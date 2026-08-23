@@ -1,0 +1,168 @@
+:host {
+  display: block;
+}
+
+.ave__empty {
+  padding: var(--sp-5);
+  text-align: center;
+  color: var(--admin-text-muted);
+  background: var(--admin-surface-alt);
+  border: 1px dashed var(--admin-border-strong);
+  border-radius: var(--r-md);
+}
+
+.ave__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-3);
+}
+
+.ave__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+
+  &.cdk-drag-preview {
+    box-shadow: var(--shadow-md);
+  }
+
+  &.cdk-drag-placeholder {
+    opacity: 0.3;
+  }
+}
+
+.ave__row-handle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 28px;
+  block-size: 28px;
+  color: var(--admin-text-muted);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.ave__row-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1.2fr 1fr 1fr;
+  }
+}
+
+.ave__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+
+  span {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--admin-text-muted);
+  }
+}
+
+.ave__input {
+  inline-size: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-sm);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+}
+
+.ave__input--hex {
+  direction: ltr;
+  text-align: start;
+}
+
+.ave__color-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+:host ::ng-deep .ave__swatch .p-colorpicker-preview {
+  inline-size: 24px;
+  block-size: 24px;
+  padding: 0;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-full);
+  cursor: pointer;
+}
+
+.ave__row-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.ave__order-btn,
+.ave__remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text-muted);
+  cursor: pointer;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--admin-surface-alt);
+    color: var(--admin-text);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.ave__remove-btn:hover:not(:disabled),
+.ave__remove-btn:focus-visible:not(:disabled) {
+  background: var(--stop-bg);
+  color: var(--stop);
+}
+
+.ave__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px dashed var(--admin-border-strong);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}

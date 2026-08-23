@@ -1,1 +1,124 @@
-<p>attribute-form-page works!</p>
+<div class="afp">
+  <app-admin-back-link parentPath="/admin/attributes" labelKey="admin.attributes.backToList"></app-admin-back-link>
+
+  <div class="afp__skeleton" *ngIf="loading()">
+    <p-skeleton height="60px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="320px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="afp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.attributes.errorMessage' | translate }}</span>
+    <button type="button" class="afp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <!-- The id isn't in the list — a stale link, a typo, or it was removed. Retrying the
+       same request wouldn't find it either; only the list itself is a way forward. -->
+  <div class="afp__not-found" *ngIf="notFound() && !loading()">
+    <i class="pi pi-question-circle" aria-hidden="true"></i>
+    <span>{{ 'admin.attributes.form.notFound' | translate }}</span>
+    <a routerLink="/admin/attributes" class="afp__back-to-list-btn">{{ 'admin.attributes.backToList' | translate }}</a>
+  </div>
+
+  <ng-container *ngIf="!loading() && !error() && !notFound()">
+    <header class="afp__header">
+      <h1 class="afp__title">{{ (isEdit ? 'admin.attributes.form.editTitle' : 'admin.attributes.form.newTitle') | translate }}</h1>
+      <button type="button" class="afp__save-btn" [disabled]="saving()" (click)="submit()">
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.attributes.form.save' | translate }}
+      </button>
+    </header>
+
+    <div class="afp__inline-error" *ngIf="inlineError()">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <span>{{ inlineError() }}</span>
+    </div>
+
+    <form class="afp__form" [formGroup]="form">
+      <section class="afp__panel">
+        <div class="afp__grid">
+          <div class="afp__field">
+            <label class="afp__label" for="afp-code">{{ 'admin.attributes.form.codeLabel' | translate }} *</label>
+            <input
+              id="afp-code"
+              type="text"
+              class="afp__input"
+              formControlName="code"
+              dir="ltr"
+              (input)="form.controls.code.setValue(form.controls.code.value.toUpperCase(), { emitEvent: false })"
+            />
+            <p class="afp__hint" *ngIf="!codeFieldError()">{{ 'admin.attributes.form.codeHint' | translate }}</p>
+            <p class="afp__error" *ngIf="codeFieldError()">{{ codeFieldError() }}</p>
+            <p class="afp__error" *ngIf="!codeFieldError() && form.controls.code.invalid && form.controls.code.touched">
+              {{ (form.controls.code.errors?.['required'] ? 'admin.attributes.form.codeRequired' : 'admin.attributes.form.codePattern') | translate }}
+            </p>
+          </div>
+
+          <div class="afp__field">
+            <label class="afp__label" for="afp-data-type">{{ 'admin.attributes.form.dataTypeLabel' | translate }}</label>
+            <p-select
+              inputId="afp-data-type"
+              formControlName="dataType"
+              [options]="[
+                { value: AttributeDataType.LIST, labelKey: 'admin.attributes.dataType.LIST' },
+                { value: AttributeDataType.TEXT, labelKey: 'admin.attributes.dataType.TEXT' },
+                { value: AttributeDataType.NUMBER, labelKey: 'admin.attributes.dataType.NUMBER' },
+                { value: AttributeDataType.BOOLEAN, labelKey: 'admin.attributes.dataType.BOOLEAN' }
+              ]"
+              optionValue="value"
+              appendTo="self"
+              styleClass="afp__select"
+            >
+              <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+              <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+            </p-select>
+          </div>
+
+          <div class="afp__field">
+            <label class="afp__label" for="afp-display-order">{{ 'admin.attributes.form.displayOrderLabel' | translate }}</label>
+            <p-inputnumber inputId="afp-display-order" formControlName="displayOrder" mode="decimal" [min]="0" styleClass="afp__number-input"></p-inputnumber>
+          </div>
+
+          <div class="afp__toggles">
+            <label
+              class="afp__toggle"
+              [class.afp__toggle--disabled]="isEdit"
+              [pTooltip]="isEdit ? ('admin.attributes.form.variantDefiningHintLocked' | translate) : ''"
+              tooltipPosition="top"
+            >
+              <input type="checkbox" class="afp__toggle-input" formControlName="variantDefining" />
+              <span class="afp__toggle-track"><span class="afp__toggle-thumb"></span></span>
+              {{ 'admin.attributes.form.variantDefiningLabel' | translate }}
+            </label>
+            <p class="afp__hint" *ngIf="!isEdit">{{ 'admin.attributes.form.variantDefiningHintNew' | translate }}</p>
+
+            <label class="afp__toggle">
+              <input type="checkbox" class="afp__toggle-input" formControlName="filterable" />
+              <span class="afp__toggle-track"><span class="afp__toggle-thumb"></span></span>
+              {{ 'admin.attributes.form.filterableLabel' | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="afp__languages" formGroupName="translations">
+          <div class="afp__lang-field" dir="rtl" formGroupName="ar">
+            <label class="afp__label" for="afp-name-ar">{{ 'admin.attributes.form.arabic' | translate }} — {{ 'admin.attributes.form.nameLabel' | translate }} *</label>
+            <input id="afp-name-ar" type="text" class="afp__input" formControlName="name" dir="rtl" />
+            <p class="afp__error" *ngIf="form.get('translations.ar.name')?.invalid && form.get('translations.ar.name')?.touched">
+              {{ 'admin.attributes.form.nameRequired' | translate }}
+            </p>
+          </div>
+          <div class="afp__lang-field" dir="ltr" formGroupName="en">
+            <label class="afp__label" for="afp-name-en">{{ 'admin.attributes.form.english' | translate }} — {{ 'admin.attributes.form.nameLabel' | translate }}</label>
+            <input id="afp-name-en" type="text" class="afp__input" formControlName="name" dir="ltr" />
+          </div>
+        </div>
+      </section>
+
+      <section class="afp__panel" *ngIf="form.controls.dataType.value === AttributeDataType.LIST">
+        <h2 class="afp__panel-title">{{ 'admin.attributes.columns.values' | translate }}</h2>
+        <app-attribute-values-editor [rows]="valueRows()" (rowsChange)="valueRows.set($event)"></app-attribute-values-editor>
+      </section>
+    </form>
+  </ng-container>
+</div>

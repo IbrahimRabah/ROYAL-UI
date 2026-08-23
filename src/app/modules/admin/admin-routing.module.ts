@@ -16,7 +16,11 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
-      { path: 'taxonomy', loadChildren: () => import('./taxonomy/taxonomy.module').then(m => m.TaxonomyModule) },
+      // No path segment of its own — its own routes (categories/brands/attributes) mount
+      // directly under /admin, per the task's literal /admin/categories, /admin/brands,
+      // /admin/attributes (not /admin/taxonomy/...). "taxonomy" is just this module's
+      // internal/organizational name.
+      { path: '', loadChildren: () => import('./taxonomy/taxonomy.module').then(m => m.TaxonomyModule) },
       { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule) },
       { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
       { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule) },

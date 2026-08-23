@@ -1,1 +1,103 @@
-<p>brand-list-page works!</p>
+<div class="brand-list-page">
+  <header class="brand-list-page__header">
+    <h1 class="brand-list-page__title">{{ 'admin.brands.title' | translate }}</h1>
+    <button type="button" class="brand-list-page__new-btn" (click)="openNew()">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      {{ 'admin.brands.newBrand' | translate }}
+    </button>
+  </header>
+
+  <div class="brand-list-page__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.brands.errorMessage' | translate }}</span>
+    <button type="button" class="brand-list-page__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="brand-list-page__table-wrap">
+      <p-table [value]="brands()" [loading]="loading()" dataKey="id" styleClass="brand-list-page__table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="brand-list-page__col-logo"></th>
+            <th>{{ 'admin.brands.columns.name' | translate }}</th>
+            <th>{{ 'admin.brands.columns.slug' | translate }}</th>
+            <th class="brand-list-page__col-status">{{ 'admin.brands.columns.status' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="brand-list-page__col-logo">
+              <div class="brand-list-page__thumb">
+                <img *ngIf="row.logoUrl" [src]="row.logoUrl" [alt]="displayName(row)" loading="lazy" />
+                <i *ngIf="!row.logoUrl" class="pi pi-image" aria-hidden="true"></i>
+              </div>
+            </td>
+            <td>
+              <button type="button" class="brand-list-page__name-link" (click)="openEdit(row)">{{ displayName(row) }}</button>
+            </td>
+            <td class="brand-list-page__col-slug">{{ row.slug }}</td>
+            <td class="brand-list-page__col-status">
+              <app-vl-status-badge
+                *ngIf="row.active === false"
+                [label]="'admin.brands.inactiveBadge' | translate"
+                tone="muted"
+                [outline]="true"
+              ></app-vl-status-badge>
+            </td>
+            <td class="brand-list-page__col-action">
+              <button type="button" class="brand-list-page__edit-btn" (click)="openEdit(row)">
+                {{ 'admin.brands.edit' | translate }}
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="brand-list-page__empty">{{ 'admin.brands.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="brand-list-page__cards">
+      <div *ngFor="let row of brands()" class="admin-card" [class.brand-list-page__card--inactive]="row.active === false">
+        <div class="admin-card__row1">
+          <div class="brand-list-page__card-identity">
+            <div class="brand-list-page__thumb brand-list-page__thumb--card">
+              <img *ngIf="row.logoUrl" [src]="row.logoUrl" [alt]="displayName(row)" loading="lazy" />
+              <i *ngIf="!row.logoUrl" class="pi pi-image" aria-hidden="true"></i>
+            </div>
+            <span class="admin-card__primary">{{ displayName(row) }}</span>
+          </div>
+          <button type="button" class="admin-card__action" (click)="openEdit(row)">
+            {{ 'admin.brands.edit' | translate }}
+          </button>
+        </div>
+
+        <div class="admin-card__secondary admin-card__secondary--code">{{ row.slug }}</div>
+
+        <div class="admin-card__badges" *ngIf="row.active === false">
+          <app-vl-status-badge
+            [label]="'admin.brands.inactiveBadge' | translate"
+            tone="muted"
+            [outline]="true"
+          ></app-vl-status-badge>
+        </div>
+      </div>
+
+      <p *ngIf="!loading() && !brands().length" class="brand-list-page__empty">{{ 'admin.brands.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>
+
+<app-brand-form-dialog
+  [open]="dialogOpen()"
+  [brand]="editingBrand()"
+  (closed)="closeDialog()"
+  (saved)="onSaved()"
+></app-brand-form-dialog>

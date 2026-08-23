@@ -34,33 +34,42 @@
       />
     </div>
 
-    <p-select
-      [ngModel]="categoryFilter()"
-      (ngModelChange)="onCategoryFilterChange($event)"
-      [options]="categoryOptions()"
-      optionLabel="name"
-      optionValue="id"
-      [showClear]="true"
-      appendTo="self"
-      [placeholder]="'admin.products.list.allCategories' | translate"
-      styleClass="product-list-page__filter-select"
-    >
-      <ng-template let-option pTemplate="item">
-        <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
-      </ng-template>
-    </p-select>
+    <details class="admin-toolbar">
+      <summary class="admin-toolbar__trigger">
+        <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        {{ 'common.filters' | translate }}
+        <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+      </summary>
+      <div class="admin-toolbar__panel">
+        <p-select
+          [ngModel]="categoryFilter()"
+          (ngModelChange)="onCategoryFilterChange($event)"
+          [options]="categoryOptions()"
+          optionLabel="name"
+          optionValue="id"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.products.list.allCategories' | translate"
+          styleClass="product-list-page__filter-select"
+        >
+          <ng-template let-option pTemplate="item">
+            <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
+          </ng-template>
+        </p-select>
 
-    <p-select
-      [ngModel]="brandFilter()"
-      (ngModelChange)="onBrandFilterChange($event)"
-      [options]="brands()"
-      optionLabel="name"
-      optionValue="id"
-      [showClear]="true"
-      appendTo="self"
-      [placeholder]="'admin.products.list.allBrands' | translate"
-      styleClass="product-list-page__filter-select"
-    ></p-select>
+        <p-select
+          [ngModel]="brandFilter()"
+          (ngModelChange)="onBrandFilterChange($event)"
+          [options]="brandOptions()"
+          optionLabel="name"
+          optionValue="id"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.products.list.allBrands' | translate"
+          styleClass="product-list-page__filter-select"
+        ></p-select>
+      </div>
+    </details>
   </div>
 
   <div class="product-list-page__error" *ngIf="error() && !loading()">
@@ -192,28 +201,55 @@
 
     <!-- Mobile cards -->
     <div class="product-list-page__cards">
-      <div *ngFor="let row of filteredRows()" class="product-list-page__card">
-        <div class="product-list-page__thumb product-list-page__thumb--card">
-          <i class="pi pi-image" aria-hidden="true"></i>
+      <div *ngFor="let row of filteredRows()" class="admin-card">
+        <div class="admin-card__row1">
+          <div class="product-list-page__card-identity">
+            <div class="product-list-page__thumb product-list-page__thumb--card">
+              <i class="pi pi-image" aria-hidden="true"></i>
+            </div>
+            <a [routerLink]="[row.id]" class="admin-card__primary product-list-page__name-link">{{ displayName(row) }}</a>
+          </div>
+
+          <button
+            type="button"
+            class="admin-card__action"
+            (click)="cardPopover.toggle($event)"
+            [attr.aria-label]="'admin.products.list.moreActions' | translate"
+          >
+            <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
+          </button>
         </div>
 
-        <div class="product-list-page__card-body">
-          <a [routerLink]="[row.id]" class="product-list-page__name-link">{{ displayName(row) }}</a>
-          <span class="product-list-page__card-category">{{ row.categoryName }}</span>
-          <div class="product-list-page__card-meta">
-            <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
-            <span class="product-list-page__card-variants">{{ 'admin.products.list.variantsCount' | translate: { count: row.variantCount } }}</span>
+        <div class="admin-card__secondary">{{ row.categoryName }}</div>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.products.list.columns.price' | translate }}</span>
+            <span class="admin-card__stat-value">{{ priceRangeLabel(row) }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.products.list.columns.stock' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.availableQty }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.products.list.columns.variants' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.variantCount }}</span>
           </div>
         </div>
 
-        <button
-          type="button"
-          class="product-list-page__menu-btn"
-          (click)="cardPopover.toggle($event)"
-          [attr.aria-label]="'admin.products.list.moreActions' | translate"
-        >
-          <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
-        </button>
+        <div class="admin-card__badges">
+          <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+          <span
+            *ngIf="row.warnings.length"
+            class="product-list-page__warning"
+            [pTooltip]="warningsTooltip(row)"
+            [escape]="false"
+            tooltipPosition="top"
+          >
+            <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+            <span *ngIf="row.warnings.length > 1" class="product-list-page__warning-count">{{ row.warnings.length }}</span>
+          </span>
+        </div>
 
         <p-popover #cardPopover>
           <div class="product-list-page__menu">

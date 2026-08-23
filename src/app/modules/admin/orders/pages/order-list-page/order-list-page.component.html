@@ -148,26 +148,32 @@
 
     <!-- Mobile cards -->
     <div class="order-list-page__cards">
-      <div *ngFor="let row of rows()" class="order-list-page__card" [ngClass]="staleClass(row)">
-        <div class="order-list-page__card-top">
-          <a [routerLink]="['/admin/orders', row.id]" class="order-list-page__card-number">{{ row.orderNumber }}</a>
-          <span class="order-list-page__card-waiting">{{ waitingLabel(row) }}</span>
+      <div *ngFor="let row of rows()" class="admin-card" [ngClass]="staleClass(row)">
+        <div class="admin-card__row1">
+          <a [routerLink]="['/admin/orders', row.id]" class="admin-card__primary order-list-page__card-number">{{ row.orderNumber }}</a>
         </div>
 
-        <div class="order-list-page__card-customer">
-          <span class="order-list-page__customer-name">{{ row.contactName }}</span>
-          <a [href]="'tel:' + row.contactPhone" class="order-list-page__card-call">
-            <i class="pi pi-phone" aria-hidden="true"></i>
-            {{ row.contactPhone }}
-          </a>
+        <div class="admin-card__secondary">{{ row.contactName }}</div>
+        <a [href]="'tel:' + row.contactPhone" class="admin-card__secondary admin-card__secondary--code order-list-page__card-call">
+          <i class="pi pi-phone" aria-hidden="true"></i>
+          {{ row.contactPhone }}
+        </a>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.orders.list.columns.total' | translate }}</span>
+            <span class="admin-card__stat-value">{{ formatMoney(row.grandTotal) }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.orders.list.columns.waiting' | translate }}</span>
+            <span class="admin-card__stat-value">{{ waitingLabel(row) }}</span>
+          </div>
         </div>
 
-        <div class="order-list-page__card-badges">
+        <div class="admin-card__badges">
           <app-vl-status-badge [label]="statusLabel(row.fulfillmentStatus)" [tone]="statusTone(row.fulfillmentStatus)"></app-vl-status-badge>
           <app-vl-status-badge [label]="paymentStatusLabel(row.paymentStatus)" [tone]="paymentStatusTone(row.paymentStatus)" [outline]="true"></app-vl-status-badge>
         </div>
-
-        <div class="order-list-page__card-total">{{ formatMoney(row.grandTotal) }}</div>
 
         <button
           *ngIf="row.fulfillmentStatus === 'PENDING'; else viewDetailsBtn"

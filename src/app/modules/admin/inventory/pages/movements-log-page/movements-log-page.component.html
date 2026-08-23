@@ -5,7 +5,13 @@
     <h1 class="movements-log-page__title">{{ 'admin.inventory.movements.title' | translate }}</h1>
   </header>
 
-  <div class="movements-log-page__filters">
+  <details class="admin-toolbar movements-log-page__filters">
+    <summary class="admin-toolbar__trigger">
+      <i class="pi pi-sliders-h" aria-hidden="true"></i>
+      {{ 'common.filters' | translate }}
+      <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+    </summary>
+    <div class="admin-toolbar__panel movements-log-page__filters-panel">
     <div class="movements-log-page__sku-chip" *ngIf="variantId() !== null">
       <span>{{ 'admin.inventory.movements.filteredBySku' | translate: { sku: resolvedSku() ?? ('#' + variantId()) } }}</span>
       <button type="button" (click)="clearVariantFilter()" [attr.aria-label]="'common.clear' | translate">
@@ -75,7 +81,8 @@
         [placeholder]="'admin.inventory.movements.dateTo' | translate"
       ></p-datepicker>
     </div>
-  </div>
+    </div>
+  </details>
 
   <div class="movements-log-page__error" *ngIf="error() && !loading()">
     <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
@@ -83,7 +90,7 @@
     <button type="button" class="movements-log-page__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
   </div>
 
-  <div class="movements-log-page__table-wrap" *ngIf="!error()">
+  <div class="movements-log-page__table-wrap admin-scroll-x" *ngIf="!error()">
     <p-table
       [value]="rows()"
       [loading]="loading()"

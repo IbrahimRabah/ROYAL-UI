@@ -19,6 +19,26 @@ export interface NameTranslationInput {
   name: string;
 }
 
+// Category translations — NOT the same as TranslationInput/Output above. Confirmed by the
+// backend: shortDescription doesn't exist on the category entity at all. The shared
+// TranslationInput still carries it for products, but sending it here would be silently
+// dropped server-side — so this is its own narrower type rather than reusing that one.
+export interface CategoryTranslationInput {
+  locale: Language;
+  name: string;
+  description: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+}
+
+export interface CategoryTranslationOutput {
+  locale: Language;
+  name: string;
+  description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
 // GET/PUT /admin/products/{id} response translations[] — same six fields as
 // TranslationInput above, sent back unchanged on save. The API omits null fields entirely
 // (a global convention, not specific to this endpoint) rather than sending explicit

@@ -10,11 +10,16 @@
 .admin-topbar {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-2);
   min-block-size: 60px;
-  padding-inline: var(--sp-4);
+  padding-inline: var(--sp-3);
   background: var(--admin-surface);
   border-block-end: 2px solid var(--gold);
+
+  @include breakpoints.sm {
+    gap: var(--sp-3);
+    padding-inline: var(--sp-4);
+  }
 }
 
 .admin-topbar__menu-btn {
@@ -60,18 +65,29 @@
 .admin-topbar__end {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-2);
   flex-shrink: 0;
+
+  @include breakpoints.sm {
+    gap: var(--sp-3);
+  }
 }
 
+// Language switcher and "view store" used to be hidden below 576px with no mobile
+// equivalent anywhere else in the admin shell — on a phone there was simply no way to
+// change language or open the storefront. Both stay visible at every width now; "view
+// store" drops its label to an icon-only 44px tap target below sm to make room.
 .admin-topbar__lang {
-  display: none;
+  display: inline-flex;
 }
 
 .admin-topbar__view-store {
-  display: none;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--sp-2);
+  min-inline-size: var(--admin-row-height);
+  min-block-size: var(--admin-row-height);
   color: var(--admin-text-muted);
   text-decoration: none;
   font-size: var(--fs-sm);
@@ -84,18 +100,24 @@
   }
 }
 
+.admin-topbar__view-store-label {
+  display: none;
+}
+
 @include breakpoints.sm {
-  .admin-topbar__lang,
-  .admin-topbar__view-store {
-    display: inline-flex;
+  .admin-topbar__view-store-label {
+    display: inline;
   }
 }
 
 .admin-topbar__account-trigger {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-3);
+  min-inline-size: var(--admin-row-height);
+  min-block-size: var(--admin-row-height);
+  padding: var(--sp-2);
   border: 1px solid var(--admin-border);
   border-radius: var(--r-full);
   background: transparent;
@@ -104,6 +126,10 @@
   cursor: pointer;
   transition: background 180ms ease;
 
+  @include breakpoints.sm {
+    padding: var(--sp-2) var(--sp-3);
+  }
+
   &:hover,
   &:focus-visible {
     background: var(--admin-surface-alt);
@@ -111,10 +137,15 @@
 }
 
 .admin-topbar__account-name {
+  display: none;
   max-inline-size: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @include breakpoints.sm {
+    display: inline;
+  }
 }
 
 .admin-topbar__account-panel {

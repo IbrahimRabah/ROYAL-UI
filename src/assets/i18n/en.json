@@ -15,6 +15,7 @@
     "remove": "Remove",
     "retry": "Retry",
     "clear": "Clear",
+    "filters": "Filters",
     "carousel": {
       "previous": "Previous",
       "next": "Next",
@@ -663,6 +664,18 @@
     "inventory": {
       "received": "Received {{sku}} — {{available}} now available",
       "adjusted": "Adjusted {{sku}} — {{available}} now available"
+    },
+    "categories": {
+      "created": "Category created",
+      "updated": "Category updated"
+    },
+    "brands": {
+      "created": "Brand created",
+      "updated": "Brand updated"
+    },
+    "attributes": {
+      "created": "Attribute created",
+      "updated": "Attribute updated"
     }
   },
   "errorPage": {
@@ -684,6 +697,8 @@
       "orders": "Orders",
       "products": "Products",
       "categories": "Categories",
+      "brands": "Brands",
+      "attributes": "Attributes",
       "inventory": "Inventory",
       "invoices": "Invoices",
       "remittances": "Remittances",
@@ -1192,6 +1207,139 @@
     },
     "remittances": {
       "backToList": "Back to remittances"
+    },
+    "categories": {
+      "title": "Categories",
+      "newCategory": "New category",
+      "newSubcategory": "New subcategory",
+      "inactiveBadge": "Inactive",
+      "products": "{{count}} products",
+      "edit": "Edit",
+      "empty": "No categories yet.",
+      "errorMessage": "We couldn't load categories — try refreshing the page",
+      "form": {
+        "addTitle": "New category",
+        "editTitle": "Edit category",
+        "parentLabel": "Parent",
+        "topLevel": "Top level",
+        "slugLabel": "Slug",
+        "slugHint": "Leave empty to generate from the name",
+        "slugWarning": "Changing the slug breaks existing links to this category",
+        "displayOrderLabel": "Display order",
+        "activeLabel": "Active",
+        "imageUrlLabel": "Image URL",
+        "bannerUrlLabel": "Banner URL",
+        "arabic": "Arabic",
+        "english": "English",
+        "nameLabel": "Name",
+        "nameRequired": "Name is required",
+        "descriptionLabel": "Description",
+        "metaTitleLabel": "Meta title",
+        "metaDescriptionLabel": "Meta description",
+        "save": "Save"
+      }
+    },
+    "brands": {
+      "title": "Brands",
+      "newBrand": "New brand",
+      "inactiveBadge": "Inactive",
+      "edit": "Edit",
+      "empty": "No brands yet.",
+      "errorMessage": "We couldn't load brands — try refreshing the page",
+      "columns": {
+        "logo": "Logo",
+        "name": "Name",
+        "slug": "Slug",
+        "status": "Status"
+      },
+      "form": {
+        "addTitle": "New brand",
+        "editTitle": "Edit brand",
+        "slugLabel": "Slug",
+        "slugHint": "Leave empty to generate from the name",
+        "slugWarning": "Changing the slug breaks existing links to this brand",
+        "nameArLabel": "Name (Arabic)",
+        "nameEnLabel": "Name (English)",
+        "nameRequired": "Name is required",
+        "logoUrlLabel": "Logo URL",
+        "activeLabel": "Active",
+        "save": "Save"
+      }
+    },
+    "attributes": {
+      "title": "Attributes",
+      "newAttribute": "New attribute",
+      "backToList": "Back to attributes",
+      "edit": "Edit",
+      "empty": "No attributes yet.",
+      "errorMessage": "We couldn't load attributes — try refreshing the page",
+      "variantSection": {
+        "title": "Variant attributes",
+        "note": "These generate SKUs. Each combination becomes a separate variant with its own price and stock."
+      },
+      "specSection": {
+        "title": "Specifications",
+        "note": "These describe the product. They appear in the spec table and don't affect price or stock."
+      },
+      "columns": {
+        "name": "Name",
+        "code": "Code",
+        "dataType": "Data type",
+        "values": "Values",
+        "filterable": "Filterable",
+        "displayOrder": "Order"
+      },
+      "filterableBadge": "Filterable",
+      "valueCount": "{{count}} values",
+      "dataType": {
+        "LIST": "List",
+        "TEXT": "Text",
+        "NUMBER": "Number",
+        "BOOLEAN": "Boolean"
+      },
+      "form": {
+        "newTitle": "New attribute",
+        "editTitle": "Edit attribute",
+        "notFound": "This attribute couldn't be found — it may have been renamed or removed.",
+        "codeLabel": "Code",
+        "codeHint": "Letters, numbers and underscores only",
+        "codeRequired": "Code is required",
+        "codePattern": "Letters, numbers and underscores only",
+        "dataTypeLabel": "Data type",
+        "variantDefiningLabel": "Variant defining",
+        "variantDefiningHintNew": "Generates a separate SKU for every combination — this cannot be changed once variants exist.",
+        "variantDefiningHintLocked": "This can't be changed once the attribute is used by a variant.",
+        "filterableLabel": "Filterable",
+        "displayOrderLabel": "Display order",
+        "arabic": "Arabic",
+        "english": "English",
+        "nameLabel": "Name",
+        "nameRequired": "Name is required",
+        "save": "Save",
+        "confirmVariantDefining": {
+          "title": "Make this a variant attribute?",
+          "message": "Variant attributes generate a separate SKU for every combination. This cannot be changed once variants exist.",
+          "confirm": "Yes, make it variant-defining",
+          "cancel": "Cancel"
+        }
+      },
+      "valuesEditor": {
+        "addValue": "Add value",
+        "empty": "No values yet — add one below.",
+        "codeLabel": "Code",
+        "hexLabel": "Colour",
+        "nameArLabel": "Name (Arabic)",
+        "nameEnLabel": "Name (English)",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "remove": "Remove",
+        "removeConfirm": {
+          "title": "Remove this value?",
+          "message": "If this value is used by any variant or product, removing it will fail",
+          "confirm": "Remove",
+          "cancel": "Cancel"
+        }
+      }
     }
   }
 }

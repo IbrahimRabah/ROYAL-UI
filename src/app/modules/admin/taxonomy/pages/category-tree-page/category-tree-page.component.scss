@@ -1,0 +1,222 @@
+:host {
+  display: block;
+}
+
+.ctp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.ctp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.ctp__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+.ctp__new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.9;
+  }
+}
+
+.ctp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.ctp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+.ctp__empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+.ctp__tree {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-3);
+}
+
+// Each nesting level indents by --sp-5 and draws a hairline connector down its start
+// edge, so the hierarchy reads at a glance regardless of depth.
+.ctp__children {
+  margin-inline-start: var(--sp-5);
+  padding-inline-start: var(--sp-4);
+  border-inline-start: 1px solid var(--admin-border);
+}
+
+.ctp__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  min-block-size: var(--admin-row-height);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  transition: background 150ms ease;
+
+  &:hover {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.ctp__row--inactive {
+  opacity: 0.55;
+}
+
+.ctp__thumb {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: var(--r-md);
+  background: var(--cream);
+  color: var(--admin-text-muted);
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+}
+
+.ctp__row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+  flex: 1 1 220px;
+}
+
+.ctp__row-name {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--admin-text);
+}
+
+.ctp__row-slug {
+  color: var(--admin-text-muted);
+  font-family: var(--mono, monospace);
+  font-size: var(--fs-xs);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.ctp__row-count {
+  flex-shrink: 0;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.ctp__row-badge {
+  flex-shrink: 0;
+}
+
+.ctp__row-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.ctp__row-action {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--admin-row-height);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.ctp__row-action--primary {
+  border-color: var(--gold);
+  color: var(--gold-dp);
+}
+
+@media (max-width: 767px) {
+  .ctp__row-count {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .ctp__row-slug {
+    display: none;
+  }
+
+  // Name/thumb/badge keep the top line; the two action buttons drop to their own
+  // full-width row underneath instead of squeezing next to a shrunk name.
+  .ctp__row-actions {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctp__row,
+  .ctp__new-btn {
+    transition: none;
+  }
+}

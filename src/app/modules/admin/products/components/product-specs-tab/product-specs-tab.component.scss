@@ -54,10 +54,12 @@
 
 .pst__row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--sp-2) var(--sp-4);
   min-block-size: var(--admin-row-height);
   padding-inline: var(--sp-4);
+  padding-block: var(--sp-2);
   background: var(--admin-surface);
   border-block-end: 1px solid var(--admin-border);
 
@@ -82,6 +84,12 @@
   font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--admin-text);
+
+  // Below tablet the fixed 180px label leaves the value input too narrow to use —
+  // it takes its own full-width line instead, with the input/select below it.
+  @media (max-width: 767px) {
+    flex-basis: 100%;
+  }
 }
 
 :host ::ng-deep .pst__row-input {
@@ -118,8 +126,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 32px;
-  block-size: 32px;
+  inline-size: var(--admin-row-height);
+  block-size: var(--admin-row-height);
   border: 1px solid var(--admin-border);
   border-radius: var(--r-md);
   background: var(--admin-surface);
@@ -136,14 +144,21 @@
 
 .pst__add {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-3);
   align-items: center;
   margin-block-end: var(--sp-4);
 }
 
 :host ::ng-deep .pst__add-select {
-  flex: 1 1 auto;
+  flex: 1 1 240px;
+  min-inline-size: 0;
   max-inline-size: 320px;
+
+  @media (max-width: 575px) {
+    flex-basis: 100%;
+    max-inline-size: none;
+  }
 }
 
 .pst__add-btn {

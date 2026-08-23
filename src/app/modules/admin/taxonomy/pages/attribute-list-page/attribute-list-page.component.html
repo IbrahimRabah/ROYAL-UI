@@ -1,1 +1,110 @@
-<p>attribute-list-page works!</p>
+<div class="alp">
+  <header class="alp__header">
+    <h1 class="alp__title">{{ 'admin.attributes.title' | translate }}</h1>
+    <a routerLink="/admin/attributes/new" class="alp__new-btn">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      {{ 'admin.attributes.newAttribute' | translate }}
+    </a>
+  </header>
+
+  <div class="alp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.attributes.errorMessage' | translate }}</span>
+    <button type="button" class="alp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error() && !loading()">
+    <ng-container
+      *ngTemplateOutlet="sectionTpl; context: {
+        icon: 'pi-sitemap',
+        titleKey: 'admin.attributes.variantSection.title',
+        noteKey: 'admin.attributes.variantSection.note',
+        rows: variantAttributes()
+      }"
+    ></ng-container>
+
+    <ng-container
+      *ngTemplateOutlet="sectionTpl; context: {
+        icon: 'pi-list',
+        titleKey: 'admin.attributes.specSection.title',
+        noteKey: 'admin.attributes.specSection.note',
+        rows: specAttributes()
+      }"
+    ></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #sectionTpl let-icon="icon" let-titleKey="titleKey" let-noteKey="noteKey" let-rows="rows">
+  <section class="alp__section">
+    <div class="alp__section-header">
+      <div class="alp__icon-badge">
+        <i class="pi" [ngClass]="icon" aria-hidden="true"></i>
+      </div>
+      <div class="alp__section-header-text">
+        <h2 class="alp__section-title">{{ titleKey | translate }}</h2>
+        <p class="alp__section-note">{{ noteKey | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Desktop / tablet table -->
+    <div class="alp__table-wrap">
+      <p-table [value]="rows" dataKey="id" styleClass="alp__table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.attributes.columns.name' | translate }}</th>
+            <th>{{ 'admin.attributes.columns.code' | translate }}</th>
+            <th>{{ 'admin.attributes.columns.dataType' | translate }}</th>
+            <th class="alp__col-num">{{ 'admin.attributes.columns.values' | translate }}</th>
+            <th class="alp__col-center">{{ 'admin.attributes.columns.filterable' | translate }}</th>
+            <th class="alp__col-num">{{ 'admin.attributes.columns.displayOrder' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ displayName(row) }}</td>
+            <td class="alp__col-code">{{ row.code }}</td>
+            <td>
+              <app-vl-status-badge [label]="dataTypeLabelKey(row.dataType) | translate" [tone]="dataTypeTone(row.dataType)"></app-vl-status-badge>
+            </td>
+            <td class="alp__col-num">{{ row.dataType === AttributeDataType.LIST ? row.values.length : '—' }}</td>
+            <td class="alp__col-center">
+              <app-vl-status-badge *ngIf="row.filterable" [label]="'admin.attributes.filterableBadge' | translate" tone="ok" [outline]="true"></app-vl-status-badge>
+            </td>
+            <td class="alp__col-num">{{ row.displayOrder }}</td>
+            <td class="alp__col-action">
+              <a [routerLink]="['/admin/attributes', row.id]" [state]="{ attribute: row }" class="alp__edit-link">{{ 'admin.attributes.edit' | translate }}</a>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="alp__empty">{{ 'admin.attributes.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards — name first, then identity (code), then metadata (badges), per the
+         shared admin-card row order. -->
+    <div class="alp__cards">
+      <div *ngFor="let row of rows" class="admin-card">
+        <div class="admin-card__row1">
+          <span class="admin-card__primary">{{ displayName(row) }}</span>
+          <a [routerLink]="['/admin/attributes', row.id]" [state]="{ attribute: row }" class="admin-card__action">{{ 'admin.attributes.edit' | translate }}</a>
+        </div>
+        <div class="admin-card__secondary admin-card__secondary--code">{{ row.code }}</div>
+        <div class="admin-card__badges">
+          <app-vl-status-badge [label]="dataTypeLabelKey(row.dataType) | translate" [tone]="dataTypeTone(row.dataType)"></app-vl-status-badge>
+          <app-vl-status-badge *ngIf="row.filterable" [label]="'admin.attributes.filterableBadge' | translate" tone="ok" [outline]="true"></app-vl-status-badge>
+          <span class="alp__card-value-count" *ngIf="row.dataType === AttributeDataType.LIST">
+            {{ 'admin.attributes.valueCount' | translate: { count: row.values.length } }}
+          </span>
+        </div>
+      </div>
+      <p *ngIf="!rows.length" class="alp__empty">{{ 'admin.attributes.empty' | translate }}</p>
+    </div>
+  </section>
+</ng-template>

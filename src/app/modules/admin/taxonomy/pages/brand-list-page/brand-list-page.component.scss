@@ -1,0 +1,214 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.brand-list-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.brand-list-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.brand-list-page__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+.brand-list-page__new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.9;
+  }
+}
+
+.brand-list-page__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.brand-list-page__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+.brand-list-page__table-wrap {
+  display: none;
+
+  @include breakpoints.md {
+    display: block;
+  }
+}
+
+.brand-list-page__col-logo {
+  inline-size: 1%;
+}
+
+.brand-list-page__col-status,
+.brand-list-page__col-action {
+  white-space: nowrap;
+  inline-size: 1%;
+}
+
+.brand-list-page__col-slug {
+  color: var(--admin-text-muted);
+  font-family: var(--mono, monospace);
+  font-size: var(--fs-xs);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.brand-list-page__thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--r-md);
+  background: var(--cream);
+  color: var(--admin-text-muted);
+  font-size: 1.125rem;
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+}
+
+.brand-list-page__thumb--card {
+  flex-shrink: 0;
+  inline-size: 56px;
+  block-size: 56px;
+}
+
+.brand-list-page__name-link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--admin-text);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-align: start;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+  }
+}
+
+.brand-list-page__edit-btn {
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.brand-list-page__empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+:host ::ng-deep .brand-list-page__table {
+  .p-datatable-thead > tr > th {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-block-end: 1px solid var(--admin-border);
+  }
+
+  .p-datatable-tbody > tr {
+    block-size: var(--admin-row-height);
+    background: var(--admin-surface);
+
+    > td {
+      padding: var(--sp-3) var(--sp-4);
+      border-block-end: 1px solid var(--admin-border);
+      font-size: var(--fs-sm);
+      color: var(--admin-text);
+    }
+
+    &:nth-child(even) {
+      background: var(--admin-surface-alt);
+    }
+  }
+}
+
+.brand-list-page__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+
+  @include breakpoints.md {
+    display: none;
+  }
+}
+
+.brand-list-page__card--inactive {
+  opacity: 0.6;
+}
+
+.brand-list-page__card-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+  flex: 1 1 auto;
+}

@@ -1,12 +1,21 @@
+@use 'styles/breakpoints';
+
+// admin-toolbar (global, unscoped) handles the collapsed-below-tablet look; this
+// scoped rule only needs to restore the always-expanded bordered flex box at md+ —
+// its higher specificity (the auto-added component attribute selector) is what wins
+// over admin-toolbar's own `display: contents` there.
 .order-filters-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--sp-4);
   padding: var(--sp-5);
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: var(--r-lg);
+
+  @include breakpoints.md {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--sp-4);
+  }
 }
 
 .order-filters-bar__field {

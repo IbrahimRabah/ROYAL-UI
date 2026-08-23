@@ -15,6 +15,7 @@
     "remove": "إزالة",
     "retry": "إعادة المحاولة",
     "clear": "مسح",
+    "filters": "الفلاتر",
     "carousel": {
       "previous": "السابق",
       "next": "التالي",
@@ -663,6 +664,18 @@
     "inventory": {
       "received": "تم استلام {{sku}} — المتاح الآن {{available}}",
       "adjusted": "تم تعديل {{sku}} — المتاح الآن {{available}}"
+    },
+    "categories": {
+      "created": "تم إنشاء التصنيف",
+      "updated": "تم تحديث التصنيف"
+    },
+    "brands": {
+      "created": "تم إنشاء العلامة التجارية",
+      "updated": "تم تحديث العلامة التجارية"
+    },
+    "attributes": {
+      "created": "تم إنشاء الخاصية",
+      "updated": "تم تحديث الخاصية"
     }
   },
   "errorPage": {
@@ -684,6 +697,8 @@
       "orders": "الطلبات",
       "products": "المنتجات",
       "categories": "التصنيفات",
+      "brands": "العلامات التجارية",
+      "attributes": "الخصائص",
       "inventory": "المخزون",
       "invoices": "الفواتير",
       "remittances": "التحصيلات",
@@ -1192,6 +1207,139 @@
     },
     "remittances": {
       "backToList": "رجوع إلى التسويات"
+    },
+    "categories": {
+      "title": "التصنيفات",
+      "newCategory": "تصنيف جديد",
+      "newSubcategory": "تصنيف فرعي جديد",
+      "inactiveBadge": "غير نشط",
+      "products": "{{count}} منتج",
+      "edit": "تعديل",
+      "empty": "لا توجد تصنيفات بعد.",
+      "errorMessage": "تعذّر تحميل التصنيفات — حاول تحديث الصفحة",
+      "form": {
+        "addTitle": "تصنيف جديد",
+        "editTitle": "تعديل التصنيف",
+        "parentLabel": "التصنيف الأب",
+        "topLevel": "مستوى أعلى",
+        "slugLabel": "الرابط المختصر",
+        "slugHint": "اتركه فارغًا لإنشائه تلقائيًا من الاسم",
+        "slugWarning": "تغيير الـ slug يكسر الروابط الحالية لهذا التصنيف",
+        "displayOrderLabel": "ترتيب العرض",
+        "activeLabel": "نشط",
+        "imageUrlLabel": "رابط الصورة",
+        "bannerUrlLabel": "رابط البانر",
+        "arabic": "العربية",
+        "english": "الإنجليزية",
+        "nameLabel": "الاسم",
+        "nameRequired": "الاسم مطلوب",
+        "descriptionLabel": "الوصف",
+        "metaTitleLabel": "عنوان الميتا",
+        "metaDescriptionLabel": "وصف الميتا",
+        "save": "حفظ"
+      }
+    },
+    "brands": {
+      "title": "العلامات التجارية",
+      "newBrand": "علامة تجارية جديدة",
+      "inactiveBadge": "غير نشط",
+      "edit": "تعديل",
+      "empty": "لا توجد علامات تجارية بعد.",
+      "errorMessage": "تعذّر تحميل العلامات التجارية — حاول تحديث الصفحة",
+      "columns": {
+        "logo": "الشعار",
+        "name": "الاسم",
+        "slug": "الرابط المختصر",
+        "status": "الحالة"
+      },
+      "form": {
+        "addTitle": "علامة تجارية جديدة",
+        "editTitle": "تعديل العلامة التجارية",
+        "slugLabel": "الرابط المختصر",
+        "slugHint": "اتركه فارغًا لإنشائه تلقائيًا من الاسم",
+        "slugWarning": "تغيير الـ slug يكسر الروابط الحالية لهذه العلامة التجارية",
+        "nameArLabel": "الاسم (عربي)",
+        "nameEnLabel": "الاسم (إنجليزي)",
+        "nameRequired": "الاسم مطلوب",
+        "logoUrlLabel": "رابط الشعار",
+        "activeLabel": "نشط",
+        "save": "حفظ"
+      }
+    },
+    "attributes": {
+      "title": "الخصائص",
+      "newAttribute": "خاصية جديدة",
+      "backToList": "رجوع إلى الخصائص",
+      "edit": "تعديل",
+      "empty": "لا توجد خصائص بعد.",
+      "errorMessage": "تعذّر تحميل الخصائص — حاول تحديث الصفحة",
+      "variantSection": {
+        "title": "خصائص الخيارات",
+        "note": "هذه تولّد أكواد SKU. كل تركيبة تصبح خيارًا مستقلًا بسعره ومخزونه."
+      },
+      "specSection": {
+        "title": "المواصفات",
+        "note": "هذه تصف المنتج. تظهر في جدول المواصفات ولا تؤثر على السعر أو المخزون."
+      },
+      "columns": {
+        "name": "الاسم",
+        "code": "الكود",
+        "dataType": "نوع البيانات",
+        "values": "القيم",
+        "filterable": "قابل للفلترة",
+        "displayOrder": "الترتيب"
+      },
+      "filterableBadge": "قابل للفلترة",
+      "valueCount": "{{count}} قيمة",
+      "dataType": {
+        "LIST": "قائمة",
+        "TEXT": "نص",
+        "NUMBER": "رقم",
+        "BOOLEAN": "منطقي"
+      },
+      "form": {
+        "newTitle": "خاصية جديدة",
+        "editTitle": "تعديل الخاصية",
+        "notFound": "تعذّر العثور على هذه الخاصية — ربما تم إعادة تسميتها أو حذفها.",
+        "codeLabel": "الكود",
+        "codeHint": "حروف وأرقام وشرطة سفلية فقط",
+        "codeRequired": "الكود مطلوب",
+        "codePattern": "حروف وأرقام وشرطة سفلية فقط",
+        "dataTypeLabel": "نوع البيانات",
+        "variantDefiningLabel": "خاصية خيارات",
+        "variantDefiningHintNew": "تولّد SKU منفصلًا لكل تركيبة — لا يمكن تغيير هذا بعد إنشاء الخيارات.",
+        "variantDefiningHintLocked": "لا يمكن تغيير هذا بعد استخدام الخاصية في أحد الخيارات.",
+        "filterableLabel": "قابل للفلترة",
+        "displayOrderLabel": "ترتيب العرض",
+        "arabic": "العربية",
+        "english": "الإنجليزية",
+        "nameLabel": "الاسم",
+        "nameRequired": "الاسم مطلوب",
+        "save": "حفظ",
+        "confirmVariantDefining": {
+          "title": "جعلها خاصية خيارات؟",
+          "message": "خصائص الخيارات تولّد SKU منفصلًا لكل تركيبة. لا يمكن تغيير هذا بعد إنشاء الخيارات.",
+          "confirm": "نعم، اجعلها خاصية خيارات",
+          "cancel": "إلغاء"
+        }
+      },
+      "valuesEditor": {
+        "addValue": "إضافة قيمة",
+        "empty": "لا توجد قيم بعد — أضف واحدة أدناه.",
+        "codeLabel": "الكود",
+        "hexLabel": "اللون",
+        "nameArLabel": "الاسم (عربي)",
+        "nameEnLabel": "الاسم (إنجليزي)",
+        "moveUp": "تحريك لأعلى",
+        "moveDown": "تحريك لأسفل",
+        "remove": "إزالة",
+        "removeConfirm": {
+          "title": "إزالة هذه القيمة؟",
+          "message": "إذا كانت هذه القيمة مستخدمة في أي خيار أو منتج، فسيفشل حذفها",
+          "confirm": "إزالة",
+          "cancel": "إلغاء"
+        }
+      }
     }
   }
 }

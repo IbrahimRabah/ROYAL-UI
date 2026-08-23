@@ -1,0 +1,110 @@
+// Shared mobile-card structure for every admin list screen (inventory, categories,
+// brands, attributes, products, orders...) — extracted so all of them stay consistent
+// and a future screen inherits the right hierarchy instead of rediscovering it.
+// Global (not per-component ::ng-deep) for the same reason status-pill.scss is: avoids
+// duplicating the same rules past every component's own 4kB style budget.
+//
+// Row order is deliberate and must not be reshuffled per screen:
+//   1. primary identifier (name) + the row's action/menu, at the end edge
+//   2. secondary identifier (code / SKU / variant summary / customer name), muted
+//   3. numeric or status data as a labelled group, 2–3 columns
+//   4. badges together, one wrapping group — never interleaved with text
+// Any of rows 2–4 can be omitted if a screen has nothing for it, but never reordered.
+.admin-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+}
+
+// Row 1
+.admin-card__row1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.admin-card__primary {
+  overflow-wrap: anywhere;
+  min-inline-size: 0;
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+// Wraps the row's action button/link/menu-trigger — guarantees a real 44px tap target
+// even when the visual icon or label inside is smaller, and never shrinks even when
+// .admin-card__primary is long.
+.admin-card__action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-inline-size: var(--admin-row-height);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-3);
+}
+
+// Row 2 — secondary identifier. Base is direction-neutral (customer names, category
+// names and variant summaries are Arabic prose and must keep normal RTL flow); apply
+// the --code modifier only to actual SKUs/order-numbers/slugs, which must stay LTR and
+// must never truncate mid-string (ellipsis would hide the half that identifies the
+// record), so both wrap instead of clipping.
+.admin-card__secondary {
+  overflow-wrap: anywhere;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.admin-card__secondary--code {
+  direction: ltr;
+  text-align: start;
+  unicode-bidi: isolate;
+}
+
+// Row 3
+.admin-card__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  border-block: 1px solid var(--admin-border);
+}
+
+.admin-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.admin-card__stat-label {
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-card__stat-value {
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+// Row 4
+.admin-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}

@@ -13,9 +13,15 @@
   <div class="admin-topbar__end">
     <app-vl-language-switcher class="admin-topbar__lang"></app-vl-language-switcher>
 
-    <a routerLink="/" target="_blank" rel="noopener" class="admin-topbar__view-store">
+    <a
+      routerLink="/"
+      target="_blank"
+      rel="noopener"
+      class="admin-topbar__view-store"
+      [attr.aria-label]="'admin.topbar.viewStore' | translate"
+    >
       <i class="pi pi-external-link" aria-hidden="true"></i>
-      {{ 'admin.topbar.viewStore' | translate }}
+      <span class="admin-topbar__view-store-label">{{ 'admin.topbar.viewStore' | translate }}</span>
     </a>
 
     <button

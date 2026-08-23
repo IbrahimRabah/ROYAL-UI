@@ -1,0 +1,89 @@
+// Collapses a multi-control filter toolbar (selects, toggles, date pickers) behind a
+// single "Filters" trigger below tablet width, using native <details>/<summary> so no
+// component state is needed. At md+ the <details> becomes display:contents so its
+// children rejoin the parent's normal flex row exactly as before.
+//
+// Markup shape expected by callers:
+//   <details class="admin-toolbar">
+//     <summary class="admin-toolbar__trigger">
+//       <i class="pi pi-sliders-h" aria-hidden="true"></i>
+//       {{ 'common.filters' | translate }}
+//       <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+//     </summary>
+//     <div class="admin-toolbar__panel"> ...controls... </div>
+//   </details>
+.admin-toolbar {
+  display: contents;
+
+  @media (max-width: 767px) {
+    display: block;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-md);
+    background: var(--admin-surface);
+  }
+}
+
+.admin-toolbar__trigger {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-block-size: var(--admin-row-height);
+    padding-inline: var(--sp-4);
+    color: var(--admin-text);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+}
+
+.admin-toolbar__chevron {
+  margin-inline-start: auto;
+  transition: transform 150ms ease;
+}
+
+.admin-toolbar[open] .admin-toolbar__chevron {
+  transform: rotate(180deg);
+}
+
+// display:contents already defeats <details>'s native UA rule that hides non-summary
+// children when closed (an author style with an explicit `display` always wins over
+// that UA default), so the open/closed visibility below is driven entirely by the
+// [open] attribute selector rather than relying on native behavior.
+.admin-toolbar__panel {
+  display: contents;
+
+  @media (max-width: 767px) {
+    display: none;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: 0 var(--sp-4) var(--sp-4);
+
+    // Every direct control (search box, p-select, toggle) goes full width and stacks
+    // one per row instead of squeezing into the desktop's flex-wrap row.
+    > * {
+      flex: 1 1 auto;
+      inline-size: 100%;
+      min-inline-size: 0;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-toolbar[open] > .admin-toolbar__panel {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-toolbar__chevron {
+    transition: none;
+  }
+}

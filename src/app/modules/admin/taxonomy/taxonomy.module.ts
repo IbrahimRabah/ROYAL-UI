@@ -1,6 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TableModule } from 'primeng/table';
+import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { PopoverModule } from 'primeng/popover';
+import { TooltipModule } from 'primeng/tooltip';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdminSharedModule } from '../shared/admin-shared.module';
 
 import { TaxonomyRoutingModule } from './taxonomy-routing.module';
 import { CategoryTreePageComponent } from './pages/category-tree-page/category-tree-page.component';
@@ -25,7 +33,15 @@ import { AttributeValuesEditorComponent } from './components/attribute-values-ed
   imports: [
     CommonModule,
     TaxonomyRoutingModule,
-    SharedModule
+    SharedModule,
+    AdminSharedModule,
+    DragDropModule,
+    TableModule,
+    SelectModule,
+    InputNumberModule,
+    ColorPickerModule,
+    PopoverModule,
+    TooltipModule
   ]
 })
 export class TaxonomyModule { }

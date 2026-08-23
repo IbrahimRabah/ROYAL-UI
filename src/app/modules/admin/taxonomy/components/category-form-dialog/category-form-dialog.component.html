@@ -1,1 +1,155 @@
-<p>category-form-dialog works!</p>
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="category-form-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+    [formGroup]="form"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="category-form-dialog-title" class="admin-dialog__title">
+        {{ (isEdit ? 'admin.categories.form.editTitle' : 'admin.categories.form.addTitle') | translate }}
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)">
+      <div class="admin-dialog__inline-error" *ngIf="inlineError()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ inlineError() }}</span>
+      </div>
+
+      <div class="cfd__grid">
+        <div class="cfd__field">
+          <label class="admin-dialog__field-label" for="cfd-parent">{{ 'admin.categories.form.parentLabel' | translate }}</label>
+          <p-select
+            inputId="cfd-parent"
+            formControlName="parentId"
+            [options]="parentOptions"
+            optionLabel="name"
+            optionValue="id"
+            [disabled]="parentSelectDisabled"
+            [placeholder]="'admin.categories.form.topLevel' | translate"
+            [showClear]="true"
+            appendTo="self"
+            styleClass="admin-dialog__select"
+          >
+            <ng-template let-option pTemplate="item">
+              <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
+            </ng-template>
+          </p-select>
+        </div>
+
+        <div class="cfd__field">
+          <label class="admin-dialog__field-label" for="cfd-display-order">{{ 'admin.categories.form.displayOrderLabel' | translate }}</label>
+          <p-inputnumber
+            inputId="cfd-display-order"
+            formControlName="displayOrder"
+            mode="decimal"
+            [min]="0"
+            styleClass="admin-dialog__number-input"
+          ></p-inputnumber>
+        </div>
+
+        <div class="cfd__field cfd__field--full">
+          <label class="admin-dialog__field-label" for="cfd-slug">{{ 'admin.categories.form.slugLabel' | translate }}</label>
+          <input id="cfd-slug" type="text" class="admin-dialog__text-input" formControlName="slug" dir="ltr" />
+          <p class="admin-dialog__helper" *ngIf="!slugFieldError()">{{ 'admin.categories.form.slugHint' | translate }}</p>
+          <p class="admin-dialog__helper admin-dialog__helper--warn" *ngIf="slugChanged">
+            {{ 'admin.categories.form.slugWarning' | translate }}
+          </p>
+          <p class="admin-dialog__error" *ngIf="slugFieldError()">{{ slugFieldError() }}</p>
+        </div>
+
+        <div class="cfd__field">
+          <label class="admin-dialog__field-label" for="cfd-image-url">{{ 'admin.categories.form.imageUrlLabel' | translate }}</label>
+          <input id="cfd-image-url" type="text" class="admin-dialog__text-input" formControlName="imageUrl" dir="ltr" />
+        </div>
+
+        <div class="cfd__field">
+          <label class="admin-dialog__field-label" for="cfd-banner-url">{{ 'admin.categories.form.bannerUrlLabel' | translate }}</label>
+          <input id="cfd-banner-url" type="text" class="admin-dialog__text-input" formControlName="bannerUrl" dir="ltr" />
+        </div>
+
+        <label class="cfd__toggle">
+          <input type="checkbox" class="cfd__toggle-input" formControlName="active" />
+          <span class="cfd__toggle-track"><span class="cfd__toggle-thumb"></span></span>
+          {{ 'admin.categories.form.activeLabel' | translate }}
+        </label>
+      </div>
+
+      <div class="cfd__languages" formGroupName="translations">
+        <section class="cfd__lang-panel" dir="rtl" formGroupName="ar">
+          <div class="cfd__lang-header">
+            <div class="cfd__lang-badge cfd__lang-badge--ar">ع</div>
+            <h3 class="cfd__lang-title">{{ 'admin.categories.form.arabic' | translate }}</h3>
+          </div>
+
+          <label class="admin-dialog__field-label" for="cfd-name-ar">{{ 'admin.categories.form.nameLabel' | translate }} *</label>
+          <input id="cfd-name-ar" type="text" class="admin-dialog__text-input" formControlName="name" dir="rtl" />
+          <p class="admin-dialog__error" *ngIf="arName?.invalid && arName?.touched">
+            {{ 'admin.categories.form.nameRequired' | translate }}
+          </p>
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-desc-ar">
+            {{ 'admin.categories.form.descriptionLabel' | translate }}
+          </label>
+          <textarea id="cfd-desc-ar" class="admin-dialog__textarea" rows="3" formControlName="description" dir="rtl"></textarea>
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-meta-title-ar">
+            {{ 'admin.categories.form.metaTitleLabel' | translate }}
+          </label>
+          <input id="cfd-meta-title-ar" type="text" class="admin-dialog__text-input" formControlName="metaTitle" dir="rtl" />
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-meta-desc-ar">
+            {{ 'admin.categories.form.metaDescriptionLabel' | translate }}
+          </label>
+          <textarea id="cfd-meta-desc-ar" class="admin-dialog__textarea" rows="2" formControlName="metaDescription" dir="rtl"></textarea>
+        </section>
+
+        <section class="cfd__lang-panel" dir="ltr" formGroupName="en">
+          <div class="cfd__lang-header">
+            <div class="cfd__lang-badge cfd__lang-badge--en">EN</div>
+            <h3 class="cfd__lang-title">{{ 'admin.categories.form.english' | translate }}</h3>
+          </div>
+
+          <label class="admin-dialog__field-label" for="cfd-name-en">{{ 'admin.categories.form.nameLabel' | translate }}</label>
+          <input id="cfd-name-en" type="text" class="admin-dialog__text-input" formControlName="name" dir="ltr" />
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-desc-en">
+            {{ 'admin.categories.form.descriptionLabel' | translate }}
+          </label>
+          <textarea id="cfd-desc-en" class="admin-dialog__textarea" rows="3" formControlName="description" dir="ltr"></textarea>
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-meta-title-en">
+            {{ 'admin.categories.form.metaTitleLabel' | translate }}
+          </label>
+          <input id="cfd-meta-title-en" type="text" class="admin-dialog__text-input" formControlName="metaTitle" dir="ltr" />
+
+          <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="cfd-meta-desc-en">
+            {{ 'admin.categories.form.metaDescriptionLabel' | translate }}
+          </label>
+          <textarea id="cfd-meta-desc-en" class="admin-dialog__textarea" rows="2" formControlName="metaDescription" dir="ltr"></textarea>
+        </section>
+      </div>
+    </div>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="admin-dialog__submit admin-dialog__submit--ok" [disabled]="saving()" (click)="submit()">
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.categories.form.save' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

@@ -26,46 +26,55 @@
       />
     </div>
 
-    <p-select
-      [ngModel]="categoryId()"
-      (ngModelChange)="onCategoryChange($event)"
-      [options]="categoryOptions()"
-      optionLabel="name"
-      optionValue="id"
-      [showClear]="true"
-      appendTo="self"
-      [placeholder]="'admin.inventory.allCategories' | translate"
-      styleClass="inventory-list-page__filter-select"
-    >
-      <ng-template let-option pTemplate="item">
-        <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
-      </ng-template>
-    </p-select>
+    <details class="admin-toolbar">
+      <summary class="admin-toolbar__trigger">
+        <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        {{ 'common.filters' | translate }}
+        <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+      </summary>
+      <div class="admin-toolbar__panel">
+        <p-select
+          [ngModel]="categoryId()"
+          (ngModelChange)="onCategoryChange($event)"
+          [options]="categoryOptions()"
+          optionLabel="name"
+          optionValue="id"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.inventory.allCategories' | translate"
+          styleClass="inventory-list-page__filter-select"
+        >
+          <ng-template let-option pTemplate="item">
+            <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
+          </ng-template>
+        </p-select>
 
-    <p-select
-      [ngModel]="sort()"
-      (ngModelChange)="onSortChange($event)"
-      [options]="[
-        { value: 'available_asc', labelKey: 'admin.inventory.sort.availableAsc' },
-        { value: 'available_desc', labelKey: 'admin.inventory.sort.availableDesc' }
-      ]"
-      optionValue="value"
-      appendTo="self"
-      styleClass="inventory-list-page__filter-select"
-    >
-      <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
-      <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
-    </p-select>
+        <p-select
+          [ngModel]="sort()"
+          (ngModelChange)="onSortChange($event)"
+          [options]="[
+            { value: 'available_asc', labelKey: 'admin.inventory.sort.availableAsc' },
+            { value: 'available_desc', labelKey: 'admin.inventory.sort.availableDesc' }
+          ]"
+          optionValue="value"
+          appendTo="self"
+          styleClass="inventory-list-page__filter-select"
+        >
+          <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+        </p-select>
 
-    <label class="inventory-list-page__toggle">
-      <input type="checkbox" [ngModel]="lowStockOnly()" (ngModelChange)="onLowStockToggle($event)" />
-      {{ 'admin.inventory.lowStockOnly' | translate }}
-    </label>
+        <label class="inventory-list-page__toggle">
+          <input type="checkbox" [ngModel]="lowStockOnly()" (ngModelChange)="onLowStockToggle($event)" />
+          {{ 'admin.inventory.lowStockOnly' | translate }}
+        </label>
 
-    <label class="inventory-list-page__toggle">
-      <input type="checkbox" [ngModel]="outOfStockOnly()" (ngModelChange)="onOutOfStockToggle($event)" />
-      {{ 'admin.inventory.outOfStockOnly' | translate }}
-    </label>
+        <label class="inventory-list-page__toggle">
+          <input type="checkbox" [ngModel]="outOfStockOnly()" (ngModelChange)="onOutOfStockToggle($event)" />
+          {{ 'admin.inventory.outOfStockOnly' | translate }}
+        </label>
+      </div>
+    </details>
   </div>
 
   <div class="inventory-list-page__error" *ngIf="error() && !loading()">
@@ -156,16 +165,12 @@
 
     <!-- Mobile cards -->
     <div class="inventory-list-page__cards">
-      <div *ngFor="let row of rows()" class="inventory-list-page__card">
-        <div class="inventory-list-page__card-head">
-          <div class="inventory-list-page__card-title">
-            <span class="inventory-list-page__card-name">{{ row.productName }}</span>
-            <span class="inventory-list-page__card-variant">{{ row.variantSummary }}</span>
-            <span class="inventory-list-page__card-sku">{{ row.sku }}</span>
-          </div>
+      <div *ngFor="let row of rows()" class="admin-card">
+        <div class="admin-card__row1">
+          <div class="admin-card__primary">{{ row.productName }}</div>
           <button
             type="button"
-            class="inventory-list-page__menu-btn"
+            class="admin-card__action"
             (click)="cardPopover.toggle($event)"
             [attr.aria-label]="'admin.inventory.moreActions' | translate"
           >
@@ -190,22 +195,27 @@
           </p-popover>
         </div>
 
-        <div class="inventory-list-page__card-numbers">
-          <div class="inventory-list-page__card-figure">
-            <span>{{ 'admin.inventory.columns.onHand' | translate }}</span>
-            <strong>{{ row.qtyOnHand }}</strong>
+        <div class="admin-card__secondary">{{ row.variantSummary }}</div>
+        <div class="admin-card__secondary admin-card__secondary--code">{{ row.sku }}</div>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.inventory.columns.onHand' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.qtyOnHand }}</span>
           </div>
-          <div class="inventory-list-page__card-figure">
-            <span>{{ 'admin.inventory.columns.reserved' | translate }}</span>
-            <strong>{{ row.qtyReserved }}</strong>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.inventory.columns.reserved' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.qtyReserved }}</span>
           </div>
-          <div class="inventory-list-page__card-figure">
-            <span>{{ 'admin.inventory.columns.available' | translate }}</span>
-            <strong>{{ row.qtyAvailable }}</strong>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.inventory.columns.available' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.qtyAvailable }}</span>
           </div>
         </div>
 
-        <app-vl-status-badge [label]="statusInfo(row).labelKey | translate" [tone]="statusInfo(row).tone"></app-vl-status-badge>
+        <div class="admin-card__badges">
+          <app-vl-status-badge [label]="statusInfo(row).labelKey | translate" [tone]="statusInfo(row).tone"></app-vl-status-badge>
+        </div>
       </div>
 
       <p *ngIf="!loading() && !rows().length" class="inventory-list-page__empty">{{ 'admin.inventory.empty' | translate }}</p>

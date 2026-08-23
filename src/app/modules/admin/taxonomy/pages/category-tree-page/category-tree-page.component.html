@@ -1,1 +1,73 @@
-<p>category-tree-page works!</p>
+<div class="ctp">
+  <header class="ctp__header">
+    <h1 class="ctp__title">{{ 'admin.categories.title' | translate }}</h1>
+    <button type="button" class="ctp__new-btn" (click)="openNew()">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      {{ 'admin.categories.newCategory' | translate }}
+    </button>
+  </header>
+
+  <div class="ctp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.categories.errorMessage' | translate }}</span>
+    <button type="button" class="ctp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <p class="ctp__empty" *ngIf="!error() && !loading() && !tree().length">{{ 'admin.categories.empty' | translate }}</p>
+
+  <div class="ctp__tree" *ngIf="!error() && tree().length">
+    <ng-container *ngFor="let root of tree()">
+      <ng-container *ngTemplateOutlet="nodeTpl; context: { $implicit: root, depth: 0 }"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #nodeTpl let-node let-depth="depth">
+  <div class="ctp__row" [class.ctp__row--inactive]="node.active === false">
+    <div class="ctp__thumb">
+      <img *ngIf="node.imageUrl" [src]="node.imageUrl" [alt]="displayName(node)" loading="lazy" />
+      <i *ngIf="!node.imageUrl" class="pi pi-folder" aria-hidden="true"></i>
+    </div>
+
+    <div class="ctp__row-main">
+      <span class="ctp__row-name">{{ displayName(node) }}</span>
+      <span class="ctp__row-slug">{{ node.slug }}</span>
+    </div>
+
+    <span class="ctp__row-count" *ngIf="node.productCount != null">
+      {{ 'admin.categories.products' | translate: { count: node.productCount } }}
+    </span>
+
+    <app-vl-status-badge
+      *ngIf="node.active === false"
+      class="ctp__row-badge"
+      [label]="'admin.categories.inactiveBadge' | translate"
+      tone="muted"
+      [outline]="true"
+    ></app-vl-status-badge>
+
+    <div class="ctp__row-actions">
+      <button type="button" class="ctp__row-action" (click)="openNew(node.id)">
+        {{ 'admin.categories.newSubcategory' | translate }}
+      </button>
+      <button type="button" class="ctp__row-action ctp__row-action--primary" (click)="openEdit(node)">
+        {{ 'admin.categories.edit' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="ctp__children" *ngIf="node.children.length">
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="nodeTpl; context: { $implicit: child, depth: depth + 1 }"></ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+
+<app-category-form-dialog
+  [open]="dialogOpen()"
+  [category]="dialogTarget()?.category ?? null"
+  [initialParentId]="dialogTarget()?.parentId ?? null"
+  [parentOptions]="parentOptions()"
+  (closed)="closeDialog()"
+  (saved)="onSaved()"
+></app-category-form-dialog>

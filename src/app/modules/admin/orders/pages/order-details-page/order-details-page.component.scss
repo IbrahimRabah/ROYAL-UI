@@ -92,6 +92,9 @@
 }
 
 .order-details-page__payment-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--admin-row-height);
   padding: var(--sp-1) var(--sp-2);
   border: none;
   background: transparent;
@@ -220,6 +223,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
   padding: var(--sp-2) var(--sp-3);
   border: 1px solid var(--admin-border);
   border-radius: var(--r-md);
@@ -303,6 +307,10 @@
   border-collapse: collapse;
   font-size: var(--fs-sm);
 
+  @media (max-width: 639px) {
+    min-inline-size: 560px;
+  }
+
   th {
     padding-block-end: var(--sp-2);
     color: var(--admin-text-muted);
@@ -351,6 +359,8 @@
 
 .order-details-page__item-sku {
   color: var(--admin-text-muted);
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .order-details-page__item-total {

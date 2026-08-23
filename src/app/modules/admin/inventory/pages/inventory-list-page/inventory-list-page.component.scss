@@ -118,6 +118,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
   padding: var(--sp-2) var(--sp-3);
   border: 1px solid var(--admin-border);
   border-radius: var(--r-full);
@@ -129,6 +130,13 @@
 
   input {
     accent-color: var(--gold);
+  }
+}
+
+@media (max-width: 767px) {
+  .inventory-list-page__toolbar {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -297,73 +305,6 @@
 
   @include breakpoints.md {
     display: none;
-  }
-}
-
-.inventory-list-page__card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
-  background: var(--admin-surface);
-  border: 1px solid var(--admin-border);
-  border-radius: var(--r-lg);
-}
-
-.inventory-list-page__card-head {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-3);
-}
-
-.inventory-list-page__card-title {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-inline-size: 0;
-  flex: 1 1 auto;
-}
-
-.inventory-list-page__card-name {
-  font-weight: 700;
-  color: var(--admin-text);
-}
-
-.inventory-list-page__card-variant {
-  font-size: var(--fs-sm);
-  color: var(--admin-text-muted);
-}
-
-.inventory-list-page__card-sku {
-  font-size: var(--fs-xs);
-  color: var(--admin-text-muted);
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-.inventory-list-page__card-numbers {
-  display: flex;
-  gap: var(--sp-4);
-  padding-block: var(--sp-2);
-  border-block: 1px solid var(--admin-border);
-}
-
-.inventory-list-page__card-figure {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1 1 0;
-
-  span {
-    font-size: var(--fs-xs);
-    color: var(--admin-text-muted);
-  }
-
-  strong {
-    font-variant-numeric: tabular-nums;
-    direction: ltr;
-    unicode-bidi: isolate;
-    color: var(--admin-text);
   }
 }
 

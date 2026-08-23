@@ -9,6 +9,7 @@ import { AdminInventoryApiService } from '../../../../../core/services/api/admin
 import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-taxonomy-api.service';
 import { APP_CONFIG } from '../../../../../core/constants/app-config';
 import { AdminListReturnService } from '../../../../../core/services/admin-list-return.service';
+import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { StatusTone } from '../../../../../core/constants/order-status.constants';
 import { FlatCategoryOption, flattenCategoryTree } from '../../../../../shared/utils/flatten-category-tree.util';
 
@@ -26,6 +27,7 @@ export class InventoryListPageComponent {
   private readonly inventoryApi = inject(AdminInventoryApiService);
   private readonly taxonomyApi = inject(AdminTaxonomyApiService);
   private readonly listReturn = inject(AdminListReturnService);
+  private readonly languageStore = inject(LanguageStoreService);
 
   readonly pageSize = APP_CONFIG.pagination.inventory.size;
 
@@ -70,7 +72,10 @@ export class InventoryListPageComponent {
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((value) => this.updateQueryParams({ q: value || null, page: null }));
 
-    this.taxonomyApi.listCategories().subscribe({ next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree)), error: () => {} });
+    this.taxonomyApi.listCategories().subscribe({
+      next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
+      error: () => {},
+    });
 
     // Server-side filtering/sorting/pagination — refetch whenever any of these change.
     effect(() => {

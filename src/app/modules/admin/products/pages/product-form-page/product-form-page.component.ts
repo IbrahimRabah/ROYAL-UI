@@ -4,13 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-  BrandResponse,
-  CategoryNode,
+  BrandAdminResponse,
+  CategoryAdminResponse,
   ProductAdminResponse,
   ProductSpecificationInput,
   ProductUpsertRequest,
 } from '../../../../../core/models';
 import { isSpecRowIncomplete } from '../../components/product-specs-tab/product-specs-tab.component';
+import { brandDisplayName } from '../../../../../shared/utils/brand-display-name.util';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
 import {
@@ -65,11 +66,12 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   // operator edits so it's still current if they switch tabs before saving.
   readonly specRows = signal<ProductSpecificationInput[]>([]);
 
-  readonly categories = signal<CategoryNode[]>([]);
-  readonly brands = signal<BrandResponse[]>([]);
+  readonly categories = signal<CategoryAdminResponse[]>([]);
+  readonly brands = signal<BrandAdminResponse[]>([]);
   readonly categoriesError = signal(false);
   readonly brandsError = signal(false);
-  readonly categoryOptions = computed(() => flattenCategoryTree(this.categories()));
+  readonly categoryOptions = computed(() => flattenCategoryTree(this.categories(), this.languageStore.lang()));
+  readonly brandOptions = computed(() => this.brands().map((b) => ({ id: b.id, name: brandDisplayName(b, this.languageStore.lang()) })));
 
   private savedSnapshot: string;
 

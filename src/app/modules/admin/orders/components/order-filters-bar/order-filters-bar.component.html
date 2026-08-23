@@ -1,4 +1,10 @@
-<div class="order-filters-bar">
+<details class="admin-toolbar order-filters-bar">
+  <summary class="admin-toolbar__trigger">
+    <i class="pi pi-sliders-h" aria-hidden="true"></i>
+    {{ 'common.filters' | translate }}
+    <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+  </summary>
+  <div class="admin-toolbar__panel order-filters-bar__panel">
   <div class="order-filters-bar__field">
     <label class="order-filters-bar__label">{{ 'admin.orders.filters.dateFrom' | translate }}</label>
     <p-datepicker
@@ -57,4 +63,5 @@
       {{ 'admin.orders.filters.apply' | translate }}
     </button>
   </div>
-</div>
+  </div>
+</details>

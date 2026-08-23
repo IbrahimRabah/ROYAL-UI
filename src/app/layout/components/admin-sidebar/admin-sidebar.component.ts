@@ -43,7 +43,9 @@ const NAV_GROUPS: AdminNavGroup[] = [
     labelKey: 'admin.nav.groups.catalog',
     items: [
       { labelKey: 'admin.nav.products', icon: 'pi-box', route: '/admin/products' },
-      { labelKey: 'admin.nav.categories', icon: 'pi-sitemap', route: '/admin/taxonomy' },
+      { labelKey: 'admin.nav.categories', icon: 'pi-sitemap', route: '/admin/categories' },
+      { labelKey: 'admin.nav.brands', icon: 'pi-tag', route: '/admin/brands' },
+      { labelKey: 'admin.nav.attributes', icon: 'pi-sliders-h', route: '/admin/attributes' },
       { labelKey: 'admin.nav.inventory', icon: 'pi-database', route: '/admin/inventory' },
     ],
   },

@@ -1,1 +1,100 @@
-<p>attribute-values-editor works!</p>
+<div class="ave">
+  <p class="ave__empty" *ngIf="!rows.length">{{ 'admin.attributes.valuesEditor.empty' | translate }}</p>
+
+  <div class="ave__list" cdkDropList (cdkDropListDropped)="onDrop($event)" *ngIf="rows.length">
+    <div class="ave__row" *ngFor="let row of rows; let i = index; trackBy: trackByRow" cdkDrag>
+      <div class="ave__row-handle" cdkDragHandle>
+        <i class="pi pi-bars" aria-hidden="true"></i>
+      </div>
+
+      <div class="ave__row-fields">
+        <label class="ave__field ave__field--code">
+          <span>{{ 'admin.attributes.valuesEditor.codeLabel' | translate }}</span>
+          <input
+            type="text"
+            class="ave__input"
+            [ngModel]="row.code"
+            (ngModelChange)="updateRow(i, { code: $event.toUpperCase() })"
+            dir="ltr"
+          />
+        </label>
+
+        <label class="ave__field ave__field--color">
+          <span>{{ 'admin.attributes.valuesEditor.hexLabel' | translate }}</span>
+          <div class="ave__color-row">
+            <p-colorPicker
+              [ngModel]="(row.hexColor || defaultSwatchColor).replace('#', '')"
+              (onChange)="updateHexFromPicker(i, '#' + $event.value)"
+              appendTo="self"
+              styleClass="ave__swatch"
+            ></p-colorPicker>
+            <input
+              type="text"
+              class="ave__input ave__input--hex"
+              [ngModel]="row.hexColor"
+              (ngModelChange)="updateHexFromText(i, $event)"
+              placeholder="#RRGGBB"
+              dir="ltr"
+            />
+          </div>
+        </label>
+
+        <label class="ave__field">
+          <span>{{ 'admin.attributes.valuesEditor.nameArLabel' | translate }}</span>
+          <input
+            type="text"
+            class="ave__input"
+            [ngModel]="row.nameAr"
+            (ngModelChange)="updateRow(i, { nameAr: $event })"
+            dir="rtl"
+          />
+        </label>
+
+        <label class="ave__field">
+          <span>{{ 'admin.attributes.valuesEditor.nameEnLabel' | translate }}</span>
+          <input
+            type="text"
+            class="ave__input"
+            [ngModel]="row.nameEn"
+            (ngModelChange)="updateRow(i, { nameEn: $event })"
+            dir="ltr"
+          />
+        </label>
+      </div>
+
+      <div class="ave__row-actions">
+        <button
+          type="button"
+          class="ave__order-btn"
+          [disabled]="i === 0"
+          (click)="moveUp(i)"
+          [attr.aria-label]="'admin.attributes.valuesEditor.moveUp' | translate"
+        >
+          <i class="pi pi-chevron-up" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="ave__order-btn"
+          [disabled]="i === rows.length - 1"
+          (click)="moveDown(i)"
+          [attr.aria-label]="'admin.attributes.valuesEditor.moveDown' | translate"
+        >
+          <i class="pi pi-chevron-down" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="ave__remove-btn"
+          (click)="removeRow(i)"
+          [attr.aria-label]="'admin.attributes.valuesEditor.remove' | translate"
+        >
+          <i class="pi pi-trash" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="ave__add-btn" (click)="addRow()">
+    <i class="pi pi-plus" aria-hidden="true"></i>
+    {{ 'admin.attributes.valuesEditor.addValue' | translate }}
+  </button>
+</div>

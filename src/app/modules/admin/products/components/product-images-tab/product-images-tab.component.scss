@@ -204,12 +204,21 @@
   pointer-events: auto;
 }
 
+// Hover has no touch equivalent — without this, the edit/delete actions would be
+// completely unreachable on a phone or tablet, since :hover never triggers there.
+@media (hover: none) {
+  .pit__tile-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .pit__tile-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 32px;
-  block-size: 32px;
+  inline-size: var(--admin-row-height);
+  block-size: var(--admin-row-height);
   border: none;
   border-radius: 50%;
   background: #fff;

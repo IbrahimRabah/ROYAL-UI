@@ -5,7 +5,10 @@ export interface CategoryBreadcrumbItem {
   name: string;
 }
 
-// GET /categories/tree (and its admin equivalent) — recursive.
+// GET /categories/tree (storefront only) — recursive. GET /admin/categories returns a
+// different, richer shape (CategoryAdminResponse, catalog/admin/category-admin.ts) — a
+// single already-translated `name` here vs full translations[] there. Do not reuse
+// between the two.
 // imageUrl/bannerUrl confirmed nullable by the admin tree example
 // ("discontinued-line" -> imageUrl: null, bannerUrl: null).
 export interface CategoryNode {

@@ -1,3 +1,5 @@
+@use 'styles/breakpoints';
+
 :host {
   display: block;
 }
@@ -18,11 +20,23 @@
 
 // ═══ Filters ═══
 
+// admin-toolbar (global, unscoped) handles the collapsed-below-tablet look; this
+// scoped rule only needs to restore the always-expanded flex row at md+ — its higher
+// specificity (the auto-added component attribute selector) is what wins over
+// admin-toolbar's own `display: contents` there.
 .movements-log-page__filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--sp-4);
+  @include breakpoints.md {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--sp-4);
+  }
+}
+
+.movements-log-page__filters-panel {
+  @media (max-width: 767px) {
+    align-items: stretch;
+  }
 }
 
 .movements-log-page__field {
@@ -43,8 +57,13 @@
 }
 
 .movements-log-page__text-input {
-  min-inline-size: 200px;
+  flex: 1 1 auto;
+  min-inline-size: 0;
   padding: var(--sp-3);
+
+  @include breakpoints.md {
+    min-inline-size: 200px;
+  }
   border: 1px solid var(--admin-border);
   border-radius: var(--r-md);
   background: var(--admin-surface);
@@ -204,6 +223,10 @@
 }
 
 :host ::ng-deep .movements-log-page__table {
+  @media (max-width: 991px) {
+    min-inline-size: 720px;
+  }
+
   .p-datatable-thead > tr > th {
     padding: var(--sp-3) var(--sp-4);
     background: var(--admin-surface-alt);

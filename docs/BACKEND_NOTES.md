@@ -203,3 +203,51 @@ does today.
     current account — a later rename won't rewrite history.
     `AuditLogResponse` already carried `actorName`, so the (still unbuilt)
     audit screen needs no equivalent change when it's built.
+
+16. **RESOLVED — the backend added proper admin DTOs; the guessed
+    optional-field shapes are gone.** `CategoryAdminResponse` (id, slug,
+    `parentId`, `translations[]` with locale/name/description/metaTitle/
+    metaDescription, imageUrl, bannerUrl, displayOrder, active, productCount,
+    children) and `BrandAdminResponse` (id, slug, nameAr, nameEn, logoUrl,
+    active) are now dedicated types, distinct from the storefront's
+    `CategoryNode`/`BrandResponse` (which were reverted to their original
+    clean storefront-only shape — the speculative `active`/`nameAr`/`nameEn`/
+    `translations` fields added here as a guess are gone from those). Two
+    contract quirks confirmed and handled:
+    - **Categories have no `shortDescription` column at all.** The shared
+      `TranslationInput`/`TranslationOutput` (used for products) still carry
+      it, but sending it for a category is silently dropped server-side. New
+      category-specific types (`CategoryTranslationInput`/
+      `CategoryTranslationOutput`, `catalog/admin/translation.ts`) omit the
+      field entirely rather than send something that goes nowhere.
+    - **Brands use `nameAr`/`nameEn` as two direct fields, not
+      `translations[]`** — no separate translation table — and have **no
+      `displayOrder`** column; they sort by name. `BrandAdminResponse`/
+      `BrandUpsertRequest` reflect this; `brand-form-dialog` never had a
+      displayOrder field to begin with, so nothing needed removing there.
+    Editing was never actually gated behind a read-only/disabled state on
+    either screen (the earlier defensive-optional-fields approach degraded
+    gracefully rather than blocking); this update is a pure type/shape
+    correction, not an unlock. Category full-replace save (all four fields,
+    every locale sent, blanks defaulted to `''`, no `shortDescription` key)
+    verified against a mock: the outgoing `PUT` body matches exactly, and
+    both AR/EN prefill correctly on edit from `translations[]`.
+
+17. **No `GET /admin/attributes/{id}` exists.** Confirmed 405 — only `GET
+    /admin/attributes` (the list) and `PUT /admin/attributes/{id}` are in the
+    contract. `attribute-form-page` no longer calls a per-id endpoint: it
+    loads `GET /admin/attributes` and finds the matching id itself (the list
+    already returns each attribute in full, including its complete
+    `values[]`, so nothing is lost by doing it this way). Navigating from
+    the list page passes the row via router `state` to skip the second
+    request, but that's purely an optimization — a hard refresh or a direct
+    link has no state to read, so the fetch-and-find path is what always
+    runs in that case, and it's the one that was actually verified (mocked
+    a 3-value `LIST` attribute, navigated straight to `/admin/attributes/
+    {id}` with no prior in-app navigation, confirmed only `GET
+    /admin/attributes` was ever called and all 3 values loaded intact). An
+    id not present in the list shows a not-found state instead of hanging
+    on the loading skeleton forever (also verified). Worth requesting a real
+    `GET /admin/attributes/{id}` if the attribute list ever grows large
+    enough that fetching the whole thing per edit becomes wasteful — right
+    now it's a non-issue at this catalog's scale.

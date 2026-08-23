@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject, switchMap } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { BrandResponse, Money, ProductAdminResponse, money } from '../../../../../core/models';
+import { BrandAdminResponse, Money, ProductAdminResponse, money } from '../../../../../core/models';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
 import {
@@ -21,6 +21,7 @@ import { ToastService } from '../../../../../core/services/toast.service';
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
 import { AdminListReturnService } from '../../../../../core/services/admin-list-return.service';
 import { FlatCategoryOption, flattenCategoryTree } from '../../../../../shared/utils/flatten-category-tree.util';
+import { brandDisplayName } from '../../../../../shared/utils/brand-display-name.util';
 
 const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   style: 'currency',
@@ -82,7 +83,8 @@ export class ProductListPageComponent {
   readonly error = signal(false);
 
   readonly categoryOptions = signal<FlatCategoryOption[]>([]);
-  readonly brands = signal<BrandResponse[]>([]);
+  readonly brands = signal<BrandAdminResponse[]>([]);
+  readonly brandOptions = computed(() => this.brands().map((b) => ({ id: b.id, name: brandDisplayName(b, this.languageStore.lang()) })));
 
   private readonly searchInput$ = new Subject<string>();
 
@@ -121,7 +123,10 @@ export class ProductListPageComponent {
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((value) => this.updateQueryParams({ q: value || null, page: null }));
 
-    this.taxonomyApi.listCategories().subscribe({ next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree)), error: () => {} });
+    this.taxonomyApi.listCategories().subscribe({
+      next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
+      error: () => {},
+    });
     this.taxonomyApi.listBrands().subscribe({ next: (b) => this.brands.set(b), error: () => {} });
 
     this.fetchAll();

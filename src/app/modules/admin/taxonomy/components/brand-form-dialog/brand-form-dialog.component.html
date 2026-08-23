@@ -1,1 +1,76 @@
-<p>brand-form-dialog works!</p>
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="brand-form-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+    [formGroup]="form"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="brand-form-dialog-title" class="admin-dialog__title">
+        {{ (isEdit ? 'admin.brands.form.editTitle' : 'admin.brands.form.addTitle') | translate }}
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)">
+      <div class="admin-dialog__inline-error" *ngIf="inlineError()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ inlineError() }}</span>
+      </div>
+
+      <label class="admin-dialog__field-label" for="bfd-name-ar">{{ 'admin.brands.form.nameArLabel' | translate }} *</label>
+      <input id="bfd-name-ar" type="text" class="admin-dialog__text-input" formControlName="nameAr" dir="rtl" />
+      <p class="admin-dialog__error" *ngIf="form.controls.nameAr.invalid && form.controls.nameAr.touched">
+        {{ 'admin.brands.form.nameRequired' | translate }}
+      </p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="bfd-name-en">
+        {{ 'admin.brands.form.nameEnLabel' | translate }} *
+      </label>
+      <input id="bfd-name-en" type="text" class="admin-dialog__text-input" formControlName="nameEn" dir="ltr" />
+      <p class="admin-dialog__error" *ngIf="form.controls.nameEn.invalid && form.controls.nameEn.touched">
+        {{ 'admin.brands.form.nameRequired' | translate }}
+      </p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="bfd-slug">
+        {{ 'admin.brands.form.slugLabel' | translate }}
+      </label>
+      <input id="bfd-slug" type="text" class="admin-dialog__text-input" formControlName="slug" dir="ltr" />
+      <p class="admin-dialog__helper" *ngIf="!slugFieldError()">{{ 'admin.brands.form.slugHint' | translate }}</p>
+      <p class="admin-dialog__helper admin-dialog__helper--warn" *ngIf="slugChanged">
+        {{ 'admin.brands.form.slugWarning' | translate }}
+      </p>
+      <p class="admin-dialog__error" *ngIf="slugFieldError()">{{ slugFieldError() }}</p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="bfd-logo-url">
+        {{ 'admin.brands.form.logoUrlLabel' | translate }}
+      </label>
+      <input id="bfd-logo-url" type="text" class="admin-dialog__text-input" formControlName="logoUrl" dir="ltr" />
+
+      <label class="bfd__toggle">
+        <input type="checkbox" class="bfd__toggle-input" formControlName="active" />
+        <span class="bfd__toggle-track"><span class="bfd__toggle-thumb"></span></span>
+        {{ 'admin.brands.form.activeLabel' | translate }}
+      </label>
+    </div>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="admin-dialog__submit admin-dialog__submit--ok" [disabled]="saving()" (click)="submit()">
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.brands.form.save' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>
