@@ -90,13 +90,13 @@
       ></app-product-translations-tab>
     </div>
     <div class="product-form-page__tabpanel" role="tabpanel" *ngIf="activeTab() === 'images'">
-      <app-product-images-tab></app-product-images-tab>
+      <app-product-images-tab [productId]="productId()!" (imagesChanged)="refreshProductSilently()"></app-product-images-tab>
     </div>
     <div class="product-form-page__tabpanel" role="tabpanel" *ngIf="activeTab() === 'variants'">
       <app-product-variants-tab [productId]="productId()!" (variantsChanged)="refreshProductSilently()"></app-product-variants-tab>
     </div>
     <div class="product-form-page__tabpanel" role="tabpanel" *ngIf="activeTab() === 'specs'">
-      <app-product-specs-tab></app-product-specs-tab>
+      <app-product-specs-tab [rows]="specRows()" (rowsChange)="specRows.set($event)"></app-product-specs-tab>
     </div>
   </ng-container>
 </div>

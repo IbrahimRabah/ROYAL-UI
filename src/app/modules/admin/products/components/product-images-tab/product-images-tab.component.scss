@@ -1,23 +1,241 @@
+@use 'styles/breakpoints';
+
 :host {
   display: block;
 }
 
-.product-tab-placeholder {
+.pit__error {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.pit__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+// ═══ Note ═══
+
+.pit__note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  margin: 0 0 var(--sp-4);
+  background: var(--admin-surface-alt);
+  border-inline-start: 3px solid var(--gold);
+  border-radius: var(--r-md);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+
+  i {
+    flex-shrink: 0;
+    margin-block-start: 2px;
+    color: var(--gold);
+  }
+}
+
+// ═══ Dropzone ═══
+
+.pit__dropzone {
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-3);
-  padding: var(--sp-8) var(--sp-4);
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  margin-block-end: var(--sp-4);
+  border: 2px dashed var(--admin-border-strong);
+  border-radius: var(--r-lg);
+  background: var(--admin-surface);
   color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+
+  i {
+    font-size: 1.25rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--gold);
+  }
+}
+
+.pit__dropzone--over {
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 6%, var(--admin-surface));
+}
+
+.pit__dropzone--empty {
+  flex-direction: column;
+  padding: var(--sp-8) var(--sp-5);
   text-align: center;
 
   i {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    margin-block-end: var(--sp-2);
+    color: var(--admin-text-muted);
+  }
+}
+
+.pit__dropzone-title {
+  margin: 0;
+  color: var(--admin-text);
+  font-weight: 700;
+}
+
+.pit__dropzone-hint {
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+}
+
+.pit__empty-warning {
+  margin: var(--sp-3) 0 0;
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.pit__file-input {
+  display: none;
+}
+
+.pit__uploading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+}
+
+// ═══ Grid ═══
+
+.pit__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+
+  @include breakpoints.md {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  p {
-    margin: 0;
-    font-size: var(--fs-sm);
+  @include breakpoints.lg {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.pit__tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--admin-surface-alt);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.pit__tile--main {
+  border-color: var(--gold);
+  border-width: 2px;
+}
+
+.pit__tile-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.pit__tile-main-pill {
+  position: absolute;
+  inset-block-start: var(--sp-2);
+  inset-inline-start: var(--sp-2);
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pit__tile-scrim {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  pointer-events: none;
+}
+
+.pit__tile:hover .pit__tile-scrim,
+.pit__tile:focus-within .pit__tile-scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pit__tile-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--admin-text);
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.pit__tile-action--danger {
+  color: var(--stop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pit__dropzone,
+  .pit__tile-scrim,
+  .pit__tile-action {
+    transition: none;
   }
 }

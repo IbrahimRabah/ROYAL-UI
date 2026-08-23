@@ -1,1 +1,32 @@
-<p>product-tabs works!</p>
+<div class="ptabs">
+  <div class="ptabs__bar" *ngIf="showTabs; else plainTitle" role="tablist">
+    <button
+      type="button"
+      class="ptabs__tab"
+      [class.ptabs__tab--active]="activeTab() === 'description'"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'description'"
+      (click)="selectTab('description')"
+    >{{ 'product.description' | translate }}</button>
+    <button
+      type="button"
+      class="ptabs__tab"
+      [class.ptabs__tab--active]="activeTab() === 'specifications'"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'specifications'"
+      (click)="selectTab('specifications')"
+    >{{ 'product.specifications' | translate }}</button>
+  </div>
+
+  <ng-template #plainTitle>
+    <h2 class="ptabs__title">{{ 'product.description' | translate }}</h2>
+  </ng-template>
+
+  <div class="ptabs__panel" role="tabpanel" *ngIf="!showTabs || activeTab() === 'description'">
+    <p class="ptabs__description-text">{{ description }}</p>
+  </div>
+
+  <div class="ptabs__panel" role="tabpanel" *ngIf="showTabs && activeTab() === 'specifications'">
+    <app-product-specs-table [specifications]="specifications"></app-product-specs-table>
+  </div>
+</div>

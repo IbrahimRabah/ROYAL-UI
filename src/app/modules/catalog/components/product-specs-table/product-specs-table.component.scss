@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.specs-table {
+  inline-size: 100%;
+  max-inline-size: 65ch;
+  border-collapse: collapse;
+}
+
+.specs-table__row {
+  border-block-end: 1px solid var(--border);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+.specs-table__name,
+.specs-table__value {
+  padding: var(--sp-3) 0;
+  text-align: start;
+  font-weight: 400;
+  font-size: var(--fs-sm);
+  vertical-align: top;
+}
+
+.specs-table__name {
+  inline-size: 40%;
+  padding-inline-end: var(--sp-4);
+  color: var(--text-muted);
+}
+
+.specs-table__value {
+  color: var(--text);
+}

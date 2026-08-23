@@ -1,1 +1,8 @@
-<p>product-specs-table works!</p>
+<table class="specs-table">
+  <tbody>
+    <tr class="specs-table__row" *ngFor="let spec of specifications; trackBy: trackByCode">
+      <th class="specs-table__name" scope="row">{{ spec.name }}</th>
+      <td class="specs-table__value">{{ spec.value }}</td>
+    </tr>
+  </tbody>
+</table>

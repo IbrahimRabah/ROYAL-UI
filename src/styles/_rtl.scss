@@ -36,6 +36,45 @@
 //   html[dir='rtl'] .some-primeng-class {
 //     transform: scaleX(-1); // or whatever physical property can't be made logical
 //   }
+//
+// ⚠️ p-select's overlay POSITIONING bug is NOT here, and can't be — read on before
+// reaching for a CSS fix for it.
+//
+// The verification above only ever checked p-select's *static CSS* (selectstyle.mjs) —
+// that part is genuinely clean. What broke three separate admin screens (orders filters,
+// the variant picker, the specs value select) is a JS bug, one directory over, in
+// @primeuix/utils/dist/dom/index.mjs — the shared overlay-positioning helper every
+// PrimeNG overlay component (Select, MultiSelect, Popover, ...) delegates to for
+// non-"self" appendTo targets:
+//
+//   d.left+f>ct.width ? B=Math.max(0,d.left+w+c-f) : B=d.left+w;
+//   q(t) ? t.style.insetInlineEnd=B+"px" : t.style.insetInlineStart=B+"px";
+//
+// `d.left` is `getBoundingClientRect().left` — a physical, LTR-only measurement — and in
+// the RTL branch (`q(t)` = isRTL) that same physical number gets assigned to the
+// *logical* `insetInlineEnd`, which means "distance from the right edge." Physical-left
+// and distance-from-the-right are not the same number, so in RTL the overlay lands
+// nowhere near its trigger — "shows only the first row," "renders broken," etc.,
+// depending on how far off it ends up.
+//
+// This path (absolutePosition()) only runs for `appendTo` values other than "self". The
+// "self" path (relativePosition()) never has this bug — it only ever sets
+// `insetInlineStart`, which is direction-agnostic on its own; the browser resolves it
+// correctly in both directions with no JS math involved. So the fix isn't a CSS override
+// (there's no wrong physical property here to override — the wrong number is baked into
+// an inline style by JS) — it's "never use anything but appendTo='self' for p-select."
+//
+// That rule is enforced, not just documented: see modules/admin/shared/directives/
+// select-append-self.directive.ts, imported via AdminSharedModule into every admin
+// feature module that uses p-select. It force-sets appendTo="self" on every p-select
+// instance regardless of what the template says, so this can't be reintroduced by typing
+// appendTo="body" (or leaving it unset) on a future screen.
+//
+// "self" has its own gotcha: its overlay is a normal DOM descendant of the select, so an
+// ancestor with `overflow: hidden` will clip it exactly as if it were any other
+// overflowing child. That's a layout problem to fix at the call site (don't wrap a
+// p-select in an overflow:hidden container — apply border-radius per first/last child
+// instead, see product-specs-tab.component.scss), not a reason to go back to "body".
 
 // order-card's trailing chevron is a "go forward" affordance, not a fixed left/right
 // glyph — it should point toward the end of the reading direction, which a single pi

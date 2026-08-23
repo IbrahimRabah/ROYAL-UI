@@ -1,4 +1,113 @@
-<div class="product-tab-placeholder">
-  <i class="pi pi-images" aria-hidden="true"></i>
-  <p>{{ 'admin.products.form.comingSoon' | translate }}</p>
+<div class="pit">
+  <div class="pit__skeleton" *ngIf="loading()">
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="pit__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.products.form.images.loadError' | translate }}</span>
+    <button type="button" class="pit__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!loading() && !error()">
+    <p class="pit__note">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      {{ 'admin.products.form.images.note' | translate }}
+    </p>
+
+    <!-- Empty state — full-size dropzone -->
+    <div
+      class="pit__dropzone pit__dropzone--empty"
+      [class.pit__dropzone--over]="dragOver()"
+      *ngIf="!images().length"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+      <p class="pit__dropzone-title">{{ 'admin.products.form.images.dropzoneTitle' | translate }}</p>
+      <p class="pit__dropzone-hint">{{ 'admin.products.form.images.dropzoneHint' | translate }}</p>
+      <p class="pit__empty-warning">{{ 'admin.products.form.images.emptyWarning' | translate }}</p>
+    </div>
+
+    <ng-container *ngIf="images().length">
+      <div
+        class="pit__dropzone"
+        [class.pit__dropzone--over]="dragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()"
+      >
+        <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+        <span>{{ 'admin.products.form.images.dropzoneTitle' | translate }}</span>
+        <span class="pit__dropzone-hint">{{ 'admin.products.form.images.dropzoneHint' | translate }}</span>
+      </div>
+
+      <div class="pit__grid" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="onReorderDrop($event)">
+        <div *ngFor="let image of images()" cdkDrag class="pit__tile" [class.pit__tile--main]="image.main">
+          <img [src]="image.thumbUrl || image.url" [alt]="image.altTextEn || image.altTextAr" class="pit__tile-img" />
+
+          <span class="pit__tile-main-pill" *ngIf="image.main">{{ 'admin.products.form.images.mainPill' | translate }}</span>
+
+          <div class="pit__tile-scrim">
+            <button
+              type="button"
+              class="pit__tile-action"
+              [disabled]="image.main"
+              (click)="setMain(image)"
+              [pTooltip]="'admin.products.form.images.setMain' | translate"
+              tooltipPosition="top"
+              [attr.aria-label]="'admin.products.form.images.setMain' | translate"
+            >
+              <i class="pi pi-star" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              class="pit__tile-action"
+              (click)="startEdit(image)"
+              [pTooltip]="'admin.products.form.images.edit' | translate"
+              tooltipPosition="top"
+              [attr.aria-label]="'admin.products.form.images.edit' | translate"
+            >
+              <i class="pi pi-pencil" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              class="pit__tile-action pit__tile-action--danger"
+              (click)="deleteImage(image)"
+              [pTooltip]="'admin.products.form.images.delete' | translate"
+              tooltipPosition="top"
+              [attr.aria-label]="'admin.products.form.images.delete' | translate"
+            >
+              <i class="pi pi-trash" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="pit__uploading" *ngIf="uploading()">
+      <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+      {{ 'admin.products.form.images.uploading' | translate }}
+    </div>
+
+    <input
+      #fileInput
+      type="file"
+      multiple
+      accept="image/jpeg,image/png,image/webp,image/avif"
+      class="pit__file-input"
+      (change)="onFileInputChange($event)"
+    />
+  </ng-container>
 </div>
+
+<app-image-edit-dialog
+  [image]="editingImage()"
+  [variants]="variants()"
+  [saving]="savingEdit()"
+  (closed)="closeEditDialog()"
+  (save)="saveEditDialog($event)"
+></app-image-edit-dialog>

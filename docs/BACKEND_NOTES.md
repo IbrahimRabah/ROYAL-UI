@@ -105,3 +105,67 @@ does today.
    by attribute with clear headings and shows a `--warn`-tinted note telling
    the operator to select only what actually applies — no client-side
    guessing at which attribute belongs to which category.
+
+9. **RESOLVED — `ProductAdminResponse` now returns `specifications`.**
+   `GET /admin/products/{id}` echoes back what was saved, same shape as the
+   request (`attributeId`/`attributeValueId`/`valueText`), confirmed on a
+   real product (`10167`). Per the API's global omit-null convention,
+   `attributeValueId`/`valueText` are omitted entirely when null rather than
+   sent as an explicit null (e.g. `{ "attributeId": 10051,
+   "attributeValueId": 53 }` — no `valueText` key at all). `product-form-page`
+   now normalizes both keys to `null` when absent before handing rows to
+   `product-specs-tab` — see item 12, which was the actual frontend gap this
+   surfaced (the model didn't declare the field and the tab never read it,
+   so the newly-available data still weren't reaching the UI).
+
+10. **`product-specs-tab` now branches on `dataType` — was the actual cause of
+    the 409 `DUPLICATE_VALUE` errors on `LIST` attributes.** Every spec row
+    used to render a free-text input regardless of `dataType`, so saving a
+    `LIST` attribute (e.g. `STRAP_TYPE`, id `10051`, values `53`/`54`/`55`)
+    sent `valueText: "معدن"` instead of `attributeValueId: 53` — the backend
+    tried to create a new value with that name and rejected the duplicate.
+    Fixed: `LIST` attributes render a `p-select` of that attribute's
+    `values[]` and send `attributeValueId` with `valueText: null`;
+    `TEXT`/`NUMBER`/`BOOLEAN` render the free-text input and send `valueText`
+    with `attributeValueId: null`. Verified against a mocked backend with the
+    real confirmed shapes (`STRAP_TYPE`/`LIST`/values 53–55,
+    `MATERIAL`/`TEXT`) — the outgoing `PUT` body for a `STRAP_TYPE = Metal`
+    row is `{"attributeId":10051,"attributeValueId":53,"valueText":null}`, as
+    specified.
+
+11. **RESOLVED — the suspected `TEXT`-spec inner-join bug did not
+    materialize; both `LIST` and `TEXT` specs come back from the storefront.**
+    Confirmed directly: `GET /products/velora-chrono-classic` returns
+    `"specifications": [{ "code": "STRAP_TYPE", ..., "value": "Metal" },
+    { "code": "MATERIAL", ..., "value": "fsfds" }]` — `MATERIAL` (`TEXT`,
+    null `attributeValueId`) is present alongside `STRAP_TYPE` (`LIST`), so
+    whatever the earlier concern was, it isn't dropping null-attributeValueId
+    rows. `product-tabs`/`product-specs-table` (storefront) render both
+    correctly — see the PDP two-tab-bar task. The one remaining gap was
+    entirely frontend: the admin Specifications tab wasn't reading the
+    saved specs back in at all — see item 12.
+
+12. **RESOLVED — the admin Specifications tab now pre-populates from the
+    saved product, instead of always starting empty.** Two compounding gaps,
+    both frontend: `ProductAdminResponse` (core/models) didn't declare
+    `specifications` even after the backend started returning it (item 9),
+    and `product-specs-tab` never read `product.specifications` into its
+    `rows` state to begin with — rows only ever grew via the operator's own
+    "Add specification" clicks. A product with real saved specs (confirmed
+    on `10167`: `STRAP_TYPE = Metal`, `MATERIAL = "fsfds"`) still showed the
+    tab's empty state. Fixed by declaring the field and seeding
+    `product-form-page`'s `specRows` signal from
+    `p.specifications` on fetch (normalizing the omitted-when-null keys per
+    the convention above). Two related follow-ups landed in the same pass:
+    the "Add specification" dropdown already excluded attributes present in
+    `rows`, so it now correctly excludes already-set attributes too (that
+    exclusion was silently inert while `rows` always started empty) — it's
+    now disabled with an inline note when none remain; and the tab's own
+    independent "Save specifications" button was removed, since
+    specifications ride the same full-replace `PUT` as the Details form —
+    `specRows` was lifted into `product-form-page` and the single top-level
+    Save now sends both in one request. Verified against a mocked backend
+    with the exact reported payload: both rows render pre-filled, the add
+    dropdown is disabled with the note, only one Save button exists, and
+    clicking it PUTs `specifications` correctly alongside the rest of the
+    body.

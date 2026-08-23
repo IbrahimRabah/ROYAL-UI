@@ -36,6 +36,11 @@ export interface ProductAdminResponse {
   updatedAt: string;
   // e.g. "No variants — this product cannot be published or bought", "No images".
   warnings: string[];
+  // Added alongside translations[] — same full-replace-via-PUT shape as the request
+  // (ProductSpecificationInput). Per the API's global convention, attributeValueId /
+  // valueText are OMITTED entirely when null, never sent as an explicit null — treat a
+  // missing key as null/empty when reading, same as every other nullable field.
+  specifications: ProductSpecificationInput[];
 }
 
 export interface ProductSpecificationInput {

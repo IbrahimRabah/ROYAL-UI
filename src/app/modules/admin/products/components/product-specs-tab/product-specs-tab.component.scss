@@ -2,22 +2,197 @@
   display: block;
 }
 
-.product-tab-placeholder {
+.pst__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+// ═══ Empty state ═══
+
+.pst__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--sp-3);
-  padding: var(--sp-8) var(--sp-4);
-  color: var(--admin-text-muted);
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-5);
   text-align: center;
+  background: var(--admin-surface);
+  border: 1px dashed var(--admin-border-strong);
+  border-radius: var(--r-lg);
+  margin-block-end: var(--sp-4);
 
   i {
     font-size: 2rem;
+    color: var(--admin-text-muted);
   }
 
   p {
     margin: 0;
-    font-size: var(--fs-sm);
+    max-inline-size: 460px;
+    color: var(--admin-text-muted);
+    font-size: var(--fs-base);
   }
 }
+
+// ═══ Rows ═══
+
+// No overflow: hidden here — a p-select inside a row needs appendTo="self" (see
+// select-append-self.directive.ts), whose overlay is a normal descendant of the row and
+// would get clipped by a hidden-overflow ancestor the moment it opens. Rounded corners
+// come from the first/last row instead of container-level clipping.
+.pst__rows {
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  margin-block-end: var(--sp-4);
+}
+
+.pst__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-4);
+  background: var(--admin-surface);
+  border-block-end: 1px solid var(--admin-border);
+
+  &:first-child {
+    border-start-start-radius: var(--r-lg);
+    border-start-end-radius: var(--r-lg);
+  }
+
+  &:last-child {
+    border-block-end: none;
+    border-end-start-radius: var(--r-lg);
+    border-end-end-radius: var(--r-lg);
+  }
+
+  &:nth-child(even) {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.pst__row-label {
+  flex: 0 0 180px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+:host ::ng-deep .pst__row-input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.pst__row-text {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-sm);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+}
+
+.pst__row--incomplete {
+  box-shadow: inset 3px 0 0 var(--warn);
+
+  :host-context([dir='rtl']) & {
+    box-shadow: inset -3px 0 0 var(--warn);
+  }
+}
+
+.pst__row-remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--stop);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop-bg);
+  }
+}
+
+// ═══ Add specification ═══
+
+.pst__add {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  margin-block-end: var(--sp-4);
+}
+
+:host ::ng-deep .pst__add-select {
+  flex: 1 1 auto;
+  max-inline-size: 320px;
+}
+
+.pst__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.pst__no-attributes {
+  padding: var(--sp-4);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.pst__incomplete-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  margin: 0 0 var(--sp-3);
+  background: var(--warn-bg);
+  border-inline-start: 3px solid var(--warn);
+  border-radius: var(--r-md);
+  color: var(--warn);
+  font-size: var(--fs-sm);
+
+  i {
+    flex-shrink: 0;
+    margin-block-start: 2px;
+  }
+}
+

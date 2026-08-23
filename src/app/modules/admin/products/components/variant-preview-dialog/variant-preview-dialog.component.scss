@@ -22,8 +22,8 @@
 .vpd__panel {
   display: flex;
   flex-direction: column;
-  inline-size: 100%;
-  max-inline-size: 760px;
+  inline-size: 90vw;
+  max-inline-size: 1100px;
   max-block-size: 88vh;
   background: var(--admin-surface);
   border-radius: var(--r-lg);
@@ -87,6 +87,7 @@
   flex: 1 1 auto;
   min-block-size: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0 var(--sp-5) var(--sp-5);
 }
 
@@ -197,9 +198,8 @@
 
 .vpd__bulk-fill {
   display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--sp-2);
+  flex-direction: column;
+  gap: var(--sp-4);
   padding: var(--sp-4);
   margin-block-end: var(--sp-4);
   background: var(--admin-surface-alt);
@@ -207,34 +207,26 @@
   border-radius: var(--r-md);
 }
 
+.vpd__bulk-fill-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
 .vpd__bulk-fill-label {
-  flex-basis: 100%;
   font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--admin-text);
 }
 
-:host ::ng-deep .vpd__bulk-input {
-  inline-size: 100px;
-
-  &.vpd__bulk-input--sm {
-    inline-size: 84px;
-  }
-
-  input {
-    inline-size: 100%;
-    padding: var(--sp-2);
-    border: 1px solid var(--admin-border);
-    border-radius: var(--r-sm);
-    background: var(--admin-surface);
-    color: var(--admin-text);
-    font-size: var(--fs-sm);
-    text-align: end;
-    direction: ltr;
-  }
+.vpd__bulk-fill-hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
 }
 
 .vpd__bulk-apply {
+  align-self: flex-end;
   padding: var(--sp-2) var(--sp-4);
   border: none;
   border-radius: var(--r-sm);
@@ -300,13 +292,19 @@
   color: var(--admin-text-muted);
 }
 
+// Mobile-first: 1 column on phones, 2 from tablet width, 3 from desktop width — wraps
+// instead of forcing every field onto one overflowing line.
 .vpd__detail-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--sp-3);
 
-  @include breakpoints.md {
-    grid-template-columns: repeat(4, 1fr);
+  @include breakpoints.sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -314,9 +312,17 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-1);
+  min-inline-size: 0;
   font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--admin-text-muted);
+}
+
+.vpd__field-hint {
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  color: var(--admin-text-muted);
+  line-height: 1.4;
 }
 
 :host ::ng-deep .vpd__detail-input {
@@ -405,14 +411,11 @@
   }
 
   .vpd__panel {
+    inline-size: 100%;
     max-inline-size: 100%;
     max-block-size: 92vh;
     border-end-start-radius: 0;
     border-end-end-radius: 0;
-  }
-
-  .vpd__detail-grid {
-    grid-template-columns: 1fr 1fr;
   }
 }
 

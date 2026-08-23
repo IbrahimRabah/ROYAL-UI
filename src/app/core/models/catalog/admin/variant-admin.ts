@@ -10,6 +10,8 @@ export interface VariantAdminResponse {
   id: number;
   productId: number;
   sku: string;
+  // e.g. "ذهبي / 42 مم" — human-readable attribute-value combination, localized.
+  summary: string;
   // Inferred nullable — barcode is never described as required.
   barcode: string | null;
   price: Money;

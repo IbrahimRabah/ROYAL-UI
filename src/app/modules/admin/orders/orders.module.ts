@@ -6,6 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { PopoverModule } from 'primeng/popover';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdminSharedModule } from '../shared/admin-shared.module';
 
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrderListPageComponent } from './pages/order-list-page/order-list-page.component';
@@ -34,6 +35,7 @@ import { OrderAuditPanelComponent } from './components/order-audit-panel/order-a
     FormsModule,
     OrdersRoutingModule,
     SharedModule,
+    AdminSharedModule,
     TableModule,
     SelectModule,
     DatePickerModule,

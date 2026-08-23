@@ -62,56 +62,78 @@
       <!-- Step 2: row details -->
       <ng-container *ngIf="step() === 'details'">
         <div class="vpd__bulk-fill">
-          <span class="vpd__bulk-fill-label">{{ 'admin.products.form.variants.generator.applyToAll' | translate }}</span>
-          <p-inputnumber
-            [ngModel]="bulkFill().price"
-            (ngModelChange)="updateBulkFill({ price: $event })"
-            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-            [placeholder]="'admin.products.form.variants.generator.priceLabel' | translate"
-            styleClass="vpd__bulk-input"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().compareAtPrice"
-            (ngModelChange)="updateBulkFill({ compareAtPrice: $event })"
-            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-            [placeholder]="'admin.products.form.variants.generator.compareAtLabel' | translate"
-            styleClass="vpd__bulk-input"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().costPrice"
-            (ngModelChange)="updateBulkFill({ costPrice: $event })"
-            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-            [placeholder]="'admin.products.form.variants.generator.costLabel' | translate"
-            styleClass="vpd__bulk-input"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().taxRate"
-            (ngModelChange)="updateBulkFill({ taxRate: $event })"
-            mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" [min]="0" [max]="1"
-            [placeholder]="'admin.products.form.variants.generator.taxRateLabel' | translate"
-            styleClass="vpd__bulk-input vpd__bulk-input--sm"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().weightGrams"
-            (ngModelChange)="updateBulkFill({ weightGrams: $event })"
-            mode="decimal" [min]="0" suffix=" g"
-            [placeholder]="'admin.products.form.variants.generator.weightLabel' | translate"
-            styleClass="vpd__bulk-input vpd__bulk-input--sm"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().initialStock"
-            (ngModelChange)="updateBulkFill({ initialStock: $event })"
-            mode="decimal" [min]="0"
-            [placeholder]="'admin.products.form.variants.generator.initialStockLabel' | translate"
-            styleClass="vpd__bulk-input vpd__bulk-input--sm"
-          ></p-inputnumber>
-          <p-inputnumber
-            [ngModel]="bulkFill().minStockLevel"
-            (ngModelChange)="updateBulkFill({ minStockLevel: $event })"
-            mode="decimal" [min]="0"
-            [placeholder]="'admin.products.form.variants.generator.minStockLabel' | translate"
-            styleClass="vpd__bulk-input vpd__bulk-input--sm"
-          ></p-inputnumber>
+          <div class="vpd__bulk-fill-intro">
+            <span class="vpd__bulk-fill-label">{{ 'admin.products.form.variants.generator.applyToAll' | translate }}</span>
+            <p class="vpd__bulk-fill-hint">{{ 'admin.products.form.variants.generator.applyToAllHint' | translate }}</p>
+          </div>
+
+          <div class="vpd__detail-grid">
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.priceLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().price"
+                (ngModelChange)="updateBulkFill({ price: $event })"
+                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.compareAtLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().compareAtPrice"
+                (ngModelChange)="updateBulkFill({ compareAtPrice: $event })"
+                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.costLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().costPrice"
+                (ngModelChange)="updateBulkFill({ costPrice: $event })"
+                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.taxRateLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().taxRate"
+                (ngModelChange)="updateBulkFill({ taxRate: $event })"
+                mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" [min]="0" [max]="1"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+              <small class="vpd__field-hint">{{ 'admin.products.form.variants.generator.taxRateHint' | translate }}</small>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.weightLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().weightGrams"
+                (ngModelChange)="updateBulkFill({ weightGrams: $event })"
+                mode="decimal" [min]="0" suffix=" g"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.initialStockLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().initialStock"
+                (ngModelChange)="updateBulkFill({ initialStock: $event })"
+                mode="decimal" [min]="0"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+            <label class="vpd__detail-field">
+              <span>{{ 'admin.products.form.variants.generator.minStockLabel' | translate }}</span>
+              <p-inputnumber
+                [ngModel]="bulkFill().minStockLevel"
+                (ngModelChange)="updateBulkFill({ minStockLevel: $event })"
+                mode="decimal" [min]="0"
+                styleClass="vpd__detail-input"
+              ></p-inputnumber>
+            </label>
+          </div>
+
           <button type="button" class="vpd__bulk-apply" (click)="applyBulkFill()">
             {{ 'admin.products.form.variants.generator.apply' | translate }}
           </button>
@@ -164,6 +186,7 @@
                   mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" [min]="0" [max]="1"
                   styleClass="vpd__detail-input"
                 ></p-inputnumber>
+                <small class="vpd__field-hint">{{ 'admin.products.form.variants.generator.taxRateHint' | translate }}</small>
               </label>
               <label class="vpd__detail-field">
                 <span>{{ 'admin.products.form.variants.generator.weightLabel' | translate }}</span>

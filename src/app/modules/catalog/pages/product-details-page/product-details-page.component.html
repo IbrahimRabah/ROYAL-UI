@@ -45,10 +45,11 @@
 
     <section class="pdp__description section">
       <div class="container-vl pdp__description-inner">
-        <div class="pdp__description-copy">
-          <h2 class="pdp__description-title">{{ 'product.description' | translate }}</h2>
-          <p class="pdp__description-text">{{ p.description }}</p>
-        </div>
+        <app-product-tabs
+          class="pdp__description-copy"
+          [description]="p.description"
+          [specifications]="p.specifications"
+        ></app-product-tabs>
 
         <img
           *ngIf="descriptionImage() as image"

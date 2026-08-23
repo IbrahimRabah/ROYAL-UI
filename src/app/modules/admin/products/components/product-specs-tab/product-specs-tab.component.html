@@ -1,4 +1,100 @@
-<div class="product-tab-placeholder">
-  <i class="pi pi-list" aria-hidden="true"></i>
-  <p>{{ 'admin.products.form.comingSoon' | translate }}</p>
+<div class="pst">
+  <div class="pst__skeleton" *ngIf="loading()">
+    <p-skeleton height="180px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="pst__error" *ngIf="attributesError() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.products.form.specs.attributesLoadError' | translate }}</span>
+  </div>
+
+  <ng-container *ngIf="!loading() && !attributesError()">
+    <div class="pst__empty" *ngIf="!rows().length">
+      <i class="pi pi-list" aria-hidden="true"></i>
+      <p>{{ 'admin.products.form.specs.emptyTitle' | translate }}</p>
+    </div>
+
+    <div class="pst__rows" *ngIf="rows().length">
+      <div
+        class="pst__row"
+        [class.pst__row--incomplete]="isRowIncomplete(row)"
+        *ngFor="let row of rows(); let i = index; trackBy: trackByAttributeId"
+      >
+        <span class="pst__row-label">{{ attributeFor(row) ? localizedName(attributeFor(row)!) : '' }}</span>
+
+        <ng-container *ngIf="attributeFor(row)?.dataType === AttributeDataType.LIST; else textInput">
+          <p-select
+            [ngModel]="row.attributeValueId"
+            (ngModelChange)="updateRowValueId(i, $event)"
+            [options]="attributeFor(row)?.values ?? []"
+            optionLabel="nameAr"
+            optionValue="id"
+            appendTo="self"
+            [placeholder]="'admin.products.form.specs.selectValuePlaceholder' | translate"
+            styleClass="pst__row-input"
+          >
+            <ng-template let-option pTemplate="item">{{ localizedName(option) }}</ng-template>
+            <ng-template let-option pTemplate="selectedItem">{{ localizedName(option) }}</ng-template>
+          </p-select>
+        </ng-container>
+        <ng-template #textInput>
+          <input
+            type="text"
+            class="pst__row-text"
+            [ngModel]="row.valueText"
+            (ngModelChange)="updateRowText(i, $event)"
+            [placeholder]="'admin.products.form.specs.valuePlaceholder' | translate"
+          />
+        </ng-template>
+
+        <button
+          type="button"
+          class="pst__row-remove"
+          (click)="removeRow(i)"
+          [attr.aria-label]="'admin.products.form.specs.remove' | translate"
+        >
+          <i class="pi pi-trash" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="pst__add" *ngIf="specAttributes().length">
+      <p-select
+        [ngModel]="pendingAttributeId()"
+        (ngModelChange)="pendingAttributeId.set($event)"
+        [options]="availableAttributes()"
+        optionLabel="nameAr"
+        optionValue="id"
+        appendTo="self"
+        [disabled]="!availableAttributes().length"
+        [placeholder]="'admin.products.form.specs.addSpecification' | translate"
+        styleClass="pst__add-select"
+      >
+        <ng-template let-option pTemplate="item">{{ localizedName(option) }}</ng-template>
+        <ng-template let-option pTemplate="selectedItem">{{ localizedName(option) }}</ng-template>
+      </p-select>
+      <button
+        type="button"
+        class="pst__add-btn"
+        [disabled]="pendingAttributeId() == null || !availableAttributes().length"
+        (click)="addRow()"
+      >
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        {{ 'admin.products.form.specs.addSpecification' | translate }}
+      </button>
+    </div>
+
+    <p class="pst__no-attributes" *ngIf="!specAttributes().length">
+      {{ 'admin.products.form.specs.noAttributesConfigured' | translate }}
+    </p>
+
+    <p class="pst__no-attributes" *ngIf="specAttributes().length && !availableAttributes().length">
+      {{ 'admin.products.form.specs.allAttributesUsed' | translate }}
+    </p>
+
+    <p class="pst__incomplete-hint" *ngIf="hasIncompleteRow()">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      {{ 'admin.products.form.specs.incompleteRows' | translate }}
+    </p>
+  </ng-container>
 </div>

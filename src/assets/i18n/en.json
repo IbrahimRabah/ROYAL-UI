@@ -72,6 +72,7 @@
     "priceFrom": "From {{price}}",
     "color": "Color",
     "description": "Description",
+    "specifications": "Specifications",
     "alsoLike": "You May Also Like",
     "notFound": "This product could not be found.",
     "gallery": {
@@ -653,7 +654,11 @@
       "validationError": "Please fix the highlighted fields",
       "variantsSaved": "Variant changes saved",
       "variantsGenerated": "{{count}} variants created",
-      "variantArchived": "Variant archived"
+      "variantArchived": "Variant archived",
+      "imagesUploaded": "{{count}} images uploaded",
+      "imageMainSet": "Main image updated",
+      "imageDeleted": "Image deleted",
+      "imageSaved": "Image updated"
     }
   },
   "errorPage": {
@@ -1006,11 +1011,13 @@
           "inUseHint": "This value already appears on at least one existing variant of this product — selecting it again is fine (e.g. to add a new size in this colour).",
           "skuLabel": "SKU",
           "applyToAll": "Apply to all rows",
+          "applyToAllHint": "Fill once and apply to every row below — nothing is saved until you press Create",
           "apply": "Apply",
           "priceLabel": "Price",
           "compareAtLabel": "Compare-at",
           "costLabel": "Cost",
           "taxRateLabel": "Tax rate",
+          "taxRateHint": "0.14 = 14%, extracted from the price, not added",
           "weightLabel": "Weight",
           "initialStockLabel": "Initial stock",
           "initialStockWarning": "A variant with 0 stock exists but can't be bought — the product will look broken to shoppers, not just unavailable.",
@@ -1019,6 +1026,45 @@
           "noSelection": "Select at least one value from at least one attribute"
         },
         "skuConflict": "This SKU is already in use"
+      },
+      "images": {
+        "loadError": "We couldn't load these images.",
+        "note": "The variant link drives the storefront gallery: the product page shows the main poster plus whichever images are linked to the variant the shopper picked. An image left unlinked shows for every variant.",
+        "dropzoneTitle": "Drag images here or click to browse",
+        "dropzoneHint": "JPEG, PNG, WebP or AVIF — up to 5MB each, 20 images max",
+        "emptyWarning": "A product without images looks broken in the store.",
+        "editTitle": "Edit image",
+        "mainPill": "Main",
+        "setMain": "Set as main",
+        "edit": "Edit",
+        "delete": "Delete",
+        "altTextAr": "Alt text (Arabic)",
+        "altTextEn": "Alt text (English)",
+        "variantLink": "Linked variant",
+        "notLinked": "Not linked",
+        "uploading": "Uploading…",
+        "reorderError": "Couldn't save the new order — refreshed to the last saved state.",
+        "deleteConfirm": {
+          "title": "Delete image",
+          "message": "This image will be removed from the product permanently.",
+          "confirm": "Delete"
+        },
+        "errors": {
+          "unsupportedType": "\"{{name}}\" isn't a JPEG, PNG, WebP or AVIF file",
+          "tooLarge": "\"{{name}}\" is over 5MB",
+          "limitReached": "\"{{name}}\" wasn't added — this product already has 20 images"
+        }
+      },
+      "specs": {
+        "attributesLoadError": "We couldn't load specification attributes.",
+        "emptyTitle": "No specifications set yet — add one below and it appears on the product page automatically.",
+        "selectValuePlaceholder": "Select a value",
+        "valuePlaceholder": "Value",
+        "remove": "Remove",
+        "addSpecification": "Add specification",
+        "noAttributesConfigured": "No specification attributes are set up yet.",
+        "allAttributesUsed": "Every specification attribute already has a value on this product.",
+        "incompleteRows": "Fill in a value for every specification row, or remove the empty ones, before saving."
       }
       }
     }

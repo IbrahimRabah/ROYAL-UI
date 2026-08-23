@@ -3,7 +3,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { BrandResponse, CategoryNode, ProductAdminResponse, ProductUpsertRequest } from '../../../../../core/models';
+import {
+  BrandResponse,
+  CategoryNode,
+  ProductAdminResponse,
+  ProductSpecificationInput,
+  ProductUpsertRequest,
+} from '../../../../../core/models';
+import { isSpecRowIncomplete } from '../../components/product-specs-tab/product-specs-tab.component';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
 import {
@@ -52,6 +59,12 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   readonly actionBusy = signal(false);
   readonly activeTab = signal('details');
 
+  // The specs tab's draft state, lifted up here so the single Save action can send it —
+  // same reasoning as `form` above: seeded once from the loaded product (see fetch()),
+  // never re-synced by refreshProductSilently(), and updated live via rowsChange as the
+  // operator edits so it's still current if they switch tabs before saving.
+  readonly specRows = signal<ProductSpecificationInput[]>([]);
+
   readonly categories = signal<CategoryNode[]>([]);
   readonly brands = signal<BrandResponse[]>([]);
   readonly categoriesError = signal(false);
@@ -96,7 +109,7 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       this.fetch(id);
       this.savedSnapshot = '';
     } else {
-      this.savedSnapshot = JSON.stringify(this.form.getRawValue());
+      this.savedSnapshot = this.snapshot();
     }
   }
 
@@ -109,7 +122,24 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
     if (this.loading()) {
       return false;
     }
-    return JSON.stringify(this.form.getRawValue()) !== this.savedSnapshot;
+    return this.snapshot() !== this.savedSnapshot;
+  }
+
+  // Covers both the Details form and the specs draft — specifications ride the same
+  // single Save action now, so a change to either must count as "unsaved".
+  private snapshot(): string {
+    return JSON.stringify({ form: this.form.getRawValue(), specs: this.specRows() });
+  }
+
+  // Per the API's omit-null convention, a row's attributeValueId/valueText key can be
+  // missing entirely rather than present as null — normalize both to null so every row
+  // always has both keys, matching what the specs tab and the PUT body expect.
+  private normalizeSpecs(specs: ProductSpecificationInput[] | undefined): ProductSpecificationInput[] {
+    return (specs ?? []).map((s) => ({
+      attributeId: s.attributeId,
+      attributeValueId: s.attributeValueId ?? null,
+      valueText: s.valueText ?? null,
+    }));
   }
 
   displayName(): string {
@@ -159,6 +189,10 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       this.toast.error(this.translate.instant('toast.products.validationError'));
       return;
     }
+    if (this.specRows().some(isSpecRowIncomplete)) {
+      this.toast.error(this.translate.instant('admin.products.form.specs.incompleteRows'));
+      return;
+    }
     if (this.saving()) {
       return;
     }
@@ -171,7 +205,8 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       next: (res) => {
         this.saving.set(false);
         this.product.set(res);
-        this.savedSnapshot = JSON.stringify(this.form.getRawValue());
+        this.specRows.set(this.normalizeSpecs(res.specifications));
+        this.savedSnapshot = this.snapshot();
         this.toast.success(this.translate.instant('toast.products.saved'));
         if (!id) {
           this.router.navigate(['/admin/products', res.id], { replaceUrl: true });
@@ -256,7 +291,8 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       next: (p) => {
         this.product.set(p);
         this.patchForm(p);
-        this.savedSnapshot = JSON.stringify(this.form.getRawValue());
+        this.specRows.set(this.normalizeSpecs(p.specifications));
+        this.savedSnapshot = this.snapshot();
         this.loading.set(false);
       },
       error: () => {
@@ -331,6 +367,7 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       featured: v.featured ?? false,
       newArrival: v.newArrival ?? false,
       translations,
+      specifications: this.specRows(),
     };
   }
 }

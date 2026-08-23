@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { ProductSpecification } from '../../../../core/models';
 
 @Component({
   selector: 'app-product-specs-table',
@@ -7,5 +9,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductSpecsTableComponent {
+  @Input() specifications: ProductSpecification[] = [];
 
+  trackByCode(_index: number, spec: ProductSpecification): string {
+    return spec.code;
+  }
 }

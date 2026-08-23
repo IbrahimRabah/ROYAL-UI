@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { PopoverModule } from 'primeng/popover';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdminSharedModule } from '../shared/admin-shared.module';
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductListPageComponent } from './pages/product-list-page/product-list-page.component';
@@ -18,6 +20,7 @@ import { ProductSpecsTabComponent } from './components/product-specs-tab/product
 import { VariantPreviewDialogComponent } from './components/variant-preview-dialog/variant-preview-dialog.component';
 import { VariantMatrixTableComponent } from './components/variant-matrix-table/variant-matrix-table.component';
 import { PublishActionsBarComponent } from './components/publish-actions-bar/publish-actions-bar.component';
+import { ImageEditDialogComponent } from './components/image-edit-dialog/image-edit-dialog.component';
 
 
 @NgModule({
@@ -30,7 +33,8 @@ import { PublishActionsBarComponent } from './components/publish-actions-bar/pub
     ProductSpecsTabComponent,
     VariantPreviewDialogComponent,
     VariantMatrixTableComponent,
-    PublishActionsBarComponent
+    PublishActionsBarComponent,
+    ImageEditDialogComponent
   ],
   imports: [
     CommonModule,
@@ -38,11 +42,13 @@ import { PublishActionsBarComponent } from './components/publish-actions-bar/pub
     ReactiveFormsModule,
     ProductsRoutingModule,
     SharedModule,
+    AdminSharedModule,
     TableModule,
     SelectModule,
     PopoverModule,
     TooltipModule,
-    InputNumberModule
+    InputNumberModule,
+    DragDropModule
   ]
 })
 export class ProductsModule { }

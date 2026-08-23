@@ -1,0 +1,71 @@
+<div class="ied" *ngIf="open">
+  <div class="ied__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="ied__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="image-edit-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+  >
+    <header class="ied__header" [class.ied__header--scrolled]="scrolled()">
+      <h2 id="image-edit-dialog-title" class="ied__title">{{ 'admin.products.form.images.editTitle' | translate }}</h2>
+      <button type="button" class="ied__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="ied__body" (scroll)="onBodyScroll($event)" *ngIf="image as img">
+      <img [src]="img.thumbUrl || img.url" [alt]="img.altTextEn || img.altTextAr" class="ied__preview" />
+
+      <label class="ied__field">
+        <span>{{ 'admin.products.form.images.altTextAr' | translate }}</span>
+        <input type="text" dir="rtl" [ngModel]="draft().altTextAr" (ngModelChange)="updateDraft({ altTextAr: $event })" />
+      </label>
+
+      <label class="ied__field">
+        <span>{{ 'admin.products.form.images.altTextEn' | translate }}</span>
+        <input type="text" dir="ltr" [ngModel]="draft().altTextEn" (ngModelChange)="updateDraft({ altTextEn: $event })" />
+      </label>
+
+      <label class="ied__field">
+        <span>{{ 'admin.products.form.images.variantLink' | translate }}</span>
+        <p-select
+          [ngModel]="draft().variantId"
+          (ngModelChange)="updateDraft({ variantId: $event })"
+          [options]="variants"
+          optionLabel="summary"
+          optionValue="id"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.products.form.images.notLinked' | translate"
+          styleClass="ied__select"
+        >
+          <ng-template let-option pTemplate="item">{{ localizedVariantLabel(option) }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ localizedVariantLabel(option) }}</ng-template>
+        </p-select>
+      </label>
+
+      <label class="ied__checkbox">
+        <input
+          type="checkbox"
+          [ngModel]="draft().setMain"
+          [disabled]="img.main"
+          (ngModelChange)="updateDraft({ setMain: $event })"
+        />
+        {{ 'admin.products.form.images.setMain' | translate }}
+      </label>
+    </div>
+
+    <footer class="ied__footer" [class.ied__footer--scrolled]="scrolled()">
+      <button type="button" class="ied__cancel" [disabled]="saving" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button type="button" class="ied__save" [disabled]="saving" (click)="submitSave()">
+        <i class="pi" [ngClass]="saving ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.products.form.save' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

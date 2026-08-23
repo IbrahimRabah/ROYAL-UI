@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.ptabs__bar {
+  display: flex;
+  gap: var(--sp-6);
+  margin: 0 0 var(--sp-5);
+  border-block-end: 1px solid var(--border);
+}
+
+.ptabs__tab {
+  position: relative;
+  padding: 0 0 var(--sp-3);
+  border: none;
+  background: none;
+  font-family: var(--display);
+  font-size: var(--fs-h4);
+  color: var(--text-muted);
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 2px;
+    background: transparent;
+  }
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+.ptabs__tab--active {
+  color: var(--text);
+
+  &::after {
+    background: var(--gold);
+  }
+}
+
+.ptabs__title {
+  position: relative;
+  margin: 0 0 var(--sp-5);
+  padding-block-end: var(--sp-3);
+  font-family: var(--display);
+  font-size: var(--fs-h4);
+}
+
+.ptabs__title::after {
+  content: '';
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  inline-size: 48px;
+  block-size: 2px;
+  background: var(--gold);
+}
+
+.ptabs__description-text {
+  margin: 0;
+  max-inline-size: 65ch;
+  color: var(--text);
+  line-height: 1.7;
+}
