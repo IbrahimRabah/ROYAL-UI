@@ -16,3 +16,12 @@ export const MANUAL_MOVEMENT_TYPES: readonly StockMovement[] = [
   StockMovement.DAMAGE_WRITEOFF,
   StockMovement.PURCHASE_RECEIVED,
 ];
+
+// Single source of truth for translating a StockMovement everywhere it's shown (movements
+// log table, adjust dialog's type select, the log's type filter) — derived from the enum
+// value rather than a hardcoded per-member map, so a movement type added later on the
+// backend renders its (missing) key instead of failing to compile or silently rendering
+// nothing here.
+export function movementTypeLabelKey(type: StockMovement): string {
+  return `admin.inventory.movementType.${type}`;
+}

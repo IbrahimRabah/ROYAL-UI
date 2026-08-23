@@ -659,6 +659,10 @@
       "imageMainSet": "Main image updated",
       "imageDeleted": "Image deleted",
       "imageSaved": "Image updated"
+    },
+    "inventory": {
+      "received": "Received {{sku}} — {{available}} now available",
+      "adjusted": "Adjusted {{sku}} — {{available}} now available"
     }
   },
   "errorPage": {
@@ -775,6 +779,7 @@
       }
     },
     "orders": {
+      "backToList": "Back to orders",
       "tabs": {
         "all": "All",
         "pendingConfirmation": "Pending confirmation",
@@ -893,7 +898,118 @@
         }
       }
     },
+    "inventory": {
+      "backToList": "Back to inventory",
+      "title": "Inventory",
+      "lowStockTitle": "Low stock",
+      "lowStockSubtitle": "Variants at or below their minimum level — your restock list",
+      "movementsLogLink": "Movements log",
+      "searchPlaceholder": "Search by SKU or product name",
+      "allCategories": "All categories",
+      "lowStockOnly": "Low stock only",
+      "outOfStockOnly": "Out of stock only",
+      "sort": {
+        "availableAsc": "Lowest available first",
+        "availableDesc": "Highest available first"
+      },
+      "errorMessage": "We couldn't load inventory — try refreshing the page",
+      "empty": "No variants match these filters.",
+      "moreActions": "More actions",
+      "columns": {
+        "product": "Product",
+        "variant": "Variant",
+        "sku": "SKU",
+        "onHand": "On hand",
+        "reserved": "Reserved",
+        "available": "Available",
+        "minLevel": "Min level",
+        "status": "Status"
+      },
+      "status": {
+        "outOfStock": "Out of stock",
+        "low": "Low",
+        "inStock": "In stock"
+      },
+      "actions": {
+        "receive": "Receive stock",
+        "adjust": "Adjust",
+        "viewMovements": "View movements"
+      },
+      "numbers": {
+        "onHand": "On hand",
+        "reserved": "Reserved",
+        "available": "Available"
+      },
+      "receiveDialog": {
+        "title": "Receive stock",
+        "quantityLabel": "Quantity",
+        "quantityPlaceholder": "Units received",
+        "preview": "On hand will become {{value}}",
+        "referenceLabel": "Reference",
+        "referencePlaceholder": "e.g. INV-2026-00184",
+        "referenceHelper": "Supplier invoice or delivery note number",
+        "noteLabel": "Note",
+        "notePlaceholder": "Optional note",
+        "submit": "Receive"
+      },
+      "adjustDialog": {
+        "title": "Adjust stock",
+        "deltaLabel": "Quantity change",
+        "deltaPlaceholder": "e.g. -3 or 5",
+        "preview": "On hand will become {{value}}",
+        "previewWarning": "this would go below zero or below what's reserved",
+        "movementTypeLabel": "Movement type",
+        "movementTypePlaceholder": "Optional — defaults to manual adjustment",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why is this changing?",
+        "reasonHelper": "Required — this becomes part of the audit trail",
+        "reasonChips": {
+          "stocktake": "Stocktake correction",
+          "damaged": "Damaged goods",
+          "shortage": "Supplier shortage",
+          "found": "Found in warehouse"
+        },
+        "submit": "Adjust"
+      },
+      "movementType": {
+        "PURCHASE_RECEIVED": "Goods received",
+        "MANUAL_ADJUSTMENT": "Manual adjustment",
+        "DAMAGE_WRITEOFF": "Damage write-off",
+        "SALE": "Sale",
+        "RETURN_SELLABLE": "Return to stock",
+        "RETURN_DAMAGED": "Damaged return",
+        "CANCELLATION_RESTOCK": "Cancelled order"
+      },
+      "movements": {
+        "title": "Stock movements",
+        "filteredBySku": "Showing movements for {{sku}}",
+        "skuLabel": "SKU",
+        "skuPlaceholder": "Search by SKU",
+        "skuNotFound": "No variant found for that SKU",
+        "typeLabel": "Movement type",
+        "allTypes": "All types",
+        "dateFrom": "From date",
+        "dateTo": "To date",
+        "empty": "No movements match these filters.",
+        "systemActor": "System",
+        "referenceType": {
+          "VARIANT_CREATE": "Opening stock",
+          "ADJUSTMENT": "Adjustment"
+        },
+        "columns": {
+          "date": "Date",
+          "sku": "SKU",
+          "type": "Type",
+          "delta": "Quantity",
+          "balanceAfter": "Balance after",
+          "reference": "Reference",
+          "reason": "Reason",
+          "actor": "Actor"
+        }
+      }
+    },
     "products": {
+      "backToList": "Back to products",
       "tabs": {
         "all": "All",
         "active": "Active",
@@ -1067,6 +1183,15 @@
         "incompleteRows": "Fill in a value for every specification row, or remove the empty ones, before saving."
       }
       }
+    },
+    "customers": {
+      "backToList": "Back to customers"
+    },
+    "invoices": {
+      "backToList": "Back to invoices"
+    },
+    "remittances": {
+      "backToList": "Back to remittances"
     }
   }
 }

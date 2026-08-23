@@ -1,1 +1,20 @@
-<p>stock-numbers-card works!</p>
+<div class="snc">
+  <div class="snc__figure">
+    <span class="snc__label">{{ 'admin.inventory.numbers.onHand' | translate }}</span>
+    <span class="snc__value">{{ qtyOnHand }}</span>
+  </div>
+
+  <div class="snc__figure">
+    <span class="snc__label">{{ 'admin.inventory.numbers.reserved' | translate }}</span>
+    <span class="snc__value">{{ qtyReserved }}</span>
+  </div>
+
+  <div class="snc__figure snc__figure--available">
+    <span class="snc__label">{{ 'admin.inventory.numbers.available' | translate }}</span>
+    <span
+      class="snc__value snc__value--emphasis"
+      [class.snc__value--stop]="availableTone === 'stop'"
+      [class.snc__value--warn]="availableTone === 'warn'"
+    >{{ qtyAvailable }}</span>
+  </div>
+</div>

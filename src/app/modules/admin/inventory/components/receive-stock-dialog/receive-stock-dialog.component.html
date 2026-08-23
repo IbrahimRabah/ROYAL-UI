@@ -1,1 +1,98 @@
-<p>receive-stock-dialog works!</p>
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="receive-stock-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="receive-stock-dialog-title" class="admin-dialog__title">
+        {{ 'admin.inventory.receiveDialog.title' | translate }}
+        <span class="admin-dialog__title-sku" *ngIf="position() as p">{{ p.sku }}</span>
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)">
+      <div class="admin-dialog__inline-error" *ngIf="errorMessage()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+      <p class="admin-dialog__product-name" *ngIf="position() as p">{{ p.productName }} — {{ p.variantSummary }}</p>
+
+      <app-stock-numbers-card
+        *ngIf="position() as p"
+        [qtyOnHand]="p.qtyOnHand"
+        [qtyReserved]="p.qtyReserved"
+        [qtyAvailable]="p.qtyAvailable"
+        [minStockLevel]="p.minStockLevel"
+      ></app-stock-numbers-card>
+
+      <label class="admin-dialog__field-label" for="receive-quantity">
+        {{ 'admin.inventory.receiveDialog.quantityLabel' | translate }}
+      </label>
+      <p-inputnumber
+        inputId="receive-quantity"
+        [ngModel]="quantity()"
+        (ngModelChange)="quantity.set($event)"
+        mode="decimal"
+        [min]="1"
+        [placeholder]="'admin.inventory.receiveDialog.quantityPlaceholder' | translate"
+        styleClass="admin-dialog__number-input"
+      ></p-inputnumber>
+
+      <p class="admin-dialog__preview" *ngIf="quantity() && quantity()! > 0">
+        {{ 'admin.inventory.receiveDialog.preview' | translate: { value: onHandAfter } }}
+      </p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="receive-reference">
+        {{ 'admin.inventory.receiveDialog.referenceLabel' | translate }}
+      </label>
+      <input
+        id="receive-reference"
+        type="text"
+        class="admin-dialog__text-input"
+        [ngModel]="reference()"
+        (ngModelChange)="reference.set($event)"
+        [placeholder]="'admin.inventory.receiveDialog.referencePlaceholder' | translate"
+      />
+      <p class="admin-dialog__helper">{{ 'admin.inventory.receiveDialog.referenceHelper' | translate }}</p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="receive-note">
+        {{ 'admin.inventory.receiveDialog.noteLabel' | translate }}
+      </label>
+      <textarea
+        id="receive-note"
+        class="admin-dialog__textarea"
+        rows="3"
+        [ngModel]="note()"
+        (ngModelChange)="note.set($event)"
+        [placeholder]="'admin.inventory.receiveDialog.notePlaceholder' | translate"
+      ></textarea>
+    </div>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="admin-dialog__submit admin-dialog__submit--ok"
+        [disabled]="saving() || !quantity() || quantity()! <= 0"
+        (click)="submit()"
+      >
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.inventory.receiveDialog.submit' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

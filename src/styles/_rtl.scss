@@ -83,6 +83,13 @@ html[dir='rtl'] .order-card__chevron {
   transform: scaleX(-1);
 }
 
+// admin-back-link's leading chevron is a "go back" affordance — it should point toward
+// the start of the reading direction. pi-chevron-left is a physical glyph (always points
+// left), so RTL needs the same explicit flip as order-card__chevron above.
+html[dir='rtl'] .admin-back-link__chevron {
+  transform: scaleX(-1);
+}
+
 // order-timeline's connector fill animates from the timeline's start toward the current
 // node on the horizontal (desktop) layout only; transform-origin isn't a logical
 // property, so the LTR default (left) needs an explicit RTL flip to keep the fill

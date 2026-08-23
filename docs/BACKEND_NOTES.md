@@ -169,3 +169,37 @@ does today.
     dropdown is disabled with the note, only one Save button exists, and
     clicking it PUTs `specifications` correctly alongside the rest of the
     body.
+
+13. **RESOLVED — `POST /admin/inventory/{variantId}/receive` no longer
+    writes a hardcoded English reason.** `reason` is now `null` when the
+    operator didn't type a note, matching what the client always sent.
+    `movements-log-page` already rendered an empty `reason` as a muted "—";
+    it now derives a translated label from `referenceType` instead when
+    `reason` is null and a reference exists (see item 14) — a plain "—"
+    only remains for movements with neither.
+
+14. **RESOLVED — opening-stock movements (from `initialStock` on variant
+    creation) now come back with `reason: null`, `referenceType:
+    "VARIANT_CREATE"`, `referenceId: <variantId>`.** The frontend builds the
+    display text itself rather than showing blank: `movements-log-page`
+    derives a translated label from `referenceType` whenever `reason` is
+    null (`admin.inventory.movements.referenceType.*`, e.g.
+    `VARIANT_CREATE` → "Opening stock" / "رصيد افتتاحي"), shown muted so it
+    reads as derived rather than typed. Generalized beyond this one case —
+    `referenceTypeLabelKey()` maps any known `referenceType` the API sends;
+    an unrecognized one renders the raw string as-is (never blank, never a
+    raw i18n key path) so a new reference type introduced later still shows
+    something meaningful. `ADJUSTMENT` (the other confirmed value) is
+    mapped too, though reason is required on that path so its fallback is
+    expected to be unreachable in practice.
+
+15. **RESOLVED — `StockMovementResponse` now includes `actorName`, captured
+    at write time.** `movements-log-page`'s "By" column now shows the name
+    directly, falling back to the translated "System" /
+    "النظام" (`admin.inventory.movements.systemActor`) when both
+    `actorId`/`actorName` are absent (order-flow-driven movements). The old
+    `#{{ actorId }}` rendering is gone. Per the backend's note, this is a
+    stored copy captured at the time of the movement, not a join to the
+    current account — a later rename won't rewrite history.
+    `AuditLogResponse` already carried `actorName`, so the (still unbuilt)
+    audit screen needs no equivalent change when it's built.

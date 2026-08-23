@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdminSharedModule } from '../shared/admin-shared.module';
 
 import { CustomersRoutingModule } from './customers-routing.module';
 import { CustomerListPageComponent } from './pages/customer-list-page/customer-list-page.component';
@@ -19,7 +20,8 @@ import { FailedOrdersWarningComponent } from './components/failed-orders-warning
   imports: [
     CommonModule,
     CustomersRoutingModule,
-    SharedModule
+    SharedModule,
+    AdminSharedModule
   ]
 })
 export class CustomersModule { }

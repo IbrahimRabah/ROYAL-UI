@@ -34,6 +34,15 @@ export interface ValidationFailedError {
   readonly fieldErrors: FieldError[];
 }
 
+// Thrown instead of the raw HttpErrorResponse for 409 NEGATIVE_STOCK / STOCK_BELOW_RESERVED
+// on the receive/adjust inventory mutations — the operator needs to see this right next to
+// the figures they're editing, never as a toast (see handleInventoryMutationError).
+export interface StockConflictError {
+  readonly kind: 'STOCK_CONFLICT';
+  readonly code: ErrorCode.NEGATIVE_STOCK | ErrorCode.STOCK_BELOW_RESERVED;
+  readonly message: string;
+}
+
 /**
  * err.error is read as the contract's RFC 7807 ApiError shape and its `code` translated
  * via ERROR_MESSAGES_*. Three codes get special handling; everything else falls through
@@ -90,6 +99,18 @@ export class ErrorInterceptor implements HttpInterceptor {
     ) {
       const retriedReq = req.clone({ context: req.context.set(CONCURRENT_STOCK_RETRIED, true) });
       return next.handle(retriedReq).pipe(catchError((retryErr: unknown) => this.handle(retryErr, retriedReq, next)));
+    }
+
+    // 409 NEGATIVE_STOCK / STOCK_BELOW_RESERVED — the receive/adjust dialogs render these
+    // inline next to the variant's current figures so the operator can correct right
+    // there; never a toast, same treatment as VALIDATION_FAILED above.
+    if (
+      apiError &&
+      err.status === 409 &&
+      (code === ErrorCode.NEGATIVE_STOCK || code === ErrorCode.STOCK_BELOW_RESERVED)
+    ) {
+      const stockError: StockConflictError = { kind: 'STOCK_CONFLICT', code, message: this.translate(code) };
+      return throwError(() => stockError);
     }
 
     // Known backend bugs (documented in the contract) that can return a malformed or

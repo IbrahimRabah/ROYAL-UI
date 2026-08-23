@@ -4,7 +4,16 @@ import { Observable } from 'rxjs';
 
 import { API_ROUTES } from '../../constants/api-routes';
 import { APP_CONFIG } from '../../constants/app-config';
-import { AdjustStockRequest, PageResponse, ReceiveStockRequest, StockMovementResponse, StockPositionResponse } from '../../models';
+import {
+  AdjustStockRequest,
+  InventoryAdminResponse,
+  InventoryListParams,
+  InventoryMovementsParams,
+  PageResponse,
+  ReceiveStockRequest,
+  StockMovementResponse,
+  StockPositionResponse,
+} from '../../models';
 import { buildHttpParams } from './http-params.util';
 
 @Injectable({
@@ -12,6 +21,21 @@ import { buildHttpParams } from './http-params.util';
 })
 export class AdminInventoryApiService {
   private readonly http = inject(HttpClient);
+
+  // The search (`q`) is normalised Arabic server-side ("ساعه" finds "ساعة") — pass it
+  // through untouched, no client-side normalising.
+  list(params: InventoryListParams): Observable<PageResponse<InventoryAdminResponse>> {
+    const httpParams = buildHttpParams({
+      q: params.q,
+      lowStockOnly: params.lowStockOnly ? true : undefined,
+      outOfStockOnly: params.outOfStockOnly ? true : undefined,
+      categoryId: params.categoryId,
+      sort: params.sort,
+      page: params.page,
+      size: params.size ?? APP_CONFIG.pagination.inventory.size,
+    });
+    return this.http.get<PageResponse<InventoryAdminResponse>>(API_ROUTES.admin.inventory.list(), { params: httpParams });
+  }
 
   getPosition(variantId: number): Observable<StockPositionResponse> {
     return this.http.get<StockPositionResponse>(API_ROUTES.admin.inventory.position(variantId));
@@ -31,8 +55,15 @@ export class AdminInventoryApiService {
   }
 
   // Omit variantId for the full ledger — an unrecognized one just yields an empty page.
-  movements(variantId?: number, page?: number, size?: number): Observable<PageResponse<StockMovementResponse>> {
-    const params = buildHttpParams({ variantId, page, size: size ?? APP_CONFIG.pagination.inventoryMovements.size });
-    return this.http.get<PageResponse<StockMovementResponse>>(API_ROUTES.admin.inventory.movements(), { params });
+  movements(params: InventoryMovementsParams = {}): Observable<PageResponse<StockMovementResponse>> {
+    const httpParams = buildHttpParams({
+      variantId: params.variantId,
+      movementType: params.movementType,
+      dateFrom: params.dateFrom,
+      dateTo: params.dateTo,
+      page: params.page,
+      size: params.size ?? APP_CONFIG.pagination.inventoryMovements.size,
+    });
+    return this.http.get<PageResponse<StockMovementResponse>>(API_ROUTES.admin.inventory.movements(), { params: httpParams });
   }
 }

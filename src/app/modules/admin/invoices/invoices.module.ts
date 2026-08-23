@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdminSharedModule } from '../shared/admin-shared.module';
 
 import { InvoicesRoutingModule } from './invoices-routing.module';
 import { InvoiceListPageComponent } from './pages/invoice-list-page/invoice-list-page.component';
@@ -21,7 +22,8 @@ import { CancelInvoiceDialogComponent } from './components/cancel-invoice-dialog
   imports: [
     CommonModule,
     InvoicesRoutingModule,
-    SharedModule
+    SharedModule,
+    AdminSharedModule
   ]
 })
 export class InvoicesModule { }

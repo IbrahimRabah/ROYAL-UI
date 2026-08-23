@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  margin-block-end: var(--sp-4);
+}
+
+.admin-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+  }
+}
+
+// Physical glyph — RTL mirror lives in src/styles/_rtl.scss alongside the other
+// direction-flipped chevrons (see order-card__chevron).
+.admin-back-link__chevron {
+  font-size: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-back-link {
+    transition: none;
+  }
+}

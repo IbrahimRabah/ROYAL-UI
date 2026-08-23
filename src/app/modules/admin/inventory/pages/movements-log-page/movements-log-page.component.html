@@ -1,1 +1,153 @@
-<p>movements-log-page works!</p>
+<div class="movements-log-page">
+  <app-admin-back-link parentPath="/admin/inventory" labelKey="admin.inventory.backToList"></app-admin-back-link>
+
+  <header class="movements-log-page__header">
+    <h1 class="movements-log-page__title">{{ 'admin.inventory.movements.title' | translate }}</h1>
+  </header>
+
+  <div class="movements-log-page__filters">
+    <div class="movements-log-page__sku-chip" *ngIf="variantId() !== null">
+      <span>{{ 'admin.inventory.movements.filteredBySku' | translate: { sku: resolvedSku() ?? ('#' + variantId()) } }}</span>
+      <button type="button" (click)="clearVariantFilter()" [attr.aria-label]="'common.clear' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="movements-log-page__field" *ngIf="variantId() === null">
+      <label class="movements-log-page__label">{{ 'admin.inventory.movements.skuLabel' | translate }}</label>
+      <div class="movements-log-page__sku-search">
+        <input
+          type="text"
+          class="movements-log-page__text-input"
+          [ngModel]="skuDraft()"
+          (ngModelChange)="skuDraft.set($event); skuNotFound.set(false)"
+          (keydown.enter)="resolveSkuAndFilter()"
+          [placeholder]="'admin.inventory.movements.skuPlaceholder' | translate"
+        />
+        <button type="button" class="movements-log-page__sku-apply" [disabled]="resolvingSku()" (click)="resolveSkuAndFilter()">
+          <i class="pi" [ngClass]="resolvingSku() ? 'pi-spin pi-spinner' : 'pi-search'" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p class="movements-log-page__hint movements-log-page__hint--stop" *ngIf="skuNotFound()">
+        {{ 'admin.inventory.movements.skuNotFound' | translate }}
+      </p>
+    </div>
+
+    <div class="movements-log-page__field">
+      <label class="movements-log-page__label">{{ 'admin.inventory.movements.typeLabel' | translate }}</label>
+      <p-select
+        [ngModel]="movementType()"
+        (ngModelChange)="onMovementTypeChange($event)"
+        [options]="movementTypeOptions"
+        optionValue="type"
+        [showClear]="true"
+        appendTo="self"
+        [placeholder]="'admin.inventory.movements.allTypes' | translate"
+        styleClass="movements-log-page__select"
+      >
+        <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+        <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+      </p-select>
+    </div>
+
+    <div class="movements-log-page__field">
+      <label class="movements-log-page__label">{{ 'admin.inventory.movements.dateFrom' | translate }}</label>
+      <p-datepicker
+        [ngModel]="dateFromDate()"
+        (ngModelChange)="onDateFromChange($event)"
+        dateFormat="yy-mm-dd"
+        [showIcon]="true"
+        [iconDisplay]="'input'"
+        appendTo="body"
+        [placeholder]="'admin.inventory.movements.dateFrom' | translate"
+      ></p-datepicker>
+    </div>
+
+    <div class="movements-log-page__field">
+      <label class="movements-log-page__label">{{ 'admin.inventory.movements.dateTo' | translate }}</label>
+      <p-datepicker
+        [ngModel]="dateToDate()"
+        (ngModelChange)="onDateToChange($event)"
+        dateFormat="yy-mm-dd"
+        [showIcon]="true"
+        [iconDisplay]="'input'"
+        appendTo="body"
+        [placeholder]="'admin.inventory.movements.dateTo' | translate"
+      ></p-datepicker>
+    </div>
+  </div>
+
+  <div class="movements-log-page__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.inventory.errorMessage' | translate }}</span>
+    <button type="button" class="movements-log-page__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div class="movements-log-page__table-wrap" *ngIf="!error()">
+    <p-table
+      [value]="rows()"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalElements()"
+      [lazy]="true"
+      [first]="page() * pageSize"
+      (onPage)="onPage($event)"
+      dataKey="id"
+      styleClass="movements-log-page__table"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'admin.inventory.movements.columns.date' | translate }}</th>
+          <th>{{ 'admin.inventory.movements.columns.sku' | translate }}</th>
+          <th>{{ 'admin.inventory.movements.columns.type' | translate }}</th>
+          <th class="movements-log-page__col-num">{{ 'admin.inventory.movements.columns.delta' | translate }}</th>
+          <th class="movements-log-page__col-num">{{ 'admin.inventory.movements.columns.balanceAfter' | translate }}</th>
+          <th>{{ 'admin.inventory.movements.columns.reference' | translate }}</th>
+          <th>{{ 'admin.inventory.movements.columns.reason' | translate }}</th>
+          <th>{{ 'admin.inventory.movements.columns.actor' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="movements-log-page__col-date">{{ row.createdAt | arabicDate }}</td>
+          <td class="movements-log-page__col-sku">{{ row.sku }}</td>
+          <td>
+            <app-vl-status-badge [label]="typeLabelKey(row.movementType) | translate" [tone]="typeTone(row.movementType)"></app-vl-status-badge>
+          </td>
+          <td class="movements-log-page__col-num">
+            <span [class.movements-log-page__delta--ok]="deltaClass(row) === 'ok'" [class.movements-log-page__delta--stop]="deltaClass(row) === 'stop'">
+              {{ deltaText(row) }}
+            </span>
+          </td>
+          <td class="movements-log-page__col-num">{{ row.qtyAfter }}</td>
+          <td class="movements-log-page__col-muted">{{ referenceText(row) }}</td>
+          <td>
+            <ng-container *ngIf="row.reason; else derivedReason">{{ row.reason }}</ng-container>
+            <ng-template #derivedReason>
+              <span class="movements-log-page__muted-dash">
+                <ng-container *ngIf="row.referenceType; else noReason">
+                  <ng-container *ngIf="referenceTypeLabelKey(row.referenceType) as key; else rawReferenceType">
+                    {{ key | translate }}
+                  </ng-container>
+                  <ng-template #rawReferenceType>{{ row.referenceType }}</ng-template>
+                </ng-container>
+                <ng-template #noReason>—</ng-template>
+              </span>
+            </ng-template>
+          </td>
+          <td class="movements-log-page__col-muted">
+            {{ row.actorName || ('admin.inventory.movements.systemActor' | translate) }}
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="movements-log-page__empty">{{ 'admin.inventory.movements.empty' | translate }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

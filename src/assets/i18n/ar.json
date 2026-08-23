@@ -659,6 +659,10 @@
       "imageMainSet": "تم تحديث الصورة الرئيسية",
       "imageDeleted": "تم حذف الصورة",
       "imageSaved": "تم تحديث الصورة"
+    },
+    "inventory": {
+      "received": "تم استلام {{sku}} — المتاح الآن {{available}}",
+      "adjusted": "تم تعديل {{sku}} — المتاح الآن {{available}}"
     }
   },
   "errorPage": {
@@ -775,6 +779,7 @@
       }
     },
     "orders": {
+      "backToList": "رجوع إلى الطلبات",
       "tabs": {
         "all": "الكل",
         "pendingConfirmation": "بانتظار التأكيد",
@@ -893,7 +898,118 @@
         }
       }
     },
+    "inventory": {
+      "backToList": "رجوع إلى المخزون",
+      "title": "المخزون",
+      "lowStockTitle": "المخزون المنخفض",
+      "lowStockSubtitle": "خيارات وصلت أو نزلت عن الحد الأدنى — قائمة التوريد",
+      "movementsLogLink": "سجل الحركات",
+      "searchPlaceholder": "ابحث بـ SKU أو اسم المنتج",
+      "allCategories": "كل التصنيفات",
+      "lowStockOnly": "المخزون المنخفض فقط",
+      "outOfStockOnly": "غير المتوفر فقط",
+      "sort": {
+        "availableAsc": "الأقل توفرًا أولاً",
+        "availableDesc": "الأكثر توفرًا أولاً"
+      },
+      "errorMessage": "تعذّر تحميل المخزون — حاول تحديث الصفحة",
+      "empty": "لا توجد خيارات مطابقة لهذه الفلاتر.",
+      "moreActions": "المزيد من الإجراءات",
+      "columns": {
+        "product": "المنتج",
+        "variant": "الخيار",
+        "sku": "SKU",
+        "onHand": "المتوفر فعليًا",
+        "reserved": "المحجوز",
+        "available": "المتاح",
+        "minLevel": "الحد الأدنى",
+        "status": "الحالة"
+      },
+      "status": {
+        "outOfStock": "نفد",
+        "low": "منخفض",
+        "inStock": "متوفر"
+      },
+      "actions": {
+        "receive": "استلام مخزون",
+        "adjust": "تعديل",
+        "viewMovements": "عرض الحركات"
+      },
+      "numbers": {
+        "onHand": "المتوفر فعليًا",
+        "reserved": "المحجوز",
+        "available": "المتاح"
+      },
+      "receiveDialog": {
+        "title": "استلام مخزون",
+        "quantityLabel": "الكمية",
+        "quantityPlaceholder": "الوحدات المستلمة",
+        "preview": "سيصبح المتاح فعليًا {{value}}",
+        "referenceLabel": "المرجع",
+        "referencePlaceholder": "مثال: INV-2026-00184",
+        "referenceHelper": "رقم فاتورة المورّد أو إذن التوريد",
+        "noteLabel": "ملاحظة",
+        "notePlaceholder": "ملاحظة اختيارية",
+        "submit": "استلام"
+      },
+      "adjustDialog": {
+        "title": "تعديل المخزون",
+        "deltaLabel": "التغيير في الكمية",
+        "deltaPlaceholder": "مثال: -3 أو 5",
+        "preview": "سيصبح المتاح فعليًا {{value}}",
+        "previewWarning": "سينزل هذا إلى ما دون الصفر أو أقل من المحجوز",
+        "movementTypeLabel": "نوع الحركة",
+        "movementTypePlaceholder": "اختياري — الافتراضي تعديل يدوي",
+        "reasonLabel": "السبب",
+        "reasonPlaceholder": "لماذا يتغيّر هذا؟",
+        "reasonHelper": "مطلوب — يصبح جزءًا من سجل المراجعة",
+        "reasonChips": {
+          "stocktake": "تصحيح جرد",
+          "damaged": "بضاعة تالفة",
+          "shortage": "نقص من المورّد",
+          "found": "وُجدت في المخزن"
+        },
+        "submit": "تعديل"
+      },
+      "movementType": {
+        "PURCHASE_RECEIVED": "استلام بضاعة",
+        "MANUAL_ADJUSTMENT": "تصحيح يدوي",
+        "DAMAGE_WRITEOFF": "إعدام تالف",
+        "SALE": "بيع",
+        "RETURN_SELLABLE": "مرتجع صالح للبيع",
+        "RETURN_DAMAGED": "مرتجع تالف",
+        "CANCELLATION_RESTOCK": "إلغاء طلب"
+      },
+      "movements": {
+        "title": "حركات المخزون",
+        "filteredBySku": "عرض حركات {{sku}}",
+        "skuLabel": "SKU",
+        "skuPlaceholder": "ابحث بـ SKU",
+        "skuNotFound": "لم يتم العثور على خيار بهذا الـ SKU",
+        "typeLabel": "نوع الحركة",
+        "allTypes": "كل الأنواع",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "empty": "لا توجد حركات مطابقة لهذه الفلاتر.",
+        "systemActor": "النظام",
+        "referenceType": {
+          "VARIANT_CREATE": "رصيد افتتاحي",
+          "ADJUSTMENT": "تعديل"
+        },
+        "columns": {
+          "date": "التاريخ",
+          "sku": "SKU",
+          "type": "النوع",
+          "delta": "الكمية",
+          "balanceAfter": "الرصيد بعدها",
+          "reference": "المرجع",
+          "reason": "السبب",
+          "actor": "بواسطة"
+        }
+      }
+    },
     "products": {
+      "backToList": "رجوع إلى المنتجات",
       "tabs": {
         "all": "الكل",
         "active": "نشط",
@@ -1067,6 +1183,15 @@
         "incompleteRows": "أدخل قيمة لكل صف مواصفة، أو احذف الصفوف الفارغة، قبل الحفظ."
       }
       }
+    },
+    "customers": {
+      "backToList": "رجوع إلى العملاء"
+    },
+    "invoices": {
+      "backToList": "رجوع إلى الفواتير"
+    },
+    "remittances": {
+      "backToList": "رجوع إلى التسويات"
     }
   }
 }

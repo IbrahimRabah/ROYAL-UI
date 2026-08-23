@@ -15,6 +15,30 @@ export interface StockPositionResponse {
   updatedAt: string;
 }
 
+// GET /admin/inventory — full paginated list; same item shape as GET
+// /admin/inventory/low-stock (StockPositionResponse), just wrapped in PageResponse.
+export type InventoryAdminResponse = StockPositionResponse;
+
+export interface InventoryListParams {
+  q?: string;
+  lowStockOnly?: boolean;
+  outOfStockOnly?: boolean;
+  categoryId?: number;
+  sort?: 'available_asc' | 'available_desc';
+  page?: number;
+  size?: number;
+}
+
+// GET /admin/inventory/movements
+export interface InventoryMovementsParams {
+  variantId?: number;
+  movementType?: StockMovement;
+  dateFrom?: string;
+  dateTo?: string;
+  page?: number;
+  size?: number;
+}
+
 // POST /admin/inventory/{variantId}/receive
 export interface ReceiveStockRequest {
   quantity: number;

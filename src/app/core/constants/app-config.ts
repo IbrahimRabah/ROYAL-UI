@@ -17,6 +17,8 @@ export const APP_CONFIG = {
     adminCustomers: { size: 25 },
     // GET /admin/invoices
     invoices: { size: 20 },
+    // GET /admin/inventory
+    inventory: { size: 20 },
     // GET /admin/remittances
     remittances: { size: 20 },
     // GET /admin/inventory/movements

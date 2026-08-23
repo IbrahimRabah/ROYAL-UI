@@ -118,8 +118,10 @@ export const API_ROUTES = {
       attribute: (attributeId: number) => `${BASE}/admin/attributes/${attributeId}`,
     },
 
-    // Inventory — admin (5 endpoints)
+    // Inventory — admin (6 endpoints)
     inventory: {
+      // Full paginated list — q/lowStockOnly/outOfStockOnly/categoryId/sort/page/size.
+      list: () => `${BASE}/admin/inventory`,
       position: (variantId: number) => `${BASE}/admin/inventory/${variantId}`,
       lowStock: () => `${BASE}/admin/inventory/low-stock`,
       receive: (variantId: number) => `${BASE}/admin/inventory/${variantId}/receive`,

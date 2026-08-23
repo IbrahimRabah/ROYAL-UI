@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,6 +19,7 @@ import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
+import { AdminListReturnService } from '../../../../../core/services/admin-list-return.service';
 import { FlatCategoryOption, flattenCategoryTree } from '../../../../../shared/utils/flatten-category-tree.util';
 
 const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
@@ -57,6 +58,7 @@ export class ProductListPageComponent {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly confirmDialog = inject(ConfirmDialogService);
+  private readonly listReturn = inject(AdminListReturnService);
 
   readonly tabs = TABS;
   readonly pageSize = 20;
@@ -123,6 +125,13 @@ export class ProductListPageComponent {
     this.taxonomyApi.listBrands().subscribe({ next: (b) => this.brands.set(b), error: () => {} });
 
     this.fetchAll();
+
+    // So a back link from a product's detail page can return to this exact filtered,
+    // paginated view instead of a reset one.
+    effect(() => {
+      this.queryParamMap();
+      this.listReturn.remember('/admin/products', this.router.url);
+    });
   }
 
   displayName(row: ProductAdminResponse): string {

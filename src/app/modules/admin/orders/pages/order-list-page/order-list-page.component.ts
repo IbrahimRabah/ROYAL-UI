@@ -22,6 +22,7 @@ import {
   StatusTone,
 } from '../../../../../core/constants/order-status.constants';
 import { AdminOrderApiService } from '../../../../../core/services/api/admin-order-api.service';
+import { AdminListReturnService } from '../../../../../core/services/admin-list-return.service';
 import { GeoApiService } from '../../../../../core/services/api/geo-api.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { ToastService } from '../../../../../core/services/toast.service';
@@ -72,6 +73,7 @@ export class OrderListPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly orderApi = inject(AdminOrderApiService);
+  private readonly listReturn = inject(AdminListReturnService);
   private readonly geoApi = inject(GeoApiService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly toast = inject(ToastService);
@@ -140,6 +142,9 @@ export class OrderListPageComponent {
           this.searchDraft.set(search);
         }
         first = false;
+        // So a back link from an order's detail page can return to this exact filtered,
+        // paginated view instead of a reset one.
+        this.listReturn.remember('/admin/orders', this.router.url);
         this.fetch(status, search, page, filters);
       },
       { allowSignalWrites: true },

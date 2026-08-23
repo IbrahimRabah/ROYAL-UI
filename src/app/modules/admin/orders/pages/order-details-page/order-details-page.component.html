@@ -1,4 +1,6 @@
 <div class="order-details-page">
+  <app-admin-back-link parentPath="/admin/orders" labelKey="admin.orders.backToList"></app-admin-back-link>
+
   <!-- Loading -->
   <div class="order-details-page__skeleton" *ngIf="loading() && !order()">
     <p-skeleton height="90px" borderRadius="12px"></p-skeleton>

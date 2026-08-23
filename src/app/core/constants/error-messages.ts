@@ -68,7 +68,7 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
 
   // Inventory
   [ErrorCode.INVENTORY_RECORD_MISSING]: 'لا يوجد سجل مخزون لهذا المنتج',
-  [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'تم تعديل المخزون في نفس اللحظة، حاول مرة أخرى',
+  [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'شخص آخر عدّل هذا المخزون — تم التحديث، حاول مجددًا',
   [ErrorCode.NEGATIVE_STOCK]: 'هذا التعديل سيجعل الكمية بالسالب',
   [ErrorCode.MOVEMENT_TYPE_NOT_MANUAL]: 'نوع الحركة هذا لا يمكن إدخاله يدوياً',
   [ErrorCode.STOCK_BELOW_RESERVED]: 'هذا التعديل سيجعل الكمية المتاحة أقل من المحجوز',
@@ -140,7 +140,7 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
 
   // Inventory
   [ErrorCode.INVENTORY_RECORD_MISSING]: 'No inventory record exists for this item',
-  [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'Stock was updated at the same time, please try again',
+  [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'Someone else changed this stock — refreshed, please try again',
   [ErrorCode.NEGATIVE_STOCK]: 'This change would make the stock quantity negative',
   [ErrorCode.MOVEMENT_TYPE_NOT_MANUAL]: 'This movement type cannot be entered manually',
   [ErrorCode.STOCK_BELOW_RESERVED]: 'This change would drop available stock below what is reserved',

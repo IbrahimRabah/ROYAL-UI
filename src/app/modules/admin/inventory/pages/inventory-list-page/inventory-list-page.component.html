@@ -1,1 +1,228 @@
-<p>inventory-list-page works!</p>
+<div class="inventory-list-page">
+  <header class="inventory-list-page__header">
+    <div class="inventory-list-page__header-text">
+      <h1 class="inventory-list-page__title">
+        {{ (isLowStockRoute ? 'admin.inventory.lowStockTitle' : 'admin.inventory.title') | translate }}
+      </h1>
+      <p class="inventory-list-page__subtitle" *ngIf="isLowStockRoute">
+        {{ 'admin.inventory.lowStockSubtitle' | translate }}
+      </p>
+    </div>
+    <a routerLink="/admin/inventory/movements" class="inventory-list-page__movements-btn">
+      <i class="pi pi-history" aria-hidden="true"></i>
+      {{ 'admin.inventory.movementsLogLink' | translate }}
+    </a>
+  </header>
+
+  <div class="inventory-list-page__toolbar">
+    <div class="inventory-list-page__search">
+      <i class="pi pi-search inventory-list-page__search-icon" aria-hidden="true"></i>
+      <input
+        type="search"
+        class="inventory-list-page__search-input"
+        [ngModel]="searchDraft()"
+        (ngModelChange)="onSearchDraftChange($event)"
+        [placeholder]="'admin.inventory.searchPlaceholder' | translate"
+      />
+    </div>
+
+    <p-select
+      [ngModel]="categoryId()"
+      (ngModelChange)="onCategoryChange($event)"
+      [options]="categoryOptions()"
+      optionLabel="name"
+      optionValue="id"
+      [showClear]="true"
+      appendTo="self"
+      [placeholder]="'admin.inventory.allCategories' | translate"
+      styleClass="inventory-list-page__filter-select"
+    >
+      <ng-template let-option pTemplate="item">
+        <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
+      </ng-template>
+    </p-select>
+
+    <p-select
+      [ngModel]="sort()"
+      (ngModelChange)="onSortChange($event)"
+      [options]="[
+        { value: 'available_asc', labelKey: 'admin.inventory.sort.availableAsc' },
+        { value: 'available_desc', labelKey: 'admin.inventory.sort.availableDesc' }
+      ]"
+      optionValue="value"
+      appendTo="self"
+      styleClass="inventory-list-page__filter-select"
+    >
+      <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+      <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+    </p-select>
+
+    <label class="inventory-list-page__toggle">
+      <input type="checkbox" [ngModel]="lowStockOnly()" (ngModelChange)="onLowStockToggle($event)" />
+      {{ 'admin.inventory.lowStockOnly' | translate }}
+    </label>
+
+    <label class="inventory-list-page__toggle">
+      <input type="checkbox" [ngModel]="outOfStockOnly()" (ngModelChange)="onOutOfStockToggle($event)" />
+      {{ 'admin.inventory.outOfStockOnly' | translate }}
+    </label>
+  </div>
+
+  <div class="inventory-list-page__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.inventory.errorMessage' | translate }}</span>
+    <button type="button" class="inventory-list-page__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="inventory-list-page__table-wrap">
+      <p-table
+        [value]="rows()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="totalElements()"
+        [lazy]="true"
+        [first]="page() * pageSize"
+        (onPage)="onPage($event)"
+        dataKey="variantId"
+        styleClass="inventory-list-page__table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.inventory.columns.product' | translate }}</th>
+            <th>{{ 'admin.inventory.columns.variant' | translate }}</th>
+            <th>{{ 'admin.inventory.columns.sku' | translate }}</th>
+            <th class="inventory-list-page__col-num">{{ 'admin.inventory.columns.onHand' | translate }}</th>
+            <th class="inventory-list-page__col-num">{{ 'admin.inventory.columns.reserved' | translate }}</th>
+            <th class="inventory-list-page__col-num">{{ 'admin.inventory.columns.available' | translate }}</th>
+            <th class="inventory-list-page__col-num">{{ 'admin.inventory.columns.minLevel' | translate }}</th>
+            <th class="inventory-list-page__col-status">{{ 'admin.inventory.columns.status' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.productName }}</td>
+            <td>{{ row.variantSummary }}</td>
+            <td class="inventory-list-page__col-sku">{{ row.sku }}</td>
+            <td class="inventory-list-page__col-num">{{ row.qtyOnHand }}</td>
+            <td class="inventory-list-page__col-num">{{ row.qtyReserved }}</td>
+            <td class="inventory-list-page__col-num inventory-list-page__col-available">{{ row.qtyAvailable }}</td>
+            <td class="inventory-list-page__col-num">{{ row.minStockLevel }}</td>
+            <td class="inventory-list-page__col-status">
+              <app-vl-status-badge [label]="statusInfo(row).labelKey | translate" [tone]="statusInfo(row).tone"></app-vl-status-badge>
+            </td>
+            <td class="inventory-list-page__col-action">
+              <button
+                type="button"
+                class="inventory-list-page__menu-btn"
+                (click)="rowPopover.toggle($event)"
+                [attr.aria-label]="'admin.inventory.moreActions' | translate"
+              >
+                <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
+              </button>
+
+              <p-popover #rowPopover>
+                <div class="inventory-list-page__menu">
+                  <button type="button" class="inventory-list-page__menu-item" (click)="openReceiveDialog(row); rowPopover.hide()">
+                    {{ 'admin.inventory.actions.receive' | translate }}
+                  </button>
+                  <button type="button" class="inventory-list-page__menu-item" (click)="openAdjustDialog(row); rowPopover.hide()">
+                    {{ 'admin.inventory.actions.adjust' | translate }}
+                  </button>
+                  <a
+                    routerLink="/admin/inventory/movements"
+                    [queryParams]="{ variantId: row.variantId }"
+                    class="inventory-list-page__menu-item"
+                  >
+                    {{ 'admin.inventory.actions.viewMovements' | translate }}
+                  </a>
+                </div>
+              </p-popover>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" class="inventory-list-page__empty">{{ 'admin.inventory.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="inventory-list-page__cards">
+      <div *ngFor="let row of rows()" class="inventory-list-page__card">
+        <div class="inventory-list-page__card-head">
+          <div class="inventory-list-page__card-title">
+            <span class="inventory-list-page__card-name">{{ row.productName }}</span>
+            <span class="inventory-list-page__card-variant">{{ row.variantSummary }}</span>
+            <span class="inventory-list-page__card-sku">{{ row.sku }}</span>
+          </div>
+          <button
+            type="button"
+            class="inventory-list-page__menu-btn"
+            (click)="cardPopover.toggle($event)"
+            [attr.aria-label]="'admin.inventory.moreActions' | translate"
+          >
+            <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
+          </button>
+          <p-popover #cardPopover>
+            <div class="inventory-list-page__menu">
+              <button type="button" class="inventory-list-page__menu-item" (click)="openReceiveDialog(row); cardPopover.hide()">
+                {{ 'admin.inventory.actions.receive' | translate }}
+              </button>
+              <button type="button" class="inventory-list-page__menu-item" (click)="openAdjustDialog(row); cardPopover.hide()">
+                {{ 'admin.inventory.actions.adjust' | translate }}
+              </button>
+              <a
+                routerLink="/admin/inventory/movements"
+                [queryParams]="{ variantId: row.variantId }"
+                class="inventory-list-page__menu-item"
+              >
+                {{ 'admin.inventory.actions.viewMovements' | translate }}
+              </a>
+            </div>
+          </p-popover>
+        </div>
+
+        <div class="inventory-list-page__card-numbers">
+          <div class="inventory-list-page__card-figure">
+            <span>{{ 'admin.inventory.columns.onHand' | translate }}</span>
+            <strong>{{ row.qtyOnHand }}</strong>
+          </div>
+          <div class="inventory-list-page__card-figure">
+            <span>{{ 'admin.inventory.columns.reserved' | translate }}</span>
+            <strong>{{ row.qtyReserved }}</strong>
+          </div>
+          <div class="inventory-list-page__card-figure">
+            <span>{{ 'admin.inventory.columns.available' | translate }}</span>
+            <strong>{{ row.qtyAvailable }}</strong>
+          </div>
+        </div>
+
+        <app-vl-status-badge [label]="statusInfo(row).labelKey | translate" [tone]="statusInfo(row).tone"></app-vl-status-badge>
+      </div>
+
+      <p *ngIf="!loading() && !rows().length" class="inventory-list-page__empty">{{ 'admin.inventory.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>
+
+<app-receive-stock-dialog
+  [variantId]="receiveDialogVariantId()"
+  (closed)="onDialogClosed()"
+  (saved)="onDialogSettled()"
+  (conflict)="onDialogSettled()"
+></app-receive-stock-dialog>
+
+<app-adjust-stock-dialog
+  [variantId]="adjustDialogVariantId()"
+  (closed)="onDialogClosed()"
+  (saved)="onDialogSettled()"
+  (conflict)="onDialogSettled()"
+></app-adjust-stock-dialog>

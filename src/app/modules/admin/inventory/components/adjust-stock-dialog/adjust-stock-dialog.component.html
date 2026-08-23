@@ -1,1 +1,124 @@
-<p>adjust-stock-dialog works!</p>
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="adjust-stock-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="adjust-stock-dialog-title" class="admin-dialog__title">
+        {{ 'admin.inventory.adjustDialog.title' | translate }}
+        <span class="admin-dialog__title-sku" *ngIf="position() as p">{{ p.sku }}</span>
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)">
+      <div class="admin-dialog__inline-error" *ngIf="errorMessage()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+      <p class="admin-dialog__product-name" *ngIf="position() as p">{{ p.productName }} — {{ p.variantSummary }}</p>
+
+      <app-stock-numbers-card
+        *ngIf="position() as p"
+        [qtyOnHand]="p.qtyOnHand"
+        [qtyReserved]="p.qtyReserved"
+        [qtyAvailable]="p.qtyAvailable"
+        [minStockLevel]="p.minStockLevel"
+      ></app-stock-numbers-card>
+
+      <label class="admin-dialog__field-label" for="adjust-delta">
+        {{ 'admin.inventory.adjustDialog.deltaLabel' | translate }}
+      </label>
+      <p-inputnumber
+        inputId="adjust-delta"
+        [ngModel]="quantityDelta()"
+        (ngModelChange)="quantityDelta.set($event)"
+        mode="decimal"
+        [showButtons]="false"
+        [placeholder]="'admin.inventory.adjustDialog.deltaPlaceholder' | translate"
+        styleClass="admin-dialog__number-input"
+      ></p-inputnumber>
+
+      <p
+        class="admin-dialog__preview"
+        [class.admin-dialog__preview--stop]="willGoBelowSafe"
+        *ngIf="quantityDelta() !== null && quantityDelta() !== 0"
+      >
+        <i class="pi" [ngClass]="willGoBelowSafe ? 'pi-exclamation-triangle' : 'pi-info-circle'" aria-hidden="true"></i>
+        {{ 'admin.inventory.adjustDialog.preview' | translate: { value: onHandAfter } }}
+        <ng-container *ngIf="willGoBelowSafe">
+          — {{ 'admin.inventory.adjustDialog.previewWarning' | translate }}
+        </ng-container>
+      </p>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="adjust-movement-type">
+        {{ 'admin.inventory.adjustDialog.movementTypeLabel' | translate }}
+      </label>
+      <p-select
+        inputId="adjust-movement-type"
+        [ngModel]="movementType()"
+        (ngModelChange)="movementType.set($event)"
+        [options]="movementTypeOptions"
+        optionValue="type"
+        [showClear]="true"
+        appendTo="self"
+        [placeholder]="'admin.inventory.adjustDialog.movementTypePlaceholder' | translate"
+        styleClass="admin-dialog__select"
+      >
+        <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+        <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+      </p-select>
+
+      <label class="admin-dialog__field-label admin-dialog__field-label--spaced" for="adjust-reason">
+        {{ 'admin.inventory.adjustDialog.reasonLabel' | translate }} *
+      </label>
+      <div class="admin-dialog__chips">
+        <button
+          *ngFor="let chip of reasonChips"
+          type="button"
+          class="admin-dialog__chip"
+          (click)="applyReasonChip(chip)"
+        >
+          {{ chip.labelKey | translate }}
+        </button>
+      </div>
+      <textarea
+        id="adjust-reason"
+        class="admin-dialog__textarea"
+        rows="2"
+        [ngModel]="reason()"
+        (ngModelChange)="reason.set($event)"
+        [placeholder]="'admin.inventory.adjustDialog.reasonPlaceholder' | translate"
+      ></textarea>
+      <p class="admin-dialog__helper">{{ 'admin.inventory.adjustDialog.reasonHelper' | translate }}</p>
+    </div>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="admin-dialog__submit"
+        [class.admin-dialog__submit--ok]="!willGoBelowSafe"
+        [class.admin-dialog__submit--stop]="willGoBelowSafe"
+        [disabled]="saving() || !canSubmit"
+        (click)="submit()"
+      >
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.inventory.adjustDialog.submit' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>
