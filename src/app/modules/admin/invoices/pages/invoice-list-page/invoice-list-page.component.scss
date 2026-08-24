@@ -168,8 +168,14 @@
   font-weight: 700;
   color: var(--admin-text);
   direction: ltr;
-  text-align: start;
+  // text-align: start resolves against this element's own (forced) ltr direction, not the
+  // page's, so it would always land left — explicit left/right + an RTL override instead.
+  text-align: left;
   unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
 }
 
 .ilp__col-number--cancelled {
@@ -193,9 +199,13 @@
 
 .ilp__col-phone {
   direction: ltr;
-  text-align: start;
+  text-align: left;
   unicode-bidi: isolate;
   color: var(--admin-text-muted);
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
 }
 
 .ilp__col-num {

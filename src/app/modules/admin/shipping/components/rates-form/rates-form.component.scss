@@ -1,0 +1,283 @@
+@use 'styles/breakpoints';
+
+.admin-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+
+.admin-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+}
+
+.admin-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: 560px;
+  max-block-size: 88vh;
+  background: var(--admin-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: admin-dialog-in 220ms ease both;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.admin-dialog__panel--lg {
+  max-inline-size: 900px;
+}
+
+@keyframes admin-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.admin-dialog__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-block-end: 1px solid transparent;
+  transition: border-color 150ms ease;
+}
+
+.admin-dialog__header--scrolled {
+  border-color: var(--admin-border);
+}
+
+.admin-dialog__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h6);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.admin-dialog__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--admin-row-height);
+  block-size: var(--admin-row-height);
+  border: none;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.admin-dialog__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  // Only the body scrolls, and only vertically — this is the backstop; the real fix for
+  // the grid ever getting wider than the panel is the minmax(0, 1fr) tracks below, but a
+  // stray wide child (e.g. an untranslated string) should still never open a scrollbar.
+  overflow-x: hidden;
+  padding: 0 var(--sp-5) var(--sp-5);
+}
+
+.admin-dialog__field-label {
+  display: block;
+  margin-block-end: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+// Label above the input, input, then helper beneath — the same stacked pattern as the
+// storefront address form (address-form-dialog__helper), just with this admin surface's
+// own spacing/tone.
+.admin-dialog__helper {
+  display: block;
+  inline-size: 100%;
+  margin-block-start: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+  line-height: 1.5;
+}
+
+.admin-dialog__footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--admin-surface-alt);
+  border-block-start: 1px solid transparent;
+  transition: border-color 150ms ease;
+}
+
+.admin-dialog__footer--scrolled {
+  border-color: var(--admin-border);
+}
+
+.admin-dialog__cancel,
+.admin-dialog__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease, opacity 150ms ease;
+}
+
+.admin-dialog__cancel {
+  border: 1px solid var(--admin-border);
+  background: transparent;
+  color: var(--admin-text);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.admin-dialog__submit {
+  border: none;
+  color: #fff;
+}
+
+.admin-dialog__submit--ok {
+  background: var(--ok);
+}
+
+.admin-dialog__submit:hover:not(:disabled),
+.admin-dialog__submit:focus-visible:not(:disabled) {
+  opacity: 0.88;
+}
+
+.admin-dialog__cancel:disabled,
+.admin-dialog__submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (max-width: 639px) {
+  .admin-dialog {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .admin-dialog__panel {
+    max-inline-size: 100%;
+    max-block-size: 92vh;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    animation: admin-dialog-sheet-in 220ms ease both;
+  }
+}
+
+@keyframes admin-dialog-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dialog__panel {
+    animation: none;
+  }
+}
+
+// ═══ Rate fields grid — 3 columns desktop, 2 tablet, 1 mobile ═══
+
+.rf__grid {
+  display: grid;
+  // minmax(0, 1fr), not bare 1fr — a bare 1fr track's automatic minimum size is based on
+  // its content's min-content width, so a long helper text or a p-inputnumber with its
+  // own intrinsic width forces the track (and the whole grid) wider than the panel, which
+  // is what was opening the horizontal scrollbar. minmax(0, ...) lets the track actually
+  // shrink to the space available and wrap its content instead of pushing past it.
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--sp-5);
+  column-gap: var(--sp-5);
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.md {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+// ═══ Confirm step ═══
+
+.rf__confirm-warning {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--r-md);
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+
+  i {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    margin-block-start: 1px;
+  }
+}
+
+.rf__field {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+:host ::ng-deep .rf__number-input {
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  direction: ltr;
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+}

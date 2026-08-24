@@ -202,19 +202,16 @@
 
 :host ::ng-deep .afp__number-input {
   inline-size: 100%;
-
-  input {
-    inline-size: 100%;
-    padding: var(--sp-3);
-    border: 1px solid var(--admin-border);
-    border-radius: var(--r-md);
-    background: var(--admin-surface);
-    color: var(--admin-text);
-    font-size: var(--fs-base);
-    font-variant-numeric: tabular-nums;
-    text-align: end;
-    direction: ltr;
-  }
+  min-inline-size: 0;
+  padding: var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  direction: ltr;
 }
 
 .afp__toggles {

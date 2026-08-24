@@ -1,1 +1,86 @@
-<p>zones-page works!</p>
+<div class="zp">
+  <header class="zp__header">
+    <h1 class="zp__title">{{ 'admin.shipping.title' | translate }}</h1>
+  </header>
+
+  <div class="zp__border-note">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.shipping.borderNote' | translate }}</span>
+  </div>
+
+  <div class="zp__skeleton" *ngIf="loading()">
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="zp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.shipping.errorMessage' | translate }}</span>
+    <button type="button" class="zp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <p class="zp__empty" *ngIf="!loading() && !error() && !zones().length">{{ 'admin.shipping.empty' | translate }}</p>
+
+  <div class="zp__grid" *ngIf="!loading() && !error()">
+    <section class="zp__card" *ngFor="let zone of zones()" [class.zp__card--inactive]="!zone.active">
+      <div class="zp__card-header">
+        <div class="zp__name-block">
+          <div class="zp__name-row">
+            <span class="zp__name-ar">{{ zone.nameAr }}</span>
+            <app-vl-status-badge
+              *ngIf="!zone.active"
+              [label]="'admin.shipping.inactiveBadge' | translate"
+              tone="muted"
+              [outline]="true"
+            ></app-vl-status-badge>
+          </div>
+          <span class="zp__name-en">{{ zone.nameEn }}</span>
+        </div>
+
+        <div class="zp__cost-block">
+          <ng-container *ngIf="zone.baseCost !== null; else noRate">
+            <span class="zp__cost">{{ formatAmount(zone.baseCost) }}</span>
+            <span class="zp__cost-currency">EGP</span>
+          </ng-container>
+          <ng-template #noRate>
+            <span class="zp__cost zp__cost--none">{{ 'admin.shipping.noRate' | translate }}</span>
+          </ng-template>
+        </div>
+
+        <button type="button" class="zp__edit-btn" (click)="openEdit(zone)">
+          <i class="pi pi-pencil" aria-hidden="true"></i>
+          {{ 'admin.shipping.edit' | translate }}
+        </button>
+      </div>
+
+      <div class="zp__chips">
+        <span class="zp__chip" *ngFor="let gov of zone.governorates">{{ gov }}</span>
+      </div>
+
+      <div class="zp__stats">
+        <div class="zp__stat">
+          <span class="zp__stat-label">{{ 'admin.shipping.fields.freeShippingOver' | translate }}</span>
+          <span class="zp__stat-value">
+            {{ zone.freeShippingOver !== null ? formatAmount(zone.freeShippingOver) : ('admin.shipping.fields.noFreeShipping' | translate) }}
+          </span>
+        </div>
+        <div class="zp__stat">
+          <span class="zp__stat-label">{{ 'admin.shipping.fields.codFee' | translate }}</span>
+          <span class="zp__stat-value">{{ zone.codFee !== null ? formatAmount(zone.codFee) : '—' }}</span>
+        </div>
+        <div class="zp__stat">
+          <span class="zp__stat-label">{{ 'admin.shipping.fields.deliveryDays' | translate }}</span>
+          <span class="zp__stat-value">
+            {{ 'admin.shipping.fields.deliveryDaysValue' | translate: { min: zone.deliveryDaysMin, max: zone.deliveryDaysMax } }}
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<app-rates-form
+  [zone]="editingZone()"
+  (closed)="onDialogClosed()"
+  (saved)="onSaved()"
+></app-rates-form>

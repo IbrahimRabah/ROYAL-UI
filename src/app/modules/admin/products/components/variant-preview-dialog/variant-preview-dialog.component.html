@@ -74,7 +74,7 @@
                 [ngModel]="bulkFill().price"
                 (ngModelChange)="updateBulkFill({ price: $event })"
                 mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
             <label class="vpd__detail-field">
@@ -83,7 +83,7 @@
                 [ngModel]="bulkFill().compareAtPrice"
                 (ngModelChange)="updateBulkFill({ compareAtPrice: $event })"
                 mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
             <label class="vpd__detail-field">
@@ -92,7 +92,7 @@
                 [ngModel]="bulkFill().costPrice"
                 (ngModelChange)="updateBulkFill({ costPrice: $event })"
                 mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
             <label class="vpd__detail-field">
@@ -101,7 +101,7 @@
                 [ngModel]="bulkFill().taxRate"
                 (ngModelChange)="updateBulkFill({ taxRate: $event })"
                 mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" [min]="0" [max]="1"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
               <small class="vpd__field-hint">{{ 'admin.products.form.variants.generator.taxRateHint' | translate }}</small>
             </label>
@@ -111,7 +111,7 @@
                 [ngModel]="bulkFill().weightGrams"
                 (ngModelChange)="updateBulkFill({ weightGrams: $event })"
                 mode="decimal" [min]="0" suffix=" g"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
             <label class="vpd__detail-field">
@@ -120,7 +120,7 @@
                 [ngModel]="bulkFill().initialStock"
                 (ngModelChange)="updateBulkFill({ initialStock: $event })"
                 mode="decimal" [min]="0"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
             <label class="vpd__detail-field">
@@ -129,7 +129,7 @@
                 [ngModel]="bulkFill().minStockLevel"
                 (ngModelChange)="updateBulkFill({ minStockLevel: $event })"
                 mode="decimal" [min]="0"
-                styleClass="vpd__detail-input"
+                inputStyleClass="vpd__detail-input"
               ></p-inputnumber>
             </label>
           </div>
@@ -157,7 +157,7 @@
                   [ngModel]="rowDraft(i).price"
                   (ngModelChange)="updateRow(i, { price: $event })"
                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
               <label class="vpd__detail-field">
@@ -166,7 +166,7 @@
                   [ngModel]="rowDraft(i).compareAtPrice"
                   (ngModelChange)="updateRow(i, { compareAtPrice: $event })"
                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
               <label class="vpd__detail-field">
@@ -175,7 +175,7 @@
                   [ngModel]="rowDraft(i).costPrice"
                   (ngModelChange)="updateRow(i, { costPrice: $event })"
                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" suffix=" EGP"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
               <label class="vpd__detail-field">
@@ -184,7 +184,7 @@
                   [ngModel]="rowDraft(i).taxRate"
                   (ngModelChange)="updateRow(i, { taxRate: $event })"
                   mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" [min]="0" [max]="1"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
                 <small class="vpd__field-hint">{{ 'admin.products.form.variants.generator.taxRateHint' | translate }}</small>
               </label>
@@ -194,7 +194,7 @@
                   [ngModel]="rowDraft(i).weightGrams"
                   (ngModelChange)="updateRow(i, { weightGrams: $event })"
                   mode="decimal" [min]="0" suffix=" g"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
               <label class="vpd__detail-field">
@@ -203,7 +203,7 @@
                   [ngModel]="rowDraft(i).initialStock"
                   (ngModelChange)="updateRow(i, { initialStock: $event })"
                   mode="decimal" [min]="0"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
               <label class="vpd__detail-field">
@@ -212,7 +212,7 @@
                   [ngModel]="rowDraft(i).minStockLevel"
                   (ngModelChange)="updateRow(i, { minStockLevel: $event })"
                   mode="decimal" [min]="0"
-                  styleClass="vpd__detail-input"
+                  inputStyleClass="vpd__detail-input"
                 ></p-inputnumber>
               </label>
             </div>

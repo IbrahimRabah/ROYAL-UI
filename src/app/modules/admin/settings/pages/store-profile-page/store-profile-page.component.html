@@ -1,1 +1,177 @@
-<p>store-profile-page works!</p>
+<div class="spp">
+  <header class="spp__header">
+    <h1 class="spp__title">{{ 'admin.settings.title' | translate }}</h1>
+    <p class="spp__lead">{{ 'admin.settings.lead' | translate }}</p>
+  </header>
+
+  <div class="spp__skeleton" *ngIf="loading()">
+    <p-skeleton height="60px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="420px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="spp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.settings.errorMessage' | translate }}</span>
+    <button type="button" class="spp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!loading() && !error()">
+    <app-missing-fields-banner [fields]="missingFields()" (fieldClick)="focusField($event)"></app-missing-fields-banner>
+
+    <form class="spp__form" (ngSubmit)="submit()">
+      <section class="spp__section">
+        <h2 class="spp__section-title">
+          <span class="spp__section-icon"><i class="pi pi-building" aria-hidden="true"></i></span>
+          {{ 'admin.settings.sections.identity' | translate }}
+        </h2>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-legalName">{{ 'admin.settings.fields.legalName' | translate }} *</label>
+          <input
+            id="sp-legalName"
+            type="text"
+            class="spp__input"
+            dir="rtl"
+            required
+            [ngModel]="legalName()"
+            (ngModelChange)="legalName.set($event)"
+            name="legalName"
+          />
+        </div>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-legalNameEn">{{ 'admin.settings.fields.legalNameEn' | translate }}</label>
+          <input
+            id="sp-legalNameEn"
+            type="text"
+            class="spp__input"
+            dir="ltr"
+            [ngModel]="legalNameEn()"
+            (ngModelChange)="legalNameEn.set($event)"
+            name="legalNameEn"
+          />
+        </div>
+      </section>
+
+      <section class="spp__section">
+        <h2 class="spp__section-title">
+          <span class="spp__section-icon"><i class="pi pi-map-marker" aria-hidden="true"></i></span>
+          {{ 'admin.settings.sections.contact' | translate }}
+        </h2>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-address">{{ 'admin.settings.fields.address' | translate }}</label>
+          <textarea
+            id="sp-address"
+            class="spp__textarea"
+            rows="2"
+            [ngModel]="address()"
+            (ngModelChange)="address.set($event)"
+            name="address"
+          ></textarea>
+        </div>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-phone">{{ 'admin.settings.fields.phone' | translate }}</label>
+          <input
+            id="sp-phone"
+            type="tel"
+            class="spp__input spp__input--ltr"
+            dir="ltr"
+            [ngModel]="phone()"
+            (ngModelChange)="phone.set($event)"
+            name="phone"
+          />
+        </div>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-email">{{ 'admin.settings.fields.email' | translate }}</label>
+          <input
+            id="sp-email"
+            type="email"
+            class="spp__input spp__input--ltr"
+            dir="ltr"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
+            name="email"
+          />
+        </div>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-website">{{ 'admin.settings.fields.website' | translate }}</label>
+          <input
+            id="sp-website"
+            type="url"
+            class="spp__input spp__input--ltr"
+            dir="ltr"
+            [ngModel]="website()"
+            (ngModelChange)="website.set($event)"
+            name="website"
+          />
+        </div>
+      </section>
+
+      <section class="spp__section">
+        <h2 class="spp__section-title">
+          <span class="spp__section-icon"><i class="pi pi-verified" aria-hidden="true"></i></span>
+          {{ 'admin.settings.sections.legal' | translate }}
+        </h2>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-taxNumber">{{ 'admin.settings.fields.taxNumber' | translate }}</label>
+          <input
+            id="sp-taxNumber"
+            type="text"
+            class="spp__input spp__input--ltr"
+            dir="ltr"
+            [ngModel]="taxNumber()"
+            (ngModelChange)="taxNumber.set($event)"
+            name="taxNumber"
+          />
+        </div>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-commercialRegister">{{ 'admin.settings.fields.commercialRegister' | translate }}</label>
+          <input
+            id="sp-commercialRegister"
+            type="text"
+            class="spp__input spp__input--ltr"
+            dir="ltr"
+            [ngModel]="commercialRegister()"
+            (ngModelChange)="commercialRegister.set($event)"
+            name="commercialRegister"
+          />
+        </div>
+      </section>
+
+      <section class="spp__section">
+        <h2 class="spp__section-title">
+          <span class="spp__section-icon"><i class="pi pi-file" aria-hidden="true"></i></span>
+          {{ 'admin.settings.sections.invoice' | translate }}
+        </h2>
+
+        <div class="spp__field">
+          <label class="spp__label" for="sp-invoiceFooterNote">{{ 'admin.settings.fields.invoiceFooterNote' | translate }}</label>
+          <textarea
+            id="sp-invoiceFooterNote"
+            class="spp__textarea"
+            rows="3"
+            [ngModel]="invoiceFooterNote()"
+            (ngModelChange)="invoiceFooterNote.set($event)"
+            name="invoiceFooterNote"
+          ></textarea>
+        </div>
+      </section>
+
+      <p class="spp__snapshot-note">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        {{ 'admin.settings.snapshotNote' | translate }}
+      </p>
+
+      <button type="submit" class="spp__submit" [disabled]="!canSubmit()">
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.settings.save' | translate }}
+      </button>
+    </form>
+  </ng-container>
+</div>

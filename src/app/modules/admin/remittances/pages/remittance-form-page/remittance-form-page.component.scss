@@ -132,8 +132,7 @@
   color: var(--stop);
 }
 
-:host ::ng-deep .rfp__date,
-:host ::ng-deep .rfp__number-input {
+:host ::ng-deep .rfp__date {
   inline-size: 100%;
 
   input {
@@ -141,7 +140,9 @@
   }
 }
 
-:host ::ng-deep .rfp__number-input input {
+:host ::ng-deep .rfp__number-input {
+  inline-size: 100%;
+  min-inline-size: 0;
   text-align: end;
   direction: ltr;
   font-variant-numeric: tabular-nums;

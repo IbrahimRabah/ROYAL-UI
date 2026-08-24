@@ -684,6 +684,12 @@
     "remittances": {
       "created": "Remittance recorded",
       "cancelled": "Remittance cancelled"
+    },
+    "shipping": {
+      "rateUpdated": "Shipping rate updated"
+    },
+    "settings": {
+      "profileSaved": "Store profile saved"
     }
   },
   "errorPage": {
@@ -1374,6 +1380,72 @@
         "reasonPlaceholder": "Why is this remittance being cancelled?",
         "keep": "Keep remittance",
         "submit": "Cancel remittance"
+      }
+    },
+    "shipping": {
+      "title": "Shipping Zones",
+      "borderNote": "The border governorate rates (Sinai, Red Sea, New Valley, Matrouh) were priced on an estimate before a courier contract existed. If those rates haven't been reviewed against the actual contract, they should be.",
+      "errorMessage": "We couldn't load shipping zones — try refreshing the page",
+      "empty": "No shipping zones configured yet.",
+      "inactiveBadge": "Inactive",
+      "edit": "Edit",
+      "noRate": "No rate configured",
+      "fields": {
+        "baseCost": "Base cost",
+        "freeShippingOver": "Free shipping over",
+        "noFreeShipping": "No free shipping",
+        "codFee": "COD fee",
+        "deliveryDays": "Delivery",
+        "deliveryDaysValue": "{{min}}–{{max}} days",
+        "maxWeight": "Max weight",
+        "costPerExtraKg": "Cost per extra kg"
+      },
+      "ratesForm": {
+        "title": "Edit rate — {{zone}}",
+        "baseCostLabel": "Base cost",
+        "freeShippingLabel": "Free shipping threshold",
+        "freeShippingHelper": "Leave empty for no free shipping. Set an amount and orders above it ship free.",
+        "codFeeLabel": "COD fee",
+        "codFeeHelper": "Charged on top of shipping — appears as its own line on the order.",
+        "deliveryDaysMinLabel": "Delivery days (min)",
+        "deliveryDaysMaxLabel": "Delivery days (max)",
+        "maxWeightLabel": "Max weight (g)",
+        "costPerExtraKgLabel": "Cost per extra kg",
+        "submit": "Save changes",
+        "confirmTitle": "Update this rate?",
+        "confirmMessage": "This changes what every customer pays from now on. Orders already placed keep their original shipping cost.",
+        "confirmSubmit": "Save changes",
+        "confirmCancel": "Keep current rate"
+      }
+    },
+    "settings": {
+      "title": "Store Profile",
+      "lead": "These details appear on every printed invoice — legal name, address, tax and registration numbers, and the footer note.",
+      "errorMessage": "We couldn't load the store profile — try refreshing the page",
+      "snapshotNote": "Invoices snapshot this data at the time they're issued. Changing these details won't alter invoices already printed — only invoices issued from now on.",
+      "save": "Save changes",
+      "confirmTitle": "Save store profile?",
+      "confirmMessage": "This information appears on every invoice issued from now on. Invoices already printed keep the details that were on file at the time.",
+      "sections": {
+        "identity": "Identity",
+        "contact": "Contact",
+        "legal": "Legal",
+        "invoice": "Invoice"
+      },
+      "fields": {
+        "legalName": "Legal name (Arabic)",
+        "legalNameEn": "Legal name (English)",
+        "address": "Address",
+        "phone": "Phone",
+        "email": "Email",
+        "taxNumber": "Tax number",
+        "commercialRegister": "Commercial register",
+        "website": "Website",
+        "invoiceFooterNote": "Invoice footer note"
+      },
+      "missingFields": {
+        "heading": "Missing information",
+        "intro": "The following fields are incomplete:"
       }
     },
     "categories": {

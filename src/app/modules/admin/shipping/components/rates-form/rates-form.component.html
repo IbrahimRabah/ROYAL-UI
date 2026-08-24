@@ -1,1 +1,183 @@
-<p>rates-form works!</p>
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel admin-dialog__panel--lg"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="rates-form-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="rates-form-title" class="admin-dialog__title">
+        {{ (confirmStep() ? 'admin.shipping.ratesForm.confirmTitle' : 'admin.shipping.ratesForm.title') | translate: { zone: zone?.nameAr } }}
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)" *ngIf="!confirmStep(); else confirmBody">
+      <div class="rf__grid">
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-base-cost">
+            {{ 'admin.shipping.ratesForm.baseCostLabel' | translate }} *
+          </label>
+          <p-inputnumber
+            inputId="rf-base-cost"
+            [ngModel]="baseCost()"
+            (ngModelChange)="baseCost.set($event)"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            suffix=" EGP"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-free-shipping">
+            {{ 'admin.shipping.ratesForm.freeShippingLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-free-shipping"
+            [ngModel]="freeShippingOver()"
+            (ngModelChange)="freeShippingOver.set($event)"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            suffix=" EGP"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+          <p class="admin-dialog__helper">{{ 'admin.shipping.ratesForm.freeShippingHelper' | translate }}</p>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-cod-fee">
+            {{ 'admin.shipping.ratesForm.codFeeLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-cod-fee"
+            [ngModel]="codFee()"
+            (ngModelChange)="codFee.set($event)"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            suffix=" EGP"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+          <p class="admin-dialog__helper">{{ 'admin.shipping.ratesForm.codFeeHelper' | translate }}</p>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-days-min">
+            {{ 'admin.shipping.ratesForm.deliveryDaysMinLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-days-min"
+            [ngModel]="deliveryDaysMin()"
+            (ngModelChange)="deliveryDaysMin.set($event)"
+            mode="decimal"
+            [min]="0"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-days-max">
+            {{ 'admin.shipping.ratesForm.deliveryDaysMaxLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-days-max"
+            [ngModel]="deliveryDaysMax()"
+            (ngModelChange)="deliveryDaysMax.set($event)"
+            mode="decimal"
+            [min]="0"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-max-weight">
+            {{ 'admin.shipping.ratesForm.maxWeightLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-max-weight"
+            [ngModel]="maxWeightGrams()"
+            (ngModelChange)="maxWeightGrams.set($event)"
+            mode="decimal"
+            [min]="0"
+            suffix=" g"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+        </div>
+
+        <div class="rf__field">
+          <label class="admin-dialog__field-label" for="rf-extra-kg">
+            {{ 'admin.shipping.ratesForm.costPerExtraKgLabel' | translate }}
+          </label>
+          <p-inputnumber
+            inputId="rf-extra-kg"
+            [ngModel]="costPerExtraKg()"
+            (ngModelChange)="costPerExtraKg.set($event)"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            suffix=" EGP"
+            inputStyleClass="rf__number-input"
+          ></p-inputnumber>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: the consequence warning, in this same panel — never a second stacked
+         dialog (see the component comment on confirmStep for why). -->
+    <ng-template #confirmBody>
+      <div class="admin-dialog__body">
+        <div class="rf__confirm-warning">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          <span>{{ 'admin.shipping.ratesForm.confirmMessage' | translate }}</span>
+        </div>
+      </div>
+    </ng-template>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()" *ngIf="!confirmStep(); else confirmFooter">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="admin-dialog__submit admin-dialog__submit--ok"
+        [disabled]="saving() || !canSubmit"
+        (click)="goToConfirm()"
+      >
+        <i class="pi pi-check" aria-hidden="true"></i>
+        {{ 'admin.shipping.ratesForm.submit' | translate }}
+      </button>
+    </footer>
+
+    <ng-template #confirmFooter>
+      <footer class="admin-dialog__footer">
+        <button type="button" class="admin-dialog__cancel" [disabled]="saving()" (click)="backToEdit()">
+          {{ 'admin.shipping.ratesForm.confirmCancel' | translate }}
+        </button>
+        <button
+          type="button"
+          class="admin-dialog__submit admin-dialog__submit--ok"
+          [disabled]="saving()"
+          (click)="confirmSave()"
+        >
+          <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+          {{ 'admin.shipping.ratesForm.confirmSubmit' | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </div>
+</div>

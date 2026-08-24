@@ -1,1 +1,16 @@
-<p>missing-fields-banner works!</p>
+<div class="mfb" *ngIf="fields.length">
+  <div class="mfb__body">
+    <div class="mfb__header">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <span class="mfb__heading">{{ 'admin.settings.missingFields.heading' | translate }}</span>
+    </div>
+    <p class="mfb__intro">{{ 'admin.settings.missingFields.intro' | translate }}</p>
+    <ul class="mfb__list">
+      <li *ngFor="let field of fields">
+        <button type="button" class="mfb__item" (click)="fieldClick.emit(field)">
+          {{ labelKeyFor(field) | translate }}
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

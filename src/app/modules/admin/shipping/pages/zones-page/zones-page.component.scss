@@ -1,0 +1,265 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.zp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zp__header {
+  display: flex;
+  align-items: center;
+}
+
+.zp__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+// ═══ Border-governorate note — remove once rates are confirmed against a real contract ═══
+
+.zp__border-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--r-lg);
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+
+  i {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    margin-block-start: 1px;
+  }
+}
+
+.zp__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.zp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+.zp__empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+// ═══ Zone cards ═══
+
+.zp__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.zp__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  transition: opacity 150ms ease;
+}
+
+.zp__card--inactive {
+  opacity: 0.6;
+}
+
+.zp__card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.zp__name-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+  flex: 1 1 160px;
+}
+
+.zp__name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zp__name-ar {
+  font-family: var(--body);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.zp__name-en {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.zp__cost-block {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1);
+}
+
+.zp__cost {
+  font-size: var(--fs-h4);
+  font-weight: 800;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.zp__cost--none {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.zp__cost-currency {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.zp__edit-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+// ═══ Governorate chips ═══
+
+.zp__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.zp__chip {
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--admin-surface-alt);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+// ═══ Rate stats — two columns even at 375px (the card itself is already the single
+// column at that width; these three figures still read better paired up than stacked
+// one-per-row), three columns from tablet up where there's room for all of them in one
+// row. ═══
+
+.zp__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--admin-border);
+
+  @include breakpoints.md {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.zp__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+}
+
+.zp__stat-label {
+  display: block;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.zp__stat-value {
+  display: block;
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  direction: ltr;
+  // text-align: start would resolve against this element's own (forced) ltr direction,
+  // not the page's — always landing on the left regardless of language. Flip explicitly
+  // to the right in RTL so it matches the surrounding Arabic layout's flow.
+  text-align: left;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zp__card {
+    transition: none;
+  }
+}

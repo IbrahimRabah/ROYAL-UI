@@ -1,0 +1,201 @@
+:host {
+  display: block;
+}
+
+.spp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  max-inline-size: 720px;
+  // Without this the flex column, capped at max-inline-size, just sits at the block's
+  // start edge — reading as a lopsided "two-column" layout with the rest of the page
+  // empty beside it, since block boxes don't self-center under a max-width alone.
+  margin-inline: auto;
+}
+
+.spp__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.spp__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+// States why these fields matter — they're what prints on every invoice.
+.spp__lead {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+  line-height: 1.6;
+}
+
+.spp__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.spp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.spp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+.spp__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.spp__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+}
+
+.spp__section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.spp__section-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: 0.9375rem;
+}
+
+.spp__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.spp__label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.spp__input,
+.spp__textarea {
+  inline-size: 100%;
+  padding: var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-family: var(--body);
+  font-size: var(--fs-sm);
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+}
+
+.spp__input--ltr {
+  text-align: start;
+  unicode-bidi: isolate;
+}
+
+.spp__textarea {
+  resize: vertical;
+}
+
+// Invoices keep whatever was on file when they were issued — this note sits right below
+// the form so a "why didn't the old invoice update" question never has to be asked.
+.spp__snapshot-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--admin-surface-alt);
+  border-radius: var(--r-md);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+
+  i {
+    flex-shrink: 0;
+    margin-block-start: 1px;
+  }
+}
+
+.spp__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spp__submit {
+    transition: none;
+  }
+}
