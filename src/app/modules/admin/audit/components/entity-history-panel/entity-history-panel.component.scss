@@ -1,0 +1,204 @@
+:host {
+  display: block;
+}
+
+.ehp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.ehp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.ehp__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+.ehp__link-through {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.ehp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.ehp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+.ehp__empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+// ═══ Timeline ═══
+
+.ehp__timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ehp__entry {
+  position: relative;
+  display: flex;
+  gap: var(--sp-4);
+  padding-inline-start: var(--sp-6);
+
+  // The connecting line — a single inset-inline-start rule reverses direction for free
+  // under RTL (logical property, not left/right), no separate RTL override needed.
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 5px;
+    inset-block-start: 20px;
+    inset-block-end: calc(var(--sp-5) * -1);
+    inline-size: 2px;
+    background: var(--admin-border);
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.ehp__dot {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 6px;
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--admin-surface);
+}
+
+.ehp__entry-body {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+}
+
+.ehp__entry-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.ehp__action {
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.ehp__date {
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.ehp__change {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.ehp__value {
+  display: inline-block;
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-sm);
+  font-family: var(--mono, monospace);
+  font-size: var(--fs-sm);
+  direction: ltr;
+  unicode-bidi: isolate;
+  overflow-wrap: anywhere;
+}
+
+.ehp__value--old {
+  background: var(--stop-bg);
+  color: var(--stop);
+  text-decoration: line-through;
+}
+
+.ehp__value--new {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.ehp__change-arrow {
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+
+  :host-context([dir='rtl']) & {
+    transform: scaleX(-1);
+  }
+}
+
+.ehp__reason {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+  line-height: 1.5;
+}
+
+.ehp__actor {
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
+}

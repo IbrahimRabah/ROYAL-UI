@@ -1221,7 +1221,113 @@
       }
     },
     "customers": {
-      "backToList": "رجوع إلى العملاء"
+      "backToList": "رجوع إلى العملاء",
+      "list": {
+        "title": "العملاء",
+        "searchPlaceholder": "ابحث بالاسم أو رقم الهاتف",
+        "errorMessage": "تعذّر تحميل العملاء — حاول تحديث الصفحة",
+        "empty": "لا يوجد عملاء مطابقون لهذا البحث.",
+        "viewDetails": "عرض التفاصيل",
+        "repeatBadge": "عميل متكرر",
+        "statusActive": "نشط",
+        "columns": {
+          "name": "الاسم",
+          "phone": "الهاتف",
+          "email": "البريد الإلكتروني",
+          "orderCount": "الطلبات",
+          "totalSpent": "إجمالي الإنفاق",
+          "lastOrderAt": "آخر طلب",
+          "registeredAt": "تاريخ التسجيل",
+          "status": "الحالة"
+        }
+      },
+      "detail": {
+        "errorMessage": "تعذّر تحميل بيانات هذا العميل.",
+        "notFound": "لم يتم العثور على هذا العميل.",
+        "verified": "موثّق",
+        "registeredOn": "مسجَّل منذ {{date}}",
+        "failedOrdersCount": "فشل التوصيل {{count}} مرات",
+        "failedOrdersHint": "اتصل قبل الشحن",
+        "addressesTitle": "العناوين المحفوظة",
+        "defaultAddress": "افتراضي",
+        "recentOrdersTitle": "الطلبات الأخيرة",
+        "noOrders": "لا يوجد لهذا العميل طلبات بعد.",
+        "stats": {
+          "totalOrders": "إجمالي الطلبات",
+          "deliveredOrders": "تم التوصيل",
+          "failedOrders": "فشل التوصيل",
+          "cancelledOrders": "ملغي",
+          "totalSpent": "إجمالي الإنفاق",
+          "averageOrderValue": "متوسط قيمة الطلب",
+          "firstOrderAt": "أول طلب",
+          "lastOrderAt": "آخر طلب"
+        },
+        "ordersColumns": {
+          "orderNumber": "الطلب",
+          "fulfillmentStatus": "حالة التنفيذ",
+          "paymentStatus": "حالة الدفع",
+          "grandTotal": "الإجمالي",
+          "itemCount": "العناصر",
+          "placedAt": "تاريخ الطلب"
+        }
+      }
+    },
+    "exports": {
+      "title": "التصدير",
+      "filtersTitle": "الفلاتر",
+      "rangeInvalid": "تاريخ النهاية قبل تاريخ البداية — هذا النطاق لن يُرجع أي نتائج.",
+      "downloadError": "تعذّر إنشاء ملف التصدير — حاول مرة أخرى.",
+      "pickingList": {
+        "title": "قائمة التغليف",
+        "explanation": "اطبعها كل صباح للمخزن — ما يجب تغليفه اليوم.",
+        "downloadBtn": "تحميل PDF"
+      },
+      "accounting": {
+        "title": "تصدير محاسبي",
+        "explanation": "نهاية الشهر، للمحاسب.",
+        "downloadBtn": "تحميل Excel"
+      },
+      "filters": {
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "fulfillmentStatus": "حالة التنفيذ",
+        "allFulfillmentStatuses": "كل حالات التنفيذ",
+        "paymentStatus": "حالة الدفع",
+        "allPaymentStatuses": "كل حالات الدفع",
+        "governorate": "المحافظة",
+        "allGovernorates": "كل المحافظات",
+        "excludeCancelled": "استبعاد الطلبات الملغاة"
+      }
+    },
+    "audit": {
+      "backToList": "رجوع إلى سجل المراجعة",
+      "list": {
+        "title": "سجل المراجعة",
+        "coverageNote": "يغطي هذا السجل أربعة أنواع أحداث فقط — تغييرات الأسعار، وحركات المخزون، والاستلامات، والدفعات. تغييرات حالة الطلب موجودة في المخطط الزمني للطلب بدلاً من ذلك، ولا يتم تسجيل تعديلات المنتجات والتصنيفات إطلاقًا.",
+        "actorPlaceholder": "ابحث باسم المستخدم",
+        "allActions": "كل الإجراءات",
+        "allEntityTypes": "كل أنواع السجلات",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "errorMessage": "تعذّر تحميل سجل المراجعة — حاول تحديث الصفحة",
+        "empty": "لا توجد سجلات مطابقة لهذه الفلاتر.",
+        "viewHistory": "عرض السجل",
+        "columns": {
+          "date": "التاريخ",
+          "action": "الإجراء",
+          "entity": "السجل",
+          "change": "التغيير",
+          "reason": "السبب",
+          "actor": "المستخدم"
+        }
+      },
+      "history": {
+        "backToLog": "رجوع إلى سجل المراجعة",
+        "openRecord": "فتح السجل",
+        "errorMessage": "تعذّر تحميل سجل هذا العنصر.",
+        "empty": "لا يوجد سجل مسجَّل لهذا العنصر.",
+        "by": "بواسطة {{name}}"
+      }
     },
     "invoices": {
       "backToList": "رجوع إلى الفواتير",

@@ -1,1 +1,7 @@
-<p>failed-orders-warning works!</p>
+<div class="fow" *ngIf="count > 0">
+  <i class="pi pi-exclamation-triangle fow__icon" aria-hidden="true"></i>
+  <div class="fow__body">
+    <span class="fow__count">{{ 'admin.customers.detail.failedOrdersCount' | translate: { count } }}</span>
+    <span class="fow__hint">{{ 'admin.customers.detail.failedOrdersHint' | translate }}</span>
+  </div>
+</div>

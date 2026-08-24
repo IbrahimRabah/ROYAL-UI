@@ -1,0 +1,104 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.eff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--sp-5);
+  column-gap: var(--sp-5);
+  align-items: end;
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.eff__field {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.eff__label {
+  display: block;
+  margin-block-end: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+:host ::ng-deep .eff__field {
+  .p-select,
+  .p-datepicker {
+    inline-size: 100%;
+  }
+}
+
+.eff__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--admin-row-height);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+  cursor: pointer;
+}
+
+.eff__toggle-input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.eff__toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-block;
+  inline-size: 40px;
+  block-size: 22px;
+  border-radius: var(--r-full);
+  background: var(--admin-border-strong);
+  transition: background 150ms ease;
+}
+
+.eff__toggle-thumb {
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: inset-inline-start 150ms ease;
+}
+
+.eff__toggle-input:checked + .eff__toggle-track {
+  background: var(--gold);
+}
+
+.eff__toggle-input:checked + .eff__toggle-track .eff__toggle-thumb {
+  inset-inline-start: 20px;
+}
+
+.eff__toggle-input:focus-visible + .eff__toggle-track {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eff__toggle-track,
+  .eff__toggle-thumb {
+    transition: none;
+  }
+}

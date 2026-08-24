@@ -1,1 +1,59 @@
-<p>export-page works!</p>
+<div class="exp">
+  <header class="exp__header">
+    <h1 class="exp__title">{{ 'admin.exports.title' | translate }}</h1>
+  </header>
+
+  <section class="exp__filters-panel">
+    <h2 class="exp__section-title">{{ 'admin.exports.filtersTitle' | translate }}</h2>
+    <app-export-filters-form (filtersChange)="onFiltersChange($event)"></app-export-filters-form>
+
+    <div class="exp__range-warning" *ngIf="dateRangeInvalid()">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <span>{{ 'admin.exports.rangeInvalid' | translate }}</span>
+    </div>
+  </section>
+
+  <div class="exp__cards">
+    <section class="exp__card">
+      <div class="exp__card-icon"><i class="pi pi-box" aria-hidden="true"></i></div>
+      <h3 class="exp__card-title">{{ 'admin.exports.pickingList.title' | translate }}</h3>
+      <p class="exp__card-format">PDF</p>
+      <p class="exp__card-explanation">{{ 'admin.exports.pickingList.explanation' | translate }}</p>
+
+      <div class="exp__card-error" *ngIf="downloadError() === 'pickingList'">
+        {{ 'admin.exports.downloadError' | translate }}
+      </div>
+
+      <button
+        type="button"
+        class="exp__download-btn"
+        [disabled]="downloading() !== null || dateRangeInvalid()"
+        (click)="downloadPickingList()"
+      >
+        <i class="pi" [ngClass]="downloading() === 'pickingList' ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+        {{ 'admin.exports.pickingList.downloadBtn' | translate }}
+      </button>
+    </section>
+
+    <section class="exp__card">
+      <div class="exp__card-icon"><i class="pi pi-file-excel" aria-hidden="true"></i></div>
+      <h3 class="exp__card-title">{{ 'admin.exports.accounting.title' | translate }}</h3>
+      <p class="exp__card-format">Excel</p>
+      <p class="exp__card-explanation">{{ 'admin.exports.accounting.explanation' | translate }}</p>
+
+      <div class="exp__card-error" *ngIf="downloadError() === 'accounting'">
+        {{ 'admin.exports.downloadError' | translate }}
+      </div>
+
+      <button
+        type="button"
+        class="exp__download-btn"
+        [disabled]="downloading() !== null || dateRangeInvalid()"
+        (click)="downloadAccounting()"
+      >
+        <i class="pi" [ngClass]="downloading() === 'accounting' ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+        {{ 'admin.exports.accounting.downloadBtn' | translate }}
+      </button>
+    </section>
+  </div>
+</div>

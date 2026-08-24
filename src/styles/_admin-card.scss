@@ -64,8 +64,14 @@
 
 .admin-card__secondary--code {
   direction: ltr;
-  text-align: start;
+  // text-align: start would resolve against this element's own (forced) ltr direction,
+  // not the page's, so it would always land left — explicit left/right + an RTL override.
+  text-align: left;
   unicode-bidi: isolate;
+
+  html[dir='rtl'] & {
+    text-align: right;
+  }
 }
 
 // Row 3
@@ -98,7 +104,15 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   direction: ltr;
+  // Keep direction: ltr — these are numbers/dates/money and must not reverse — but with
+  // no explicit text-align the browser's default ("start") resolves against this ltr, so
+  // it always lands left regardless of page direction. Flip explicitly for RTL pages.
+  text-align: left;
   unicode-bidi: isolate;
+
+  html[dir='rtl'] & {
+    text-align: right;
+  }
 }
 
 // Row 4

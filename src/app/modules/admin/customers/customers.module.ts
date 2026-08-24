@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { SharedModule } from '../../../shared/shared.module';
 import { AdminSharedModule } from '../shared/admin-shared.module';
 
@@ -19,9 +22,12 @@ import { FailedOrdersWarningComponent } from './components/failed-orders-warning
   ],
   imports: [
     CommonModule,
+    FormsModule,
     CustomersRoutingModule,
     SharedModule,
-    AdminSharedModule
+    AdminSharedModule,
+    TableModule,
+    TooltipModule
   ]
 })
 export class CustomersModule { }

@@ -1,0 +1,246 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.cdp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+// ═══ Error / not-found ═══
+
+.cdp__error,
+.cdp__not-found {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+}
+
+.cdp__error {
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  color: var(--stop);
+}
+
+.cdp__not-found {
+  background: var(--admin-surface-alt);
+  border: 1px dashed var(--admin-border-strong);
+  color: var(--admin-text-muted);
+}
+
+.cdp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+// ═══ Header ═══
+
+.cdp__header {
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+}
+
+.cdp__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.cdp__name {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+.cdp__contact-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.cdp__phone-link {
+  color: var(--admin-text);
+  font-weight: 600;
+  text-decoration: none;
+  direction: ltr;
+  // text-align: start would resolve against this element's own (forced) ltr direction,
+  // not the page's, so it would always land left — explicit left/right + an RTL override.
+  text-align: left;
+  unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+    text-decoration: underline;
+  }
+}
+
+.cdp__email {
+  color: var(--admin-text-muted);
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+.cdp__registered {
+  margin-block-start: var(--sp-1);
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+// ═══ Purchase summary stats ═══
+
+.cdp__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.cdp__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.cdp__stat-label {
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cdp__stat-value {
+  color: var(--admin-text);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+// ═══ Addresses ═══
+
+.cdp__section-title {
+  margin: 0 0 var(--sp-4);
+  font-family: var(--body);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.cdp__address-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-4);
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cdp__address-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+}
+
+.cdp__address-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.cdp__address-label {
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.cdp__address-recipient {
+  font-size: var(--fs-sm);
+  color: var(--admin-text);
+}
+
+.cdp__address-phone {
+  align-self: flex-start;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+    text-decoration: underline;
+  }
+}
+
+.cdp__address-formatted {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

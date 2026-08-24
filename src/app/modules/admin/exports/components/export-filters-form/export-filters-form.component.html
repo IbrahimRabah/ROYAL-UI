@@ -1,1 +1,79 @@
-<p>export-filters-form works!</p>
+<div class="eff">
+  <div class="eff__field">
+    <label class="eff__label" for="eff-date-from">{{ 'admin.exports.filters.dateFrom' | translate }}</label>
+    <p-datepicker
+      inputId="eff-date-from"
+      [ngModel]="dateFromDate()"
+      (ngModelChange)="onDateFromChange($event)"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      [iconDisplay]="'input'"
+      appendTo="body"
+      [placeholder]="'admin.exports.filters.dateFrom' | translate"
+    ></p-datepicker>
+  </div>
+
+  <div class="eff__field">
+    <label class="eff__label" for="eff-date-to">{{ 'admin.exports.filters.dateTo' | translate }}</label>
+    <p-datepicker
+      inputId="eff-date-to"
+      [ngModel]="dateToDate()"
+      (ngModelChange)="onDateToChange($event)"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      [iconDisplay]="'input'"
+      appendTo="body"
+      [placeholder]="'admin.exports.filters.dateTo' | translate"
+    ></p-datepicker>
+  </div>
+
+  <div class="eff__field">
+    <label class="eff__label" for="eff-fulfillment">{{ 'admin.exports.filters.fulfillmentStatus' | translate }}</label>
+    <p-select
+      inputId="eff-fulfillment"
+      [ngModel]="fulfillmentStatus()"
+      (ngModelChange)="onFulfillmentChange($event)"
+      [options]="fulfillmentOptions"
+      [showClear]="true"
+      [placeholder]="'admin.exports.filters.allFulfillmentStatuses' | translate"
+    >
+      <ng-template let-option pTemplate="item">{{ option | fulfillmentStatus }}</ng-template>
+      <ng-template let-option pTemplate="selectedItem">{{ option | fulfillmentStatus }}</ng-template>
+    </p-select>
+  </div>
+
+  <div class="eff__field">
+    <label class="eff__label" for="eff-payment">{{ 'admin.exports.filters.paymentStatus' | translate }}</label>
+    <p-select
+      inputId="eff-payment"
+      [ngModel]="paymentStatus()"
+      (ngModelChange)="onPaymentChange($event)"
+      [options]="paymentOptions"
+      [showClear]="true"
+      [placeholder]="'admin.exports.filters.allPaymentStatuses' | translate"
+    >
+      <ng-template let-option pTemplate="item">{{ option | paymentStatus }}</ng-template>
+      <ng-template let-option pTemplate="selectedItem">{{ option | paymentStatus }}</ng-template>
+    </p-select>
+  </div>
+
+  <div class="eff__field">
+    <label class="eff__label" for="eff-governorate">{{ 'admin.exports.filters.governorate' | translate }}</label>
+    <p-select
+      inputId="eff-governorate"
+      [ngModel]="governorateId()"
+      (ngModelChange)="onGovernorateChange($event)"
+      [options]="governorates()"
+      optionLabel="name"
+      optionValue="id"
+      [showClear]="true"
+      [placeholder]="'admin.exports.filters.allGovernorates' | translate"
+    ></p-select>
+  </div>
+
+  <label class="eff__toggle">
+    <input type="checkbox" class="eff__toggle-input" [checked]="excludeCancelled()" (change)="toggleExcludeCancelled()" />
+    <span class="eff__toggle-track"><span class="eff__toggle-thumb"></span></span>
+    {{ 'admin.exports.filters.excludeCancelled' | translate }}
+  </label>
+</div>

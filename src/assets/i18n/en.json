@@ -1221,7 +1221,113 @@
       }
     },
     "customers": {
-      "backToList": "Back to customers"
+      "backToList": "Back to customers",
+      "list": {
+        "title": "Customers",
+        "searchPlaceholder": "Search by name or phone",
+        "errorMessage": "We couldn't load customers — try refreshing the page",
+        "empty": "No customers match this search.",
+        "viewDetails": "View details",
+        "repeatBadge": "Repeat customer",
+        "statusActive": "Active",
+        "columns": {
+          "name": "Name",
+          "phone": "Phone",
+          "email": "Email",
+          "orderCount": "Orders",
+          "totalSpent": "Total spent",
+          "lastOrderAt": "Last order",
+          "registeredAt": "Registered",
+          "status": "Status"
+        }
+      },
+      "detail": {
+        "errorMessage": "We couldn't load this customer.",
+        "notFound": "This customer couldn't be found.",
+        "verified": "Verified",
+        "registeredOn": "Registered {{date}}",
+        "failedOrdersCount": "Failed delivery {{count}} times",
+        "failedOrdersHint": "Call before shipping",
+        "addressesTitle": "Saved addresses",
+        "defaultAddress": "Default",
+        "recentOrdersTitle": "Recent orders",
+        "noOrders": "This customer has no orders yet.",
+        "stats": {
+          "totalOrders": "Total orders",
+          "deliveredOrders": "Delivered",
+          "failedOrders": "Failed",
+          "cancelledOrders": "Cancelled",
+          "totalSpent": "Total spent",
+          "averageOrderValue": "Average order value",
+          "firstOrderAt": "First order",
+          "lastOrderAt": "Last order"
+        },
+        "ordersColumns": {
+          "orderNumber": "Order",
+          "fulfillmentStatus": "Fulfilment",
+          "paymentStatus": "Payment",
+          "grandTotal": "Total",
+          "itemCount": "Items",
+          "placedAt": "Placed"
+        }
+      }
+    },
+    "exports": {
+      "title": "Exports",
+      "filtersTitle": "Filters",
+      "rangeInvalid": "The end date is before the start date — this range would return no results.",
+      "downloadError": "The export couldn't be generated — try again.",
+      "pickingList": {
+        "title": "Picking list",
+        "explanation": "Print each morning for the warehouse — what to pack today.",
+        "downloadBtn": "Download PDF"
+      },
+      "accounting": {
+        "title": "Accounting export",
+        "explanation": "End of month, for your accountant.",
+        "downloadBtn": "Download Excel"
+      },
+      "filters": {
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "fulfillmentStatus": "Fulfilment status",
+        "allFulfillmentStatuses": "All fulfilment statuses",
+        "paymentStatus": "Payment status",
+        "allPaymentStatuses": "All payment statuses",
+        "governorate": "Governorate",
+        "allGovernorates": "All governorates",
+        "excludeCancelled": "Exclude cancelled orders"
+      }
+    },
+    "audit": {
+      "backToList": "Back to audit log",
+      "list": {
+        "title": "Audit log",
+        "coverageNote": "This log covers only four event types — price changes, stock movements, receipts and payments. Order status changes live in the order timeline instead, and product and category edits are not logged at all.",
+        "actorPlaceholder": "Search by actor name",
+        "allActions": "All actions",
+        "allEntityTypes": "All entity types",
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "errorMessage": "We couldn't load the audit log — try refreshing the page",
+        "empty": "No audit entries match these filters.",
+        "viewHistory": "View history",
+        "columns": {
+          "date": "Date",
+          "action": "Action",
+          "entity": "Entity",
+          "change": "Change",
+          "reason": "Reason",
+          "actor": "Actor"
+        }
+      },
+      "history": {
+        "backToLog": "Back to audit log",
+        "openRecord": "Open record",
+        "errorMessage": "We couldn't load this record's history.",
+        "empty": "No history recorded for this record.",
+        "by": "by {{name}}"
+      }
     },
     "invoices": {
       "backToList": "Back to invoices",

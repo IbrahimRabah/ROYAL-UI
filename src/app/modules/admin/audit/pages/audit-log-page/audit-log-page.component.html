@@ -1,1 +1,185 @@
-<p>audit-log-page works!</p>
+<div class="alp">
+  <header class="alp__header">
+    <h1 class="alp__title">{{ 'admin.audit.list.title' | translate }}</h1>
+  </header>
+
+  <div class="alp__coverage-note">
+    <i class="pi pi-info-circle" aria-hidden="true"></i>
+    <span>{{ 'admin.audit.list.coverageNote' | translate }}</span>
+  </div>
+
+  <div class="alp__toolbar">
+    <div class="alp__search">
+      <i class="pi pi-search alp__search-icon" aria-hidden="true"></i>
+      <input
+        type="search"
+        class="alp__search-input"
+        [ngModel]="actorDraft()"
+        (ngModelChange)="onActorDraftChange($event)"
+        [placeholder]="'admin.audit.list.actorPlaceholder' | translate"
+      />
+    </div>
+
+    <div class="admin-toolbar">
+      <button
+        type="button"
+        class="admin-toolbar__trigger"
+        [attr.aria-expanded]="filtersOpen()"
+        (click)="filtersOpen.set(!filtersOpen())"
+      >
+        <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        {{ 'common.filters' | translate }}
+        <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+      </button>
+      <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
+        <p-select
+          [ngModel]="action()"
+          (ngModelChange)="onActionChange($event)"
+          [options]="actionOptions"
+          [showClear]="true"
+          [placeholder]="'admin.audit.list.allActions' | translate"
+        >
+          <ng-template let-option pTemplate="item">{{ actionLabel(option) }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ actionLabel(option) }}</ng-template>
+        </p-select>
+
+        <p-select
+          [ngModel]="entityType()"
+          (ngModelChange)="onEntityTypeChange($event)"
+          [options]="entityTypeOptions"
+          [showClear]="true"
+          [placeholder]="'admin.audit.list.allEntityTypes' | translate"
+        >
+          <ng-template let-option pTemplate="item">{{ entityTypeLabel(option) }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ entityTypeLabel(option) }}</ng-template>
+        </p-select>
+
+        <p-datepicker
+          [ngModel]="dateFromDate()"
+          (ngModelChange)="onDateFromChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.audit.list.dateFrom' | translate"
+        ></p-datepicker>
+
+        <p-datepicker
+          [ngModel]="dateToDate()"
+          (ngModelChange)="onDateToChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.audit.list.dateTo' | translate"
+        ></p-datepicker>
+
+        <button type="button" class="alp__clear-btn" *ngIf="hasActiveFilters()" (click)="clearFilters()">
+          {{ 'common.clear' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="alp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.audit.list.errorMessage' | translate }}</span>
+    <button type="button" class="alp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="alp__table-wrap">
+      <p-table
+        [value]="rows()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="totalElements()"
+        [lazy]="true"
+        [first]="page() * pageSize"
+        (onPage)="onPage($event)"
+        dataKey="id"
+        styleClass="alp__table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.audit.list.columns.date' | translate }}</th>
+            <th>{{ 'admin.audit.list.columns.action' | translate }}</th>
+            <th>{{ 'admin.audit.list.columns.entity' | translate }}</th>
+            <th>{{ 'admin.audit.list.columns.change' | translate }}</th>
+            <th>{{ 'admin.audit.list.columns.reason' | translate }}</th>
+            <th>{{ 'admin.audit.list.columns.actor' | translate }}</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="alp__col-date">{{ row.createdAt | arabicDate: { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' } }}</td>
+            <td>
+              <span class="alp__action-dot" [style.background]="actionColor(row.action)"></span>
+              {{ actionLabel(row.action) }}
+            </td>
+            <td>
+              <a [routerLink]="['/admin/audit', row.entityType, row.entityId]" class="alp__entity-link">
+                {{ row.entityLabel }}
+              </a>
+              <span class="alp__entity-type">{{ entityTypeLabel(row.entityType) }}</span>
+            </td>
+            <td class="alp__col-change">
+              <span class="alp__value alp__value--old" *ngIf="row.oldValue !== null">{{ row.oldValue }}</span>
+              <i class="pi pi-arrow-right alp__change-arrow" *ngIf="row.oldValue !== null && row.newValue !== null" aria-hidden="true"></i>
+              <span class="alp__value alp__value--new" *ngIf="row.newValue !== null">{{ row.newValue }}</span>
+            </td>
+            <td class="alp__col-reason">{{ row.reason ?? '—' }}</td>
+            <td>{{ row.actorName }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" class="alp__empty">{{ 'admin.audit.list.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="alp__cards">
+      <div *ngFor="let row of rows()" class="admin-card">
+        <div class="admin-card__row1">
+          <div class="admin-card__primary">
+            <span class="alp__action-dot" [style.background]="actionColor(row.action)"></span>
+            {{ actionLabel(row.action) }}
+          </div>
+          <a [routerLink]="['/admin/audit', row.entityType, row.entityId]" class="admin-card__action" [attr.aria-label]="'admin.audit.list.viewHistory' | translate">
+            <i class="pi pi-eye" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <div class="admin-card__secondary">{{ row.entityLabel }} — {{ entityTypeLabel(row.entityType) }}</div>
+
+        <div class="alp__card-change" *ngIf="row.oldValue !== null || row.newValue !== null">
+          <span class="alp__value alp__value--old" *ngIf="row.oldValue !== null">{{ row.oldValue }}</span>
+          <i class="pi pi-arrow-right alp__change-arrow" *ngIf="row.oldValue !== null && row.newValue !== null" aria-hidden="true"></i>
+          <span class="alp__value alp__value--new" *ngIf="row.newValue !== null">{{ row.newValue }}</span>
+        </div>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.audit.list.columns.actor' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.actorName }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.audit.list.columns.date' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.createdAt | arabicDate }}</span>
+          </div>
+        </div>
+
+        <p class="alp__card-reason" *ngIf="row.reason">{{ row.reason }}</p>
+      </div>
+
+      <p *ngIf="!loading() && !rows().length" class="alp__empty">{{ 'admin.audit.list.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>

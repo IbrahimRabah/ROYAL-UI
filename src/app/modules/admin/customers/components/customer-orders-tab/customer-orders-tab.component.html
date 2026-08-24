@@ -1,1 +1,81 @@
-<p>customer-orders-tab works!</p>
+<section class="cot">
+  <h2 class="cot__title">{{ 'admin.customers.detail.recentOrdersTitle' | translate }}</h2>
+
+  <ng-container *ngIf="orders.length; else empty">
+    <!-- Desktop / tablet table -->
+    <div class="cot__table-wrap">
+      <table class="cot__table">
+        <thead>
+          <tr>
+            <th>{{ 'admin.customers.detail.ordersColumns.orderNumber' | translate }}</th>
+            <th>{{ 'admin.customers.detail.ordersColumns.fulfillmentStatus' | translate }}</th>
+            <th>{{ 'admin.customers.detail.ordersColumns.paymentStatus' | translate }}</th>
+            <th class="cot__col-num">{{ 'admin.customers.detail.ordersColumns.grandTotal' | translate }}</th>
+            <th class="cot__col-num">{{ 'admin.customers.detail.ordersColumns.itemCount' | translate }}</th>
+            <th>{{ 'admin.customers.detail.ordersColumns.placedAt' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders" [routerLink]="['/admin/orders', order.id]" class="cot__row">
+            <td class="cot__col-number">{{ order.orderNumber }}</td>
+            <td>
+              <app-vl-status-badge
+                [label]="order.fulfillmentStatus | fulfillmentStatus"
+                [tone]="fulfillmentTone(order.fulfillmentStatus)"
+              ></app-vl-status-badge>
+            </td>
+            <td>
+              <app-vl-status-badge
+                [label]="order.paymentStatus | paymentStatus"
+                [tone]="paymentTone(order.paymentStatus)"
+              ></app-vl-status-badge>
+            </td>
+            <td class="cot__col-num">{{ order.grandTotal | egp }}<span class="cot__currency">EGP</span></td>
+            <td class="cot__col-num">{{ order.itemCount }}</td>
+            <td class="cot__col-date">{{ order.placedAt | arabicDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="cot__cards">
+      <a *ngFor="let order of orders" [routerLink]="['/admin/orders', order.id]" class="admin-card">
+        <div class="admin-card__row1">
+          <div class="admin-card__primary admin-card__primary--code">{{ order.orderNumber }}</div>
+          <i class="pi pi-chevron-right cot__card-chevron" aria-hidden="true"></i>
+        </div>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.detail.ordersColumns.grandTotal' | translate }}</span>
+            <span class="admin-card__stat-value">{{ order.grandTotal | egp }} EGP</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.detail.ordersColumns.itemCount' | translate }}</span>
+            <span class="admin-card__stat-value">{{ order.itemCount }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.detail.ordersColumns.placedAt' | translate }}</span>
+            <span class="admin-card__stat-value">{{ order.placedAt | arabicDate }}</span>
+          </div>
+        </div>
+
+        <div class="admin-card__badges">
+          <app-vl-status-badge
+            [label]="order.fulfillmentStatus | fulfillmentStatus"
+            [tone]="fulfillmentTone(order.fulfillmentStatus)"
+          ></app-vl-status-badge>
+          <app-vl-status-badge
+            [label]="order.paymentStatus | paymentStatus"
+            [tone]="paymentTone(order.paymentStatus)"
+          ></app-vl-status-badge>
+        </div>
+      </a>
+    </div>
+  </ng-container>
+
+  <ng-template #empty>
+    <p class="cot__empty">{{ 'admin.customers.detail.noOrders' | translate }}</p>
+  </ng-template>
+</section>

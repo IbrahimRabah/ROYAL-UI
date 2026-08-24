@@ -1,1 +1,42 @@
-<p>entity-history-panel works!</p>
+<div class="ehp">
+  <app-admin-back-link parentPath="/admin/audit" labelKey="admin.audit.history.backToLog"></app-admin-back-link>
+
+  <header class="ehp__header">
+    <h1 class="ehp__title">{{ entityTypeLabel }}</h1>
+    <a *ngIf="linkTarget" [routerLink]="linkTarget" class="ehp__link-through">
+      {{ 'admin.audit.history.openRecord' | translate }}
+      <i class="pi pi-external-link" aria-hidden="true"></i>
+    </a>
+  </header>
+
+  <div class="ehp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.audit.history.errorMessage' | translate }}</span>
+    <button type="button" class="ehp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ol class="ehp__timeline" *ngIf="!error() && entries().length">
+    <li class="ehp__entry" *ngFor="let entry of entries()">
+      <span class="ehp__dot" [style.background]="actionColor(entry.action)"></span>
+
+      <div class="ehp__entry-body">
+        <div class="ehp__entry-head">
+          <span class="ehp__action">{{ actionLabel(entry.action) }}</span>
+          <span class="ehp__date">{{ entry.createdAt | arabicDate: { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' } }}</span>
+        </div>
+
+        <div class="ehp__change" *ngIf="entry.oldValue !== null || entry.newValue !== null">
+          <span class="ehp__value ehp__value--old" *ngIf="entry.oldValue !== null">{{ entry.oldValue }}</span>
+          <i class="pi pi-arrow-right ehp__change-arrow" *ngIf="entry.oldValue !== null && entry.newValue !== null" aria-hidden="true"></i>
+          <span class="ehp__value ehp__value--new" *ngIf="entry.newValue !== null">{{ entry.newValue }}</span>
+        </div>
+
+        <p class="ehp__reason" *ngIf="entry.reason">{{ entry.reason }}</p>
+
+        <span class="ehp__actor">{{ 'admin.audit.history.by' | translate: { name: entry.actorName } }}</span>
+      </div>
+    </li>
+  </ol>
+
+  <p class="ehp__empty" *ngIf="!error() && !loading() && !entries().length">{{ 'admin.audit.history.empty' | translate }}</p>
+</div>

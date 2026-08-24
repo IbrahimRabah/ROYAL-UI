@@ -1,0 +1,147 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.cot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cot__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.cot__empty {
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--admin-text-muted);
+  background: var(--admin-surface);
+  border: 1px dashed var(--admin-border-strong);
+  border-radius: var(--r-lg);
+}
+
+// ═══ Table ═══
+
+.cot__table-wrap {
+  display: none;
+  overflow-x: auto;
+
+  @include breakpoints.md {
+    display: block;
+  }
+}
+
+.cot__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+
+  th {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: start;
+    border-block-end: 1px solid var(--admin-border);
+  }
+
+  td {
+    padding: var(--sp-3) var(--sp-4);
+    border-block-end: 1px solid var(--admin-border);
+    font-size: var(--fs-sm);
+    color: var(--admin-text);
+  }
+}
+
+.cot__row {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: table-row;
+  transition: background 150ms ease;
+
+  &:nth-child(even) {
+    background: var(--admin-surface-alt);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: color-mix(in srgb, var(--gold) 6%, var(--admin-surface-alt));
+  }
+}
+
+.cot__col-number {
+  font-weight: 700;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+.cot__col-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.cot__currency {
+  margin-inline-start: var(--sp-1);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.cot__col-date {
+  white-space: nowrap;
+  color: var(--admin-text-muted);
+}
+
+// ═══ Mobile cards ═══
+
+.cot__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+
+  @include breakpoints.md {
+    display: none;
+  }
+}
+
+// Order numbers stay LTR even inside the primary-identifier row (the shared
+// admin-card__secondary--code modifier only covers row 2, not row 1's primary slot).
+.admin-card__primary--code {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+.cot__card-chevron {
+  flex-shrink: 0;
+  color: var(--admin-text-muted);
+
+  :host-context([dir='rtl']) & {
+    transform: scaleX(-1);
+  }
+}

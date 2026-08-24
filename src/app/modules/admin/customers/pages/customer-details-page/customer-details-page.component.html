@@ -1,3 +1,96 @@
-<app-admin-back-link parentPath="/admin/customers" labelKey="admin.customers.backToList"></app-admin-back-link>
+<div class="cdp">
+  <app-admin-back-link parentPath="/admin/customers" labelKey="admin.customers.backToList"></app-admin-back-link>
 
-<p>customer-details-page works!</p>
+  <div class="cdp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.customers.detail.errorMessage' | translate }}</span>
+    <button type="button" class="cdp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div class="cdp__not-found" *ngIf="notFound() && !loading()">
+    <i class="pi pi-question-circle" aria-hidden="true"></i>
+    <span>{{ 'admin.customers.detail.notFound' | translate }}</span>
+  </div>
+
+  <ng-container *ngIf="customer() as c">
+    <header class="cdp__header">
+      <div class="cdp__identity">
+        <h1 class="cdp__name">{{ fullName }}</h1>
+        <div class="cdp__contact-row">
+          <a [href]="'tel:' + c.phone" class="cdp__phone-link">{{ c.phone | phoneDisplay }}</a>
+          <app-vl-status-badge
+            *ngIf="c.phoneVerified"
+            [label]="'admin.customers.detail.verified' | translate"
+            tone="ok"
+            [outline]="true"
+          ></app-vl-status-badge>
+        </div>
+        <div class="cdp__contact-row" *ngIf="c.email">
+          <span class="cdp__email">{{ c.email }}</span>
+          <app-vl-status-badge
+            *ngIf="c.emailVerified"
+            [label]="'admin.customers.detail.verified' | translate"
+            tone="ok"
+            [outline]="true"
+          ></app-vl-status-badge>
+        </div>
+        <span class="cdp__registered">{{ 'admin.customers.detail.registeredOn' | translate: { date: (c.registeredAt | arabicDate) } }}</span>
+      </div>
+    </header>
+
+    <app-failed-orders-warning [count]="c.purchases.failedOrders"></app-failed-orders-warning>
+
+    <section class="cdp__stats">
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.totalOrders' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.totalOrders }}</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.deliveredOrders' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.deliveredOrders }}</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.cancelledOrders' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.cancelledOrders }}</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.totalSpent' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.totalSpent | egp }} EGP</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.averageOrderValue' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.averageOrderValue | egp }} EGP</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.firstOrderAt' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.firstOrderAt | arabicDate }}</span>
+      </div>
+      <div class="cdp__stat">
+        <span class="cdp__stat-label">{{ 'admin.customers.detail.stats.lastOrderAt' | translate }}</span>
+        <span class="cdp__stat-value">{{ c.purchases.lastOrderAt | arabicDate }}</span>
+      </div>
+    </section>
+
+    <section class="cdp__addresses" *ngIf="c.addresses.length">
+      <h2 class="cdp__section-title">{{ 'admin.customers.detail.addressesTitle' | translate }}</h2>
+      <div class="cdp__address-grid">
+        <div class="cdp__address-card" *ngFor="let addr of c.addresses">
+          <div class="cdp__address-head">
+            <span class="cdp__address-label">{{ addr.label }}</span>
+            <app-vl-status-badge
+              *ngIf="addr.isDefault"
+              [label]="'admin.customers.detail.defaultAddress' | translate"
+              tone="info"
+              [outline]="true"
+            ></app-vl-status-badge>
+          </div>
+          <span class="cdp__address-recipient">{{ addr.recipientName }}</span>
+          <a [href]="'tel:' + addr.phone" class="cdp__address-phone">{{ addr.phone | phoneDisplay }}</a>
+          <p class="cdp__address-formatted">{{ addr.formatted }}</p>
+        </div>
+      </div>
+    </section>
+
+    <app-customer-orders-tab [orders]="c.recentOrders"></app-customer-orders-tab>
+  </ng-container>
+</div>

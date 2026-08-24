@@ -1,0 +1,267 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.clp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.clp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.clp__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+}
+
+// ═══ Search ═══
+
+.clp__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-inline-size: 420px;
+}
+
+.clp__search-icon {
+  position: absolute;
+  inset-inline-start: var(--sp-4);
+  color: var(--admin-text-muted);
+  font-size: 1.125rem;
+  pointer-events: none;
+}
+
+.clp__search-input {
+  inline-size: 100%;
+  padding-block: var(--sp-3);
+  padding-inline-start: calc(var(--sp-4) * 2 + 1rem);
+  padding-inline-end: calc(var(--admin-row-height) + var(--sp-2));
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-family: var(--body);
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+
+  &::placeholder {
+    color: var(--admin-text-muted);
+  }
+}
+
+.clp__clear-btn {
+  position: absolute;
+  inset-inline-end: var(--sp-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--admin-row-height);
+  block-size: var(--admin-row-height);
+  border: none;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+// ═══ Error ═══
+
+.clp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.clp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+// ═══ Table ═══
+
+.clp__table-wrap {
+  display: none;
+
+  @include breakpoints.md {
+    display: block;
+  }
+}
+
+.clp__col-name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.clp__col-phone,
+.clp__col-email {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  color: var(--admin-text-muted);
+
+  :host-context([dir='rtl']) & {
+    text-align: right;
+  }
+}
+
+.clp__phone-link {
+  color: var(--admin-text);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+    text-decoration: underline;
+  }
+}
+
+.clp__col-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.clp__currency {
+  margin-inline-start: var(--sp-1);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.clp__col-date {
+  white-space: nowrap;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.clp__col-action {
+  white-space: nowrap;
+  inline-size: 1%;
+}
+
+.clp__icon-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+    color: var(--admin-text);
+  }
+}
+
+.clp__empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+:host ::ng-deep .clp__table {
+  .p-datatable-thead > tr > th {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-block-end: 1px solid var(--admin-border);
+  }
+
+  .p-datatable-tbody > tr {
+    block-size: var(--admin-row-height);
+    background: var(--admin-surface);
+    transition: background 150ms ease;
+
+    > td {
+      padding: var(--sp-3) var(--sp-4);
+      border-block-end: 1px solid var(--admin-border);
+      font-size: var(--fs-sm);
+      color: var(--admin-text);
+    }
+
+    &:nth-child(even) {
+      background: var(--admin-surface-alt);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--gold) 6%, var(--admin-surface-alt));
+    }
+  }
+
+  .p-paginator {
+    background: var(--admin-surface);
+    border-block-start: 1px solid var(--admin-border);
+    padding: var(--sp-3);
+  }
+}
+
+// ═══ Mobile cards ═══
+
+.clp__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+
+  @include breakpoints.md {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host ::ng-deep .clp__table .p-datatable-tbody > tr {
+    transition: none;
+  }
+}

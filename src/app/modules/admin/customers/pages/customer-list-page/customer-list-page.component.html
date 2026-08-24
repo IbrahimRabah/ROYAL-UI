@@ -1,1 +1,143 @@
-<p>customer-list-page works!</p>
+<div class="clp">
+  <header class="clp__header">
+    <h1 class="clp__title">{{ 'admin.customers.list.title' | translate }}</h1>
+  </header>
+
+  <div class="clp__search">
+    <i class="pi pi-search clp__search-icon" aria-hidden="true"></i>
+    <input
+      type="search"
+      class="clp__search-input"
+      [ngModel]="searchDraft()"
+      (ngModelChange)="onSearchDraftChange($event)"
+      [placeholder]="'admin.customers.list.searchPlaceholder' | translate"
+    />
+    <button type="button" class="clp__clear-btn" *ngIf="searchDraft()" (click)="clearSearch()" [attr.aria-label]="'common.clear' | translate">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <div class="clp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.customers.list.errorMessage' | translate }}</span>
+    <button type="button" class="clp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="clp__table-wrap">
+      <p-table
+        [value]="rows()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="totalElements()"
+        [lazy]="true"
+        [first]="page() * pageSize"
+        (onPage)="onPage($event)"
+        dataKey="id"
+        styleClass="clp__table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.customers.list.columns.name' | translate }}</th>
+            <th>{{ 'admin.customers.list.columns.phone' | translate }}</th>
+            <th>{{ 'admin.customers.list.columns.email' | translate }}</th>
+            <th class="clp__col-num">{{ 'admin.customers.list.columns.orderCount' | translate }}</th>
+            <th class="clp__col-num">{{ 'admin.customers.list.columns.totalSpent' | translate }}</th>
+            <th>{{ 'admin.customers.list.columns.lastOrderAt' | translate }}</th>
+            <th>{{ 'admin.customers.list.columns.registeredAt' | translate }}</th>
+            <th>{{ 'admin.customers.list.columns.status' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="clp__col-name">
+              <span>{{ row.name }}</span>
+              <app-vl-status-badge
+                *ngIf="isRepeatCustomer(row)"
+                class="clp__repeat-badge"
+                [label]="'admin.customers.list.repeatBadge' | translate"
+                tone="info"
+                [outline]="true"
+              ></app-vl-status-badge>
+            </td>
+            <td class="clp__col-phone">
+              <a [href]="'tel:' + row.phone" class="clp__phone-link">{{ row.phone | phoneDisplay }}</a>
+            </td>
+            <td class="clp__col-email">{{ row.email ?? '—' }}</td>
+            <td class="clp__col-num">{{ row.orderCount }}</td>
+            <td class="clp__col-num">{{ row.totalSpent | egp }}<span class="clp__currency">EGP</span></td>
+            <td class="clp__col-date">{{ row.lastOrderAt | arabicDate }}</td>
+            <td class="clp__col-date">{{ row.registeredAt | arabicDate }}</td>
+            <td>
+              <app-vl-status-badge
+                [label]="row.status === 'ACTIVE' ? ('admin.customers.list.statusActive' | translate) : row.status"
+                [tone]="row.status === 'ACTIVE' ? 'ok' : 'stop'"
+              ></app-vl-status-badge>
+            </td>
+            <td class="clp__col-action">
+              <a [routerLink]="['/admin/customers', row.id]" class="clp__icon-btn" [attr.aria-label]="'admin.customers.list.viewDetails' | translate">
+                <i class="pi pi-eye" aria-hidden="true"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" class="clp__empty">{{ 'admin.customers.list.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="clp__cards">
+      <div *ngFor="let row of rows()" class="admin-card">
+        <div class="admin-card__row1">
+          <div class="admin-card__primary">{{ row.name }}</div>
+          <a [routerLink]="['/admin/customers', row.id]" class="admin-card__action" [attr.aria-label]="'admin.customers.list.viewDetails' | translate">
+            <i class="pi pi-eye" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <a [href]="'tel:' + row.phone" class="admin-card__secondary admin-card__secondary--code">
+          {{ row.phone | phoneDisplay }}
+        </a>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.list.columns.orderCount' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.orderCount }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.list.columns.totalSpent' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.totalSpent | egp }} EGP</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.customers.list.columns.lastOrderAt' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.lastOrderAt | arabicDate }}</span>
+          </div>
+        </div>
+
+        <div class="admin-card__badges">
+          <app-vl-status-badge
+            *ngIf="isRepeatCustomer(row)"
+            [label]="'admin.customers.list.repeatBadge' | translate"
+            tone="info"
+            [outline]="true"
+          ></app-vl-status-badge>
+          <app-vl-status-badge
+            [label]="row.status === 'ACTIVE' ? ('admin.customers.list.statusActive' | translate) : row.status"
+            [tone]="row.status === 'ACTIVE' ? 'ok' : 'stop'"
+          ></app-vl-status-badge>
+        </div>
+      </div>
+
+      <p *ngIf="!loading() && !rows().length" class="clp__empty">{{ 'admin.customers.list.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>
