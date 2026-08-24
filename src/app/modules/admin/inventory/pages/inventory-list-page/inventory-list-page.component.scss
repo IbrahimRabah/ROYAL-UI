@@ -114,6 +114,32 @@
   }
 }
 
+// A one-click shortcut into the same lowStockOnly filter the toggle below already
+// offers — visible without opening the filters panel, and only while there's something
+// to act on (hidden once applied or when nothing is low).
+.inventory-list-page__low-stock-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--warn);
+  border-radius: var(--r-full);
+  background: var(--warn-bg);
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.85;
+  }
+}
+
 .inventory-list-page__toggle {
   display: inline-flex;
   align-items: center;

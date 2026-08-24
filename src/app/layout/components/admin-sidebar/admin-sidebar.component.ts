@@ -18,11 +18,23 @@ import {
 
 import { AdminDashboardApiService } from '../../../core/services/api/admin-dashboard-api.service';
 
+interface AdminNavChild {
+  labelKey: string;
+  icon: string;
+  route: string;
+}
+
 interface AdminNavItem {
   labelKey: string;
   icon: string;
   route: string;
   badge?: true;
+  // When present, this item renders as a non-navigating group header (its own `route`
+  // is unused) with these as indented sub-links instead of one flat link — for sections
+  // that cover more than one screen (see the sidebar-audit finding this was added for:
+  // remittances/invoices each had multiple registered routes but only one nav entry,
+  // same problem previously fixed for brands/attributes).
+  children?: AdminNavChild[];
 }
 
 interface AdminNavGroup {
@@ -46,14 +58,38 @@ const NAV_GROUPS: AdminNavGroup[] = [
       { labelKey: 'admin.nav.categories', icon: 'pi-sitemap', route: '/admin/categories' },
       { labelKey: 'admin.nav.brands', icon: 'pi-tag', route: '/admin/brands' },
       { labelKey: 'admin.nav.attributes', icon: 'pi-sliders-h', route: '/admin/attributes' },
-      { labelKey: 'admin.nav.inventory', icon: 'pi-database', route: '/admin/inventory' },
+      {
+        labelKey: 'admin.nav.inventory',
+        icon: 'pi-database',
+        route: '/admin/inventory',
+        children: [
+          { labelKey: 'admin.nav.inventoryList', icon: 'pi-list', route: '/admin/inventory' },
+          { labelKey: 'admin.nav.inventoryMovements', icon: 'pi-history', route: '/admin/inventory/movements' },
+        ],
+      },
     ],
   },
   {
     labelKey: 'admin.nav.groups.finance',
     items: [
-      { labelKey: 'admin.nav.invoices', icon: 'pi-file', route: '/admin/invoices' },
-      { labelKey: 'admin.nav.remittances', icon: 'pi-wallet', route: '/admin/remittances' },
+      {
+        labelKey: 'admin.nav.invoices',
+        icon: 'pi-file',
+        route: '/admin/invoices',
+        children: [
+          { labelKey: 'admin.nav.invoicesList', icon: 'pi-list', route: '/admin/invoices' },
+          { labelKey: 'admin.nav.invoicesUninvoiced', icon: 'pi-exclamation-triangle', route: '/admin/invoices/uninvoiced' },
+        ],
+      },
+      {
+        labelKey: 'admin.nav.remittances',
+        icon: 'pi-wallet',
+        route: '/admin/remittances',
+        children: [
+          { labelKey: 'admin.nav.remittancesOutstanding', icon: 'pi-truck', route: '/admin/remittances/outstanding' },
+          { labelKey: 'admin.nav.remittancesSettlements', icon: 'pi-check-square', route: '/admin/remittances' },
+        ],
+      },
     ],
   },
   {

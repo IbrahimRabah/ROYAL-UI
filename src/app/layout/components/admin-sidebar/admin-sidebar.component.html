@@ -1,21 +1,46 @@
 <ng-template #navList>
   <div class="admin-sidebar__group" *ngFor="let group of navGroups">
     <span class="admin-sidebar__group-label">{{ group.labelKey | translate }}</span>
-    <a
-      *ngFor="let item of group.items"
-      [routerLink]="item.route"
-      routerLinkActive="admin-sidebar__link--active"
-      class="admin-sidebar__link"
-      [attr.data-tooltip]="item.labelKey | translate"
-      (click)="closeMobile()"
-    >
-      <i class="pi {{ item.icon }} admin-sidebar__icon" aria-hidden="true"></i>
-      <span class="admin-sidebar__label">{{ item.labelKey | translate }}</span>
-      <span
-        *ngIf="item.badge && pendingOrderCount() > 0"
-        class="admin-sidebar__badge"
-      >{{ pendingOrderCount() }}</span>
-    </a>
+
+    <ng-container *ngFor="let item of group.items">
+      <a
+        *ngIf="!item.children"
+        [routerLink]="item.route"
+        routerLinkActive="admin-sidebar__link--active"
+        class="admin-sidebar__link"
+        [attr.data-tooltip]="item.labelKey | translate"
+        (click)="closeMobile()"
+      >
+        <i class="pi {{ item.icon }} admin-sidebar__icon" aria-hidden="true"></i>
+        <span class="admin-sidebar__label">{{ item.labelKey | translate }}</span>
+        <span
+          *ngIf="item.badge && pendingOrderCount() > 0"
+          class="admin-sidebar__badge"
+        >{{ pendingOrderCount() }}</span>
+      </a>
+
+      <!-- Sections covering more than one screen: a non-navigating header (hidden when
+           the sidebar is icon-only collapsed, same as the group label) plus its screens
+           as indented sub-links, each with its own icon so it stays usable collapsed. -->
+      <ng-container *ngIf="item.children">
+        <div class="admin-sidebar__parent">
+          <i class="pi {{ item.icon }} admin-sidebar__icon" aria-hidden="true"></i>
+          <span class="admin-sidebar__label">{{ item.labelKey | translate }}</span>
+        </div>
+        <a
+          *ngFor="let child of item.children"
+          [routerLink]="child.route"
+          routerLinkActive="admin-sidebar__link--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="admin-sidebar__link admin-sidebar__link--child"
+          [attr.data-tooltip]="child.labelKey | translate"
+          (click)="closeMobile()"
+        >
+          <i class="pi {{ child.icon }} admin-sidebar__icon" aria-hidden="true"></i>
+          <span class="admin-sidebar__label">{{ child.labelKey | translate }}</span>
+        </a>
+      </ng-container>
+    </ng-container>
   </div>
 </ng-template>
 

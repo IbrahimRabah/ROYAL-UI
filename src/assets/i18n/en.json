@@ -708,8 +708,14 @@
       "brands": "Brands",
       "attributes": "Attributes",
       "inventory": "Inventory",
+      "inventoryList": "Inventory",
+      "inventoryMovements": "Movements",
       "invoices": "Invoices",
+      "invoicesList": "Invoices",
+      "invoicesUninvoiced": "Uninvoiced report",
       "remittances": "Remittances",
+      "remittancesOutstanding": "Outstanding",
+      "remittancesSettlements": "Settlements",
       "customers": "Customers",
       "shipping": "Shipping",
       "exports": "Exports",
@@ -928,6 +934,7 @@
       "lowStockSubtitle": "Variants at or below their minimum level — your restock list",
       "movementsLogLink": "Movements log",
       "searchPlaceholder": "Search by SKU or product name",
+      "lowStockChip": "Low stock ({{count}})",
       "allCategories": "All categories",
       "lowStockOnly": "Low stock only",
       "outOfStockOnly": "Out of stock only",
@@ -1321,7 +1328,7 @@
       "list": {
         "title": "Remittances",
         "outstandingLink": "Outstanding",
-        "courierSearchPlaceholder": "Search by courier name",
+        "allCouriers": "All couriers",
         "allStatuses": "All statuses",
         "dateFrom": "Date from",
         "dateTo": "Date to",
@@ -1336,6 +1343,13 @@
           "difference": "Difference",
           "orderCount": "Orders",
           "status": "Status"
+        },
+        "summary": {
+          "expected": "Total expected",
+          "received": "Total received",
+          "difference": "Total difference",
+          "shortCount": "{{short}} of {{total}} settlements came up short",
+          "excludesCancelled": "Excludes {{count}} cancelled settlements"
         }
       },
       "detail": {

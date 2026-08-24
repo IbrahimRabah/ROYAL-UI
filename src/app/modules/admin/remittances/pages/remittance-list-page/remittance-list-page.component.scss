@@ -61,43 +61,6 @@
   }
 }
 
-.rlp__search {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 2 1 240px;
-}
-
-.rlp__search-icon {
-  position: absolute;
-  inset-inline-start: var(--sp-4);
-  color: var(--admin-text-muted);
-  font-size: 1.125rem;
-  pointer-events: none;
-}
-
-.rlp__search-input {
-  inline-size: 100%;
-  padding-block: var(--sp-3);
-  padding-inline-start: calc(var(--sp-4) * 2 + 1rem);
-  padding-inline-end: var(--sp-4);
-  border: 1px solid var(--admin-border);
-  border-radius: var(--r-lg);
-  background: var(--admin-surface);
-  color: var(--admin-text);
-  font-size: var(--fs-base);
-  font-family: var(--body);
-
-  &:focus {
-    outline: 2px solid var(--gold);
-    outline-offset: -1px;
-  }
-
-  &::placeholder {
-    color: var(--admin-text-muted);
-  }
-}
-
 :host ::ng-deep .rlp__filter-select {
   flex: 1 1 170px;
   min-inline-size: 0;
@@ -152,6 +115,63 @@
     background: var(--stop);
     color: #fff;
   }
+}
+
+// ═══ Summary — cumulative figures over the filtered set; the difference carries the
+// emphasis, per the visual spec (--fs-h2, tone-coded). ═══
+
+.rlp__summary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rlp__summary-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.rlp__summary-label {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.rlp__summary-value {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.rlp__summary-value--emphasis {
+  font-size: var(--fs-h2);
+  font-weight: 800;
+}
+
+.rlp__summary-sub {
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
+}
+
+// States what the figures above deliberately leave out — spans the full row so it
+// reads as a note about the whole summary, not just the difference figure beside it.
+.rlp__summary-excluded {
+  grid-column: 1 / -1;
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--admin-border);
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
 }
 
 // ═══ Table ═══

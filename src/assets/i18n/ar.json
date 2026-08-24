@@ -708,8 +708,14 @@
       "brands": "العلامات التجارية",
       "attributes": "الخصائص",
       "inventory": "المخزون",
+      "inventoryList": "المخزون",
+      "inventoryMovements": "الحركات",
       "invoices": "الفواتير",
+      "invoicesList": "الفواتير",
+      "invoicesUninvoiced": "تقرير غير المفوترة",
       "remittances": "التحصيلات",
+      "remittancesOutstanding": "المستحق",
+      "remittancesSettlements": "التسويات",
       "customers": "العملاء",
       "shipping": "الشحن",
       "exports": "التصدير",
@@ -928,6 +934,7 @@
       "lowStockSubtitle": "خيارات وصلت أو نزلت عن الحد الأدنى — قائمة التوريد",
       "movementsLogLink": "سجل الحركات",
       "searchPlaceholder": "ابحث بـ SKU أو اسم المنتج",
+      "lowStockChip": "مخزون منخفض ({{count}})",
       "allCategories": "كل التصنيفات",
       "lowStockOnly": "المخزون المنخفض فقط",
       "outOfStockOnly": "غير المتوفر فقط",
@@ -1321,7 +1328,7 @@
       "list": {
         "title": "التسويات",
         "outstandingLink": "المستحقات",
-        "courierSearchPlaceholder": "ابحث باسم الكوريير",
+        "allCouriers": "كل شركات الشحن",
         "allStatuses": "كل الحالات",
         "dateFrom": "من تاريخ",
         "dateTo": "إلى تاريخ",
@@ -1336,6 +1343,13 @@
           "difference": "الفرق",
           "orderCount": "الطلبات",
           "status": "الحالة"
+        },
+        "summary": {
+          "expected": "إجمالي المتوقع",
+          "received": "إجمالي المستلم",
+          "difference": "إجمالي الفرق",
+          "shortCount": "{{short}} من {{total}} تسويات جاءت بعجز",
+          "excludesCancelled": "لا يشمل {{count}} تسوية ملغاة"
         }
       },
       "detail": {

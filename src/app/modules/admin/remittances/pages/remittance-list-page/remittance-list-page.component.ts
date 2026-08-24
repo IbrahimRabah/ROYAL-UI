@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Money, RemittanceResponse, money } from '../../../../../core/models';
 import { RemittanceStatus } from '../../../../../core/enums/remittance-status';
@@ -21,6 +19,16 @@ const NUMBER_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
+
+// GET /admin/remittances is a plain paginated list — no aggregate/totals field in the
+// contract, and no separate summary endpoint. At this app's data size, one request for
+// "everything" (a generously large `size`) and filtering/summing client-side is simpler
+// and, critically, more correct than juggling multiple page requests: it's the only way
+// the summary card can reflect the SAME filtered set the table shows rather than just
+// whatever happened to be on the current server page. If remittance volume ever outgrows
+// this, the right fix is a backend aggregate endpoint, not paging through thousands of
+// rows client-side.
+const FETCH_ALL_SIZE = 2000;
 
 @Component({
   selector: 'app-remittance-list-page',
@@ -56,39 +64,103 @@ export class RemittanceListPageComponent {
 
   readonly hasActiveFilters = computed(() => !!(this.status() || this.dateFrom() || this.dateTo() || this.courier()));
 
-  readonly courierDraft = signal('');
   readonly filtersOpen = signal(false);
-  readonly rows = signal<RemittanceResponse[]>([]);
-  readonly totalElements = signal(0);
+  readonly allRows = signal<RemittanceResponse[]>([]);
   readonly loading = signal(true);
   readonly error = signal(false);
 
-  private readonly courierInput$ = new Subject<string>();
+  // Every courier name actually seen, for the filter dropdown — an exact-match select
+  // rather than free text, so "read the figures for this one courier" never misses a row
+  // to a typo or a partial-name mismatch.
+  readonly courierOptions = computed(() => {
+    const names = new Set(this.allRows().map((r) => r.courierName));
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  });
+
+  // The filtered set — courier/status/date-range applied client-side, since none of them
+  // are server query params. Both the table and the summary derive from this SAME array,
+  // so the summary can never drift from what's actually on screen.
+  readonly filteredRows = computed<RemittanceResponse[]>(() => {
+    let content = this.allRows();
+
+    const status = this.status();
+    if (status) {
+      content = content.filter((r) => r.status === status);
+    }
+
+    const courier = this.courier();
+    if (courier) {
+      content = content.filter((r) => r.courierName === courier);
+    }
+
+    const from = this.dateFrom();
+    if (from) {
+      const fromTime = new Date(from).getTime();
+      content = content.filter((r) => new Date(r.settlementDate).getTime() >= fromTime);
+    }
+
+    const to = this.dateTo();
+    if (to) {
+      const toTime = new Date(to).getTime() + 24 * 3_600_000 - 1;
+      content = content.filter((r) => new Date(r.settlementDate).getTime() <= toTime);
+    }
+
+    return content;
+  });
+
+  readonly totalElements = computed(() => this.filteredRows().length);
+
+  readonly pagedRows = computed(() => {
+    const start = this.page() * this.pageSize;
+    return this.filteredRows().slice(start, start + this.pageSize);
+  });
+
+  // ═══ Summary — cumulative over the filtered set, not just the current page ═══
+
+  // A cancelled remittance's orders return to unpaid and reappear in outstanding — its
+  // expected/received amounts are no longer real money owed or collected, so counting
+  // them here would double-count against outstanding. The table still shows cancelled
+  // rows (the history matters); only the summary figures exclude them.
+  readonly summaryActiveRows = computed(() => this.filteredRows().filter((r) => r.status !== RemittanceStatus.CANCELLED));
+  readonly summaryCancelledCount = computed(
+    () => this.filteredRows().length - this.summaryActiveRows().length,
+  );
+
+  readonly summaryExpected = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.expectedAmount), 0));
+  readonly summaryReceived = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.receivedAmount), 0));
+  // Summed from each row's own `difference` (received − expected, the backend's sign
+  // convention — negative is short) rather than re-derived as expected − received, which
+  // would silently flip the sign relative to every per-row figure on this same screen.
+  readonly summaryDifference = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.difference), 0));
+  // Any non-zero difference, not just status === SHORT — a settlement can be CANCELLED
+  // (excluded above) or otherwise carry a difference without that exact status, and the
+  // count must agree with the total it's derived alongside, not with a status label.
+  readonly summaryShortCount = computed(
+    () => this.summaryActiveRows().filter((r) => Math.abs(money(r.difference)) >= 0.005).length,
+  );
+  readonly summaryTotalCount = computed(() => this.summaryActiveRows().length);
+
+  readonly summaryDiffClass = computed(() => {
+    const diff = this.summaryDifference();
+    if (Math.abs(diff) < 0.005) return 'rlp__diff--ok';
+    return diff < 0 ? 'rlp__diff--stop' : 'rlp__diff--warn';
+  });
+
+  readonly summaryDiffSign = computed(() => (this.summaryDifference() > 0.005 ? '+' : ''));
 
   constructor() {
-    this.courierDraft.set(this.courier());
+    // Filters/page live in the URL for bookmarking and the back-link, but since every row
+    // is already fetched once, changing them never needs a new request — only remember().
+    effect(() => {
+      this.status();
+      this.courier();
+      this.dateFrom();
+      this.dateTo();
+      this.page();
+      this.listReturn.remember('/admin/remittances', this.router.url);
+    });
 
-    this.courierInput$
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe((value) => this.updateQueryParams({ courier: value || null, page: null }));
-
-    let first = true;
-    effect(
-      () => {
-        const page = this.page();
-        this.status();
-        this.courier();
-        this.dateFrom();
-        this.dateTo();
-        if (!first) {
-          this.courierDraft.set(this.courier());
-        }
-        first = false;
-        this.listReturn.remember('/admin/remittances', this.router.url);
-        this.fetch(page);
-      },
-      { allowSignalWrites: true },
-    );
+    this.fetch();
   }
 
   statusLabel(status: RemittanceStatus): string {
@@ -100,8 +172,8 @@ export class RemittanceListPageComponent {
     return REMITTANCE_STATUS_TONE[status];
   }
 
-  formatAmount(value: Money): string {
-    return NUMBER_FORMATTER.format(money(value));
+  formatAmount(value: Money | number): string {
+    return NUMBER_FORMATTER.format(typeof value === 'number' ? value : money(value));
   }
 
   diffClass(row: RemittanceResponse): string {
@@ -116,9 +188,8 @@ export class RemittanceListPageComponent {
     return '';
   }
 
-  onCourierDraftChange(value: string): void {
-    this.courierDraft.set(value);
-    this.courierInput$.next(value);
+  onCourierChange(value: string | null): void {
+    this.updateQueryParams({ courier: value, page: null });
   }
 
   onStatusChange(value: RemittanceStatus | null): void {
@@ -134,7 +205,6 @@ export class RemittanceListPageComponent {
   }
 
   clearFilters(): void {
-    this.courierDraft.set('');
     this.updateQueryParams({ status: null, dateFrom: null, dateTo: null, courier: null, page: null });
   }
 
@@ -145,43 +215,16 @@ export class RemittanceListPageComponent {
   }
 
   retry(): void {
-    this.fetch(this.page());
+    this.fetch();
   }
 
-  private fetch(page: number): void {
+  private fetch(): void {
     this.loading.set(true);
     this.error.set(false);
 
-    this.remittanceApi.list(page, this.pageSize).subscribe({
+    this.remittanceApi.list(0, FETCH_ALL_SIZE).subscribe({
       next: (res) => {
-        let content = res.content;
-
-        // GET /admin/remittances has no filter query params — courier/status/date-range
-        // are applied client-side over the fetched page, same approach as invoices/orders.
-        const status = this.status();
-        if (status) {
-          content = content.filter((r) => r.status === status);
-        }
-
-        const courierQuery = this.courier().trim().toLowerCase();
-        if (courierQuery) {
-          content = content.filter((r) => r.courierName.toLowerCase().includes(courierQuery));
-        }
-
-        const from = this.dateFrom();
-        if (from) {
-          const fromTime = new Date(from).getTime();
-          content = content.filter((r) => new Date(r.settlementDate).getTime() >= fromTime);
-        }
-
-        const to = this.dateTo();
-        if (to) {
-          const toTime = new Date(to).getTime() + 24 * 3_600_000 - 1;
-          content = content.filter((r) => new Date(r.settlementDate).getTime() <= toTime);
-        }
-
-        this.rows.set(content);
-        this.totalElements.set(res.totalElements);
+        this.allRows.set(res.content);
         this.loading.set(false);
       },
       error: () => {

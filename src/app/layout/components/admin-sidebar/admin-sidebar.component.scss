@@ -217,6 +217,32 @@
   transition: color 180ms ease;
 }
 
+// A multi-screen section's non-navigating header — same row shape as a real link (icon +
+// label) so its children read as visually nested beneath it, but not interactive.
+.admin-sidebar__parent {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  block-size: 36px;
+  padding-inline: var(--sp-3);
+  color: color-mix(in srgb, var(--admin-text-invert) 55%, transparent);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  .admin-sidebar__icon {
+    font-size: 16px;
+    color: inherit;
+  }
+}
+
+.admin-sidebar__link--child {
+  margin-inline-start: var(--sp-4);
+  block-size: 38px;
+}
+
 .admin-sidebar__label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -240,12 +266,19 @@
 
 .admin-sidebar--collapsed {
   .admin-sidebar__label,
-  .admin-sidebar__badge {
+  .admin-sidebar__badge,
+  .admin-sidebar__parent {
     display: none;
   }
 
   .admin-sidebar__link {
     justify-content: center;
+  }
+
+  // Un-nest — collapsed, a section's children are just more icons in the column, same
+  // as every other item, with no visible parent to nest under.
+  .admin-sidebar__link--child {
+    margin-inline-start: 0;
   }
 
   .admin-sidebar__link:hover::after,
@@ -367,12 +400,17 @@
   .admin-sidebar--desktop .admin-sidebar__wordmark,
   .admin-sidebar--desktop .admin-sidebar__group-label,
   .admin-sidebar--desktop .admin-sidebar__label,
-  .admin-sidebar--desktop .admin-sidebar__badge {
+  .admin-sidebar--desktop .admin-sidebar__badge,
+  .admin-sidebar--desktop .admin-sidebar__parent {
     display: none;
   }
 
   .admin-sidebar--desktop .admin-sidebar__link {
     justify-content: center;
+  }
+
+  .admin-sidebar--desktop .admin-sidebar__link--child {
+    margin-inline-start: 0;
   }
 
   .admin-sidebar--desktop .admin-sidebar__link:hover::after,

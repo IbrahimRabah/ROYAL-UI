@@ -8,17 +8,6 @@
   </header>
 
   <div class="rlp__toolbar">
-    <div class="rlp__search">
-      <i class="pi pi-search rlp__search-icon" aria-hidden="true"></i>
-      <input
-        type="search"
-        class="rlp__search-input"
-        [ngModel]="courierDraft()"
-        (ngModelChange)="onCourierDraftChange($event)"
-        [placeholder]="'admin.remittances.list.courierSearchPlaceholder' | translate"
-      />
-    </div>
-
     <div class="admin-toolbar">
       <button
         type="button"
@@ -31,6 +20,15 @@
         <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
       </button>
       <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
+        <p-select
+          [ngModel]="courier() || null"
+          (ngModelChange)="onCourierChange($event)"
+          [options]="courierOptions()"
+          [showClear]="true"
+          [placeholder]="'admin.remittances.list.allCouriers' | translate"
+          styleClass="rlp__filter-select"
+        ></p-select>
+
         <p-select
           [ngModel]="status()"
           (ngModelChange)="onStatusChange($event)"
@@ -77,10 +75,35 @@
   </div>
 
   <ng-container *ngIf="!error()">
+    <!-- Cumulative figures across the filtered set (not just the current page) -->
+    <section class="rlp__summary" *ngIf="!loading()">
+      <div class="rlp__summary-figure">
+        <span class="rlp__summary-label">{{ 'admin.remittances.list.summary.expected' | translate }}</span>
+        <span class="rlp__summary-value">{{ formatAmount(summaryExpected()) }}</span>
+      </div>
+      <div class="rlp__summary-figure">
+        <span class="rlp__summary-label">{{ 'admin.remittances.list.summary.received' | translate }}</span>
+        <span class="rlp__summary-value">{{ formatAmount(summaryReceived()) }}</span>
+      </div>
+      <div class="rlp__summary-figure rlp__summary-figure--diff">
+        <span class="rlp__summary-label">{{ 'admin.remittances.list.summary.difference' | translate }}</span>
+        <span class="rlp__summary-value rlp__summary-value--emphasis" [ngClass]="summaryDiffClass()">
+          {{ summaryDiffSign() }}{{ formatAmount(summaryDifference()) }}
+        </span>
+        <span class="rlp__summary-sub">
+          {{ 'admin.remittances.list.summary.shortCount' | translate: { short: summaryShortCount(), total: summaryTotalCount() } }}
+        </span>
+      </div>
+
+      <span class="rlp__summary-excluded" *ngIf="summaryCancelledCount() > 0">
+        {{ 'admin.remittances.list.summary.excludesCancelled' | translate: { count: summaryCancelledCount() } }}
+      </span>
+    </section>
+
     <!-- Desktop / tablet table -->
     <div class="rlp__table-wrap">
       <p-table
-        [value]="rows()"
+        [value]="pagedRows()"
         [loading]="loading()"
         [paginator]="true"
         [rows]="pageSize"
@@ -131,7 +154,7 @@
 
     <!-- Mobile cards -->
     <div class="rlp__cards">
-      <div *ngFor="let row of rows()" class="admin-card">
+      <div *ngFor="let row of pagedRows()" class="admin-card">
         <div class="admin-card__row1">
           <a [routerLink]="['/admin/remittances', row.id]" class="admin-card__primary admin-card__secondary--code">{{ row.reference }}</a>
         </div>
@@ -159,7 +182,7 @@
         </div>
       </div>
 
-      <p *ngIf="!loading() && !rows().length" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !pagedRows().length" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

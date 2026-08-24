@@ -26,6 +26,16 @@
       />
     </div>
 
+    <button
+      type="button"
+      class="inventory-list-page__low-stock-chip"
+      *ngIf="lowStockCount() > 0 && !lowStockOnly()"
+      (click)="applyLowStockChip()"
+    >
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      {{ 'admin.inventory.lowStockChip' | translate: { count: lowStockCount() } }}
+    </button>
+
     <div class="admin-toolbar">
       <button
         type="button"

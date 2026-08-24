@@ -60,6 +60,11 @@ export class InventoryListPageComponent {
   readonly error = signal(false);
 
   readonly categoryOptions = signal<FlatCategoryOption[]>([]);
+  // Independent of the current filters/page — the dedicated, unpaginated endpoint's own
+  // count, so the toolbar chip reads correctly regardless of what's currently filtered/
+  // searched. Refetched after receive/adjust settles, since a stock change can move a
+  // variant in or out of "low stock".
+  readonly lowStockCount = signal(0);
 
   readonly receiveDialogVariantId = signal<number | null>(null);
   readonly adjustDialogVariantId = signal<number | null>(null);
@@ -77,6 +82,8 @@ export class InventoryListPageComponent {
       next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
       error: () => {},
     });
+
+    this.fetchLowStockCount();
 
     // Server-side filtering/sorting/pagination — refetch whenever any of these change.
     effect(() => {
@@ -111,6 +118,12 @@ export class InventoryListPageComponent {
 
   onLowStockToggle(value: boolean): void {
     this.updateQueryParams({ lowStockOnly: value ? 'true' : null, page: null });
+  }
+
+  // The toolbar's "Low stock (N)" chip — a one-click shortcut to the same toggle above,
+  // without opening the filters panel first.
+  applyLowStockChip(): void {
+    this.onLowStockToggle(true);
   }
 
   onOutOfStockToggle(value: boolean): void {
@@ -153,6 +166,7 @@ export class InventoryListPageComponent {
   onDialogSettled(): void {
     this.onDialogClosed();
     this.fetchRows();
+    this.fetchLowStockCount();
   }
 
   private fetchRows(): void {
@@ -179,6 +193,13 @@ export class InventoryListPageComponent {
           this.error.set(true);
         },
       });
+  }
+
+  private fetchLowStockCount(): void {
+    this.inventoryApi.lowStock().subscribe({
+      next: (items) => this.lowStockCount.set(items.length),
+      error: () => {},
+    });
   }
 
   private updateQueryParams(partial: Record<string, string | number | null | undefined>): void {
