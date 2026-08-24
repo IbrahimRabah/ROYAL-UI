@@ -1,0 +1,518 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.rdp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.rdp__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.rdp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.rdp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+// ═══ Header ═══
+
+.rdp__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+}
+
+.rdp__header-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.rdp__reference {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.rdp__header-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.rdp__courier {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--admin-text);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+.rdp__date {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.rdp__cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--stop);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 150ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop-bg);
+  }
+}
+
+// ═══ Amounts — the difference here is one of the two figures on this whole feature
+// that carries real weight, per the visual spec ═══
+
+.rdp__amounts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+
+  @include breakpoints.sm {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rdp__amount-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.rdp__amount-label {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.rdp__amount-value {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.rdp__amount-value--emphasis {
+  font-size: var(--fs-h2);
+  font-weight: 800;
+}
+
+.rdp__diff--ok {
+  color: var(--ok);
+}
+
+.rdp__diff--warn {
+  color: var(--warn);
+}
+
+.rdp__diff--stop {
+  color: var(--stop);
+}
+
+// ═══ Cards ═══
+
+.rdp__card {
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+}
+
+.rdp__card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-4);
+}
+
+.rdp__icon-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--r-md);
+  color: #fff;
+  font-size: 1.125rem;
+
+  &--gold { background: var(--gold); }
+  &--warn { background: var(--warn); }
+}
+
+.rdp__card-title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.rdp__note-text {
+  margin: 0;
+  padding: var(--sp-3);
+  background: var(--admin-surface-alt);
+  border-radius: var(--r-md);
+  color: var(--admin-text);
+  line-height: 1.6;
+}
+
+// ═══ Orders table ═══
+
+.rdp__orders-table-wrap {
+  overflow-x: auto;
+}
+
+.rdp__orders-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+
+  th {
+    padding-block-end: var(--sp-2);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--sp-3) var(--sp-2);
+    border-block-start: 1px solid var(--admin-border);
+    color: var(--admin-text);
+    vertical-align: middle;
+  }
+}
+
+.rdp__order-link {
+  color: var(--admin-text);
+  font-weight: 600;
+  text-decoration: none;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+  }
+}
+
+.rdp__order-amount {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+// ═══ Inline cancel dialog ═══
+
+.admin-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+
+.admin-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+}
+
+.admin-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: 560px;
+  max-block-size: 88vh;
+  background: var(--admin-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: admin-dialog-in 220ms ease both;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.admin-dialog__panel--sm {
+  max-inline-size: 440px;
+}
+
+@keyframes admin-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.admin-dialog__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-block-end: 1px solid var(--admin-border);
+}
+
+.admin-dialog__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-h6);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.admin-dialog__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: none;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.admin-dialog__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: var(--sp-5);
+}
+
+.admin-dialog__field-label {
+  display: block;
+  margin-block-end: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.admin-dialog__textarea {
+  inline-size: 100%;
+  padding: var(--sp-3);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-family: var(--body);
+  font-size: var(--fs-sm);
+  resize: vertical;
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+}
+
+.admin-dialog__counter {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
+  text-align: end;
+}
+
+.admin-dialog__warning {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  margin-block-end: var(--sp-4);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-md);
+  color: var(--stop);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+
+  i {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+  }
+}
+
+.admin-dialog__inline-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  margin-block-end: var(--sp-4);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-md);
+  color: var(--stop);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+
+  i {
+    flex-shrink: 0;
+    font-size: 1rem;
+    margin-block-start: 1px;
+  }
+}
+
+.admin-dialog__footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--admin-surface-alt);
+  border-block-start: 1px solid var(--admin-border);
+}
+
+.admin-dialog__cancel,
+.admin-dialog__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease, opacity 150ms ease;
+}
+
+.admin-dialog__cancel {
+  border: 1px solid var(--admin-border);
+  background: transparent;
+  color: var(--admin-text);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.admin-dialog__submit {
+  border: none;
+  color: #fff;
+}
+
+.admin-dialog__submit--stop {
+  background: var(--stop);
+}
+
+.admin-dialog__submit:hover:not(:disabled),
+.admin-dialog__submit:focus-visible:not(:disabled) {
+  opacity: 0.88;
+}
+
+.admin-dialog__cancel:disabled,
+.admin-dialog__submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (max-width: 639px) {
+  .admin-dialog {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .admin-dialog__panel {
+    max-inline-size: 100%;
+    max-block-size: 92vh;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rdp__cancel-btn {
+    transition: none;
+  }
+
+  .admin-dialog__panel {
+    animation: none;
+  }
+}

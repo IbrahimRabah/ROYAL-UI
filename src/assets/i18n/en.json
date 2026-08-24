@@ -676,6 +676,14 @@
     "attributes": {
       "created": "Attribute created",
       "updated": "Attribute updated"
+    },
+    "invoices": {
+      "issued": "Invoice issued",
+      "cancelled": "Invoice cancelled"
+    },
+    "remittances": {
+      "created": "Remittance recorded",
+      "cancelled": "Remittance cancelled"
     }
   },
   "errorPage": {
@@ -1203,10 +1211,156 @@
       "backToList": "Back to customers"
     },
     "invoices": {
-      "backToList": "Back to invoices"
+      "backToList": "Back to invoices",
+      "list": {
+        "title": "Invoices",
+        "uninvoicedLink": "Uninvoiced report",
+        "searchPlaceholder": "Search by invoice or order number",
+        "allStatuses": "All statuses",
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "errorMessage": "We couldn't load invoices — try refreshing the page",
+        "empty": "No invoices match these filters.",
+        "viewDetails": "View details",
+        "downloadPdf": "Download PDF",
+        "columns": {
+          "invoiceNumber": "Invoice",
+          "orderNumber": "Order",
+          "buyerName": "Buyer",
+          "buyerPhone": "Phone",
+          "grandTotal": "Grand total",
+          "status": "Status",
+          "issuedAt": "Issued"
+        }
+      },
+      "detail": {
+        "errorMessage": "We couldn't load this invoice.",
+        "downloadPdf": "Download PDF",
+        "cancelInvoice": "Cancel invoice",
+        "buyer": {
+          "heading": "Buyer",
+          "name": "Name",
+          "phone": "Phone"
+        },
+        "order": {
+          "heading": "Linked Order"
+        },
+        "totals": {
+          "heading": "Totals",
+          "net": "Net",
+          "tax": "Tax",
+          "grand": "Grand total"
+        },
+        "cancelReason": {
+          "heading": "Cancellation Reason"
+        }
+      },
+      "cancelDialog": {
+        "title": "Cancel invoice",
+        "warning": "The invoice number stays permanently consumed — it will never be reused, leaving a gap in the sequence. This cannot be undone.",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why is this invoice being cancelled?",
+        "keepInvoice": "Keep invoice",
+        "submit": "Cancel invoice"
+      },
+      "issueDialog": {
+        "title": "Issue invoice",
+        "lead": "Issue an invoice for order #{{orderId}} now, without waiting for delivery.",
+        "idempotentNote": "This is safe to retry — if this order already has an invoice, that one is returned instead of creating a second.",
+        "submit": "Issue invoice"
+      },
+      "uninvoiced": {
+        "errorMessage": "We couldn't load the uninvoiced report.",
+        "allInvoiced": "All delivered orders are invoiced",
+        "count": "{{count}} delivered orders have no invoice",
+        "alarmNote": "This should never happen — invoices are issued automatically at delivery. Issue these manually and investigate why the automatic issuing didn't fire.",
+        "orderLabel": "Order #{{id}}",
+        "issueInvoice": "Issue invoice"
+      }
     },
     "remittances": {
-      "backToList": "Back to remittances"
+      "backToList": "Back to remittances",
+      "outstanding": {
+        "heading": "With the courier",
+        "supportingLine": "{{count}} orders — oldest waiting {{oldestDays}} days",
+        "errorMessage": "We couldn't load the outstanding balance.",
+        "empty": "Nothing outstanding — the courier has settled every delivered order.",
+        "selectAll": "Select all",
+        "selectedCount": "{{count}} selected",
+        "recordRemittance": "Record remittance",
+        "columns": {
+          "orderNumber": "Order",
+          "customer": "Customer",
+          "governorate": "Governorate",
+          "amount": "Amount",
+          "deliveredAt": "Delivered",
+          "daysWaiting": "Days waiting"
+        }
+      },
+      "form": {
+        "title": "Record a remittance",
+        "noSelection": "No orders were selected. Go to the outstanding screen and select the orders this remittance covers.",
+        "backToOutstanding": "Go to outstanding",
+        "courierName": "Courier name",
+        "courierNamePlaceholder": "e.g. Bosta, Mylerz",
+        "courierReference": "Courier reference",
+        "courierReferencePlaceholder": "Their own reference number, if any",
+        "settlementDate": "Settlement date",
+        "receivedAmount": "Received amount",
+        "diffMatches": "Matches expected",
+        "diffShort": "Short by {{amount}}",
+        "diffOver": "Over by {{amount}}",
+        "note": "Note",
+        "notePlaceholder": "Optional note",
+        "noteRequiredPlaceholder": "Required — explain the difference",
+        "noteRequiredHint": "A note is required whenever the received amount doesn't match the expected total.",
+        "submit": "Record remittance",
+        "selectedOrders": "Selected orders ({{count}})",
+        "expectedTotal": "Expected total"
+      },
+      "list": {
+        "title": "Remittances",
+        "outstandingLink": "Outstanding",
+        "courierSearchPlaceholder": "Search by courier name",
+        "allStatuses": "All statuses",
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "errorMessage": "We couldn't load remittances — try refreshing the page",
+        "empty": "No remittances match these filters.",
+        "columns": {
+          "reference": "Reference",
+          "courierName": "Courier",
+          "settlementDate": "Settlement date",
+          "expected": "Expected",
+          "received": "Received",
+          "difference": "Difference",
+          "orderCount": "Orders",
+          "status": "Status"
+        }
+      },
+      "detail": {
+        "errorMessage": "We couldn't load this remittance.",
+        "cancelRemittance": "Cancel remittance",
+        "expected": "Expected",
+        "received": "Received",
+        "difference": "Difference",
+        "note": {
+          "heading": "Note"
+        },
+        "orders": {
+          "heading": "Orders ({{count}})",
+          "orderNumber": "Order",
+          "amount": "Amount"
+        }
+      },
+      "cancelDialog": {
+        "title": "Cancel remittance",
+        "warning": "The orders in this remittance return to unpaid and will reappear in outstanding.",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why is this remittance being cancelled?",
+        "keep": "Keep remittance",
+        "submit": "Cancel remittance"
+      }
     },
     "categories": {
       "title": "Categories",

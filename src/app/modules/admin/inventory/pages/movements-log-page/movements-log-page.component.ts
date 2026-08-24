@@ -69,6 +69,7 @@ export class MovementsLogPageComponent {
   // numeric variantId, so a typed SKU is resolved to one via GET /admin/inventory?q= first.
   readonly resolvedSku = signal<string | null>(null);
   readonly skuDraft = signal('');
+  readonly filtersOpen = signal(false);
   readonly skuNotFound = signal(false);
   readonly resolvingSku = signal(false);
 

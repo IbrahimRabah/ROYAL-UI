@@ -1,3 +1,112 @@
-<app-admin-back-link parentPath="/admin/invoices" labelKey="admin.invoices.backToList"></app-admin-back-link>
+<div class="idp">
+  <app-admin-back-link parentPath="/admin/invoices" labelKey="admin.invoices.backToList"></app-admin-back-link>
 
-<p>invoice-details-page works!</p>
+  <div class="idp__skeleton" *ngIf="loading()">
+    <p-skeleton height="90px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="idp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.invoices.detail.errorMessage' | translate }}</span>
+    <button type="button" class="idp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="invoice() as inv">
+    <header class="idp__header">
+      <div class="idp__header-main">
+        <h1 class="idp__number" [class.idp__number--cancelled]="inv.status === InvoiceStatus.CANCELLED">
+          {{ inv.invoiceNumber }}
+        </h1>
+        <app-vl-status-badge [label]="statusLabel(inv.status)" [tone]="statusTone(inv.status)"></app-vl-status-badge>
+        <span class="idp__date">{{ inv.issuedAt | arabicDate }}</span>
+      </div>
+      <div class="idp__header-end">
+        <button type="button" class="idp__pdf-btn" [disabled]="downloading()" (click)="downloadPdf()">
+          <i class="pi" [ngClass]="downloading() ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+          {{ 'admin.invoices.detail.downloadPdf' | translate }}
+        </button>
+        <button
+          type="button"
+          class="idp__cancel-btn"
+          *ngIf="inv.status === InvoiceStatus.ISSUED"
+          (click)="openCancelDialog()"
+        >
+          <i class="pi pi-ban" aria-hidden="true"></i>
+          {{ 'admin.invoices.detail.cancelInvoice' | translate }}
+        </button>
+      </div>
+    </header>
+
+    <div class="idp__layout">
+      <section class="idp__card">
+        <div class="idp__card-header">
+          <div class="idp__icon-badge idp__icon-badge--violet">
+            <i class="pi pi-user" aria-hidden="true"></i>
+          </div>
+          <h2 class="idp__card-title">{{ 'admin.invoices.detail.buyer.heading' | translate }}</h2>
+        </div>
+        <dl class="idp__field-grid">
+          <div class="idp__field-row">
+            <dt>{{ 'admin.invoices.detail.buyer.name' | translate }}</dt>
+            <dd>{{ inv.buyerName }}</dd>
+          </div>
+          <div class="idp__field-row">
+            <dt>{{ 'admin.invoices.detail.buyer.phone' | translate }}</dt>
+            <dd class="idp__ltr">{{ inv.buyerPhone }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="idp__card">
+        <div class="idp__card-header">
+          <div class="idp__icon-badge idp__icon-badge--info">
+            <i class="pi pi-shopping-cart" aria-hidden="true"></i>
+          </div>
+          <h2 class="idp__card-title">{{ 'admin.invoices.detail.order.heading' | translate }}</h2>
+        </div>
+        <a [routerLink]="['/admin/orders', inv.orderId]" class="idp__order-link">
+          {{ inv.orderNumber }}
+          <i class="pi pi-arrow-up-right" aria-hidden="true"></i>
+        </a>
+      </section>
+
+      <section class="idp__card idp__totals">
+        <div class="idp__card-header">
+          <div class="idp__icon-badge idp__icon-badge--gold">
+            <i class="pi pi-calculator" aria-hidden="true"></i>
+          </div>
+          <h2 class="idp__card-title">{{ 'admin.invoices.detail.totals.heading' | translate }}</h2>
+        </div>
+        <div class="idp__totals-row">
+          <span>{{ 'admin.invoices.detail.totals.net' | translate }}</span>
+          <span class="idp__ltr">{{ formatAmount(inv.netTotal) }} {{ inv.currency }}</span>
+        </div>
+        <div class="idp__totals-row">
+          <span>{{ 'admin.invoices.detail.totals.tax' | translate }}</span>
+          <span class="idp__ltr">+ {{ formatAmount(inv.taxTotal) }} {{ inv.currency }}</span>
+        </div>
+        <div class="idp__totals-row idp__totals-row--grand">
+          <span>{{ 'admin.invoices.detail.totals.grand' | translate }}</span>
+          <span class="idp__ltr">{{ formatAmount(inv.grandTotal) }} {{ inv.currency }}</span>
+        </div>
+      </section>
+
+      <section class="idp__card" *ngIf="inv.status === InvoiceStatus.CANCELLED && inv.cancelReason">
+        <div class="idp__card-header">
+          <div class="idp__icon-badge idp__icon-badge--stop">
+            <i class="pi pi-info-circle" aria-hidden="true"></i>
+          </div>
+          <h2 class="idp__card-title">{{ 'admin.invoices.detail.cancelReason.heading' | translate }}</h2>
+        </div>
+        <p class="idp__cancel-reason">{{ inv.cancelReason }}</p>
+      </section>
+    </div>
+  </ng-container>
+</div>
+
+<app-cancel-invoice-dialog
+  [invoiceId]="cancelDialogOpen() ? invoiceId : null"
+  (closed)="onCancelDialogClosed()"
+  (cancelled)="onCancelled()"
+></app-cancel-invoice-dialog>

@@ -1,1 +1,56 @@
-<p>uninvoiced-report-page works!</p>
+<div class="urp">
+  <app-admin-back-link parentPath="/admin/invoices" labelKey="admin.invoices.backToList"></app-admin-back-link>
+
+  <div class="urp__skeleton" *ngIf="loading()">
+    <p-skeleton height="110px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="urp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.invoices.uninvoiced.errorMessage' | translate }}</span>
+    <button type="button" class="urp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="report() as rep">
+    <!-- Normal state: nothing to alarm about -->
+    <div class="urp__ok-state" *ngIf="rep.count === 0">
+      <div class="urp__ok-icon">
+        <i class="pi pi-check-circle" aria-hidden="true"></i>
+      </div>
+      <p class="urp__ok-text">{{ 'admin.invoices.uninvoiced.allInvoiced' | translate }}</p>
+    </div>
+
+    <!-- Alarm state: this should never happen -->
+    <ng-container *ngIf="rep.count > 0">
+      <header class="urp__alarm-header">
+        <div class="urp__alarm-icon">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        </div>
+        <div class="urp__alarm-text">
+          <h1 class="urp__alarm-count">{{ 'admin.invoices.uninvoiced.count' | translate: { count: rep.count } }}</h1>
+          <p class="urp__alarm-note">{{ 'admin.invoices.uninvoiced.alarmNote' | translate }}</p>
+        </div>
+      </header>
+
+      <div class="urp__list">
+        <div class="urp__row" *ngFor="let orderId of rep.orderIds">
+          <a [routerLink]="['/admin/orders', orderId]" class="urp__row-link">
+            {{ 'admin.invoices.uninvoiced.orderLabel' | translate: { id: orderId } }}
+            <i class="pi pi-arrow-up-right" aria-hidden="true"></i>
+          </a>
+          <button type="button" class="urp__row-issue" (click)="openIssueDialog(orderId)">
+            <i class="pi pi-file-plus" aria-hidden="true"></i>
+            {{ 'admin.invoices.uninvoiced.issueInvoice' | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+
+<app-issue-invoice-dialog
+  [orderId]="issueDialogOrderId()"
+  (closed)="onIssueDialogClosed()"
+  (issued)="onIssued()"
+></app-issue-invoice-dialog>

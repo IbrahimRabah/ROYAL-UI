@@ -1,0 +1,390 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.osp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+// Leaves room at the bottom so the fixed summary bar never overlaps the last row.
+.osp--has-summary {
+  padding-block-end: 88px;
+}
+
+.osp__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.osp__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-lg);
+  color: var(--stop);
+}
+
+.osp__retry {
+  margin-inline-start: auto;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--stop);
+    color: #fff;
+  }
+}
+
+// ═══ Header — the operationally-critical figure on this screen ═══
+
+.osp__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: color-mix(in srgb, var(--info) 5%, var(--admin-surface));
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.osp__header-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 56px;
+  block-size: 56px;
+  border-radius: var(--r-md);
+  background: var(--info);
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.osp__header-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.osp__header-label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.osp__header-figure-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.osp__header-figure {
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.osp__header-currency {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.osp__header-sub {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+// Oldest waiting order exceeds 7 days — a soft warning wash.
+.osp__header--warn {
+  background: var(--warn-bg);
+  border-color: var(--warn);
+
+  .osp__header-icon {
+    background: var(--warn);
+  }
+
+  .osp__header-figure,
+  .osp__header-label {
+    color: var(--warn);
+  }
+}
+
+// Beyond 14 days — this is now a problem, not just aging.
+.osp__header--stop {
+  background: var(--stop-bg);
+  border-color: var(--stop);
+
+  .osp__header-icon {
+    background: var(--stop);
+  }
+
+  .osp__header-figure,
+  .osp__header-label {
+    color: var(--stop);
+  }
+}
+
+// ═══ OK / empty state ═══
+
+.osp__ok-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-8) var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+
+.osp__ok-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 64px;
+  block-size: 64px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ok) 12%, var(--admin-surface));
+  color: var(--ok);
+  font-size: 2rem;
+}
+
+.osp__ok-text {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+// ═══ Table ═══
+
+.osp__table-wrap {
+  display: none;
+
+  @include breakpoints.md {
+    display: block;
+  }
+}
+
+.osp__col-check {
+  inline-size: 1%;
+  padding-inline-start: var(--sp-4) !important;
+
+  input[type='checkbox'] {
+    inline-size: 20px;
+    block-size: 20px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+}
+
+.osp__order-link {
+  color: var(--admin-text);
+  font-weight: 700;
+  text-decoration: none;
+  direction: ltr;
+  unicode-bidi: isolate;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+  }
+}
+
+.osp__col-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.osp__currency {
+  margin-inline-start: var(--sp-1);
+  color: var(--admin-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.osp__col-date {
+  white-space: nowrap;
+  color: var(--admin-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.osp__col-days {
+  font-weight: 700;
+}
+
+:host ::ng-deep .osp__table {
+  .p-datatable-thead > tr > th {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-block-end: 1px solid var(--admin-border);
+  }
+
+  .p-datatable-tbody > tr {
+    block-size: var(--admin-row-height);
+    background: var(--admin-surface);
+    transition: background 150ms ease;
+
+    > td {
+      padding: var(--sp-3) var(--sp-4);
+      border-block-end: 1px solid var(--admin-border);
+      font-size: var(--fs-sm);
+      color: var(--admin-text);
+    }
+
+    &:nth-child(even) {
+      background: var(--admin-surface-alt);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--gold) 6%, var(--admin-surface-alt));
+    }
+  }
+}
+
+.osp__row--selected {
+  box-shadow: inset 3px 0 0 var(--gold);
+
+  :host-context([dir='rtl']) & {
+    box-shadow: inset -3px 0 0 var(--gold);
+  }
+}
+
+// ═══ Mobile cards ═══
+
+.osp__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+
+  @include breakpoints.md {
+    display: none;
+  }
+}
+
+.osp__card--selected {
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 4%, var(--admin-surface));
+}
+
+.osp__card-check-group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--admin-row-height);
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    flex-shrink: 0;
+    inline-size: 22px;
+    block-size: 22px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+}
+
+// ═══ Selection summary bar — fixed to the bottom, works down to 375px ═══
+
+.osp__summary-bar {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--admin-surface);
+  border-block-start: 1px solid var(--admin-border);
+  box-shadow: var(--shadow-md);
+}
+
+.osp__summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.osp__summary-count {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.osp__summary-total {
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.osp__summary-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--admin-row-height);
+  padding-inline: var(--sp-5);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  i {
+    transform: scaleX(-1);
+
+    :host-context([dir='ltr']) & {
+      transform: none;
+    }
+  }
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.88;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osp__header,
+  .osp__summary-btn,
+  :host ::ng-deep .osp__table .p-datatable-tbody > tr {
+    transition: none;
+  }
+}

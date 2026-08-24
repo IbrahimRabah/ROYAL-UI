@@ -5,13 +5,18 @@
     <h1 class="movements-log-page__title">{{ 'admin.inventory.movements.title' | translate }}</h1>
   </header>
 
-  <details class="admin-toolbar movements-log-page__filters">
-    <summary class="admin-toolbar__trigger">
+  <div class="admin-toolbar movements-log-page__filters">
+    <button
+      type="button"
+      class="admin-toolbar__trigger"
+      [attr.aria-expanded]="filtersOpen()"
+      (click)="filtersOpen.set(!filtersOpen())"
+    >
       <i class="pi pi-sliders-h" aria-hidden="true"></i>
       {{ 'common.filters' | translate }}
       <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
-    </summary>
-    <div class="admin-toolbar__panel movements-log-page__filters-panel">
+    </button>
+    <div class="admin-toolbar__panel movements-log-page__filters-panel" [class.admin-toolbar__panel--open]="filtersOpen()">
     <div class="movements-log-page__sku-chip" *ngIf="variantId() !== null">
       <span>{{ 'admin.inventory.movements.filteredBySku' | translate: { sku: resolvedSku() ?? ('#' + variantId()) } }}</span>
       <button type="button" (click)="clearVariantFilter()" [attr.aria-label]="'common.clear' | translate">
@@ -82,7 +87,7 @@
       ></p-datepicker>
     </div>
     </div>
-  </details>
+  </div>
 
   <div class="movements-log-page__error" *ngIf="error() && !loading()">
     <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>

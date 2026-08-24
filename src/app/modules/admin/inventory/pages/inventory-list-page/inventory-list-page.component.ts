@@ -53,6 +53,7 @@ export class InventoryListPageComponent {
   readonly page = computed(() => Number(this.queryParamMap().get('page') ?? '0') || 0);
 
   readonly searchDraft = signal('');
+  readonly filtersOpen = signal(false);
   readonly rows = signal<InventoryAdminResponse[]>([]);
   readonly totalElements = signal(0);
   readonly loading = signal(true);

@@ -1,1 +1,202 @@
-<p>invoice-list-page works!</p>
+<div class="ilp">
+  <header class="ilp__header">
+    <h1 class="ilp__title">{{ 'admin.invoices.list.title' | translate }}</h1>
+    <a routerLink="/admin/invoices/uninvoiced" class="ilp__uninvoiced-link">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      {{ 'admin.invoices.list.uninvoicedLink' | translate }}
+    </a>
+  </header>
+
+  <div class="ilp__toolbar">
+    <div class="ilp__search">
+      <i class="pi pi-search ilp__search-icon" aria-hidden="true"></i>
+      <input
+        type="search"
+        class="ilp__search-input"
+        [ngModel]="searchDraft()"
+        (ngModelChange)="onSearchDraftChange($event)"
+        [placeholder]="'admin.invoices.list.searchPlaceholder' | translate"
+      />
+    </div>
+
+    <div class="admin-toolbar">
+      <button
+        type="button"
+        class="admin-toolbar__trigger"
+        [attr.aria-expanded]="filtersOpen()"
+        (click)="filtersOpen.set(!filtersOpen())"
+      >
+        <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        {{ 'common.filters' | translate }}
+        <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+      </button>
+      <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
+        <p-select
+          [ngModel]="status()"
+          (ngModelChange)="onStatusChange($event)"
+          [options]="statusOptions"
+          [showClear]="true"
+          [placeholder]="'admin.invoices.list.allStatuses' | translate"
+          styleClass="ilp__filter-select"
+        >
+          <ng-template let-option pTemplate="item">{{ statusLabel(option) }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ statusLabel(option) }}</ng-template>
+        </p-select>
+
+        <p-datepicker
+          [ngModel]="dateFromDate()"
+          (ngModelChange)="onDateFromChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.invoices.list.dateFrom' | translate"
+        ></p-datepicker>
+
+        <p-datepicker
+          [ngModel]="dateToDate()"
+          (ngModelChange)="onDateToChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.invoices.list.dateTo' | translate"
+        ></p-datepicker>
+
+        <button type="button" class="ilp__clear-btn" *ngIf="hasActiveFilters()" (click)="clearFilters()">
+          {{ 'common.clear' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ilp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.invoices.list.errorMessage' | translate }}</span>
+    <button type="button" class="ilp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="ilp__table-wrap">
+      <p-table
+        [value]="rows()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="totalElements()"
+        [lazy]="true"
+        [first]="page() * pageSize"
+        (onPage)="onPage($event)"
+        dataKey="id"
+        styleClass="ilp__table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.invoices.list.columns.invoiceNumber' | translate }}</th>
+            <th>{{ 'admin.invoices.list.columns.orderNumber' | translate }}</th>
+            <th>{{ 'admin.invoices.list.columns.buyerName' | translate }}</th>
+            <th>{{ 'admin.invoices.list.columns.buyerPhone' | translate }}</th>
+            <th class="ilp__col-num">{{ 'admin.invoices.list.columns.grandTotal' | translate }}</th>
+            <th class="ilp__col-status">{{ 'admin.invoices.list.columns.status' | translate }}</th>
+            <th>{{ 'admin.invoices.list.columns.issuedAt' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td
+              class="ilp__col-number"
+              [class.ilp__col-number--cancelled]="row.status === InvoiceStatus.CANCELLED"
+              [pTooltip]="row.status === InvoiceStatus.CANCELLED ? (row.cancelReason ?? '') : ''"
+              tooltipPosition="top"
+            >
+              {{ row.invoiceNumber }}
+            </td>
+            <td>
+              <a [routerLink]="['/admin/orders', row.orderId]" class="ilp__order-link">{{ row.orderNumber }}</a>
+            </td>
+            <td>{{ row.buyerName }}</td>
+            <td class="ilp__col-phone">{{ row.buyerPhone }}</td>
+            <td class="ilp__col-num">{{ formatAmount(row.grandTotal) }}<span class="ilp__currency">{{ row.currency }}</span></td>
+            <td class="ilp__col-status">
+              <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+            </td>
+            <td class="ilp__col-date">{{ row.issuedAt | arabicDate }}</td>
+            <td class="ilp__col-action">
+              <a [routerLink]="['/admin/invoices', row.id]" class="ilp__icon-btn" [attr.aria-label]="'admin.invoices.list.viewDetails' | translate">
+                <i class="pi pi-eye" aria-hidden="true"></i>
+              </a>
+              <button
+                type="button"
+                class="ilp__icon-btn"
+                [disabled]="downloadingId() === row.id"
+                (click)="downloadPdf(row)"
+                [attr.aria-label]="'admin.invoices.list.downloadPdf' | translate"
+              >
+                <i class="pi" [ngClass]="downloadingId() === row.id ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="ilp__empty">{{ 'admin.invoices.list.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="ilp__cards">
+      <div *ngFor="let row of rows()" class="admin-card">
+        <div class="admin-card__row1">
+          <div
+            class="admin-card__primary"
+            [class.ilp__col-number--cancelled]="row.status === InvoiceStatus.CANCELLED"
+            [pTooltip]="row.status === InvoiceStatus.CANCELLED ? (row.cancelReason ?? '') : ''"
+            tooltipPosition="top"
+          >
+            {{ row.invoiceNumber }}
+          </div>
+          <div class="ilp__card-actions">
+            <a [routerLink]="['/admin/invoices', row.id]" class="admin-card__action" [attr.aria-label]="'admin.invoices.list.viewDetails' | translate">
+              <i class="pi pi-eye" aria-hidden="true"></i>
+            </a>
+            <button
+              type="button"
+              class="admin-card__action"
+              [disabled]="downloadingId() === row.id"
+              (click)="downloadPdf(row)"
+              [attr.aria-label]="'admin.invoices.list.downloadPdf' | translate"
+            >
+              <i class="pi" [ngClass]="downloadingId() === row.id ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-card__secondary">{{ row.buyerName }}</div>
+        <a [routerLink]="['/admin/orders', row.orderId]" class="admin-card__secondary admin-card__secondary--code">{{ row.orderNumber }}</a>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.invoices.list.columns.grandTotal' | translate }}</span>
+            <span class="admin-card__stat-value">{{ formatAmount(row.grandTotal) }} {{ row.currency }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.invoices.list.columns.issuedAt' | translate }}</span>
+            <span class="admin-card__stat-value">{{ row.issuedAt | arabicDate }}</span>
+          </div>
+        </div>
+
+        <div class="admin-card__badges">
+          <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+        </div>
+      </div>
+
+      <p *ngIf="!loading() && !rows().length" class="ilp__empty">{{ 'admin.invoices.list.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>

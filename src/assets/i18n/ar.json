@@ -676,6 +676,14 @@
     "attributes": {
       "created": "تم إنشاء الخاصية",
       "updated": "تم تحديث الخاصية"
+    },
+    "invoices": {
+      "issued": "تم إصدار الفاتورة",
+      "cancelled": "تم إلغاء الفاتورة"
+    },
+    "remittances": {
+      "created": "تم تسجيل التسوية",
+      "cancelled": "تم إلغاء التسوية"
     }
   },
   "errorPage": {
@@ -1203,10 +1211,156 @@
       "backToList": "رجوع إلى العملاء"
     },
     "invoices": {
-      "backToList": "رجوع إلى الفواتير"
+      "backToList": "رجوع إلى الفواتير",
+      "list": {
+        "title": "الفواتير",
+        "uninvoicedLink": "تقرير غير المفوترة",
+        "searchPlaceholder": "ابحث برقم الفاتورة أو رقم الطلب",
+        "allStatuses": "كل الحالات",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "errorMessage": "تعذّر تحميل الفواتير — حاول تحديث الصفحة",
+        "empty": "لا توجد فواتير مطابقة لهذه الفلاتر.",
+        "viewDetails": "عرض التفاصيل",
+        "downloadPdf": "تحميل PDF",
+        "columns": {
+          "invoiceNumber": "الفاتورة",
+          "orderNumber": "الطلب",
+          "buyerName": "المشتري",
+          "buyerPhone": "الهاتف",
+          "grandTotal": "الإجمالي",
+          "status": "الحالة",
+          "issuedAt": "تاريخ الإصدار"
+        }
+      },
+      "detail": {
+        "errorMessage": "تعذّر تحميل هذه الفاتورة.",
+        "downloadPdf": "تحميل PDF",
+        "cancelInvoice": "إلغاء الفاتورة",
+        "buyer": {
+          "heading": "المشتري",
+          "name": "الاسم",
+          "phone": "الهاتف"
+        },
+        "order": {
+          "heading": "الطلب المرتبط"
+        },
+        "totals": {
+          "heading": "الإجماليات",
+          "net": "الصافي",
+          "tax": "الضريبة",
+          "grand": "الإجمالي الكلي"
+        },
+        "cancelReason": {
+          "heading": "سبب الإلغاء"
+        }
+      },
+      "cancelDialog": {
+        "title": "إلغاء الفاتورة",
+        "warning": "رقم الفاتورة يبقى مستهلكًا نهائيًا — لن يُعاد استخدامه، وستظل فجوة في التسلسل. لا يمكن التراجع.",
+        "reasonLabel": "السبب",
+        "reasonPlaceholder": "لماذا يتم إلغاء هذه الفاتورة؟",
+        "keepInvoice": "الاحتفاظ بالفاتورة",
+        "submit": "إلغاء الفاتورة"
+      },
+      "issueDialog": {
+        "title": "إصدار فاتورة",
+        "lead": "إصدار فاتورة للطلب رقم {{orderId}} الآن، دون انتظار التسليم.",
+        "idempotentNote": "يمكنك إعادة المحاولة بأمان — إذا كان لهذا الطلب فاتورة بالفعل، سيتم إرجاعها بدلاً من إنشاء فاتورة ثانية.",
+        "submit": "إصدار الفاتورة"
+      },
+      "uninvoiced": {
+        "errorMessage": "تعذّر تحميل تقرير الطلبات غير المفوترة.",
+        "allInvoiced": "كل الطلبات المسلّمة لها فواتير",
+        "count": "{{count}} طلبات مسلّمة بلا فاتورة",
+        "alarmNote": "هذا لا يجب أن يحدث أبدًا — الفواتير تصدر تلقائيًا عند التسليم. أصدر هذه الفواتير يدويًا وتحقق من سبب عدم عمل الإصدار التلقائي.",
+        "orderLabel": "الطلب رقم {{id}}",
+        "issueInvoice": "إصدار فاتورة"
+      }
     },
     "remittances": {
-      "backToList": "رجوع إلى التسويات"
+      "backToList": "رجوع إلى التسويات",
+      "outstanding": {
+        "heading": "مع الكوريير",
+        "supportingLine": "{{count}} طلبات — أقدمها منتظر منذ {{oldestDays}} يوم",
+        "errorMessage": "تعذّر تحميل الرصيد المستحق.",
+        "empty": "لا يوجد مستحق — الكوريير سوّى كل الطلبات المسلّمة.",
+        "selectAll": "تحديد الكل",
+        "selectedCount": "تم تحديد {{count}}",
+        "recordRemittance": "تسجيل تسوية",
+        "columns": {
+          "orderNumber": "الطلب",
+          "customer": "العميل",
+          "governorate": "المحافظة",
+          "amount": "المبلغ",
+          "deliveredAt": "تاريخ التسليم",
+          "daysWaiting": "أيام الانتظار"
+        }
+      },
+      "form": {
+        "title": "تسجيل تسوية",
+        "noSelection": "لم يتم تحديد أي طلبات. اذهب إلى شاشة المستحقات وحدد الطلبات التي تغطيها هذه التسوية.",
+        "backToOutstanding": "الذهاب إلى المستحقات",
+        "courierName": "اسم الكوريير",
+        "courierNamePlaceholder": "مثال: بوسطة، مايلرز",
+        "courierReference": "مرجع الكوريير",
+        "courierReferencePlaceholder": "الرقم المرجعي الخاص بهم، إن وجد",
+        "settlementDate": "تاريخ التسوية",
+        "receivedAmount": "المبلغ المستلم",
+        "diffMatches": "مطابق للمتوقع",
+        "diffShort": "عجز قدره {{amount}}",
+        "diffOver": "زيادة قدرها {{amount}}",
+        "note": "ملاحظة",
+        "notePlaceholder": "ملاحظة اختيارية",
+        "noteRequiredPlaceholder": "مطلوب — اشرح سبب الفرق",
+        "noteRequiredHint": "الملاحظة مطلوبة كلما لم يطابق المبلغ المستلم الإجمالي المتوقع.",
+        "submit": "تسجيل التسوية",
+        "selectedOrders": "الطلبات المحددة ({{count}})",
+        "expectedTotal": "الإجمالي المتوقع"
+      },
+      "list": {
+        "title": "التسويات",
+        "outstandingLink": "المستحقات",
+        "courierSearchPlaceholder": "ابحث باسم الكوريير",
+        "allStatuses": "كل الحالات",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "errorMessage": "تعذّر تحميل التسويات — حاول تحديث الصفحة",
+        "empty": "لا توجد تسويات مطابقة لهذه الفلاتر.",
+        "columns": {
+          "reference": "المرجع",
+          "courierName": "الكوريير",
+          "settlementDate": "تاريخ التسوية",
+          "expected": "المتوقع",
+          "received": "المستلم",
+          "difference": "الفرق",
+          "orderCount": "الطلبات",
+          "status": "الحالة"
+        }
+      },
+      "detail": {
+        "errorMessage": "تعذّر تحميل هذه التسوية.",
+        "cancelRemittance": "إلغاء التسوية",
+        "expected": "المتوقع",
+        "received": "المستلم",
+        "difference": "الفرق",
+        "note": {
+          "heading": "ملاحظة"
+        },
+        "orders": {
+          "heading": "الطلبات ({{count}})",
+          "orderNumber": "الطلب",
+          "amount": "المبلغ"
+        }
+      },
+      "cancelDialog": {
+        "title": "إلغاء التسوية",
+        "warning": "الطلبات في هذه التسوية ستعود غير مدفوعة وستظهر مجددًا في المستحقات.",
+        "reasonLabel": "السبب",
+        "reasonPlaceholder": "لماذا يتم إلغاء هذه التسوية؟",
+        "keep": "الاحتفاظ بالتسوية",
+        "submit": "إلغاء التسوية"
+      }
     },
     "categories": {
       "title": "التصنيفات",

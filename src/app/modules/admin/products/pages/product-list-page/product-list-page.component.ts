@@ -78,6 +78,7 @@ export class ProductListPageComponent {
   readonly page = computed(() => Number(this.queryParamMap().get('page') ?? '0') || 0);
 
   readonly searchDraft = signal('');
+  readonly filtersOpen = signal(false);
   readonly allProducts = signal<ProductAdminResponse[]>([]);
   readonly loading = signal(true);
   readonly error = signal(false);

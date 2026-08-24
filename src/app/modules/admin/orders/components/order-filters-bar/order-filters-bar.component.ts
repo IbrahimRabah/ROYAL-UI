@@ -37,6 +37,7 @@ export class OrderFiltersBarComponent implements OnChanges {
 
   // Local, pending edits — only pushed up (and into the URL) when "Apply" is clicked, so
   // typing/picking doesn't trigger a navigation on every keystroke.
+  readonly filtersOpen = signal(false);
   readonly dateFrom = signal<Date | null>(null);
   readonly dateTo = signal<Date | null>(null);
   readonly governorateId = signal<number | null>(null);

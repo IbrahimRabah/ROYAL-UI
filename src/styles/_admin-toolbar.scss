@@ -1,17 +1,28 @@
 // Collapses a multi-control filter toolbar (selects, toggles, date pickers) behind a
-// single "Filters" trigger below tablet width, using native <details>/<summary> so no
-// component state is needed. At md+ the <details> becomes display:contents so its
-// children rejoin the parent's normal flex row exactly as before.
+// single "Filters" trigger below tablet width. Deliberately plain <div>/<button> rather
+// than <details>/<summary>: recent Chromium wraps non-summary <details> content in an
+// internal ::details-content box governed by content-visibility, tied strictly to the
+// [open] attribute — no author `display` override (however specific) can force it open,
+// which broke the "always expanded at desktop, no toggle" requirement below. Plain
+// elements have no such native behavior, so the open/closed state here is entirely
+// author-controlled via the --open modifier class (driven by a component signal).
 //
 // Markup shape expected by callers:
-//   <details class="admin-toolbar">
-//     <summary class="admin-toolbar__trigger">
+//   <div class="admin-toolbar">
+//     <button
+//       type="button"
+//       class="admin-toolbar__trigger"
+//       [attr.aria-expanded]="filtersOpen()"
+//       (click)="filtersOpen.set(!filtersOpen())"
+//     >
 //       <i class="pi pi-sliders-h" aria-hidden="true"></i>
 //       {{ 'common.filters' | translate }}
 //       <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
-//     </summary>
-//     <div class="admin-toolbar__panel"> ...controls... </div>
-//   </details>
+//     </button>
+//     <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
+//       ...controls...
+//     </div>
+//   </div>
 .admin-toolbar {
   display: contents;
 
@@ -29,18 +40,17 @@
   @media (max-width: 767px) {
     display: flex;
     align-items: center;
+    inline-size: 100%;
     gap: var(--sp-2);
     min-block-size: var(--admin-row-height);
     padding-inline: var(--sp-4);
+    border: none;
+    background: none;
     color: var(--admin-text);
     font-size: var(--fs-sm);
     font-weight: 700;
+    text-align: start;
     cursor: pointer;
-    list-style: none;
-
-    &::-webkit-details-marker {
-      display: none;
-    }
   }
 }
 
@@ -49,14 +59,10 @@
   transition: transform 150ms ease;
 }
 
-.admin-toolbar[open] .admin-toolbar__chevron {
+.admin-toolbar__trigger[aria-expanded='true'] .admin-toolbar__chevron {
   transform: rotate(180deg);
 }
 
-// display:contents already defeats <details>'s native UA rule that hides non-summary
-// children when closed (an author style with an explicit `display` always wins over
-// that UA default), so the open/closed visibility below is driven entirely by the
-// [open] attribute selector rather than relying on native behavior.
 .admin-toolbar__panel {
   display: contents;
 
@@ -76,8 +82,8 @@
   }
 }
 
-@media (max-width: 767px) {
-  .admin-toolbar[open] > .admin-toolbar__panel {
+.admin-toolbar__panel--open {
+  @media (max-width: 767px) {
     display: flex;
   }
 }

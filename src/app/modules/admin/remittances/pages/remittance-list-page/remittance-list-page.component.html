@@ -1,1 +1,165 @@
-<p>remittance-list-page works!</p>
+<div class="rlp">
+  <header class="rlp__header">
+    <h1 class="rlp__title">{{ 'admin.remittances.list.title' | translate }}</h1>
+    <a routerLink="/admin/remittances/outstanding" class="rlp__outstanding-link">
+      <i class="pi pi-truck" aria-hidden="true"></i>
+      {{ 'admin.remittances.list.outstandingLink' | translate }}
+    </a>
+  </header>
+
+  <div class="rlp__toolbar">
+    <div class="rlp__search">
+      <i class="pi pi-search rlp__search-icon" aria-hidden="true"></i>
+      <input
+        type="search"
+        class="rlp__search-input"
+        [ngModel]="courierDraft()"
+        (ngModelChange)="onCourierDraftChange($event)"
+        [placeholder]="'admin.remittances.list.courierSearchPlaceholder' | translate"
+      />
+    </div>
+
+    <div class="admin-toolbar">
+      <button
+        type="button"
+        class="admin-toolbar__trigger"
+        [attr.aria-expanded]="filtersOpen()"
+        (click)="filtersOpen.set(!filtersOpen())"
+      >
+        <i class="pi pi-sliders-h" aria-hidden="true"></i>
+        {{ 'common.filters' | translate }}
+        <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
+      </button>
+      <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
+        <p-select
+          [ngModel]="status()"
+          (ngModelChange)="onStatusChange($event)"
+          [options]="statusOptions"
+          [showClear]="true"
+          [placeholder]="'admin.remittances.list.allStatuses' | translate"
+          styleClass="rlp__filter-select"
+        >
+          <ng-template let-option pTemplate="item">{{ statusLabel(option) }}</ng-template>
+          <ng-template let-option pTemplate="selectedItem">{{ statusLabel(option) }}</ng-template>
+        </p-select>
+
+        <p-datepicker
+          [ngModel]="dateFromDate()"
+          (ngModelChange)="onDateFromChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.remittances.list.dateFrom' | translate"
+        ></p-datepicker>
+
+        <p-datepicker
+          [ngModel]="dateToDate()"
+          (ngModelChange)="onDateToChange($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          [placeholder]="'admin.remittances.list.dateTo' | translate"
+        ></p-datepicker>
+
+        <button type="button" class="rlp__clear-btn" *ngIf="hasActiveFilters()" (click)="clearFilters()">
+          {{ 'common.clear' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rlp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.remittances.list.errorMessage' | translate }}</span>
+    <button type="button" class="rlp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!error()">
+    <!-- Desktop / tablet table -->
+    <div class="rlp__table-wrap">
+      <p-table
+        [value]="rows()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="totalElements()"
+        [lazy]="true"
+        [first]="page() * pageSize"
+        (onPage)="onPage($event)"
+        dataKey="id"
+        styleClass="rlp__table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'admin.remittances.list.columns.reference' | translate }}</th>
+            <th>{{ 'admin.remittances.list.columns.courierName' | translate }}</th>
+            <th>{{ 'admin.remittances.list.columns.settlementDate' | translate }}</th>
+            <th class="rlp__col-num">{{ 'admin.remittances.list.columns.expected' | translate }}</th>
+            <th class="rlp__col-num">{{ 'admin.remittances.list.columns.received' | translate }}</th>
+            <th class="rlp__col-num">{{ 'admin.remittances.list.columns.difference' | translate }}</th>
+            <th class="rlp__col-num">{{ 'admin.remittances.list.columns.orderCount' | translate }}</th>
+            <th class="rlp__col-status">{{ 'admin.remittances.list.columns.status' | translate }}</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>
+              <a [routerLink]="['/admin/remittances', row.id]" class="rlp__ref-link">{{ row.reference }}</a>
+            </td>
+            <td>{{ row.courierName }}</td>
+            <td class="rlp__col-date">{{ row.settlementDate | arabicDate }}</td>
+            <td class="rlp__col-num">{{ formatAmount(row.expectedAmount) }}</td>
+            <td class="rlp__col-num">{{ formatAmount(row.receivedAmount) }}</td>
+            <td class="rlp__col-num" [ngClass]="diffClass(row)">{{ diffSign(row) }}{{ formatAmount(row.difference) }}</td>
+            <td class="rlp__col-num">{{ row.orderCount }}</td>
+            <td class="rlp__col-status">
+              <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="rlp__cards">
+      <div *ngFor="let row of rows()" class="admin-card">
+        <div class="admin-card__row1">
+          <a [routerLink]="['/admin/remittances', row.id]" class="admin-card__primary admin-card__secondary--code">{{ row.reference }}</a>
+        </div>
+
+        <div class="admin-card__secondary">{{ row.courierName }}</div>
+        <div class="admin-card__secondary">{{ row.settlementDate | arabicDate }}</div>
+
+        <div class="admin-card__stats">
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.remittances.list.columns.expected' | translate }}</span>
+            <span class="admin-card__stat-value">{{ formatAmount(row.expectedAmount) }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.remittances.list.columns.received' | translate }}</span>
+            <span class="admin-card__stat-value">{{ formatAmount(row.receivedAmount) }}</span>
+          </div>
+          <div class="admin-card__stat">
+            <span class="admin-card__stat-label">{{ 'admin.remittances.list.columns.difference' | translate }}</span>
+            <span class="admin-card__stat-value" [ngClass]="diffClass(row)">{{ diffSign(row) }}{{ formatAmount(row.difference) }}</span>
+          </div>
+        </div>
+
+        <div class="admin-card__badges">
+          <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+        </div>
+      </div>
+
+      <p *ngIf="!loading() && !rows().length" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</p>
+    </div>
+  </ng-container>
+</div>

@@ -1,1 +1,121 @@
-<p>remittance-form-page works!</p>
+<div class="rfp">
+  <header class="rfp__header">
+    <h1 class="rfp__title">{{ 'admin.remittances.form.title' | translate }}</h1>
+  </header>
+
+  <div class="rfp__empty-state" *ngIf="!selectedOrders.length">
+    <i class="pi pi-inbox" aria-hidden="true"></i>
+    <p>{{ 'admin.remittances.form.noSelection' | translate }}</p>
+    <a routerLink="/admin/remittances/outstanding" class="rfp__empty-link">
+      {{ 'admin.remittances.form.backToOutstanding' | translate }}
+    </a>
+  </div>
+
+  <div class="rfp__layout" *ngIf="selectedOrders.length">
+    <section class="rfp__card rfp__fields">
+      <div class="rfp__inline-error" *ngIf="errorMessage()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+      <div class="rfp__field">
+        <label class="rfp__label" for="rfp-courier-name">{{ 'admin.remittances.form.courierName' | translate }} *</label>
+        <input
+          id="rfp-courier-name"
+          type="text"
+          class="rfp__text-input"
+          [ngModel]="courierName()"
+          (ngModelChange)="courierName.set($event)"
+          [placeholder]="'admin.remittances.form.courierNamePlaceholder' | translate"
+        />
+      </div>
+
+      <div class="rfp__field">
+        <label class="rfp__label" for="rfp-courier-ref">{{ 'admin.remittances.form.courierReference' | translate }}</label>
+        <input
+          id="rfp-courier-ref"
+          type="text"
+          class="rfp__text-input"
+          dir="ltr"
+          [ngModel]="courierReference()"
+          (ngModelChange)="courierReference.set($event)"
+          [placeholder]="'admin.remittances.form.courierReferencePlaceholder' | translate"
+        />
+      </div>
+
+      <div class="rfp__field">
+        <label class="rfp__label" for="rfp-settlement-date">{{ 'admin.remittances.form.settlementDate' | translate }} *</label>
+        <p-datepicker
+          inputId="rfp-settlement-date"
+          [ngModel]="settlementDate()"
+          (ngModelChange)="settlementDate.set($event)"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          appendTo="body"
+          styleClass="rfp__date"
+        ></p-datepicker>
+      </div>
+
+      <div class="rfp__field">
+        <label class="rfp__label" for="rfp-received">{{ 'admin.remittances.form.receivedAmount' | translate }} *</label>
+        <p-inputnumber
+          inputId="rfp-received"
+          [ngModel]="receivedAmount()"
+          (ngModelChange)="receivedAmount.set($event)"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          styleClass="rfp__number-input"
+        ></p-inputnumber>
+      </div>
+
+      <div class="rfp__diff-banner" [ngClass]="'rfp__diff-banner--' + diffState()" *ngIf="receivedAmount() !== null">
+        <i class="pi" [ngClass]="diffState() === 'equal' ? 'pi-check-circle' : diffState() === 'short' ? 'pi-exclamation-triangle' : 'pi-arrow-up-right'" aria-hidden="true"></i>
+        <span *ngIf="diffState() === 'equal'">{{ 'admin.remittances.form.diffMatches' | translate }}</span>
+        <span *ngIf="diffState() === 'short'">{{ 'admin.remittances.form.diffShort' | translate: { amount: formatAmount(-difference()) } }}</span>
+        <span *ngIf="diffState() === 'over'">{{ 'admin.remittances.form.diffOver' | translate: { amount: formatAmount(difference()) } }}</span>
+      </div>
+
+      <div class="rfp__field">
+        <label class="rfp__label" for="rfp-note">
+          {{ 'admin.remittances.form.note' | translate }}
+          <span class="rfp__required-mark" *ngIf="noteRequired()">*</span>
+        </label>
+        <textarea
+          id="rfp-note"
+          class="rfp__textarea"
+          [class.rfp__textarea--required]="noteRequired() && !note().trim()"
+          rows="3"
+          [ngModel]="note()"
+          (ngModelChange)="note.set($event)"
+          [placeholder]="(noteRequired() ? 'admin.remittances.form.noteRequiredPlaceholder' : 'admin.remittances.form.notePlaceholder') | translate"
+        ></textarea>
+        <span class="rfp__note-error" *ngIf="noteFieldError()">{{ noteFieldError() }}</span>
+        <span class="rfp__note-hint" *ngIf="noteRequired() && !note().trim()">
+          {{ 'admin.remittances.form.noteRequiredHint' | translate }}
+        </span>
+      </div>
+
+      <button type="button" class="rfp__submit" [disabled]="!canSubmit()" (click)="submit()">
+        <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.remittances.form.submit' | translate }}
+      </button>
+    </section>
+
+    <section class="rfp__card rfp__orders">
+      <h2 class="rfp__orders-title">
+        {{ 'admin.remittances.form.selectedOrders' | translate: { count: selectedOrders.length } }}
+      </h2>
+      <div class="rfp__order-row" *ngFor="let order of selectedOrders">
+        <a [routerLink]="['/admin/orders', order.orderId]" class="rfp__order-link">{{ order.orderNumber }}</a>
+        <span class="rfp__order-amount">{{ formatAmount(order.amount) }}</span>
+      </div>
+      <div class="rfp__order-row rfp__order-row--total">
+        <span>{{ 'admin.remittances.form.expectedTotal' | translate }}</span>
+        <span class="rfp__order-amount">{{ formatAmount(expectedTotal()) }}</span>
+      </div>
+    </section>
+  </div>
+</div>

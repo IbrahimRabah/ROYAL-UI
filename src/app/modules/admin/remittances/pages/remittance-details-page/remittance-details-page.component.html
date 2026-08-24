@@ -1,3 +1,160 @@
-<app-admin-back-link parentPath="/admin/remittances" labelKey="admin.remittances.backToList"></app-admin-back-link>
+<div class="rdp">
+  <app-admin-back-link parentPath="/admin/remittances" labelKey="admin.remittances.backToList"></app-admin-back-link>
 
-<p>remittance-details-page works!</p>
+  <div class="rdp__skeleton" *ngIf="loading()">
+    <p-skeleton height="90px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="220px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="rdp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.remittances.detail.errorMessage' | translate }}</span>
+    <button type="button" class="rdp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="remittance() as rem">
+    <header class="rdp__header">
+      <div class="rdp__header-main">
+        <h1 class="rdp__reference">{{ rem.reference }}</h1>
+        <app-vl-status-badge [label]="statusLabel(rem.status)" [tone]="statusTone(rem.status)"></app-vl-status-badge>
+      </div>
+      <div class="rdp__header-end">
+        <span class="rdp__courier">
+          <i class="pi pi-truck" aria-hidden="true"></i>
+          {{ rem.courierName }}
+        </span>
+        <span class="rdp__date">{{ rem.settlementDate | arabicDate }}</span>
+        <button
+          type="button"
+          class="rdp__cancel-btn"
+          *ngIf="rem.status !== RemittanceStatus.CANCELLED"
+          (click)="openCancelDialog()"
+        >
+          <i class="pi pi-ban" aria-hidden="true"></i>
+          {{ 'admin.remittances.detail.cancelRemittance' | translate }}
+        </button>
+      </div>
+    </header>
+
+    <section class="rdp__amounts">
+      <div class="rdp__amount-block">
+        <span class="rdp__amount-label">{{ 'admin.remittances.detail.expected' | translate }}</span>
+        <span class="rdp__amount-value">{{ formatAmount(rem.expectedAmount) }}</span>
+      </div>
+      <div class="rdp__amount-block">
+        <span class="rdp__amount-label">{{ 'admin.remittances.detail.received' | translate }}</span>
+        <span class="rdp__amount-value">{{ formatAmount(rem.receivedAmount) }}</span>
+      </div>
+      <div class="rdp__amount-block rdp__amount-block--diff">
+        <span class="rdp__amount-label">{{ 'admin.remittances.detail.difference' | translate }}</span>
+        <span class="rdp__amount-value rdp__amount-value--emphasis" [ngClass]="diffClass(rem)">
+          {{ diffSign(rem) }}{{ formatAmount(rem.difference) }}
+        </span>
+      </div>
+    </section>
+
+    <section class="rdp__card" *ngIf="rem.note">
+      <div class="rdp__card-header">
+        <div class="rdp__icon-badge idp__icon-badge--warn">
+          <i class="pi pi-comment" aria-hidden="true"></i>
+        </div>
+        <h2 class="rdp__card-title">{{ 'admin.remittances.detail.note.heading' | translate }}</h2>
+      </div>
+      <p class="rdp__note-text">{{ rem.note }}</p>
+    </section>
+
+    <section class="rdp__card">
+      <div class="rdp__card-header">
+        <div class="rdp__icon-badge rdp__icon-badge--gold">
+          <i class="pi pi-box" aria-hidden="true"></i>
+        </div>
+        <h2 class="rdp__card-title">{{ 'admin.remittances.detail.orders.heading' | translate: { count: rem.orderCount } }}</h2>
+      </div>
+
+      <div class="rdp__orders-table-wrap admin-scroll-x">
+        <table class="rdp__orders-table">
+          <thead>
+            <tr>
+              <th>{{ 'admin.remittances.detail.orders.orderNumber' | translate }}</th>
+              <th>{{ 'admin.remittances.detail.orders.amount' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let line of rem.orders">
+              <td>
+                <a [routerLink]="['/admin/orders', line.orderId]" class="rdp__order-link">{{ line.orderNumber }}</a>
+              </td>
+              <td class="rdp__order-amount">{{ formatAmount(line.amount) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </ng-container>
+</div>
+
+<!-- Inline cancel dialog — reason is a required QUERY PARAM on the cancel endpoint, not a
+     body field (see AdminRemittanceApiService.cancel). -->
+<div class="admin-dialog" *ngIf="cancelDialogOpen()">
+  <div class="admin-dialog__backdrop" (click)="closeCancelDialog()"></div>
+
+  <div
+    class="admin-dialog__panel admin-dialog__panel--sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cancel-remittance-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="closeCancelDialog()"
+  >
+    <header class="admin-dialog__header">
+      <h2 id="cancel-remittance-dialog-title" class="admin-dialog__title">
+        {{ 'admin.remittances.cancelDialog.title' | translate }}
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="closeCancelDialog()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body">
+      <div class="admin-dialog__warning">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        <span>{{ 'admin.remittances.cancelDialog.warning' | translate }}</span>
+      </div>
+
+      <div class="admin-dialog__inline-error" *ngIf="cancelError()">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ cancelError() }}</span>
+      </div>
+
+      <label class="admin-dialog__field-label" for="remittance-cancel-reason">
+        {{ 'admin.remittances.cancelDialog.reasonLabel' | translate }}
+      </label>
+      <textarea
+        id="remittance-cancel-reason"
+        class="admin-dialog__textarea"
+        rows="3"
+        required
+        [maxLength]="reasonMaxLength"
+        [ngModel]="cancelReason()"
+        (ngModelChange)="cancelReason.set($event)"
+        [placeholder]="'admin.remittances.cancelDialog.reasonPlaceholder' | translate"
+      ></textarea>
+      <span class="admin-dialog__counter">{{ cancelReason().length }}/{{ reasonMaxLength }}</span>
+    </div>
+
+    <footer class="admin-dialog__footer">
+      <button type="button" class="admin-dialog__cancel" [disabled]="cancelling()" (click)="closeCancelDialog()">
+        {{ 'admin.remittances.cancelDialog.keep' | translate }}
+      </button>
+      <button
+        type="button"
+        class="admin-dialog__submit admin-dialog__submit--stop"
+        [disabled]="cancelling() || !canSubmitCancel"
+        (click)="submitCancel()"
+      >
+        <i class="pi" [ngClass]="cancelling() ? 'pi-spin pi-spinner' : 'pi-ban'" aria-hidden="true"></i>
+        {{ 'admin.remittances.cancelDialog.submit' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

@@ -34,13 +34,18 @@
       />
     </div>
 
-    <details class="admin-toolbar">
-      <summary class="admin-toolbar__trigger">
+    <div class="admin-toolbar">
+      <button
+        type="button"
+        class="admin-toolbar__trigger"
+        [attr.aria-expanded]="filtersOpen()"
+        (click)="filtersOpen.set(!filtersOpen())"
+      >
         <i class="pi pi-sliders-h" aria-hidden="true"></i>
         {{ 'common.filters' | translate }}
         <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
-      </summary>
-      <div class="admin-toolbar__panel">
+      </button>
+      <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
         <p-select
           [ngModel]="categoryFilter()"
           (ngModelChange)="onCategoryFilterChange($event)"
@@ -69,7 +74,7 @@
           styleClass="product-list-page__filter-select"
         ></p-select>
       </div>
-    </details>
+    </div>
   </div>
 
   <div class="product-list-page__error" *ngIf="error() && !loading()">

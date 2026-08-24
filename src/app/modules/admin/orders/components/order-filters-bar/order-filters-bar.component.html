@@ -1,10 +1,15 @@
-<details class="admin-toolbar order-filters-bar">
-  <summary class="admin-toolbar__trigger">
+<div class="admin-toolbar order-filters-bar">
+  <button
+    type="button"
+    class="admin-toolbar__trigger"
+    [attr.aria-expanded]="filtersOpen()"
+    (click)="filtersOpen.set(!filtersOpen())"
+  >
     <i class="pi pi-sliders-h" aria-hidden="true"></i>
     {{ 'common.filters' | translate }}
     <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
-  </summary>
-  <div class="admin-toolbar__panel order-filters-bar__panel">
+  </button>
+  <div class="admin-toolbar__panel order-filters-bar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
   <div class="order-filters-bar__field">
     <label class="order-filters-bar__label">{{ 'admin.orders.filters.dateFrom' | translate }}</label>
     <p-datepicker
@@ -64,4 +69,4 @@
     </button>
   </div>
   </div>
-</details>
+</div>

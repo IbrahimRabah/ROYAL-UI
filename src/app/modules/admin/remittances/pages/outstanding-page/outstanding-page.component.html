@@ -1,1 +1,112 @@
-<p>outstanding-page works!</p>
+<div class="osp" [class.osp--has-summary]="selectedCount() > 0">
+  <div class="osp__skeleton" *ngIf="loading()">
+    <p-skeleton height="140px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="320px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <div class="osp__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.remittances.outstanding.errorMessage' | translate }}</span>
+    <button type="button" class="osp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="data() as d">
+    <header class="osp__header" [class.osp__header--warn]="headerTone() === 'warn'" [class.osp__header--stop]="headerTone() === 'stop'">
+      <div class="osp__header-icon">
+        <i class="pi pi-truck" aria-hidden="true"></i>
+      </div>
+      <div class="osp__header-body">
+        <span class="osp__header-label">{{ 'admin.remittances.outstanding.heading' | translate }}</span>
+        <div class="osp__header-figure-row">
+          <span class="osp__header-figure">{{ formatAmount(d.totalAmount) }}</span>
+          <span class="osp__header-currency">EGP</span>
+        </div>
+        <span class="osp__header-sub">
+          {{ 'admin.remittances.outstanding.supportingLine' | translate: { count: d.orderCount, oldestDays: oldestDays() } }}
+        </span>
+      </div>
+    </header>
+
+    <ng-container *ngIf="d.orders.length; else emptyState">
+      <!-- Desktop / tablet table -->
+      <div class="osp__table-wrap">
+        <p-table [value]="sortedOrders()" dataKey="orderId" styleClass="osp__table">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="osp__col-check">
+                <input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" [attr.aria-label]="'admin.remittances.outstanding.selectAll' | translate" />
+              </th>
+              <th>{{ 'admin.remittances.outstanding.columns.orderNumber' | translate }}</th>
+              <th>{{ 'admin.remittances.outstanding.columns.customer' | translate }}</th>
+              <th>{{ 'admin.remittances.outstanding.columns.governorate' | translate }}</th>
+              <th class="osp__col-num">{{ 'admin.remittances.outstanding.columns.amount' | translate }}</th>
+              <th>{{ 'admin.remittances.outstanding.columns.deliveredAt' | translate }}</th>
+              <th class="osp__col-num">{{ 'admin.remittances.outstanding.columns.daysWaiting' | translate }}</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr [class.osp__row--selected]="isSelected(row.orderId)">
+              <td class="osp__col-check">
+                <input type="checkbox" [checked]="isSelected(row.orderId)" (change)="toggle(row.orderId)" [attr.aria-label]="row.orderNumber" />
+              </td>
+              <td>
+                <a [routerLink]="['/admin/orders', row.orderId]" class="osp__order-link">{{ row.orderNumber }}</a>
+              </td>
+              <td>{{ row.customerName }}</td>
+              <td>{{ row.governorate }}</td>
+              <td class="osp__col-num">{{ formatAmount(row.amount) }}<span class="osp__currency">EGP</span></td>
+              <td class="osp__col-date">{{ row.deliveredAt | arabicDate }}</td>
+              <td class="osp__col-num osp__col-days">{{ row.daysWaiting }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <!-- Mobile cards -->
+      <div class="osp__cards">
+        <div class="admin-card" *ngFor="let row of sortedOrders()" [class.osp__card--selected]="isSelected(row.orderId)">
+          <div class="admin-card__row1">
+            <label class="osp__card-check-group">
+              <input type="checkbox" [checked]="isSelected(row.orderId)" (change)="toggle(row.orderId)" [attr.aria-label]="row.orderNumber" />
+              <span class="admin-card__primary admin-card__secondary--code">{{ row.orderNumber }}</span>
+            </label>
+          </div>
+
+          <div class="admin-card__secondary">{{ row.customerName }} · {{ row.governorate }}</div>
+
+          <div class="admin-card__stats">
+            <div class="admin-card__stat">
+              <span class="admin-card__stat-label">{{ 'admin.remittances.outstanding.columns.amount' | translate }}</span>
+              <span class="admin-card__stat-value">{{ formatAmount(row.amount) }} EGP</span>
+            </div>
+            <div class="admin-card__stat">
+              <span class="admin-card__stat-label">{{ 'admin.remittances.outstanding.columns.daysWaiting' | translate }}</span>
+              <span class="admin-card__stat-value">{{ row.daysWaiting }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="osp__ok-state">
+        <div class="osp__ok-icon">
+          <i class="pi pi-check-circle" aria-hidden="true"></i>
+        </div>
+        <p class="osp__ok-text">{{ 'admin.remittances.outstanding.empty' | translate }}</p>
+      </div>
+    </ng-template>
+  </ng-container>
+</div>
+
+<div class="osp__summary-bar" *ngIf="selectedCount() > 0">
+  <div class="osp__summary-text">
+    <span class="osp__summary-count">{{ 'admin.remittances.outstanding.selectedCount' | translate: { count: selectedCount() } }}</span>
+    <span class="osp__summary-total">{{ formatAmount(selectedTotal()) }} EGP</span>
+  </div>
+  <button type="button" class="osp__summary-btn" (click)="recordRemittance()">
+    <i class="pi pi-arrow-left" aria-hidden="true"></i>
+    {{ 'admin.remittances.outstanding.recordRemittance' | translate }}
+  </button>
+</div>
