@@ -14,12 +14,12 @@
     </a>
   </header>
 
-  <div class="inventory-list-page__toolbar">
-    <div class="inventory-list-page__search">
-      <i class="pi pi-search inventory-list-page__search-icon" aria-hidden="true"></i>
+  <div class="admin-list-toolbar">
+    <div class="admin-toolbar__search">
+      <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
       <input
         type="search"
-        class="inventory-list-page__search-input"
+        class="admin-toolbar__search-input"
         [ngModel]="searchDraft()"
         (ngModelChange)="onSearchDraftChange($event)"
         [placeholder]="'admin.inventory.searchPlaceholder' | translate"
@@ -57,7 +57,7 @@
           [showClear]="true"
           appendTo="self"
           [placeholder]="'admin.inventory.allCategories' | translate"
-          styleClass="inventory-list-page__filter-select"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">
             <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
@@ -73,7 +73,7 @@
           ]"
           optionValue="value"
           appendTo="self"
-          styleClass="inventory-list-page__filter-select"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
           <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
@@ -172,7 +172,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="9" class="inventory-list-page__empty">{{ 'admin.inventory.empty' | translate }}</td>
+            <td colspan="9" class="admin-list-empty">{{ 'admin.inventory.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -191,23 +191,6 @@
           >
             <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
           </button>
-          <p-popover #cardPopover>
-            <div class="inventory-list-page__menu">
-              <button type="button" class="inventory-list-page__menu-item" (click)="openReceiveDialog(row); cardPopover.hide()">
-                {{ 'admin.inventory.actions.receive' | translate }}
-              </button>
-              <button type="button" class="inventory-list-page__menu-item" (click)="openAdjustDialog(row); cardPopover.hide()">
-                {{ 'admin.inventory.actions.adjust' | translate }}
-              </button>
-              <a
-                routerLink="/admin/inventory/movements"
-                [queryParams]="{ variantId: row.variantId }"
-                class="inventory-list-page__menu-item"
-              >
-                {{ 'admin.inventory.actions.viewMovements' | translate }}
-              </a>
-            </div>
-          </p-popover>
         </div>
 
         <div class="admin-card__secondary">{{ row.variantSummary }}</div>
@@ -231,9 +214,27 @@
         <div class="admin-card__badges">
           <app-vl-status-badge [label]="statusInfo(row).labelKey | translate" [tone]="statusInfo(row).tone"></app-vl-status-badge>
         </div>
+
+        <p-popover #cardPopover>
+          <div class="inventory-list-page__menu">
+            <button type="button" class="inventory-list-page__menu-item" (click)="openReceiveDialog(row); cardPopover.hide()">
+              {{ 'admin.inventory.actions.receive' | translate }}
+            </button>
+            <button type="button" class="inventory-list-page__menu-item" (click)="openAdjustDialog(row); cardPopover.hide()">
+              {{ 'admin.inventory.actions.adjust' | translate }}
+            </button>
+            <a
+              routerLink="/admin/inventory/movements"
+              [queryParams]="{ variantId: row.variantId }"
+              class="inventory-list-page__menu-item"
+            >
+              {{ 'admin.inventory.actions.viewMovements' | translate }}
+            </a>
+          </div>
+        </p-popover>
       </div>
 
-      <p *ngIf="!loading() && !rows().length" class="inventory-list-page__empty">{{ 'admin.inventory.empty' | translate }}</p>
+      <p *ngIf="!loading() && !rows().length" class="admin-list-empty">{{ 'admin.inventory.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

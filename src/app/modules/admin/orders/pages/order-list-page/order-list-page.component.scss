@@ -79,42 +79,7 @@
 }
 
 // ═══ Search ═══
-
-.order-list-page__search {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.order-list-page__search-icon {
-  position: absolute;
-  inset-inline-start: var(--sp-4);
-  color: var(--admin-text-muted);
-  font-size: 1.125rem;
-  pointer-events: none;
-}
-
-.order-list-page__search-input {
-  inline-size: 100%;
-  padding: var(--sp-4) var(--sp-4) var(--sp-4) calc(var(--sp-4) * 2 + 1.125rem);
-  padding-inline-start: calc(var(--sp-4) * 2 + 1.125rem);
-  padding-inline-end: var(--sp-4);
-  border: 1px solid var(--admin-border);
-  border-radius: var(--r-lg);
-  background: var(--admin-surface);
-  color: var(--admin-text);
-  font-size: var(--fs-lg);
-  font-family: var(--body);
-
-  &:focus {
-    outline: 2px solid var(--gold);
-    outline-offset: -1px;
-  }
-
-  &::placeholder {
-    color: var(--admin-text-muted);
-  }
-}
+// Now the shared .admin-toolbar__search* classes (_admin-toolbar.scss).
 
 // ═══ Error ═══
 
@@ -281,11 +246,7 @@
   }
 }
 
-.order-list-page__empty {
-  padding: var(--sp-8);
-  text-align: center;
-  color: var(--admin-text-muted);
-}
+// .order-list-page__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 // p-table internals — --admin-row-height rows, alternating surface, hover tint, uppercase
 // header labels. ::ng-deep is required to reach PrimeNG's own DOM structure.

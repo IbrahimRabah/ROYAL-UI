@@ -124,15 +124,15 @@
 
 .dashboard-page__skeleton-row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-4);
 
   @include breakpoints.md {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @include breakpoints.lg {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -348,6 +348,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-2);
+  min-inline-size: 0;
   height: 100%;
   padding: var(--admin-card-pad);
   background: color-mix(in srgb, var(--stop) 8%, var(--admin-surface));
@@ -384,6 +385,7 @@
 }
 
 .dashboard-page__stuck-figure {
+  min-inline-size: 0;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: 1.1;
@@ -391,6 +393,7 @@
 }
 
 .dashboard-page__stuck-sub {
+  min-inline-size: 0;
   font-size: var(--fs-sm);
   color: var(--admin-text-muted);
 }
@@ -399,7 +402,7 @@
 
 .dashboard-page__row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-4);
   align-items: stretch;
 }
@@ -407,9 +410,15 @@
 // <768: single column. 768–1400: 2×2 (2×3 while Stuck Reservations is showing).
 // ≥1400: auto-fit settles into 4 or 5 across depending on whether that card is present,
 // rather than a fixed repeat(4) that would leave a gap when there are 5 cards.
+// minmax(0, 1fr)/minmax(220px, 1fr), not bare 1fr — a bare 1fr track's automatic minimum
+// size is based on its content's min-content width, so a long money figure forces the
+// track (and the card sitting in it) wider than the column actually has room for. That's
+// also why every card below additionally needs min-inline-size: 0 on itself: a grid
+// item's own default min-width is "auto" too, so without that override the item still
+// refuses to shrink to the track's width even once the track itself can.
 .dashboard-page__row--4 {
   @include breakpoints.md {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @include breakpoints.xxl {
@@ -421,11 +430,11 @@
 // tablet-portrait). 1024–1400: 2 across. ≥1400: 3 across.
 .dashboard-page__row--3 {
   @include breakpoints.lg {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @include breakpoints.xxl {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -433,17 +442,17 @@
 
 .dashboard-page__queue-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-4);
 
   // 768–1024: 2 across. 1024–1400: 3 across. ≥1400: auto-fit settles into 4–6
   // depending on how much room there actually is.
   @include breakpoints.md {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @include breakpoints.lg {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   @include breakpoints.xxl {

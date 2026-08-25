@@ -88,6 +88,118 @@
   }
 }
 
+// ═══ List-page toolbar row (search box + filters trigger) ═══
+//
+// Markup shape expected by callers:
+//   <div class="admin-list-toolbar">
+//     <div class="admin-toolbar__search">
+//       <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
+//       <input type="search" class="admin-toolbar__search-input" ... />
+//     </div>
+//     <div class="admin-toolbar"> ...trigger + panel, see above... </div>
+//   </div>
+//
+// This whole block was duplicated near-identically across every admin list screen
+// (invoices, products, inventory, orders), each with its own slightly different values
+// and, critically, each independently making the same mistake: giving the search box a
+// fixed-px flex-basis (e.g. "flex: 2 1 240px") meant as a desktop WIDTH hint. Below 768px
+// this row switches to flex-direction: column, where flex-basis instead sets BLOCK-size —
+// so the search box rendered as an ~240px-tall empty box instead of a ~44px input, which
+// is what read as a huge blank gap. Fixed once here: the fixed basis only applies at
+// tablet width and up; reset to auto below it so the item sizes to its own content again.
+.admin-list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.admin-toolbar__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+// The width hint below only makes sense sharing a row with the filters trigger — scoped
+// to that context rather than baked into .admin-toolbar__search itself, since some
+// screens (orders) use the search box as a lone, always-full-width block whose ancestor
+// is flex-direction: column at every width, not just below 768px; an unscoped flex-basis
+// there would hit the exact same px-becomes-height bug this file exists to fix.
+.admin-list-toolbar > .admin-toolbar__search {
+  flex: 2 1 240px;
+
+  @media (max-width: 767px) {
+    flex-basis: auto;
+  }
+}
+
+.admin-toolbar__search-icon {
+  position: absolute;
+  inset-inline-start: var(--sp-4);
+  color: var(--admin-text-muted);
+  font-size: 1.125rem;
+  pointer-events: none;
+}
+
+.admin-toolbar__search-input {
+  inline-size: 100%;
+  padding-block: var(--sp-3);
+  padding-inline-start: calc(var(--sp-4) * 2 + 1rem);
+  padding-inline-end: var(--sp-4);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-base);
+  font-family: var(--body);
+
+  &:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+  }
+
+  &::placeholder {
+    color: var(--admin-text-muted);
+  }
+}
+
+// Filter control wrapper (p-select, p-datepicker) inside .admin-toolbar__panel — same
+// fixed-px-basis-becomes-height story as .admin-toolbar__search above. The panel already
+// resets its direct children to "flex: 1 1 auto" on mobile (below), but each screen's own
+// same-specificity, later-loaded component style was overriding that safe default with
+// its own "flex: 1 1 170px" (or 160/180px) — there's no longer a per-screen rule to do
+// that; screens use this shared one instead.
+.admin-toolbar__filter-field {
+  flex: 1 1 170px;
+  min-inline-size: 0;
+
+  @media (max-width: 767px) {
+    flex-basis: auto;
+  }
+
+  .p-select,
+  .p-datepicker {
+    inline-size: 100%;
+  }
+}
+
+// Shared empty-list message — also duplicated identically across all four screens.
+// Padding tightens below 768px; screen real estate at 375px is scarce.
+.admin-list-empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--admin-text-muted);
+
+  @media (max-width: 767px) {
+    padding: var(--sp-5);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .admin-toolbar__chevron {
     transition: none;

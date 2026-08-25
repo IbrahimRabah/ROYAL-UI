@@ -102,6 +102,19 @@ export class DashboardPageComponent {
     return SEVERITY_TONE[severity];
   }
 
+  // alert.actionPath arrives as a full path + query string (e.g.
+  // "/admin/orders?status=CONFIRMED"). Binding that whole string straight to
+  // [routerLink] makes Angular percent-encode the "?"/"=" as a literal path segment —
+  // split it so the query string reaches [queryParams] instead.
+  alertPath(actionPath: string): string {
+    return actionPath.split('?')[0];
+  }
+
+  alertQueryParams(actionPath: string): Record<string, string> {
+    const queryString = actionPath.split('?')[1];
+    return queryString ? Object.fromEntries(new URLSearchParams(queryString)) : {};
+  }
+
   totalActionQueueCount(dashboard: DashboardResponse): number {
     return dashboard.actionQueues.reduce((sum, queue) => sum + queue.count, 0);
   }

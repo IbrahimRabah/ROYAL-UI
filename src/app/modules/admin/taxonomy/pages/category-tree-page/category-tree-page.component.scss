@@ -72,11 +72,7 @@
   }
 }
 
-.ctp__empty {
-  padding: var(--sp-8);
-  text-align: center;
-  color: var(--admin-text-muted);
-}
+// .ctp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 .ctp__tree {
   background: var(--admin-surface);

@@ -8,6 +8,11 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-3);
+  // A grid item's default min-width is "auto" (its content's min-content size), not 0 —
+  // without this override the card refuses to shrink to its grid track's width even once
+  // the track itself is a shrinkable minmax(0, 1fr)/minmax(220px, 1fr).
+  min-inline-size: 0;
+  max-inline-size: 100%;
   height: 100%;
   padding: var(--admin-card-pad);
   background: color-mix(in srgb, var(--ok) 8%, var(--admin-surface));
@@ -101,7 +106,7 @@
 // line, so this settles into 3 + 2 instead of squeezing or wrapping unevenly.
 .delivery-rate-chart__legend {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sp-3) var(--sp-2);
   inline-size: 100%;
   padding-block-start: var(--sp-3);
@@ -113,6 +118,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  min-inline-size: 0;
 }
 
 .delivery-rate-chart__dot {

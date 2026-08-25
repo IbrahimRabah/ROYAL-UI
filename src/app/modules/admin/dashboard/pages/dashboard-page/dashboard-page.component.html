@@ -151,7 +151,8 @@
         <div class="dashboard-page__alert-rows">
           <a
             *ngFor="let alert of d.alerts"
-            [routerLink]="alert.actionPath"
+            [routerLink]="alertPath(alert.actionPath)"
+            [queryParams]="alertQueryParams(alert.actionPath)"
             class="dashboard-page__alert-row"
           >
             <span class="dashboard-page__alert-dot dashboard-page__alert-dot--{{ severityTone(alert.severity) }}"></span>

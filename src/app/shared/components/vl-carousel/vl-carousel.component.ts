@@ -24,7 +24,10 @@ import { LanguageStoreService } from '../../../core/state/language-store.service
 // item, +1 = forward toward the last) — never a physical left/right. RTL is handled by
 // flipping the sign once here, so callers (buttons, keyboard) never need to know direction.
 // Button *position* mirrors for free from normal flex layout inheriting the ambient
-// `dir`; only the chevron glyph needs the explicit flip in the .scss.
+// `dir`; only the chevron glyph needs the explicit flip, done globally in
+// styles/_rtl.scss (a component-scoped `[dir='rtl'] ...` rule can't match — Angular's
+// emulated encapsulation scopes the ancestor selector too, and <html> is never inside
+// this component's own rendered content).
 @Component({
   selector: 'app-vl-carousel',
   templateUrl: './vl-carousel.component.html',

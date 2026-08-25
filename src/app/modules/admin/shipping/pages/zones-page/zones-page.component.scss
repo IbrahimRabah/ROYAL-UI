@@ -78,11 +78,7 @@
   }
 }
 
-.zp__empty {
-  padding: var(--sp-8);
-  text-align: center;
-  color: var(--admin-text-muted);
-}
+// .zp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 // ═══ Zone cards ═══
 

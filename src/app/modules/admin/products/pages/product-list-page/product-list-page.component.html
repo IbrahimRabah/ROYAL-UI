@@ -22,12 +22,12 @@
     </button>
   </div>
 
-  <div class="product-list-page__toolbar">
-    <div class="product-list-page__search">
-      <i class="pi pi-search product-list-page__search-icon" aria-hidden="true"></i>
+  <div class="admin-list-toolbar">
+    <div class="admin-toolbar__search">
+      <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
       <input
         type="search"
-        class="product-list-page__search-input"
+        class="admin-toolbar__search-input"
         [ngModel]="searchDraft()"
         (ngModelChange)="onSearchDraftChange($event)"
         [placeholder]="'admin.products.list.searchPlaceholder' | translate"
@@ -55,7 +55,7 @@
           [showClear]="true"
           appendTo="self"
           [placeholder]="'admin.products.list.allCategories' | translate"
-          styleClass="product-list-page__filter-select"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">
             <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
@@ -71,7 +71,7 @@
           [showClear]="true"
           appendTo="self"
           [placeholder]="'admin.products.list.allBrands' | translate"
-          styleClass="product-list-page__filter-select"
+          styleClass="admin-toolbar__filter-field"
         ></p-select>
       </div>
     </div>
@@ -198,7 +198,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="10" class="product-list-page__empty">{{ 'admin.products.list.empty' | translate }}</td>
+            <td colspan="10" class="admin-list-empty">{{ 'admin.products.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -290,7 +290,7 @@
         </p-popover>
       </div>
 
-      <p *ngIf="!loading() && !filteredRows().length" class="product-list-page__empty">{{ 'admin.products.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !filteredRows().length" class="admin-list-empty">{{ 'admin.products.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

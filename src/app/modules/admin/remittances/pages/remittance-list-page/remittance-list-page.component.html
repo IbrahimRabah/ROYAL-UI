@@ -7,7 +7,7 @@
     </a>
   </header>
 
-  <div class="rlp__toolbar">
+  <div class="admin-list-toolbar">
     <div class="admin-toolbar">
       <button
         type="button"
@@ -26,7 +26,7 @@
           [options]="courierOptions()"
           [showClear]="true"
           [placeholder]="'admin.remittances.list.allCouriers' | translate"
-          styleClass="rlp__filter-select"
+          styleClass="admin-toolbar__filter-field"
         ></p-select>
 
         <p-select
@@ -35,7 +35,7 @@
           [options]="statusOptions"
           [showClear]="true"
           [placeholder]="'admin.remittances.list.allStatuses' | translate"
-          styleClass="rlp__filter-select"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">{{ statusLabel(option) }}</ng-template>
           <ng-template let-option pTemplate="selectedItem">{{ statusLabel(option) }}</ng-template>
@@ -146,7 +146,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="8" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</td>
+            <td colspan="8" class="admin-list-empty">{{ 'admin.remittances.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -182,7 +182,7 @@
         </div>
       </div>
 
-      <p *ngIf="!loading() && !pagedRows().length" class="rlp__empty">{{ 'admin.remittances.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !pagedRows().length" class="admin-list-empty">{{ 'admin.remittances.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

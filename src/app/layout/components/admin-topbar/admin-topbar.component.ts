@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, ViewChild, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -52,6 +52,7 @@ export class AdminTopbarComponent {
   @Output() readonly menuToggle = new EventEmitter<void>();
 
   @ViewChild('panel') private readonly panel!: Popover;
+  @ViewChild('accountTrigger') private readonly accountTrigger!: ElementRef<HTMLButtonElement>;
 
   readonly loggingOut = signal(false);
 
@@ -66,7 +67,10 @@ export class AdminTopbarComponent {
   readonly adminName = computed(() => getDisplayName(this.authStore.user()));
 
   toggleAccountPanel(event: Event): void {
-    this.panel.toggle(event);
+    // Explicit target — PrimeNG falls back to event.currentTarget/event.target when this
+    // is omitted, which should already resolve to this button, but pinning it removes any
+    // dependence on exactly where inside the button the click landed.
+    this.panel.toggle(event, this.accountTrigger.nativeElement);
   }
 
   logout(): void {

@@ -81,7 +81,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7" class="alp__empty">{{ 'admin.attributes.empty' | translate }}</td>
+            <td colspan="7" class="admin-list-empty">{{ 'admin.attributes.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -104,7 +104,7 @@
           </span>
         </div>
       </div>
-      <p *ngIf="!rows.length" class="alp__empty">{{ 'admin.attributes.empty' | translate }}</p>
+      <p *ngIf="!rows.length" class="admin-list-empty">{{ 'admin.attributes.empty' | translate }}</p>
     </div>
   </section>
 </ng-template>

@@ -1,16 +1,17 @@
 @use 'styles/breakpoints';
 
-// admin-toolbar (global, unscoped) handles the collapsed-below-tablet look; this
-// scoped rule only needs to restore the always-expanded bordered flex box at md+ —
-// its higher specificity (the auto-added component attribute selector) is what wins
-// over admin-toolbar's own `display: contents` there.
+// admin-toolbar (global, unscoped) handles the collapsed-below-tablet look — its own
+// bordered box IS the compact trigger row on mobile. This scoped rule restores the
+// always-expanded bordered flex box at md+; padding/background/border must stay inside
+// that same @include breakpoints.md, not unconditional — applied at every width (as
+// written before), they doubled up on admin-toolbar's own mobile chrome and padded the
+// whole collapsed trigger into a tall empty card instead of a compact row.
 .order-filters-bar {
-  padding: var(--sp-5);
-  background: var(--admin-surface);
-  border: 1px solid var(--admin-border);
-  border-radius: var(--r-lg);
-
   @include breakpoints.md {
+    padding: var(--sp-5);
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-lg);
     display: flex;
     flex-wrap: wrap;
     align-items: end;
@@ -22,8 +23,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-1);
+  // A bare px flex-basis is a WIDTH hint in the md+ row above, but this same rule also
+  // governs the admin-toolbar__panel's mobile column layout, where flex-basis instead
+  // sets block-size — reset it there so the field sizes to its own content height, not to
+  // whatever number was chosen for its desktop width (see _admin-toolbar.scss).
   flex: 1 1 160px;
   min-inline-size: 0;
+
+  @media (max-width: 767px) {
+    flex-basis: auto;
+  }
 
   :host ::ng-deep & .p-datepicker,
   :host ::ng-deep & .p-select {

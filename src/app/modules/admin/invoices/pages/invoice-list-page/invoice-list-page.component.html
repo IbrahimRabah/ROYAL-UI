@@ -7,12 +7,12 @@
     </a>
   </header>
 
-  <div class="ilp__toolbar">
-    <div class="ilp__search">
-      <i class="pi pi-search ilp__search-icon" aria-hidden="true"></i>
+  <div class="admin-list-toolbar">
+    <div class="admin-toolbar__search">
+      <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
       <input
         type="search"
-        class="ilp__search-input"
+        class="admin-toolbar__search-input"
         [ngModel]="searchDraft()"
         (ngModelChange)="onSearchDraftChange($event)"
         [placeholder]="'admin.invoices.list.searchPlaceholder' | translate"
@@ -37,7 +37,7 @@
           [options]="statusOptions"
           [showClear]="true"
           [placeholder]="'admin.invoices.list.allStatuses' | translate"
-          styleClass="ilp__filter-select"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">{{ statusLabel(option) }}</ng-template>
           <ng-template let-option pTemplate="selectedItem">{{ statusLabel(option) }}</ng-template>
@@ -143,7 +143,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="8" class="ilp__empty">{{ 'admin.invoices.list.empty' | translate }}</td>
+            <td colspan="8" class="admin-list-empty">{{ 'admin.invoices.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -196,7 +196,7 @@
         </div>
       </div>
 
-      <p *ngIf="!loading() && !rows().length" class="ilp__empty">{{ 'admin.invoices.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !rows().length" class="admin-list-empty">{{ 'admin.invoices.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

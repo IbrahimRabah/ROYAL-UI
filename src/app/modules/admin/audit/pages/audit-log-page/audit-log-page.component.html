@@ -8,12 +8,12 @@
     <span>{{ 'admin.audit.list.coverageNote' | translate }}</span>
   </div>
 
-  <div class="alp__toolbar">
-    <div class="alp__search">
-      <i class="pi pi-search alp__search-icon" aria-hidden="true"></i>
+  <div class="admin-list-toolbar">
+    <div class="admin-toolbar__search">
+      <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
       <input
         type="search"
-        class="alp__search-input"
+        class="admin-toolbar__search-input"
         [ngModel]="actorDraft()"
         (ngModelChange)="onActorDraftChange($event)"
         [placeholder]="'admin.audit.list.actorPlaceholder' | translate"
@@ -38,6 +38,7 @@
           [options]="actionOptions"
           [showClear]="true"
           [placeholder]="'admin.audit.list.allActions' | translate"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">{{ actionLabel(option) }}</ng-template>
           <ng-template let-option pTemplate="selectedItem">{{ actionLabel(option) }}</ng-template>
@@ -49,6 +50,7 @@
           [options]="entityTypeOptions"
           [showClear]="true"
           [placeholder]="'admin.audit.list.allEntityTypes' | translate"
+          styleClass="admin-toolbar__filter-field"
         >
           <ng-template let-option pTemplate="item">{{ entityTypeLabel(option) }}</ng-template>
           <ng-template let-option pTemplate="selectedItem">{{ entityTypeLabel(option) }}</ng-template>
@@ -138,7 +140,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="6" class="alp__empty">{{ 'admin.audit.list.empty' | translate }}</td>
+            <td colspan="6" class="admin-list-empty">{{ 'admin.audit.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -179,7 +181,7 @@
         <p class="alp__card-reason" *ngIf="row.reason">{{ row.reason }}</p>
       </div>
 
-      <p *ngIf="!loading() && !rows().length" class="alp__empty">{{ 'admin.audit.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !rows().length" class="admin-list-empty">{{ 'admin.audit.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

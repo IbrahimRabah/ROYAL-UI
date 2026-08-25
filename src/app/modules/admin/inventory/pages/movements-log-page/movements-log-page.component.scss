@@ -216,11 +216,7 @@
   font-weight: 700;
 }
 
-.movements-log-page__empty {
-  padding: var(--sp-8);
-  text-align: center;
-  color: var(--admin-text-muted);
-}
+// .movements-log-page__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 :host ::ng-deep .movements-log-page__table {
   @media (max-width: 991px) {

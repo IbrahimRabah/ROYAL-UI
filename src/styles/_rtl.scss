@@ -76,6 +76,50 @@
 // p-select in an overflow:hidden container — apply border-radius per first/last child
 // instead, see product-specs-tab.component.scss), not a reason to go back to "body".
 
+// p-popover's arrow triangle is a fixed design-token offset from the box's own LEFT edge
+// (.p-popover:before/:after { left: var(--p-popover-arrow-offset); margin-left: calc(-1
+// * gutter) } in the compiled theme CSS) — it never adapts to which edge the box actually
+// anchored from. PrimeNG's own absolutePosition() right-aligns (grows the box leftward
+// from a fixed right edge) whenever the trigger sits too close to the viewport's right
+// edge for a left-anchored box to fit — exactly the case for every admin overlay trigger
+// here (the topbar account menu, card row-action menus), which is deliberately pinned to
+// its container's inline-end edge. In RTL that inline-end edge is the LEFT of the
+// viewport, so the box stays left-anchored and the arrow's hardcoded left offset lands
+// correctly by coincidence. In LTR the inline-end edge is the RIGHT of the viewport, the
+// box right-anchors instead, and the arrow — still glued to the box's own left edge —
+// ends up nowhere near the trigger. This is the one direction (LTR needs the override,
+// not RTL) where that's true, because it's the anchor side that flips, not a physical-
+// vs-logical property mismatch like the other fixes in this file.
+html[dir='ltr'] .p-popover:before,
+html[dir='ltr'] .p-popover:after {
+  left: auto;
+  right: var(--p-popover-arrow-offset);
+}
+
+html[dir='ltr'] .p-popover:before {
+  margin-left: 0;
+  margin-right: calc(-1 * var(--p-popover-gutter));
+}
+
+html[dir='ltr'] .p-popover:after {
+  margin-left: 0;
+  margin-right: calc(-1 * (var(--p-popover-gutter) - 2px));
+}
+
+// vl-carousel's prev/next chevrons are physical glyphs (pi-chevron-left / pi-chevron-right)
+// that need to point toward the actual scroll direction, which flips in RTL. The button
+// *positions* already mirror for free (plain flex layout inheriting the ambient `dir`,
+// see vl-carousel.component.ts) — only the glyph needs the explicit flip. This rule used
+// to live as `[dir='rtl'] .vl-carousel__nav i` inside the component's own scoped .scss,
+// but that never matched: Angular's emulated view encapsulation appends the component's
+// content-attribute to every simple selector in the chain, including the ancestor
+// `[dir='rtl']` — and <html> is never part of this component's own rendered content, so
+// the attribute is never present on it. Global, unencapsulated styles (here) are the only
+// place an ancestor-based `[dir='rtl']` selector like this can actually match.
+html[dir='rtl'] .vl-carousel__nav i {
+  transform: scaleX(-1);
+}
+
 // order-card's trailing chevron is a "go forward" affordance, not a fixed left/right
 // glyph — it should point toward the end of the reading direction, which a single pi
 // icon class can't express on its own.

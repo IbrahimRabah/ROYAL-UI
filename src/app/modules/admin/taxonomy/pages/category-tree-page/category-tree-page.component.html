@@ -13,7 +13,7 @@
     <button type="button" class="ctp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
   </div>
 
-  <p class="ctp__empty" *ngIf="!error() && !loading() && !tree().length">{{ 'admin.categories.empty' | translate }}</p>
+  <p class="admin-list-empty" *ngIf="!error() && !loading() && !tree().length">{{ 'admin.categories.empty' | translate }}</p>
 
   <div class="ctp__tree" *ngIf="!error() && tree().length">
     <ng-container *ngFor="let root of tree()">

@@ -19,7 +19,7 @@
     <button type="button" class="zp__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
   </div>
 
-  <p class="zp__empty" *ngIf="!loading() && !error() && !zones().length">{{ 'admin.shipping.empty' | translate }}</p>
+  <p class="admin-list-empty" *ngIf="!loading() && !error() && !zones().length">{{ 'admin.shipping.empty' | translate }}</p>
 
   <div class="zp__grid" *ngIf="!loading() && !error()">
     <section class="zp__card" *ngFor="let zone of zones()" [class.zp__card--inactive]="!zone.active">

@@ -57,7 +57,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="5" class="brand-list-page__empty">{{ 'admin.brands.empty' | translate }}</td>
+            <td colspan="5" class="admin-list-empty">{{ 'admin.brands.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <p *ngIf="!loading() && !brands().length" class="brand-list-page__empty">{{ 'admin.brands.empty' | translate }}</p>
+      <p *ngIf="!loading() && !brands().length" class="admin-list-empty">{{ 'admin.brands.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>

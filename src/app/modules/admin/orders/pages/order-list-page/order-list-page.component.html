@@ -18,11 +18,11 @@
     </button>
   </div>
 
-  <div class="order-list-page__search">
-    <i class="pi pi-search order-list-page__search-icon" aria-hidden="true"></i>
+  <div class="admin-toolbar__search">
+    <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
     <input
       type="search"
-      class="order-list-page__search-input"
+      class="admin-toolbar__search-input"
       [ngModel]="searchDraft()"
       (ngModelChange)="onSearchDraftChange($event)"
       [placeholder]="'admin.orders.list.searchPlaceholder' | translate"
@@ -140,7 +140,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="9" class="order-list-page__empty">{{ 'admin.orders.list.empty' | translate }}</td>
+            <td colspan="9" class="admin-list-empty">{{ 'admin.orders.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -190,7 +190,7 @@
         </ng-template>
       </div>
 
-      <p *ngIf="!loading() && !rows().length" class="order-list-page__empty">{{ 'admin.orders.list.empty' | translate }}</p>
+      <p *ngIf="!loading() && !rows().length" class="admin-list-empty">{{ 'admin.orders.list.empty' | translate }}</p>
     </div>
   </ng-container>
 </div>
