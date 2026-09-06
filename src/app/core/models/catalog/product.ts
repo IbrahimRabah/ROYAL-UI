@@ -5,9 +5,6 @@ import { BrandResponse } from './brand';
 import { CategoryBreadcrumbItem } from './category';
 import { ImageResponse } from './image';
 import { VariantResponse } from './variant';
-
-// GET /products, /products/featured, /products/new-arrivals (content[] items) and
-// GET /products/{id}/related (plain array).
 export interface ProductSummaryResponse {
   id: number;
   slug: string;
@@ -19,9 +16,6 @@ export interface ProductSummaryResponse {
   imageAlt: string;
   minPrice: Money;
   maxPrice: Money;
-  // Not shown null in the example (a discounted product is used); a non-discounted
-  // product plausibly omits these, but no null example exists in the contract for this
-  // response — kept required per the literal example.
   compareAtPrice: Money;
   discountPercent: number;
   inStock: boolean;
@@ -30,7 +24,6 @@ export interface ProductSummaryResponse {
   newArrival: boolean;
 }
 
-// GET /products/{slug}
 export interface ProductDetailResponse {
   id: number;
   slug: string;
@@ -62,7 +55,6 @@ export interface ProductSeo {
   canonicalPath: string;
 }
 
-// Client-side filter model for GET /products — every field optional and composable.
 export interface ProductFilter {
   q?: string;
   categoryId?: number;

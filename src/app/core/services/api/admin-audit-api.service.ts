@@ -13,7 +13,6 @@ import { buildHttpParams } from './http-params.util';
 export class AdminAuditApiService {
   private readonly http = inject(HttpClient);
 
-  // actorId is ignored server-side if action is also set.
   list(action?: string, actorId?: number, page?: number, size?: number): Observable<PageResponse<AuditEntryResponse>> {
     const params = buildHttpParams({ action, actorId, page, size: size ?? APP_CONFIG.pagination.audit.size });
     return this.http.get<PageResponse<AuditEntryResponse>>(API_ROUTES.admin.audit.audit(), { params });

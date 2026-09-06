@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { ConfirmDialogService } from '../services/confirm-dialog.service';
 
-// Admin form pages implement this to report whether they have unsaved edits.
 export interface CanComponentDeactivate {
   hasUnsavedChanges(): boolean;
 }

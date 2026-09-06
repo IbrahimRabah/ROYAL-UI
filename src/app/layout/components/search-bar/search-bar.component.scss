@@ -19,9 +19,6 @@
   cursor: pointer;
   transition: color 220ms ease, background 220ms ease;
 
-  // [hidden] rather than *ngIf in the template — keeps the button in the DOM (instead of
-  // destroying/recreating it) while the panel is open, which avoids the browser resetting
-  // focus to <body> mid-click when the element a click just landed on disappears.
   &[hidden] {
     display: none;
   }
@@ -33,8 +30,6 @@
   }
 }
 
-// Anchored to the nearest positioned ancestor, which is `.site-header` on mobile (below)
-// and `.search-bar` itself at desktop (breakpoint override) — see each block for why.
 .search-bar__panel {
   position: absolute;
   inset-inline: 0;
@@ -91,9 +86,6 @@
 }
 
 @include breakpoints.md {
-  // `.search-bar` becomes the positioned ancestor here instead of `.site-header`, so the
-  // panel anchors to the search icon itself (a compact dropdown) rather than spanning the
-  // full header width like it does on mobile.
   .search-bar {
     position: relative;
   }
@@ -104,10 +96,6 @@
     inline-size: min(320px, 60vw);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
-    // transform-origin has no logical keyword equivalent (same escape hatch documented
-    // in mobile-nav-drawer's transform override) — the panel's anchored edge is
-    // inset-inline-end, so the origin must flip with it to keep the "grows from the
-    // icon" effect correct in RTL.
     transform-origin: top right;
 
     :host-context([dir='rtl']) & {

@@ -32,8 +32,6 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
   @Input() open = false;
   @Input() category: CategoryAdminResponse | null = null;
   @Input() initialParentId: number | null = null;
-  // Pre-filtered by the parent page to exclude the category being edited and its own
-  // descendants — see category-tree-page's parentOptions (409 CATEGORY_CYCLE avoidance).
   @Input() parentOptions: ParentOption[] = [];
 
   @Output() readonly closed = new EventEmitter<void>();
@@ -72,8 +70,6 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
     return this.category !== null;
   }
 
-  // A category with children can't be moved — its subtree would need to move with it,
-  // and the contract only offers a single parentId, not a subtree reparent.
   get parentSelectDisabled(): boolean {
     return this.category !== null && this.category.children.length > 0;
   }
@@ -117,10 +113,6 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
       return;
     }
 
-    // Categories have no shortDescription column at all — confirmed by the backend, the
-    // field doesn't exist on the entity even though the shared translation shapes used
-    // elsewhere (products) carry it. Sending it would just be silently dropped, so the
-    // category-specific request type (CategoryTranslationInput) doesn't have it to send.
     const v = this.form.getRawValue();
     const translations: CategoryUpsertRequest['translations'] = [
       {

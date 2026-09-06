@@ -44,7 +44,6 @@
   }
 }
 
-// ═══ Header ═══
 
 .rdp__header {
   display: flex;
@@ -118,9 +117,6 @@
   }
 }
 
-// ═══ Amounts — the difference here is one of the two figures on this whole feature
-// that carries real weight, per the visual spec ═══
-
 .rdp__amounts {
   display: grid;
   grid-template-columns: 1fr;
@@ -172,7 +168,6 @@
   color: var(--stop);
 }
 
-// ═══ Cards ═══
 
 .rdp__card {
   padding: var(--sp-5);
@@ -220,7 +215,6 @@
   line-height: 1.6;
 }
 
-// ═══ Orders table ═══
 
 .rdp__orders-table-wrap {
   overflow-x: auto;
@@ -272,7 +266,6 @@
   white-space: nowrap;
 }
 
-// ═══ Inline cancel dialog ═══
 
 .admin-dialog {
   position: fixed;

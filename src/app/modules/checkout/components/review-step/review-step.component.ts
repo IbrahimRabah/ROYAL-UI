@@ -11,10 +11,6 @@ export interface ContactValue {
 }
 
 type FieldName = 'phone' | 'email';
-
-// Scaffolded as "review-step" for an earlier multi-step wizard design; this task replaces
-// that with a single flat page, and the Contact section (phone + optional email) had no
-// dedicated component of its own — repurposed here rather than left as a dead stub.
 @Component({
   selector: 'app-review-step',
   templateUrl: './review-step.component.html',

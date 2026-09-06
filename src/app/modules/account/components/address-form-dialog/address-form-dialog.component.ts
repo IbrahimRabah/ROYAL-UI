@@ -99,8 +99,6 @@ export class AddressFormDialogComponent implements OnChanges, AfterViewInit, OnD
       if (isPlatformBrowser(this.platformId)) {
         this.lastFocused = document.activeElement as HTMLElement | null;
         this.lockBodyScroll();
-        // Same-tick focus() can lose to the browser's own async focus reset — defer to
-        // the next macrotask (see click-outside-and-focus-after-hide-gotchas memory).
         setTimeout(() => this.panelRef?.nativeElement.focus());
       }
     } else if (isPlatformBrowser(this.platformId)) {
@@ -110,12 +108,6 @@ export class AddressFormDialogComponent implements OnChanges, AfterViewInit, OnD
     }
   }
 
-  // Renders the dialog as a direct child of <body> instead of wherever the host template
-  // placed <app-address-form-dialog> — addresses-page's own root div carries a transform
-  // animation (auth-page-enter), which creates a new stacking context and traps this
-  // panel's z-index below the sticky/positioned site-header regardless of the z-index
-  // value used. Moving it out entirely (same idea as vl-confirm-dialog living at the
-  // customer-layout root) is the only fix that isn't fragile to unrelated ancestor styles.
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.renderer.appendChild(document.body, this.elementRef.nativeElement);
@@ -146,8 +138,6 @@ export class AddressFormDialogComponent implements OnChanges, AfterViewInit, OnD
     this.scrolled.set((event.target as HTMLElement).scrollTop > 0);
   }
 
-  // Manual focus trap — Tab/Shift+Tab wrap within the panel's focusable elements instead
-  // of escaping to the (now hidden-behind-overlay) rest of the page.
   onTab(domEvent: Event): void {
     const event = domEvent as KeyboardEvent;
     const panelEl = this.panelRef?.nativeElement;
@@ -218,7 +208,6 @@ export class AddressFormDialogComponent implements OnChanges, AfterViewInit, OnD
         if (isValidationFailedError(err)) {
           bindServerFieldErrors(this.form, err.fieldErrors);
         }
-        // Any other status is already toasted globally by ErrorInterceptor.
       },
     });
   }

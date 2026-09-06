@@ -72,7 +72,6 @@
   }
 }
 
-// .ctp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 .ctp__tree {
   background: var(--admin-surface);
@@ -81,8 +80,6 @@
   padding: var(--sp-3);
 }
 
-// Each nesting level indents by --sp-5 and draws a hairline connector down its start
-// edge, so the hierarchy reads at a glance regardless of depth.
 .ctp__children {
   margin-inline-start: var(--sp-5);
   padding-inline-start: var(--sp-4);
@@ -202,8 +199,6 @@
     display: none;
   }
 
-  // Name/thumb/badge keep the top line; the two action buttons drop to their own
-  // full-width row underneath instead of squeezing next to a shrunk name.
   .ctp__row-actions {
     flex-basis: 100%;
     justify-content: flex-end;

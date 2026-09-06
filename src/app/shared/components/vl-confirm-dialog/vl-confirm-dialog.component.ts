@@ -38,8 +38,6 @@ export class VlConfirmDialogComponent implements OnInit, OnDestroy {
         return;
       }
       this.lastFocused = document.activeElement as HTMLElement | null;
-      // Same-tick focus() loses to the browser's own async focus reset once the *ngIf
-      // panel just entered the DOM — defer to the next macrotask instead.
       setTimeout(() => this.confirmBtnRef?.nativeElement.focus());
     });
   }

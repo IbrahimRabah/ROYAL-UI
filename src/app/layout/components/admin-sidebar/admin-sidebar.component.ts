@@ -29,11 +29,6 @@ interface AdminNavItem {
   icon: string;
   route: string;
   badge?: true;
-  // When present, this item renders as a non-navigating group header (its own `route`
-  // is unused) with these as indented sub-links instead of one flat link — for sections
-  // that cover more than one screen (see the sidebar-audit finding this was added for:
-  // remittances/invoices each had multiple registered routes but only one nav entry,
-  // same problem previously fixed for brands/attributes).
   children?: AdminNavChild[];
 }
 
@@ -123,7 +118,6 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('mobileCloseBtn') private readonly mobileCloseBtn?: ElementRef<HTMLButtonElement>;
 
   readonly navGroups = NAV_GROUPS;
-  // Sum of every actionQueues entry — every order currently needing operator attention.
   readonly pendingOrderCount = signal(0);
 
   ngOnInit(): void {
@@ -142,8 +136,6 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.document.body.style.overflow = this.mobileOpen ? 'hidden' : '';
     if (this.mobileOpen) {
-      // Deferred a tick — the panel is `inert` while closed, and browsers won't accept
-      // focus() moving into an inert subtree in the same synchronous pass that clears it.
       queueMicrotask(() => this.mobileCloseBtn?.nativeElement.focus());
     }
   }

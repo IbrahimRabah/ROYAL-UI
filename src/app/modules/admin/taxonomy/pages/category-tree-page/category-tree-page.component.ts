@@ -6,12 +6,10 @@ import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-
 import { categoryDisplayName } from '../../../../../shared/utils/flatten-category-tree.util';
 
 interface DialogTarget {
-  category: CategoryAdminResponse | null; // null = creating new
-  parentId: number | null; // prefilled parent for a new (sub)category
+  category: CategoryAdminResponse | null;
+  parentId: number | null; 
 }
 
-// Flat (node, depth) pairs, deepest-first traversal order preserved as top-to-bottom tree
-// order — used both for rendering rows and for computing self+descendant exclusions.
 interface FlatNode {
   node: CategoryAdminResponse;
   depth: number;
@@ -50,9 +48,6 @@ export class CategoryTreePageComponent {
   readonly dialogTarget = signal<DialogTarget | null>(null);
   readonly dialogOpen = computed(() => this.dialogTarget() !== null);
 
-  // Every category except the one being edited and its own descendants — a category
-  // cannot become its own ancestor (409 CATEGORY_CYCLE), so this filters the parent
-  // select before the operator can ever hit that error.
   readonly parentOptions = computed(() => {
     const target = this.dialogTarget();
     const excluded = target?.category ? collectIds(target.category) : new Set<number>();

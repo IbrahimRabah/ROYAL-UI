@@ -8,10 +8,6 @@ import { AdminInventoryApiService } from '../../../../../core/services/api/admin
 import { APP_CONFIG } from '../../../../../core/constants/app-config';
 import { StatusTone } from '../../../../../core/constants/order-status.constants';
 
-// Direction + tone per the visual spec — PURCHASE_RECEIVED/RETURN_SELLABLE/
-// CANCELLATION_RESTOCK always add stock (--ok, "+"), SALE always removes it (--info, "−"),
-// DAMAGE_WRITEOFF/RETURN_DAMAGED always remove it (--stop, "−"), MANUAL_ADJUSTMENT can go
-// either way (--warn, signed from the actual quantityDelta).
 const MOVEMENT_TYPE_TONE: Record<StockMovement, StatusTone> = {
   [StockMovement.PURCHASE_RECEIVED]: 'ok',
   [StockMovement.RETURN_SELLABLE]: 'ok',
@@ -22,10 +18,6 @@ const MOVEMENT_TYPE_TONE: Record<StockMovement, StatusTone> = {
   [StockMovement.RETURN_DAMAGED]: 'stop',
 };
 
-// referenceType isn't a closed enum on the backend (see StockMovementResponse) — known
-// values map to a translated label; anything else falls back to the raw value rather
-// than rendering blank, so a new reference type the backend starts sending later still
-// shows *something* meaningful instead of disappearing.
 const REFERENCE_TYPE_LABEL_KEYS: Partial<Record<string, string>> = {
   VARIANT_CREATE: 'admin.inventory.movements.referenceType.VARIANT_CREATE',
   ADJUSTMENT: 'admin.inventory.movements.referenceType.ADJUSTMENT',
@@ -64,9 +56,6 @@ export class MovementsLogPageComponent {
   readonly loading = signal(true);
   readonly error = signal(false);
 
-  // SKU shown once resolved — either from ?variantId= arriving pre-filtered (row action on
-  // screen 1) or from the operator's own search below. The API only filters movements by
-  // numeric variantId, so a typed SKU is resolved to one via GET /admin/inventory?q= first.
   readonly resolvedSku = signal<string | null>(null);
   readonly skuDraft = signal('');
   readonly filtersOpen = signal(false);
@@ -119,9 +108,6 @@ export class MovementsLogPageComponent {
     return row.referenceId != null ? `${row.referenceType} #${row.referenceId}` : '—';
   }
 
-  // Translation key for a known referenceType, or null when unrecognized — the template
-  // renders the raw referenceType string directly in the null case, never the dotted key
-  // path (see REFERENCE_TYPE_LABEL_KEYS above).
   referenceTypeLabelKey(referenceType: string): string | null {
     return REFERENCE_TYPE_LABEL_KEYS[referenceType] ?? null;
   }

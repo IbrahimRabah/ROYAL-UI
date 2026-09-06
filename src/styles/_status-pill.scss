@@ -1,6 +1,3 @@
-// Shared by orders-page and order-details-page (both render fulfillment/payment status
-// pills) — kept out of each component's own stylesheet to avoid duplicating it past the
-// 4kB anyComponentStyle budget.
 .status-pill {
   display: inline-flex;
   align-items: center;

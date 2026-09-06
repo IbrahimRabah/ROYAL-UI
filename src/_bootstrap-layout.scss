@@ -1,6 +1,3 @@
-// Bootstrap — التخطيط فقط.
-// الترتيب هنا إجباري: _variables بيستخدم mixins معرّفة في _mixins،
-// و@use بيعزل الملفات عن بعض فبيكسر الاعتماد ده. عشان كده @import.
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 @import 'bootstrap/scss/mixins';

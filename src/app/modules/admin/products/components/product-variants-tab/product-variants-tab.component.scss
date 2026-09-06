@@ -29,7 +29,6 @@
   }
 }
 
-// ═══ Empty state ═══
 
 .pvt__empty {
   display: flex;
@@ -55,7 +54,6 @@
   }
 }
 
-// ═══ Toolbar / add button ═══
 
 .pvt__toolbar {
   display: flex;
@@ -83,7 +81,6 @@
   }
 }
 
-// ═══ Generator (step 1) ═══
 
 .pvt__generator {
   padding: var(--sp-5);
@@ -131,9 +128,6 @@
   line-height: 1.5;
 }
 
-// GET /admin/attributes returns every variant-defining attribute regardless of the
-// product's category (no scoping mechanism in the contract — see BACKEND_NOTES.md) —
-// this is the only guard against a watch offering perfume volumes until the backend adds one.
 .pvt__relevance-note {
   display: flex;
   align-items: flex-start;
@@ -177,12 +171,6 @@
   gap: var(--sp-2);
 }
 
-// Hand-rolled, not p-multiselect — PrimeNG 18's MultiSelect shares the same internal
-// `@if`-conditional pattern that threw the Ivy "LContainer must be defined" SSR/hydration
-// assertion for p-tabs and p-toggleswitch elsewhere in this admin (confirmed by grepping
-// its compiled template for the same signal-conditional codegen before writing this —
-// not empirically re-triggered here, but the risk pattern matches exactly). A toggleable
-// chip group hydrates the same plain-`*ngIf` way the rest of the app already does.
 .pvt__value-chip {
   display: inline-flex;
   align-items: center;
@@ -212,15 +200,9 @@
   inline-size: 11px;
   block-size: 11px;
   border-radius: 50%;
-  // Same reasoning as .vmt__badge-dot: an inset ring stays visible against pale swatches
-  // (white, silver) where a fixed light-gray border would nearly disappear.
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
 }
-
-// Purely informational — never disables the chip. A product with only a Silver variant
-// can still need Silver selected again (e.g. Silver + 42mm); the real duplicate guard is
-// the preview response's per-combination alreadyExists flag, not a single value.
 .pvt__value-inuse {
   padding: 1px var(--sp-2);
   border-radius: var(--r-full);

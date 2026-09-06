@@ -10,7 +10,6 @@
   gap: var(--sp-5);
 }
 
-// ═══ Shared panel chrome ═══
 
 .ptt__panel,
 .ptt__lang-panel {
@@ -59,7 +58,6 @@
   color: var(--admin-text);
 }
 
-// ═══ General fields ═══
 
 .ptt__grid {
   display: grid;
@@ -193,7 +191,6 @@
   outline-offset: 2px;
 }
 
-// ═══ Language panels ═══
 
 .ptt__languages {
   display: grid;

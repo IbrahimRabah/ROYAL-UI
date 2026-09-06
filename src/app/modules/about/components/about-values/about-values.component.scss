@@ -33,8 +33,6 @@
   position: relative;
 
   @include breakpoints.md {
-    // Thin gold rules between columns — omitted on the first item and on mobile's
-    // 2×2 stack, where a vertical divider between wrapped rows would look broken.
     &:not(:first-child)::before {
       content: '';
       position: absolute;

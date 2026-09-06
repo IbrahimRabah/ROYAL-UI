@@ -1,7 +1,3 @@
-// Shared card shell for the checkout page's stacked sections (Contact, Shipping Address,
-// Delivery Method) — same --surface/--r-lg/--shadow-sm card with a leading --ink icon
-// badge and a var(--display) title, used identically by three sibling components, so it
-// lives here once rather than duplicated per component (same reasoning as _auth-form.scss).
 @use 'breakpoints';
 
 .checkout-card {
@@ -46,9 +42,6 @@
 }
 
 .checkout-card-enter {
-  // --card-delay is set by the parent page on each section's host tag (a custom property
-  // set on a component's host element crosses the emulated-encapsulation boundary via
-  // normal CSS inheritance, unlike a descendant selector reaching into its template).
   animation: checkout-fade-rise 300ms ease both;
   animation-delay: var(--card-delay, 0ms);
 }

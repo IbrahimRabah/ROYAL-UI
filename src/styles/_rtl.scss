@@ -1,96 +1,5 @@
 @use 'breakpoints';
 
-// Corrections for PrimeNG components whose CSS hardcodes a physical direction.
-//
-// STRICT RULE: in all NEW code (components, future styles), use logical properties —
-// margin-inline-start/end, padding-inline, inset-inline, text-align: start/end — so it
-// works in both directions without needing an entry in this file. Only reach for a
-// [dir="rtl"] override here when logical properties genuinely can't express the fix —
-// e.g. an icon glyph that needs transform: scaleX(-1)/rotate(180deg) to point the other
-// way, which no logical CSS property can do on its own.
-//
-// ⚠️ RE-VERIFIED after the PrimeNG 17 → 18 (Aura) upgrade — all six original fixes here
-// (dropdown, calendar, paginator, breadcrumb, checkbox, dialog close) were re-checked
-// directly against the installed v18 component source and are gone: Aura's own styles
-// already use logical properties and native RTL handling that didn't exist in the old
-// lara-light-blue build:
-//   - Select (formerly Dropdown): inset-inline-end/padding-inline/margin-inline
-//     throughout (node_modules/primeng/esm2022/select/style/selectstyle.mjs) — no more
-//     hardcoded `right:`/physical border-radius split.
-//   - DatePicker (formerly Calendar): `.p-datepicker-prev-button:dir(rtl)` /
-//     `-next-button:dir(rtl) { transform: rotate(180deg) }` — mirrors natively.
-//   - Paginator: `.p-paginator-first:dir(rtl), ...-last:dir(rtl) { transform:
-//     rotate(180deg) }`, uniform (non-split) border-radius token.
-//   - Breadcrumb: `.p-breadcrumb-separator .p-icon:dir(rtl) { transform:
-//     rotate(180deg) }`.
-//   - Checkbox: no `.p-checkbox-label` class exists in the v18 template at all (the old
-//     bug doesn't apply); the input's `top/left: 0` is a full-coverage overlay
-//     (inset:0-equivalent), not an asymmetric offset.
-//   - Dialog: header icons use `.p-dialog-header-actions { gap: ... }` (flexbox gap,
-//     direction-agnostic) instead of per-icon margin-right + :last-child reset.
-//
-// So there is currently nothing left to override — this file is intentionally empty of
-// fixes. If a new PrimeNG component update or a custom component introduces a genuine
-// direction bug, it goes here, scoped like:
-//
-//   html[dir='rtl'] .some-primeng-class {
-//     transform: scaleX(-1); // or whatever physical property can't be made logical
-//   }
-//
-// ⚠️ p-select's overlay POSITIONING bug is NOT here, and can't be — read on before
-// reaching for a CSS fix for it.
-//
-// The verification above only ever checked p-select's *static CSS* (selectstyle.mjs) —
-// that part is genuinely clean. What broke three separate admin screens (orders filters,
-// the variant picker, the specs value select) is a JS bug, one directory over, in
-// @primeuix/utils/dist/dom/index.mjs — the shared overlay-positioning helper every
-// PrimeNG overlay component (Select, MultiSelect, Popover, ...) delegates to for
-// non-"self" appendTo targets:
-//
-//   d.left+f>ct.width ? B=Math.max(0,d.left+w+c-f) : B=d.left+w;
-//   q(t) ? t.style.insetInlineEnd=B+"px" : t.style.insetInlineStart=B+"px";
-//
-// `d.left` is `getBoundingClientRect().left` — a physical, LTR-only measurement — and in
-// the RTL branch (`q(t)` = isRTL) that same physical number gets assigned to the
-// *logical* `insetInlineEnd`, which means "distance from the right edge." Physical-left
-// and distance-from-the-right are not the same number, so in RTL the overlay lands
-// nowhere near its trigger — "shows only the first row," "renders broken," etc.,
-// depending on how far off it ends up.
-//
-// This path (absolutePosition()) only runs for `appendTo` values other than "self". The
-// "self" path (relativePosition()) never has this bug — it only ever sets
-// `insetInlineStart`, which is direction-agnostic on its own; the browser resolves it
-// correctly in both directions with no JS math involved. So the fix isn't a CSS override
-// (there's no wrong physical property here to override — the wrong number is baked into
-// an inline style by JS) — it's "never use anything but appendTo='self' for p-select."
-//
-// That rule is enforced, not just documented: see modules/admin/shared/directives/
-// select-append-self.directive.ts, imported via AdminSharedModule into every admin
-// feature module that uses p-select. It force-sets appendTo="self" on every p-select
-// instance regardless of what the template says, so this can't be reintroduced by typing
-// appendTo="body" (or leaving it unset) on a future screen.
-//
-// "self" has its own gotcha: its overlay is a normal DOM descendant of the select, so an
-// ancestor with `overflow: hidden` will clip it exactly as if it were any other
-// overflowing child. That's a layout problem to fix at the call site (don't wrap a
-// p-select in an overflow:hidden container — apply border-radius per first/last child
-// instead, see product-specs-tab.component.scss), not a reason to go back to "body".
-
-// p-popover's arrow triangle is a fixed design-token offset from the box's own LEFT edge
-// (.p-popover:before/:after { left: var(--p-popover-arrow-offset); margin-left: calc(-1
-// * gutter) } in the compiled theme CSS) — it never adapts to which edge the box actually
-// anchored from. PrimeNG's own absolutePosition() right-aligns (grows the box leftward
-// from a fixed right edge) whenever the trigger sits too close to the viewport's right
-// edge for a left-anchored box to fit — exactly the case for every admin overlay trigger
-// here (the topbar account menu, card row-action menus), which is deliberately pinned to
-// its container's inline-end edge. In RTL that inline-end edge is the LEFT of the
-// viewport, so the box stays left-anchored and the arrow's hardcoded left offset lands
-// correctly by coincidence. In LTR the inline-end edge is the RIGHT of the viewport, the
-// box right-anchors instead, and the arrow — still glued to the box's own left edge —
-// ends up nowhere near the trigger. This is the one direction (LTR needs the override,
-// not RTL) where that's true, because it's the anchor side that flips, not a physical-
-// vs-logical property mismatch like the other fixes in this file.
-html[dir='ltr'] .p-popover:before,
 html[dir='ltr'] .p-popover:after {
   left: auto;
   right: var(--p-popover-arrow-offset);
@@ -105,41 +14,21 @@ html[dir='ltr'] .p-popover:after {
   margin-left: 0;
   margin-right: calc(-1 * (var(--p-popover-gutter) - 2px));
 }
-
-// vl-carousel's prev/next chevrons are physical glyphs (pi-chevron-left / pi-chevron-right)
-// that need to point toward the actual scroll direction, which flips in RTL. The button
-// *positions* already mirror for free (plain flex layout inheriting the ambient `dir`,
-// see vl-carousel.component.ts) — only the glyph needs the explicit flip. This rule used
-// to live as `[dir='rtl'] .vl-carousel__nav i` inside the component's own scoped .scss,
-// but that never matched: Angular's emulated view encapsulation appends the component's
-// content-attribute to every simple selector in the chain, including the ancestor
-// `[dir='rtl']` — and <html> is never part of this component's own rendered content, so
-// the attribute is never present on it. Global, unencapsulated styles (here) are the only
-// place an ancestor-based `[dir='rtl']` selector like this can actually match.
 html[dir='rtl'] .vl-carousel__nav i {
   transform: scaleX(-1);
 }
 
-// order-card's trailing chevron is a "go forward" affordance, not a fixed left/right
-// glyph — it should point toward the end of the reading direction, which a single pi
-// icon class can't express on its own.
+html[dir='rtl'] .rlp__summary-value {
+  direction: rtl;
+}
+
 html[dir='rtl'] .order-card__chevron {
   transform: scaleX(-1);
 }
 
-// admin-back-link's leading chevron is a "go back" affordance — it should point toward
-// the start of the reading direction. pi-chevron-left is a physical glyph (always points
-// left), so RTL needs the same explicit flip as order-card__chevron above.
 html[dir='rtl'] .admin-back-link__chevron {
   transform: scaleX(-1);
 }
-
-// order-timeline's connector fill animates from the timeline's start toward the current
-// node on the horizontal (desktop) layout only; transform-origin isn't a logical
-// property, so the LTR default (left) needs an explicit RTL flip to keep the fill
-// growing in the reading direction. Scoped to the same min-width the component switches
-// to a horizontal connector at — the mobile vertical connector uses a top-to-bottom fill
-// that's already direction-agnostic and must not be touched here.
 @include breakpoints.md {
   html[dir='rtl'] .order-timeline__connector--filled {
     transform-origin: right;

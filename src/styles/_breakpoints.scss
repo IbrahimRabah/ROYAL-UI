@@ -1,6 +1,3 @@
-// Mobile-first only — every mixin here is a min-width query. Values match Bootstrap's
-// own grid breakpoints exactly (see _bootstrap-layout.scss) so the two systems never
-// disagree about where "tablet" or "desktop" starts.
 $breakpoints: (
   sm: 576px,
   md: 768px,

@@ -13,7 +13,6 @@
   color: var(--stop);
 }
 
-// ═══ Empty state ═══
 
 .pst__empty {
   display: flex;
@@ -40,12 +39,6 @@
   }
 }
 
-// ═══ Rows ═══
-
-// No overflow: hidden here — a p-select inside a row needs appendTo="self" (see
-// select-append-self.directive.ts), whose overlay is a normal descendant of the row and
-// would get clipped by a hidden-overflow ancestor the moment it opens. Rounded corners
-// come from the first/last row instead of container-level clipping.
 .pst__rows {
   border: 1px solid var(--admin-border);
   border-radius: var(--r-lg);
@@ -85,8 +78,6 @@
   font-weight: 600;
   color: var(--admin-text);
 
-  // Below tablet the fixed 180px label leaves the value input too narrow to use —
-  // it takes its own full-width line instead, with the input/select below it.
   @media (max-width: 767px) {
     flex-basis: 100%;
   }
@@ -140,7 +131,6 @@
   }
 }
 
-// ═══ Add specification ═══
 
 .pst__add {
   display: flex;

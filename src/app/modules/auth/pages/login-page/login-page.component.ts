@@ -69,8 +69,6 @@ export class LoginPageComponent {
         if (err instanceof HttpErrorResponse && isApiError(err.error) && err.error.code === ErrorCode.INVALID_CREDENTIALS) {
           this.formError.set(this.errorMessage(ErrorCode.INVALID_CREDENTIALS));
         }
-        // Any other status (e.g. 403 ACCOUNT_SUSPENDED) is already toasted globally by
-        // ErrorInterceptor — nothing left to do here but stop the spinner.
       },
     });
   }

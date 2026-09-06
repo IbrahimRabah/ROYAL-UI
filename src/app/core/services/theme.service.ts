@@ -11,16 +11,13 @@ export class ThemeService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
-      // Check if user has a saved theme preference
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
         this.setTheme(savedTheme === 'dark');
       } else {
-        // Check if user prefers dark mode at OS level
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         this.setTheme(prefersDark.matches);
         
-        // Listen for OS theme changes
         prefersDark.addEventListener('change', (e) => {
           this.setTheme(e.matches);
         });

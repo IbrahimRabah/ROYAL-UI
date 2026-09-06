@@ -55,10 +55,6 @@ export class OrderDetailsPageComponent {
 
   readonly paymentDialogOpen = signal(false);
 
-  // Best-effort only — GET /admin/orders/{id} carries no invoice reference, and
-  // GET /admin/invoices has no orderId filter, so there is no reliable direct lookup.
-  // This scans the first page of the most-recent invoices for a matching orderId, which
-  // covers the common case (viewing a just-delivered order) but can miss older ones.
   readonly invoice = signal<InvoiceResponse | null>(null);
   readonly invoiceChecked = signal(false);
   readonly downloadingInvoice = signal(false);

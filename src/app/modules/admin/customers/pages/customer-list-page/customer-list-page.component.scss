@@ -25,7 +25,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Search ═══
 
 .clp__search {
   position: relative;
@@ -84,7 +83,6 @@
   }
 }
 
-// ═══ Error ═══
 
 .clp__error {
   display: flex;
@@ -114,7 +112,6 @@
   }
 }
 
-// ═══ Table ═══
 
 .clp__table-wrap {
   display: none;
@@ -202,7 +199,6 @@
   }
 }
 
-// .clp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 :host ::ng-deep .clp__table {
   .p-datatable-thead > tr > th {
@@ -244,7 +240,6 @@
   }
 }
 
-// ═══ Mobile cards ═══
 
 .clp__cards {
   display: flex;

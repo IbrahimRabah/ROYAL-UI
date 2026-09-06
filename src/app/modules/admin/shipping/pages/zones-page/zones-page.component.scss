@@ -23,7 +23,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Border-governorate note — remove once rates are confirmed against a real contract ═══
 
 .zp__border-note {
   display: flex;
@@ -77,10 +76,6 @@
     color: #fff;
   }
 }
-
-// .zp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
-
-// ═══ Zone cards ═══
 
 .zp__grid {
   display: grid;
@@ -189,7 +184,6 @@
   }
 }
 
-// ═══ Governorate chips ═══
 
 .zp__chips {
   display: flex;
@@ -206,10 +200,6 @@
   white-space: nowrap;
 }
 
-// ═══ Rate stats — two columns even at 375px (the card itself is already the single
-// column at that width; these three figures still read better paired up than stacked
-// one-per-row), three columns from tablet up where there's room for all of them in one
-// row. ═══
 
 .zp__stats {
   display: grid;
@@ -242,9 +232,6 @@
   font-size: var(--fs-base);
   font-weight: 700;
   direction: ltr;
-  // text-align: start would resolve against this element's own (forced) ltr direction,
-  // not the page's — always landing on the left regardless of language. Flip explicitly
-  // to the right in RTL so it matches the surrounding Arabic layout's flow.
   text-align: left;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;

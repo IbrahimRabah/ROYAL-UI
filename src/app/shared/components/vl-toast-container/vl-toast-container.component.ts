@@ -79,8 +79,6 @@ export class VlToastContainerComponent implements OnInit, OnDestroy {
   }
 
   private add(message: ToastMessage): void {
-    // SSR never has an interactive session to show a toast to, and setTimeout has no
-    // browser-clock semantics to rely on there — nothing would ever auto-dismiss it.
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }

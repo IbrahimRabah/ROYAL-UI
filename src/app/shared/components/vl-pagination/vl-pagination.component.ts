@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-// Sentinel returned in the page list to render an ellipsis instead of a page button.
 const ELLIPSIS = -1;
 
 @Component({
@@ -10,8 +9,6 @@ const ELLIPSIS = -1;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VlPaginationComponent {
-  // Both 0-indexed, matching PageResponse straight from the API — the template
-  // is the only place that adds 1 for display.
   @Input() page = 0;
   @Input() totalPages = 0;
   @Output() readonly pageChange = new EventEmitter<number>();
@@ -21,7 +18,6 @@ export class VlPaginationComponent {
   get pages(): number[] {
     const total = this.totalPages;
     const current = this.page;
-    // Few enough pages to just show them all.
     if (total <= 7) {
       return Array.from({ length: total }, (_, i) => i);
     }

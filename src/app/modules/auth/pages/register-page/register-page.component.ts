@@ -74,8 +74,7 @@ export class RegisterPageComponent {
         if (isValidationFailedError(err)) {
           bindServerFieldErrors(this.form, err.fieldErrors);
         }
-        // 409 PHONE_ALREADY_EXISTS / EMAIL_ALREADY_EXISTS and anything else is already
-        // toasted globally by ErrorInterceptor.
+       
       },
     });
   }

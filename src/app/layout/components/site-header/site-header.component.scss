@@ -7,7 +7,6 @@
   display: block;
 }
 
-// ═══ Top bar — thin strip, --ink background, light text ═══
 
 .site-topbar {
   background: var(--ink);
@@ -49,7 +48,6 @@
   }
 }
 
-// ═══ Main header ═══
 
 .site-header {
   position: relative;
@@ -59,12 +57,6 @@
 
 .site-header__row {
   display: flex;
-  // Was flex-wrap: wrap — with the search field's old full-width row this only ever
-  // wrapped intentionally on mobile. But it stayed wrap at desktop too, so once nav +
-  // search + actions' combined natural width crept past the container (a longer/shorter
-  // language's label was enough to tip it), the actions group silently dropped to a
-  // second line instead of shrinking. nowrap here is the actual fix; min-inline-size: 0
-  // below lets the nav shrink instead of forcing overflow.
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--sp-3) var(--sp-4);

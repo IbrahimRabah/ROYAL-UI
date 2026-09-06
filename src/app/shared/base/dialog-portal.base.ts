@@ -46,8 +46,6 @@ export abstract class DialogPortalBase implements AfterViewInit, OnDestroy {
     this.scrolled.set((event.target as HTMLElement).scrollTop > 0);
   }
 
-  // Manual focus trap — Tab/Shift+Tab wrap within the panel's focusable elements instead
-  // of escaping to the (hidden-behind-overlay) rest of the page.
   onTab(domEvent: Event): void {
     const event = domEvent as KeyboardEvent;
     const panelEl = this.panelRef?.nativeElement;
@@ -78,8 +76,6 @@ export abstract class DialogPortalBase implements AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.lastFocused = document.activeElement as HTMLElement | null;
       this.lockBodyScroll();
-      // Same-tick focus() can lose to the browser's own async focus reset — defer to the
-      // next macrotask (see click-outside-and-focus-after-hide-gotchas memory).
       setTimeout(() => this.panelRef?.nativeElement.focus());
     }
   }

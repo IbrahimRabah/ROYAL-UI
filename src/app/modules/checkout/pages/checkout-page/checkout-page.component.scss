@@ -121,8 +121,6 @@
   color: var(--text);
 }
 
-// `button.` to match _reset.scss's `button:not([class*='p-']) { color: inherit; }`
-// specificity — otherwise that rule wins and the text goes invisible against --ink.
 button.checkout-page__mobile-bar-cta {
   display: inline-flex;
   align-items: center;

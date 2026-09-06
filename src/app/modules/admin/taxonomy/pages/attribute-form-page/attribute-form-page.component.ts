@@ -35,10 +35,6 @@ export class AttributeFormPageComponent {
 
   readonly loading = signal(!this.isNew);
   readonly error = signal(false);
-  // The route id doesn't match anything in the list — a stale link, a typo, or the
-  // attribute was somehow removed. Distinct from `error` (a failed request): this is a
-  // successful request that just doesn't contain the id, so retrying the same fetch
-  // wouldn't help — only going back to the list would.
   readonly notFound = signal(false);
   readonly saving = signal(false);
   readonly codeFieldError = signal<string | null>(null);
@@ -68,10 +64,6 @@ export class AttributeFormPageComponent {
       return;
     }
 
-    // The list page can pass the row it already has via router state to skip a second
-    // request — but this only exists on an in-app click, never on a hard refresh or a
-    // direct link, so it's purely an optimization: the fetch-and-find path below is the
-    // one that must always work on its own.
     const passed = this.router.getCurrentNavigation()?.extras.state?.['attribute'] as AttributeAdminResponse | undefined;
     if (passed && passed.id === this.attributeId) {
       this.patchForm(passed);
@@ -82,9 +74,6 @@ export class AttributeFormPageComponent {
     this.fetch();
   }
 
-  // There is no GET /admin/attributes/{id} (confirmed 405 — not in the contract). The
-  // list already returns every attribute in full, including complete values[], so this
-  // loads the whole list and finds the matching id itself. See BACKEND_NOTES.
   private fetch(): void {
     this.loading.set(true);
     this.error.set(false);
@@ -124,15 +113,7 @@ export class AttributeFormPageComponent {
         en: { name: attr.nameEn },
       },
     });
-    // variantDefining is locked once loaded for an existing attribute — disabled entirely
-    // in the template, but disable the control too so a stray submit can't smuggle a
-    // changed value through (the backend would reject it anyway with 409 ATTRIBUTE_IN_USE
-    // once in use, but there's no reason to let the operator try in the first place).
     this.form.controls.variantDefining.disable();
-    // The CRITICAL RULE: load every existing value into the editor — the next PUT must
-    // resend the complete set, including rows the operator never touches. attr.values
-    // here is the list endpoint's own complete array (same one PUT expects back), not a
-    // partial per-id projection — nothing is dropped between load and save.
     this.valueRows.set(
       attr.values.map((v) => ({ id: v.id, code: v.code, hexColor: v.hexColor, nameAr: v.nameAr, nameEn: v.nameEn })),
     );
@@ -147,8 +128,6 @@ export class AttributeFormPageComponent {
       return;
     }
 
-    // Effectively permanent once in use (409 ATTRIBUTE_IN_USE) — make the operator
-    // explicitly acknowledge that before it's ever saved, not after a failed second edit.
     if (this.isNew && this.form.getRawValue().variantDefining) {
       this.confirmDialog
         .confirm({
@@ -209,8 +188,6 @@ export class AttributeFormPageComponent {
     });
   }
 
-  // Draft rows use a unique negative id (see attribute-values-editor) purely for local
-  // list identity — never a real value id, so they must become `id: null` (create) here.
   private buildValuesPayload(): AttributeValueUpsertItem[] {
     return this.valueRows().map((row) => ({
       id: row.id !== null && row.id > 0 ? row.id : null,

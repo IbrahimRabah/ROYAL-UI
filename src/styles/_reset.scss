@@ -1,11 +1,3 @@
-// Modern, minimal reset. Loads after PrimeNG's theme.css (see angular.json) and after
-// _typography.scss in styles.scss, both on purpose: it only sets baseline element
-// defaults, never a type scale.
-//
-// NEVER reset button/input/select/textarea broadly here — PrimeNG's own p-button,
-// p-inputtext etc. rely on their own internal styling, and a blanket reset on these
-// tags would stomp on it. Where a reset is genuinely needed, it must be scoped away
-// from PrimeNG-rendered elements, e.g. button:not([class*="p-"]).
 
 *,
 *::before,
@@ -49,7 +41,6 @@ a {
   text-decoration: none;
 }
 
-// Scoped exactly as required — excludes anything PrimeNG rendered (p-* classes).
 button:not([class*='p-']),
 input:not([class*='p-']),
 select:not([class*='p-']),

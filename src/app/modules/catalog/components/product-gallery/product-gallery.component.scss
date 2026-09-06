@@ -116,9 +116,6 @@
 }
 
 .product-gallery__nav i {
-  // Chevron glyphs point a fixed physical direction regardless of dir — inset-inline
-  // already relocates the buttons for RTL, but the arrows themselves need a mirror too
-  // so "prev" (now on the right) points right and "next" (now on the left) points left.
   :host-context([dir='rtl']) & {
     transform: scaleX(-1);
   }

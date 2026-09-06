@@ -48,8 +48,6 @@ export class MobileNavDrawerComponent implements OnChanges, OnDestroy {
     }
     this.document.body.style.overflow = this.visible ? 'hidden' : '';
     if (this.visible) {
-      // Deferred a tick — the panel is `inert` while closed, and browsers won't accept
-      // focus() moving into an inert subtree in the same synchronous pass that clears it.
       queueMicrotask(() => this.closeBtn?.nativeElement.focus());
     } else {
       this.openCategoryId.set(null);

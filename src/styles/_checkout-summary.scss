@@ -1,6 +1,3 @@
-// Styles for app-checkout-summary-sidebar (modules/checkout/components/checkout-summary-sidebar).
-// Lives here rather than the component's own styleUrl to stay under the anyComponentStyle
-// budget (4kb) — this block alone compiles past that on its own.
 @use 'breakpoints';
 
 .checkout-summary {
@@ -233,10 +230,6 @@
   font-size: var(--fs-sm);
 }
 
-// `button.` (not just `.checkout-summary__submit`) to match the specificity of
-// _reset.scss's `button:not([class*='p-']) { color: inherit; }` — otherwise that rule
-// wins and the button's text inherits the page's dark ink color instead of --paper,
-// vanishing against the --ink background.
 button.checkout-summary__submit {
   display: none;
   align-items: center;

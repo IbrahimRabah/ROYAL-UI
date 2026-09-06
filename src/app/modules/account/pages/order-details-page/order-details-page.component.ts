@@ -27,8 +27,6 @@ export class OrderDetailsPageComponent {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
 
-  // Route param is literally named `id` in account-routing.module.ts, but it carries the
-  // orderNumber string — GET /me/orders/{orderNumber} is the only customer lookup available.
   readonly orderNumber = this.route.snapshot.paramMap.get('id') ?? '';
 
   readonly lang = this.languageStore.lang;

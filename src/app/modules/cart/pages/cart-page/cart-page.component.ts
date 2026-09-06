@@ -32,9 +32,6 @@ export class CartPageComponent {
   readonly skeletonRows = [0, 1, 2];
 
   constructor() {
-    // SSR renders as a stateless guest with no session/guest-token to resolve a cart
-    // against (same rule as checkoutReadyGuard) — fetch only in the browser and let
-    // hydration populate the store.
     if (!isPlatformBrowser(this.platformId)) {
       this.loading.set(false);
       return;
@@ -66,8 +63,6 @@ export class CartPageComponent {
       },
       error: (err: unknown) => {
         this.setPending(itemId, false);
-        // 409 STOCK_UNAVAILABLE — resync with the server's view instead of leaving a
-        // stale quantity on screen.
         if (err instanceof HttpErrorResponse && err.status === 409) {
           this.cartApi.getCart().subscribe((cart) => this.cartStore.set(cart));
         }

@@ -61,8 +61,6 @@ export class CheckoutPageComponent {
     () => this.contactValid() && this.addressValid() && !this.submitting() && !this.processing(),
   );
 
-  // Regenerated whenever the address changes and after any failed (non-duplicate) attempt —
-  // see order-api.service.place()'s doc comment for the full idempotency contract.
   private idempotencyKey: string | null = null;
   private readonly governorateId$ = new Subject<number | null>();
 
@@ -164,8 +162,6 @@ export class CheckoutPageComponent {
     const status = err instanceof HttpErrorResponse ? err.status : 0;
     const apiError = err instanceof HttpErrorResponse && isApiError(err.error) ? err.error : undefined;
 
-    // Same Idempotency-Key still in flight — this is not a failure, the original attempt
-    // will resolve on its own. Stay in the submitting/locked state, no new key is minted.
     if (status === 409 && apiError?.code === ErrorCode.DUPLICATE_ORDER) {
       this.processing.set(true);
       return;

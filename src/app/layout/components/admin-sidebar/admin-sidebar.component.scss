@@ -4,14 +4,11 @@
   display: contents;
 }
 
-// ═══ Desktop / tablet — static, always visible ═══
 
 .admin-sidebar--desktop {
   display: none;
 }
 
-// The persistent sidebar takes over at md (768px) — below that it's the off-canvas
-// drawer instead (see the mobile block further down).
 @include breakpoints.md {
   .admin-sidebar--desktop {
     position: sticky;
@@ -25,8 +22,6 @@
     z-index: var(--z-header);
     transition: inline-size 220ms ease;
 
-    // A faint gold hairline on the sidebar's inner edge — the seam against the content
-    // area — so it reads as a deliberate surface rather than a flat black rectangle.
     &::after {
       content: '';
       position: absolute;
@@ -68,10 +63,6 @@
     block-size: 36px;
     inline-size: 36px;
     object-fit: cover;
-    // The stock asset is a circular badge on an opaque white disc, not a transparent
-    // line-mark — inverting it (as a dark-on-transparent logo would need) just erases
-    // every detail into a solid white square. Cropping it round instead keeps the gold
-    // ring and V monogram legible and reads as a deliberate seal against the dark sidebar.
     border-radius: var(--r-full);
   }
 }
@@ -89,8 +80,6 @@
   display: none;
 }
 
-// An icon button in the header row, not a floating circle on the edge — the collapse
-// control needs to read as an obvious, always-visible part of the sidebar chrome.
 .admin-sidebar__collapse-toggle {
   flex-shrink: 0;
   display: flex;
@@ -117,13 +106,6 @@
   }
 }
 
-// The chevron always points toward the direction the sidebar will move — left in LTR
-// (collapsing toward the left edge; expanding swings it back to the right), mirrored in
-// RTL where the sidebar lives on the right edge instead. Each of the four combinations is
-// written out as its own selector — rather than letting the collapsed-state rule and the
-// RTL rule each set `transform` independently — because both selectors previously carried
-// the same specificity as the base `i` rule, so whichever happened to win the specificity
-// tie silently dropped the other's transform (that's what pointed the RTL arrow inward).
 .admin-sidebar__collapse-toggle i.admin-sidebar__collapse-icon--flipped {
   transform: rotate(180deg);
 }
@@ -145,7 +127,6 @@
   overflow-x: hidden;
   flex: 1 1 auto;
 
-  // No visible scrollbar — the nav should scroll silently if it overflows.
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -217,8 +198,6 @@
   transition: color 180ms ease;
 }
 
-// A multi-screen section's non-navigating header — same row shape as a real link (icon +
-// label) so its children read as visually nested beneath it, but not interactive.
 .admin-sidebar__parent {
   display: flex;
   align-items: center;
@@ -275,8 +254,6 @@
     justify-content: center;
   }
 
-  // Un-nest — collapsed, a section's children are just more icons in the column, same
-  // as every other item, with no visible parent to nest under.
   .admin-sidebar__link--child {
     margin-inline-start: 0;
   }
@@ -300,7 +277,6 @@
   }
 }
 
-// ═══ Mobile — off-canvas drawer ═══
 
 .admin-sidebar__backdrop {
   position: fixed;
@@ -385,8 +361,6 @@
   }
 }
 
-// 768–1024px: the sidebar auto-collapses to icons-only rather than taking the
-// tablet-portrait content area's width.
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .admin-sidebar--desktop {
     inline-size: 76px;

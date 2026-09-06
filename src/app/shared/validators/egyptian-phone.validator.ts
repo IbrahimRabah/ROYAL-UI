@@ -1,9 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-// Accepts the local format the contract examples always use (01012345678 — 11 digits,
-// second digit one of 0/1/2/5) and the E.164 form the backend normalizes it to
-// (+201012345678). Spaces/dashes are stripped before testing so "010 1234 5678" also
-// passes — the backend does the authoritative normalization, this is just a shape check.
 const EGYPT_MOBILE_LOCAL = /^01[0125]\d{8}$/;
 const EGYPT_MOBILE_INTL = /^(?:\+20|0020)1[0125]\d{8}$/;
 

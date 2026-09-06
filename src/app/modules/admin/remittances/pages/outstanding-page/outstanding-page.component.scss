@@ -10,7 +10,6 @@
   gap: var(--sp-5);
 }
 
-// Leaves room at the bottom so the fixed summary bar never overlaps the last row.
 .osp--has-summary {
   padding-block-end: 88px;
 }
@@ -49,7 +48,6 @@
   }
 }
 
-// ═══ Header — the operationally-critical figure on this screen ═══
 
 .osp__header {
   display: flex;
@@ -115,7 +113,6 @@
   color: var(--admin-text-muted);
 }
 
-// Oldest waiting order exceeds 7 days — a soft warning wash.
 .osp__header--warn {
   background: var(--warn-bg);
   border-color: var(--warn);
@@ -130,7 +127,6 @@
   }
 }
 
-// Beyond 14 days — this is now a problem, not just aging.
 .osp__header--stop {
   background: var(--stop-bg);
   border-color: var(--stop);
@@ -145,7 +141,6 @@
   }
 }
 
-// ═══ OK / empty state ═══
 
 .osp__ok-state {
   display: flex;
@@ -178,7 +173,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Table ═══
 
 .osp__table-wrap {
   display: none;
@@ -279,7 +273,6 @@
   }
 }
 
-// ═══ Mobile cards ═══
 
 .osp__cards {
   display: flex;
@@ -311,8 +304,6 @@
     cursor: pointer;
   }
 }
-
-// ═══ Selection summary bar — fixed to the bottom, works down to 375px ═══
 
 .osp__summary-bar {
   position: fixed;

@@ -69,11 +69,9 @@ export const VeloraPreset = definePreset(Aura, {
         color: 'var(--text)',
       },
     },
-    // Modal/overlay backdrop — reuses the token added for exactly this purpose.
     mask: {
       background: 'var(--overlay)',
     },
-    // Selected-state background/text (e.g. the active option in a Select list).
     highlight: {
       background: 'var(--cream)',
       focusBackground: 'var(--cream)',

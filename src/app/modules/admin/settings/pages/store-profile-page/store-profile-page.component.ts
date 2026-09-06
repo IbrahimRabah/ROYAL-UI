@@ -46,8 +46,6 @@ export class StoreProfilePageComponent {
     this.fetch();
   }
 
-  // The missing-fields banner emits the raw field key; jump to that field's input rather
-  // than deciding anything about it — the server already decided it's incomplete.
   focusField(field: string): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;

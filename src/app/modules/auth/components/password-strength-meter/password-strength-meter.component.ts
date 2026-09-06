@@ -11,8 +11,6 @@ const LEVEL_LABEL_KEYS: Record<StrengthLevel, string> = {
   3: 'auth.passwordStrength.strong',
 };
 
-// stop -> warn -> ok as strength rises (design spec). Levels 1 and 2 both read as "on the
-// way there" (warn) — only the weakest and strongest ends get their own color.
 const LEVEL_COLOR_VAR: Record<StrengthLevel, string> = {
   0: 'var(--stop)',
   1: 'var(--warn)',

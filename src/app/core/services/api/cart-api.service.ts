@@ -11,7 +11,6 @@ import { AddCartItemRequest, CartResponse, GuestTokenResponse, MergeCartRequest,
 export class CartApiService {
   private readonly http = inject(HttpClient);
 
-  // The one method on this service that does NOT return CartResponse.
   issueGuestToken(): Observable<GuestTokenResponse> {
     return this.http.post<GuestTokenResponse>(API_ROUTES.cart.guestToken(), null);
   }
@@ -36,9 +35,6 @@ export class CartApiService {
     return this.http.delete<CartResponse>(API_ROUTES.cart.cart());
   }
 
-  // Documented backend bug: this endpoint reads principal.id() with no null check, so an
-  // anonymous call (no Bearer token) throws an NPE that surfaces as a generic
-  // 500 INTERNAL_ERROR instead of a clean 401 — always call this with a valid Bearer token.
   merge(body: MergeCartRequest): Observable<CartResponse> {
     return this.http.post<CartResponse>(API_ROUTES.cart.merge(), body);
   }

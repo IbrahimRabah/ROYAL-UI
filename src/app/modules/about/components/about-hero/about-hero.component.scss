@@ -25,9 +25,6 @@
   background: rgba(13, 13, 13, 0.55);
 
   @include breakpoints.md {
-    // Above md the text sits over the image's own empty side, pinned to the
-    // physical left in both languages (see .about-hero__content below) — so this
-    // gradient always darkens toward the left too, regardless of RTL/LTR.
     background: linear-gradient(to left, rgba(13, 13, 13, 0.1) 0%, rgba(13, 13, 13, 0.65) 55%);
   }
 }
@@ -44,12 +41,6 @@
   text-align: center;
 
   @include breakpoints.md {
-    // Pinned to the physical left in both languages — banner.png's empty space is
-    // fixed there, so this must NOT mirror under RTL like the rest of the site (see
-    // src/styles/_rtl.scss's documented exception, and home's hero-banner.component.scss
-    // for the same left/translateX(-50%) pattern). `direction: ltr` makes every logical
-    // property below (align-items, margin-inline-*, text-align) resolve physically
-    // instead of flipping with the page's actual RTL/LTR state.
     direction: ltr;
     align-items: flex-start;
     max-inline-size: 480px;

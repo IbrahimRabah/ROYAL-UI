@@ -10,7 +10,6 @@
   gap: var(--sp-6);
 }
 
-// ═══ Loading / error ═══
 
 .order-details-page__skeleton {
   display: flex;
@@ -55,7 +54,6 @@
   }
 }
 
-// ═══ Header ═══
 
 .order-details-page__header {
   display: flex;
@@ -141,7 +139,6 @@
   }
 }
 
-// ═══ Layout ═══
 
 .order-details-page__layout {
   display: grid;
@@ -172,7 +169,6 @@
   }
 }
 
-// ═══ Shared card chrome ═══
 
 .order-details-page__card {
   padding: var(--sp-5);
@@ -216,7 +212,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Address ═══
 
 .order-details-page__copy-btn {
   flex-shrink: 0;
@@ -254,7 +249,6 @@
   font-size: var(--fs-sm);
 }
 
-// ═══ Customer ═══
 
 .order-details-page__customer-grid {
   display: grid;
@@ -296,7 +290,6 @@
   }
 }
 
-// ═══ Items table ═══
 
 .order-details-page__items-table-wrap {
   overflow-x: auto;
@@ -367,7 +360,6 @@
   font-weight: 700;
 }
 
-// ═══ Totals ═══
 
 .order-details-page__totals {
   display: flex;
@@ -391,7 +383,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Note ═══
 
 .order-details-page__note-text {
   margin: 0;
@@ -402,7 +393,6 @@
   line-height: 1.6;
 }
 
-// ═══ Invoice ═══
 
 .order-details-page__invoice-number {
   margin: 0 0 var(--sp-3);
@@ -430,8 +420,6 @@
     cursor: default;
   }
 }
-
-// ═══ Motion ═══
 
 .order-details-page__card,
 .order-details-page__header {

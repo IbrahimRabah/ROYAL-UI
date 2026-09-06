@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Money, money } from '../../../../../core/models';
 
-// Latin digits regardless of UI language, no currency symbol — the "EGP" code is
-// rendered separately (smaller, muted) beside the figure rather than baked into it.
 const NUMBER_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   maximumFractionDigits: 0,
 });

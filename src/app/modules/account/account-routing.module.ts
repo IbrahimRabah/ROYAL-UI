@@ -11,10 +11,6 @@ const routes: Routes = [
     path: '',
     component: AccountLayoutComponent,
     children: [
-      // No route for '' on purpose — landing on /me exactly then matches nothing here,
-      // leaving the router-outlet empty, and AccountLayoutComponent shows its own centred
-      // empty state instead. (A componentless route entry for '' is invalid config —
-      // NG04014 — so it must be omitted entirely, not declared with no component.)
       { path: 'profile', component: ProfilePageComponent },
       { path: 'addresses', component: AddressesPageComponent },
       { path: 'orders', component: OrdersPageComponent },

@@ -12,9 +12,6 @@ const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   maximumFractionDigits: 0,
 });
 
-// en-US-u-nu-latn forces Latin digits regardless of UI language, matching the money
-// formatter's convention — a mixed-language dashboard shouldn't switch numeral systems
-// between the currency figures and the timestamp.
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US-u-nu-latn', {
   dateStyle: 'medium',
   timeStyle: 'short',
@@ -30,8 +27,6 @@ const SEVERITY_TONE: Record<AlertSeverity, 'stop' | 'warn' | 'info'> = {
 
 export type StatusTone = 'warn' | 'info' | 'violet' | 'blue' | 'ok' | 'stop';
 
-// The canonical order-status spectrum — each FulfillmentStatus gets a visually distinct
-// colour so a row of queue cards (or any other status display) reads at a glance.
 export const STATUS_TONE: Partial<Record<FulfillmentStatus, StatusTone>> = {
   [FulfillmentStatus.PENDING]: 'warn',
   [FulfillmentStatus.CONFIRMED]: 'info',
@@ -102,10 +97,6 @@ export class DashboardPageComponent {
     return SEVERITY_TONE[severity];
   }
 
-  // alert.actionPath arrives as a full path + query string (e.g.
-  // "/admin/orders?status=CONFIRMED"). Binding that whole string straight to
-  // [routerLink] makes Angular percent-encode the "?"/"=" as a literal path segment —
-  // split it so the query string reaches [queryParams] instead.
   alertPath(actionPath: string): string {
     return actionPath.split('?')[0];
   }

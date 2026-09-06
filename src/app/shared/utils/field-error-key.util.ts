@@ -1,8 +1,5 @@
 import { AbstractControl } from '@angular/forms';
 
-// Maps a control's Angular/custom validator errors to a translation key. Shared by every
-// auth form so the same error always reads the same way regardless of which field/page
-// it's on. Returns null when there's nothing to show yet (untouched, or currently valid).
 export function getFieldErrorKey(control: AbstractControl | null): string | null {
   if (!control || !control.errors || !(control.touched || control.dirty)) {
     return null;

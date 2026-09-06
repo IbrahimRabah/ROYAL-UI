@@ -8,8 +8,6 @@ interface CollectionCard {
   category: CategoryNode | undefined;
 }
 
-// Same three curated slugs the home page's category showcase keys its local artwork
-// off (see category-showcase.component.ts) — the About page uses its own artwork set.
 const CARD_IMAGES: Record<CollectionCard['key'], string> = {
   watches: 'assets/images/about/watches.png',
   wallets: 'assets/images/about/wallets.png',

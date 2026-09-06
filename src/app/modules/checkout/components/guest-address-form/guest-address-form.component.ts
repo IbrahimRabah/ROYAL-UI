@@ -5,8 +5,6 @@ import { CheckoutAddressInput, GovernorateResponse } from '../../../../core/mode
 import { getFieldErrorKey } from '../../../../shared/utils/field-error-key.util';
 import { egyptianPhoneValidator } from '../../../../shared/validators/egyptian-phone.validator';
 
-// Everything CheckoutAddressInput needs except phone/email — those are collected once in
-// the page's Contact section (shared by every address mode) and merged in by the caller.
 export type GuestAddressFields = Omit<CheckoutAddressInput, 'phone' | 'email'>;
 
 export interface GuestAddressFormValue {
@@ -46,9 +44,6 @@ export class GuestAddressFormComponent implements OnInit, OnChanges {
     this.form.statusChanges.subscribe(() => this.emit());
   }
 
-  // Governorates load asynchronously (GET /geo/governorates) — the required validator on
-  // governorateId can't be trusted until the options it validates against have arrived, so
-  // re-run it once the list is no longer empty rather than leaving a stale "invalid" state.
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['governorates'] && this.governorates.length) {
       this.form.controls.governorateId.updateValueAndValidity({ emitEvent: false });
@@ -63,9 +58,6 @@ export class GuestAddressFormComponent implements OnInit, OnChanges {
     this.form.markAllAsTouched();
   }
 
-  // Called by the parent after a 409 GOVERNORATE_NOT_SERVED — the select already disables
-  // unserved governorates, so this only fires on the rare race where the served list changed
-  // between load and submit.
   flagGovernorateNotServed(): void {
     this.form.controls.governorateId.setErrors({ notServed: true });
     this.form.controls.governorateId.markAsTouched();

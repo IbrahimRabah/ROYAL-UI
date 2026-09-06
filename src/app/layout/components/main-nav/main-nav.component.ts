@@ -13,9 +13,6 @@ export class MainNavComponent {
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
-  // Only one dropdown open at a time — a caret button (not the CSS :hover/:focus-within
-  // used for mouse users) so keyboard/touch users have an explicit way to open a
-  // dropdown whose links are visibility: hidden (and thus untabbable) while closed.
   private readonly openCategoryId = signal<number | null>(null);
 
   isOpen(categoryId: number): boolean {

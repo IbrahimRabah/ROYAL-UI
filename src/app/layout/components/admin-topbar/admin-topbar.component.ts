@@ -12,8 +12,6 @@ import { AuthStoreService } from '../../../core/state/auth-store.service';
 import { PostAuthService } from '../../../modules/auth/services/post-auth.service';
 import { getDisplayName } from '../../../shared/utils/display-name.util';
 
-// First path segment under /admin -> the nav label key it corresponds to, reused as
-// the topbar's page title so the two never drift out of sync.
 const PAGE_TITLES: Record<string, string> = {
   dashboard: 'admin.nav.dashboard',
   orders: 'admin.nav.orders',
@@ -67,9 +65,6 @@ export class AdminTopbarComponent {
   readonly adminName = computed(() => getDisplayName(this.authStore.user()));
 
   toggleAccountPanel(event: Event): void {
-    // Explicit target — PrimeNG falls back to event.currentTarget/event.target when this
-    // is omitted, which should already resolve to this button, but pinning it removes any
-    // dependence on exactly where inside the button the click landed.
     this.panel.toggle(event, this.accountTrigger.nativeElement);
   }
 

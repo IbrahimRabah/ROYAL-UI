@@ -27,7 +27,6 @@
   border-radius: var(--r-lg);
 }
 
-// ═══ Table ═══
 
 .cot__table-wrap {
   display: none;
@@ -113,7 +112,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ Mobile cards ═══
 
 .cot__cards {
   display: flex;
@@ -125,8 +123,6 @@
   }
 }
 
-// Order numbers stay LTR even inside the primary-identifier row (the shared
-// admin-card__secondary--code modifier only covers row 2, not row 1's primary slot).
 .admin-card__primary--code {
   direction: ltr;
   text-align: left;

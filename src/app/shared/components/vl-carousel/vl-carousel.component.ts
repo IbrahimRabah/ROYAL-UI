@@ -15,19 +15,6 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 
 import { LanguageStoreService } from '../../../core/state/language-store.service';
-
-// Scroll-snap carousel: 1 track, N slides sized by breakpoint (see .scss), buttons and
-// dots drive it via scrollLeft rather than PrimeNG's p-carousel (SSR hydration issues
-// there, see p-drawer precedent — memory/primeng_drawer_ssr_bug.md).
-//
-// scrollByPage()/scrollToPage() always take a *logical* step (-1 = back toward the first
-// item, +1 = forward toward the last) — never a physical left/right. RTL is handled by
-// flipping the sign once here, so callers (buttons, keyboard) never need to know direction.
-// Button *position* mirrors for free from normal flex layout inheriting the ambient
-// `dir`; only the chevron glyph needs the explicit flip, done globally in
-// styles/_rtl.scss (a component-scoped `[dir='rtl'] ...` rule can't match — Angular's
-// emulated encapsulation scopes the ancestor selector too, and <html> is never inside
-// this component's own rendered content).
 @Component({
   selector: 'app-vl-carousel',
   templateUrl: './vl-carousel.component.html',
@@ -106,12 +93,6 @@ export class VlCarouselComponent<T> implements AfterViewInit, OnDestroy {
     const target = sign > 0 ? Math.min(raw, maxScroll) : Math.max(raw, -maxScroll);
     this.animateScrollTo(target);
   }
-
-  // Native smooth scroll, not a manual rAF loop — the viewport has scroll-snap-type:
-  // mandatory, and driving scrollLeft frame-by-frame ourselves fights the browser's own
-  // snap correction (both writing to scrollLeft at once), which is what made the
-  // buttons feel janky. Letting the browser own the whole scroll keeps it smooth and
-  // lands exactly on the snap point.
   private animateScrollTo(target: number): void {
     const viewport = this.viewportRef.nativeElement;
     viewport.scrollTo({ left: target, behavior: this.prefersReducedMotion ? 'auto' : 'smooth' });

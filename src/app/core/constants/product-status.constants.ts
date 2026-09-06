@@ -1,8 +1,6 @@
 import { ProductStatus } from '../enums/product-status';
 import { StatusTone } from './order-status.constants';
 
-// UI labels — not part of the contract (status is a plain enum string there), but
-// needed everywhere a product status is rendered to a user.
 export const PRODUCT_STATUS_LABELS_AR: Record<ProductStatus, string> = {
   [ProductStatus.DRAFT]: 'مسودة',
   [ProductStatus.ACTIVE]: 'نشط',

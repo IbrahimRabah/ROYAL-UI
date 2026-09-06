@@ -47,11 +47,6 @@
   }
 }
 
-// ═══ Toolbar ═══
-// Search box, filters trigger/panel and filter-field sizing are all shared global
-// classes now (.admin-list-toolbar / .admin-toolbar__search* / .admin-toolbar__filter-field
-// in _admin-toolbar.scss) — this screen only needs its own clear button below.
-
 .ilp__clear-btn {
   flex-shrink: 0;
   padding: var(--sp-2) var(--sp-4);
@@ -69,7 +64,6 @@
   }
 }
 
-// ═══ Error ═══
 
 .ilp__error {
   display: flex;
@@ -99,7 +93,6 @@
   }
 }
 
-// ═══ Table ═══
 
 .ilp__table-wrap {
   display: none;
@@ -113,8 +106,6 @@
   font-weight: 700;
   color: var(--admin-text);
   direction: ltr;
-  // text-align: start resolves against this element's own (forced) ltr direction, not the
-  // page's, so it would always land left — explicit left/right + an RTL override instead.
   text-align: left;
   unicode-bidi: isolate;
 
@@ -211,7 +202,6 @@
   }
 }
 
-// .ilp__empty removed — shared .admin-list-empty (_admin-toolbar.scss) now covers this.
 
 :host ::ng-deep .ilp__table {
   .p-datatable-thead > tr > th {
@@ -252,8 +242,6 @@
     padding: var(--sp-3);
   }
 }
-
-// ═══ Mobile cards ═══
 
 .ilp__cards {
   display: flex;

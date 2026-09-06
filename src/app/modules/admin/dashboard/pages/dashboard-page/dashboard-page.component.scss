@@ -10,7 +10,6 @@
   gap: var(--sp-6);
 }
 
-// ═══ Header ═══
 
 .dashboard-page__header {
   display: flex;
@@ -65,7 +64,6 @@
   }
 }
 
-// ═══ Error ═══
 
 .dashboard-page__error {
   display: flex;
@@ -114,7 +112,6 @@
   }
 }
 
-// ═══ Loading skeleton ═══
 
 .dashboard-page__skeleton {
   display: flex;
@@ -136,7 +133,6 @@
   }
 }
 
-// ═══ Shared card chrome ═══
 
 .dashboard-page__card {
   position: relative;
@@ -172,7 +168,6 @@
   }
 }
 
-// A short gold rule beneath the heading text — the page's recurring "considered" cue.
 .dashboard-page__section-heading--rule {
   position: relative;
   padding-block-end: var(--sp-3);
@@ -219,8 +214,6 @@
   padding: var(--admin-card-pad) var(--admin-card-pad) var(--sp-3);
 }
 
-// Used inside a `.dashboard-page__card` that already carries its own padding — the
-// zero-padding variant above is for panels that own their full edge-to-edge chrome.
 .dashboard-page__panel-header--tight {
   padding: 0 0 var(--sp-4);
 }
@@ -341,7 +334,6 @@
   }
 }
 
-// ═══ Stuck reservations (revenue row, conditional) ═══
 
 .dashboard-page__stuck-card {
   display: flex;
@@ -398,7 +390,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ Row grids ═══
 
 .dashboard-page__row {
   display: grid;
@@ -406,16 +397,6 @@
   gap: var(--sp-4);
   align-items: stretch;
 }
-
-// <768: single column. 768–1400: 2×2 (2×3 while Stuck Reservations is showing).
-// ≥1400: auto-fit settles into 4 or 5 across depending on whether that card is present,
-// rather than a fixed repeat(4) that would leave a gap when there are 5 cards.
-// minmax(0, 1fr)/minmax(220px, 1fr), not bare 1fr — a bare 1fr track's automatic minimum
-// size is based on its content's min-content width, so a long money figure forces the
-// track (and the card sitting in it) wider than the column actually has room for. That's
-// also why every card below additionally needs min-inline-size: 0 on itself: a grid
-// item's own default min-width is "auto" too, so without that override the item still
-// refuses to shrink to the track's width even once the track itself can.
 .dashboard-page__row--4 {
   @include breakpoints.md {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -425,9 +406,6 @@
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 }
-
-// <768: single column. 768–1024: still single column (panels stay stacked at
-// tablet-portrait). 1024–1400: 2 across. ≥1400: 3 across.
 .dashboard-page__row--3 {
   @include breakpoints.lg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -438,15 +416,12 @@
   }
 }
 
-// ═══ Section 1: Action queues ═══
 
 .dashboard-page__queue-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-4);
 
-  // 768–1024: 2 across. 1024–1400: 3 across. ≥1400: auto-fit settles into 4–6
-  // depending on how much room there actually is.
   @include breakpoints.md {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -546,8 +521,6 @@
   block-size: 44px;
   border-radius: var(--r-md);
   font-size: 1.25rem;
-  // Filled solid with the status colour and a white icon — not a pale tint — so the row
-  // of cards reads as a spectrum of distinctly different colours.
   background: var(--tile-accent);
   color: #fff;
 }
@@ -582,16 +555,12 @@
   .dashboard-page__queue-bar { background: var(--stop); }
 }
 
-// ═══ Order status distribution (built from actionQueues) ═══
 
 .dashboard-page__distribution {
   margin-block-start: var(--sp-5);
   padding-block-start: var(--sp-4);
   border-block-start: 1px solid var(--admin-border);
 }
-
-// Scrolls horizontally rather than squeezing segments illegibly thin on very narrow
-// screens — the bar itself keeps a minimum width so each coloured segment stays visible.
 .dashboard-page__distribution-scroll {
   overflow-x: auto;
 }
@@ -651,7 +620,6 @@
   &--ok { background: var(--ok); }
 }
 
-// ═══ Section 3: Alerts ═══
 
 .dashboard-page__alert-rows {
   display: flex;
@@ -713,7 +681,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Section 4: Reference figures ═══
 
 .dashboard-page__stat-list {
   display: flex;
@@ -770,7 +737,6 @@
   }
 }
 
-// ═══ Motion ═══
 
 .dashboard-page__fade {
   height: 100%;

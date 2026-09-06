@@ -25,8 +25,6 @@ export class ReceiveStockDialogComponent extends DialogPortalBase implements OnC
 
   @Output() readonly closed = new EventEmitter<void>();
   @Output() readonly saved = new EventEmitter<void>();
-  // 409 CONCURRENT_STOCK_CHANGE after the interceptor's own retry also failed — already
-  // toasted by the interceptor; parent just needs to close this dialog and refetch the row.
   @Output() readonly conflict = new EventEmitter<void>();
 
   readonly position = signal<StockPositionResponse | null>(null);
@@ -73,8 +71,6 @@ export class ReceiveStockDialogComponent extends DialogPortalBase implements OnC
   submit(): void {
     const variantId = this.variantId;
     const quantity = this.quantity();
-    // Receiving is only ever an increase — a zero or negative quantity has no meaning
-    // here (the operator uses Adjust to reduce stock).
     if (this.saving() || variantId === null || quantity === null || quantity <= 0) {
       return;
     }

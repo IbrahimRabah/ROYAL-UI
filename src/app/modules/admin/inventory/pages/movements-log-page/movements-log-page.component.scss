@@ -17,13 +17,6 @@
   font-weight: 800;
   color: var(--admin-text);
 }
-
-// ═══ Filters ═══
-
-// admin-toolbar (global, unscoped) handles the collapsed-below-tablet look; this
-// scoped rule only needs to restore the always-expanded flex row at md+ — its higher
-// specificity (the auto-added component attribute selector) is what wins over
-// admin-toolbar's own `display: contents` there.
 .movements-log-page__filters {
   @include breakpoints.md {
     display: flex;
@@ -146,7 +139,11 @@
   }
 }
 
-// ═══ Error ═══
+
+:host ::ng-deep p-datepicker .p-datepicker {
+  inline-size: 100%;
+}
+
 
 .movements-log-page__error {
   display: flex;
@@ -176,7 +173,6 @@
   }
 }
 
-// ═══ Table ═══
 
 .movements-log-page__col-num {
   text-align: end;
@@ -215,8 +211,6 @@
   color: var(--stop);
   font-weight: 700;
 }
-
-// .movements-log-page__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 :host ::ng-deep .movements-log-page__table {
   @media (max-width: 991px) {

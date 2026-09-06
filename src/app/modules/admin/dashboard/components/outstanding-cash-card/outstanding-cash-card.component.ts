@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { DashboardCodPosition, money } from '../../../../../core/models';
 
-// Latin digits, no currency symbol — "EGP" is rendered separately (smaller, muted)
-// beside the figure, matching the kpi-card treatment.
 const NUMBER_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   maximumFractionDigits: 0,
 });

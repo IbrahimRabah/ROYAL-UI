@@ -22,10 +22,6 @@ export class CheckoutSummarySidebarComponent {
 
   @Output() readonly placeOrder = new EventEmitter<void>();
 
-  // Mobile only — the desktop layout always shows the full breakdown (see the component's
-  // scss, which ignores this below the `lg` breakpoint). Checkout-page renders its own
-  // fixed-to-the-bottom Place Order bar on mobile, so this card's own submit button is
-  // desktop-only.
   readonly expanded = signal(false);
 
   get hasCodFee(): boolean {

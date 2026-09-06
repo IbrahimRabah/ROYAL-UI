@@ -8,9 +8,6 @@
   gap: var(--sp-5);
   inline-size: 100%;
   max-inline-size: 720px;
-  // Without this the flex column, capped at max-inline-size, just sits at the block's
-  // start edge — reading as a lopsided "two-column" layout with the rest of the page
-  // empty beside it, since block boxes don't self-center under a max-width alone.
   margin-inline: auto;
 }
 
@@ -28,7 +25,6 @@
   color: var(--admin-text);
 }
 
-// States why these fields matter — they're what prints on every invoice.
 .spp__lead {
   margin: 0;
   font-size: var(--fs-sm);
@@ -148,8 +144,6 @@
   resize: vertical;
 }
 
-// Invoices keep whatever was on file when they were issued — this note sits right below
-// the form so a "why didn't the old invoice update" question never has to be asked.
 .spp__snapshot-note {
   display: flex;
   align-items: flex-start;

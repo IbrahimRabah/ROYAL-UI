@@ -1,10 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Inject, OnDestroy, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-// Adds `.scroll-reveal` immediately and `.scroll-reveal--visible` once the host enters
-// the viewport (see src/styles/_motion.scss for the actual transition). Skipped
-// server-side (no IntersectionObserver in SSR) and short-circuited to already-visible
-// under prefers-reduced-motion or if IntersectionObserver is unavailable.
 @Directive({
   selector: '[appScrollReveal]',
 })

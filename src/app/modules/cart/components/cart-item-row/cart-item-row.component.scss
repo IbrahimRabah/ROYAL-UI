@@ -9,9 +9,6 @@
   border-block-end: 1px solid var(--line-soft);
   transition: opacity 200ms ease;
 
-  // Below xl the list panel (2/3 of the page grid) isn't wide enough to fit a 110px
-  // image plus four columns without crushing the product name — stay in the mobile
-  // stacked layout until there's genuinely room for it.
   @include breakpoints.xl {
     grid-template-columns: minmax(160px, 2fr) 110px 130px 110px;
     align-items: center;

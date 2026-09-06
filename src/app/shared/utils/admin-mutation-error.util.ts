@@ -8,24 +8,12 @@ import { ValidationFailedError } from '../../core/interceptors/error.interceptor
 import { ToastService } from '../../core/services/toast.service';
 
 export interface AdminMutationErrorResult {
-  // 409 INVALID_STATUS_TRANSITION — the order moved since the page loaded. Never a toast:
-  // show `message` inline and refetch the order/list.
+
   isConflict: boolean;
   message: string | null;
-  // 400 VALIDATION_FAILED targeting the reason/note field specifically. Never a toast:
-  // bind under the field.
   fieldError: string | null;
 }
 
-/**
- * Central error handling for the four admin order mutations (confirm, setFulfillment,
- * setPayment, cancel) — all four suppress the interceptor's automatic toast (see
- * AdminOrderApiService) so this can apply the two documented exceptions:
- *   - 409 INVALID_STATUS_TRANSITION → never a toast (caller shows it inline + refetches)
- *   - 400 VALIDATION_FAILED → never a toast (caller binds fieldError under the field)
- * Every other failure is toasted here, exactly like the interceptor would have — callers
- * don't need to do anything further for the generic case.
- */
 export function handleAdminMutationError(err: unknown, toast: ToastService, lang: Language): AdminMutationErrorResult {
   const table = lang === Language.AR ? ERROR_MESSAGES_AR : ERROR_MESSAGES_EN;
 

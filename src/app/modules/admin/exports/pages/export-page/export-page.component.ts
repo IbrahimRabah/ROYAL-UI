@@ -21,8 +21,6 @@ export class ExportPageComponent {
   readonly downloading = signal<ExportKind | null>(null);
   readonly downloadError = signal<ExportKind | null>(null);
 
-  // A reversed date range obviously returns nothing — the one case worth blocking rather
-  // than letting the operator generate an empty file and wonder why.
   readonly dateRangeInvalid = computed(() => {
     const { dateFrom, dateTo } = this.filters();
     return !!dateFrom && !!dateTo && dateFrom > dateTo;

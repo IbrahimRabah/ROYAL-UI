@@ -4,8 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
 
-// Flat, editor-friendly shape — attribute-form-page converts to/from
-// AttributeValueUpsertItem.translations[] at its own boundary (on load and on save).
 export interface AttributeValueRow {
   id: number | null;
   code: string;
@@ -26,22 +24,11 @@ export class AttributeValuesEditorComponent {
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
 
-  // The CRITICAL RULE: PUT /admin/attributes/{id} replaces the entire value set — this
-  // component owns the complete draft list (every existing value, loaded once by the
-  // parent, never trimmed to "just what changed"), and always emits the complete list
-  // back, including untouched rows. Same trap as product translations/specifications.
   @Input({ required: true }) rows: AttributeValueRow[] = [];
   @Output() readonly rowsChange = new EventEmitter<AttributeValueRow[]>();
 
-  // p-colorPicker requires a valid hex to render its swatch — falls back to this when a
-  // row has no colour yet (non-colour attributes never set one) without writing a value
-  // into the row itself; only actually picking a colour does that.
   readonly defaultSwatchColor = '#cccccc';
 
-  // Every row's id is unique regardless of origin — real (positive) ids come from the
-  // server, new rows get a unique negative draft id at creation (see nextDraftId), so
-  // NgForOf keeps the right DOM node per row across reorders without needing index-based
-  // identity (which would misattribute focus/input state after a drag or an up/down move).
   trackByRow(_index: number, row: AttributeValueRow): number {
     return row.id!;
   }
@@ -69,9 +56,6 @@ export class AttributeValuesEditorComponent {
     this.emit(this.rows.map((r, i) => (i === index ? { ...r, ...patch } : r)));
   }
 
-  // Keeps the colour picker (always #rrggbb) and the free-typed hex field in sync without
-  // fighting each other — a partial/invalid typed value is kept as-is (not coerced) until
-  // it either becomes valid or the picker is used directly.
   updateHexFromPicker(index: number, value: string): void {
     this.updateRow(index, { hexColor: value || null });
   }

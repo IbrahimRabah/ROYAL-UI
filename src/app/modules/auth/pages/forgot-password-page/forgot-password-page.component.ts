@@ -43,8 +43,6 @@ export class ForgotPasswordPageComponent {
     this.loading.set(true);
     const { identifier } = this.form.getRawValue();
     this.authApi.forgotPassword({ identifier }).subscribe({
-      // Deliberately doesn't reveal whether the account exists — swap to the confirmation
-      // state on any 2xx response, since the backend always reports success.
       next: () => {
         this.loading.set(false);
         this.submitted.set(true);

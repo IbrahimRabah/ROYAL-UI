@@ -1,9 +1,4 @@
-// ═══ 1. المكتبات الخارجية ═══
-// PrimeNG بيتحمّل من angular.json قبل الملف ده.
-// Bootstrap للتخطيط فقط — الأنماط المتصادمة (أزرار، فورمات، cards) مشيلة.
 @use 'bootstrap-layout';
-
-// ═══ 2. إعدادات المشروع — بعد المكتبات عشان تكسب ═══
 @use 'styles/tokens';
 @use 'styles/breakpoints';
 @use 'styles/typography';

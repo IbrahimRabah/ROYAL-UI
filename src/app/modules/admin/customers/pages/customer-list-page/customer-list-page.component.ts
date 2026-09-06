@@ -24,8 +24,6 @@ export class CustomerListPageComponent {
 
   private readonly queryParamMap = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
 
-  // Passed to the API untouched — phone search is normalised server-side (an operator
-  // typing 01012345678 must still find a customer stored as +201012345678).
   readonly search = computed(() => this.queryParamMap().get('q') ?? '');
   readonly page = computed(() => Number(this.queryParamMap().get('page') ?? '0') || 0);
 

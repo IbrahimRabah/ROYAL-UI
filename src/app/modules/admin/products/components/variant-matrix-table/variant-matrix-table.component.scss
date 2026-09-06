@@ -4,14 +4,6 @@
   display: block;
 }
 
-// ═══ Desktop table ═══
-
-// The table's natural content width (11 columns of dense inputs) comfortably exceeds most
-// viewports — without a scroll container of its own, the overflow spills silently past
-// both edges (no scrollbar, nothing to scroll it back into view), which is what reads as
-// "columns don't line up": header and body cells are in fact pixel-identical per column
-// (same single <table>, no colgroup/scrollable-mode split) — most of the row is just
-// off-screen. Contain it here instead.
 .vmt__table-wrap {
   display: none;
   overflow-x: auto;
@@ -57,9 +49,6 @@
   inline-size: 11px;
   block-size: 11px;
   border-radius: 50%;
-  // A fixed light-gray border nearly disappears against pale swatches (white, silver) —
-  // an inset dark ring at low opacity stays a visible hairline against any colour,
-  // light or dark, while the fill itself sits at the value's hexColor, full opacity.
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
 }
@@ -69,13 +58,6 @@
   font-size: var(--fs-xs);
   color: var(--stop);
 }
-
-// p-inputnumber internals — compact block padding per the dense-matrix spec, numbers
-// stay LTR regardless of interface language. A FIXED (not max/100%) inline-size keeps
-// every row's box the same width regardless of how many digits it holds — variable
-// widths were what made the column read as ragged even once centred. p-inputnumber's
-// own root is display:inline-flex (PrimeNG default), so the parent td/th's
-// text-align: center (.vmt__col-center) centers this fixed-width box within the cell.
 :host ::ng-deep .vmt__input {
   inline-size: 130px;
   min-inline-size: 0;
@@ -162,7 +144,6 @@
   }
 }
 
-// p-table internals — dense rows, alternating tint, dirty-row indicator.
 :host ::ng-deep .vmt__table {
   .p-datatable-thead > tr > th {
     padding: var(--sp-3) var(--sp-3);
@@ -244,8 +225,6 @@
     cursor: default;
   }
 }
-
-// ═══ Mobile cards ═══
 
 .vmt__cards {
   display: flex;

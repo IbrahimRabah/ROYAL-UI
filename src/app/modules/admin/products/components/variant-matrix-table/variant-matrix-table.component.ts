@@ -32,9 +32,6 @@ export class VariantMatrixTableComponent implements OnChanges {
   @Input() variants: VariantAdminResponse[] = [];
   @Input() valueLookup: Map<number, ValueLookupEntry> = new Map();
   @Input() saving = false;
-  // Best-effort — the 409 SKU_ALREADY_EXISTS response doesn't identify which row in the
-  // batch conflicted, so the parent matches the error's free-text detail against the SKUs
-  // it submitted. Empty when there's no active conflict, or when the match attempt failed.
   @Input() conflictedSkus: Set<string> = new Set();
 
   @Output() readonly save = new EventEmitter<VariantUpsertItem[]>();
@@ -46,8 +43,6 @@ export class VariantMatrixTableComponent implements OnChanges {
     if (!('variants' in changes)) {
       return;
     }
-    // A fresh fetch always wins over whatever was mid-edit — same rule as everywhere else
-    // in this admin (see order-list-page's refetch-after-mutation pattern).
     const next: Record<number, VariantRowDraft> = {};
     for (const v of this.variants) {
       next[v.id] = this.snapshotOf(v);
@@ -98,7 +93,6 @@ export class VariantMatrixTableComponent implements OnChanges {
     return PRODUCT_STATUS_TONE[variant.status];
   }
 
-  // null = neutral. Only qtyAvailable is colored — on-hand/reserved stay plain.
   availableTone(variant: VariantAdminResponse): 'stop' | 'warn' | null {
     if (variant.qtyAvailable === 0) {
       return 'stop';
@@ -132,8 +126,6 @@ export class VariantMatrixTableComponent implements OnChanges {
           weightGrams: d.weightGrams,
           attributeValueIds: v.attributeValueIds,
           minStockLevel: d.minStockLevel,
-          // initialStock deliberately omitted — stock only moves through the inventory
-          // receive/adjust endpoints, never through this form, for an existing variant.
         };
       });
     if (items.length) {

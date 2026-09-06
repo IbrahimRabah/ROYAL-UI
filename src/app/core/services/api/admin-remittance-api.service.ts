@@ -8,9 +8,6 @@ import { CreateRemittanceRequest, OutstandingRemittanceResponse, PageResponse, R
 import { SUPPRESS_ERROR_TOAST } from '../../interceptors/error.interceptor';
 import { buildHttpParams } from './http-params.util';
 
-// create/cancel suppress the interceptor's automatic error toast — both are handled via
-// admin-mutation-error.util.ts so a 400 VALIDATION_FAILED (e.g. a shortfall with no note)
-// binds inline instead of toasting.
 const NO_TOAST = { context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) };
 
 @Injectable({
@@ -19,7 +16,6 @@ const NO_TOAST = { context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) };
 export class AdminRemittanceApiService {
   private readonly http = inject(HttpClient);
 
-  // A single object ({ orderCount, totalAmount, orders }), not a page.
   outstanding(): Observable<OutstandingRemittanceResponse> {
     return this.http.get<OutstandingRemittanceResponse>(API_ROUTES.admin.remittances.outstanding());
   }
@@ -37,7 +33,6 @@ export class AdminRemittanceApiService {
     return this.http.get<RemittanceResponse>(API_ROUTES.admin.remittances.remittance(remittanceId));
   }
 
-  // reason is a required query param, not a body field.
   cancel(remittanceId: number, reason: string): Observable<RemittanceResponse> {
     const params = buildHttpParams({ reason });
     return this.http.post<RemittanceResponse>(API_ROUTES.admin.remittances.cancel(remittanceId), null, { params, ...NO_TOAST });

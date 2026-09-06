@@ -153,8 +153,6 @@
   }
 }
 
-// A 409 (order moved since the page loaded) or a field-level validation message — never a
-// toast for these two cases, shown inline instead (see admin-mutation-error.util.ts).
 .admin-dialog__inline-error {
   display: flex;
   align-items: flex-start;

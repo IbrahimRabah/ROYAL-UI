@@ -1,6 +1,5 @@
 import { Money } from '../common/money';
 
-// POST /shipping/quote
 export interface ShippingQuoteRequest {
   governorateId: number;
   cartId?: number;
@@ -22,9 +21,6 @@ export interface ShippingQuoteResponse {
   totalWeightGrams: number;
   estimatedTotal: Money;
 }
-
-// GET /admin/shipping/zones — baseCost/freeShippingOver/codFee are explicitly null when
-// the zone has no active rate yet (deliveryDaysMin/Max fall back to 0, not null).
 export interface ShippingZoneResponse {
   zoneId: number;
   code: string;
@@ -39,7 +35,6 @@ export interface ShippingZoneResponse {
   governorates: string[];
 }
 
-// PUT /admin/shipping/rates — replaces the zone's existing active rate.
 export interface ShippingRateRequest {
   zoneId: number;
   baseCost: Money;

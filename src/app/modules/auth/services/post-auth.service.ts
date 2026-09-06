@@ -56,9 +56,6 @@ export class PostAuthService {
           }
         }),
         catchError((err: unknown) => {
-          // Don't block sign-in on a merge failure — keep the guest token (a transient
-          // failure shouldn't strand an un-merged cart) and just reload whatever cart the
-          // account already has.
           console.error('Cart merge failed', err);
           return this.cartApi.getCart().pipe(
             tap((cart) => this.cartStore.set(cart)),
@@ -69,14 +66,7 @@ export class PostAuthService {
       .subscribe(() => this.router.navigateByUrl(returnUrl));
   }
 
-  /**
-   * Runs after the session is cleared client-side, whichever logout flow triggered it.
-   * The guest token was deleted at login-merge time and nothing else ever re-issues it
-   * (app.initializer only runs once, at bootstrap) — without this, a signed-out visitor
-   * is left with neither a Bearer token nor a guest cookie, so /cart/** requests carry no
-   * identity at all and silently fail. Re-request a guest token and reload the cart so
-   * add-to-cart works again immediately, without needing a full page reload.
-   */
+  
   completeLogout(): void {
     this.guestToken
       .ensureToken()

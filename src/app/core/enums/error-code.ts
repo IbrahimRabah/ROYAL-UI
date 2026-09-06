@@ -1,9 +1,4 @@
-// 58 codes extracted from the API contract (global conventions table + every per-endpoint
-// "Error responses" table + the scope-note in the Orders section). The plan's ~55 estimate
-// undercounts DUPLICATE_VALUE / REFERENCED_BY_OTHER_RECORDS (generic catalog-admin conflicts)
-// and the three return/refund codes that exist in the catalog but have no endpoint yet.
 export enum ErrorCode {
-  // Global — apply to every endpoint, not repeated per entry in the contract
   INVALID_REQUEST_BODY = 'INVALID_REQUEST_BODY',
   INVALID_PARAMETER = 'INVALID_PARAMETER',
   UNAUTHORIZED = 'UNAUTHORIZED',
@@ -11,7 +6,6 @@ export enum ErrorCode {
   INTERNAL_ERROR = 'INTERNAL_ERROR',
   VALIDATION_FAILED = 'VALIDATION_FAILED',
 
-  // Identity & Authentication
   INVALID_PHONE_FORMAT = 'INVALID_PHONE_FORMAT',
   PHONE_ALREADY_EXISTS = 'PHONE_ALREADY_EXISTS',
   EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
@@ -23,7 +17,6 @@ export enum ErrorCode {
   OTP_INVALID = 'OTP_INVALID',
   OTP_EXPIRED = 'OTP_EXPIRED',
 
-  // Catalog — storefront & admin (products, variants, categories, brands, attributes)
   PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND',
   VARIANT_NOT_FOUND = 'VARIANT_NOT_FOUND',
   RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
@@ -47,7 +40,6 @@ export enum ErrorCode {
   DUPLICATE_VALUE = 'DUPLICATE_VALUE',
   REFERENCED_BY_OTHER_RECORDS = 'REFERENCED_BY_OTHER_RECORDS',
 
-  // Cart & Checkout
   STOCK_UNAVAILABLE = 'STOCK_UNAVAILABLE',
   PRODUCT_NOT_ACTIVE = 'PRODUCT_NOT_ACTIVE',
   CART_ITEM_NOT_FOUND = 'CART_ITEM_NOT_FOUND',
@@ -58,16 +50,13 @@ export enum ErrorCode {
   PAYMENT_METHOD_UNAVAILABLE = 'PAYMENT_METHOD_UNAVAILABLE',
   DUPLICATE_ORDER = 'DUPLICATE_ORDER',
 
-  // Orders
   ORDER_NOT_FOUND = 'ORDER_NOT_FOUND',
   ORDER_CANNOT_BE_CANCELLED = 'ORDER_CANNOT_BE_CANCELLED',
   INVALID_STATUS_TRANSITION = 'INVALID_STATUS_TRANSITION',
-  // Exist in the error catalog for the future return/refund flow — no endpoint uses them yet.
   RETURN_WINDOW_CLOSED = 'RETURN_WINDOW_CLOSED',
   RETURN_QUANTITY_EXCEEDED = 'RETURN_QUANTITY_EXCEEDED',
   REFUND_EXCEEDS_ORDER_TOTAL = 'REFUND_EXCEEDS_ORDER_TOTAL',
 
-  // Inventory
   INVENTORY_RECORD_MISSING = 'INVENTORY_RECORD_MISSING',
   CONCURRENT_STOCK_CHANGE = 'CONCURRENT_STOCK_CHANGE',
   NEGATIVE_STOCK = 'NEGATIVE_STOCK',

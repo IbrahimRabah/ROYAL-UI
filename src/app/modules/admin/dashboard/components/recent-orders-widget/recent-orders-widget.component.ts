@@ -13,8 +13,6 @@ const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
 
 type StatusTone = 'warn' | 'info' | 'violet' | 'blue' | 'ok' | 'stop';
 
-// Mirrors the canonical order-status palette used for the action-queue cards on the
-// dashboard page — the same status should always read as the same colour everywhere.
 const STATUS_TONE: Partial<Record<FulfillmentStatus, StatusTone>> = {
   [FulfillmentStatus.PENDING]: 'warn',
   [FulfillmentStatus.CONFIRMED]: 'info',

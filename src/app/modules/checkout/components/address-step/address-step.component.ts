@@ -30,8 +30,6 @@ export class AddressStepComponent implements OnInit {
   readonly isLoggedIn = this.authStore.isLoggedIn;
   readonly loadingAddresses = signal(false);
   readonly addresses = signal<AddressResponse[]>([]);
-  // Guests, and signed-in customers with no saved addresses yet, start straight on the
-  // inline form — 'saved' only ever applies once GET /me/addresses actually returns rows.
   readonly mode = signal<'saved' | 'new'>('new');
   readonly selectedAddressId = signal<number | null>(null);
 

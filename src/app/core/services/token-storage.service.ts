@@ -56,7 +56,6 @@ export class TokenStorageService {
     this.write(REFRESH_TOKEN_KEY, token);
   }
 
-  // See the class-level warning — never feed this the raw /auth/me response.
   setUser(user: UserResponse): void {
     this.write(USER_KEY, JSON.stringify(user));
   }

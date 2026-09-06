@@ -19,7 +19,6 @@ export class BrandListPageComponent {
   readonly loading = signal(true);
   readonly error = signal(false);
 
-  // null = closed, 'new' = creating, a BrandAdminResponse = editing that one.
   readonly dialogTarget = signal<BrandAdminResponse | 'new' | null>(null);
 
   readonly dialogOpen = computed(() => this.dialogTarget() !== null);

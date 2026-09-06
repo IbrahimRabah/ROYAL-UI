@@ -92,9 +92,6 @@
   }
 }
 
-// Arrow slides 4px in the reading direction on hover. Under RTL the icon is already
-// mirrored (scaleX(-1) above), so keeping the same local translateX(4px) and letting
-// that mirror carry through auto-flips the visual slide to the correct physical side.
 .contact-help__card:hover .contact-help__link-icon,
 .contact-help__card:focus-within .contact-help__link-icon {
   transform: translateX(4px);

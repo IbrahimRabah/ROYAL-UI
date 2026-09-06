@@ -47,9 +47,6 @@ export class CancelOrderDialogComponent implements OnChanges, AfterViewInit, OnD
 
   @Output() readonly closed = new EventEmitter<void>();
   @Output() readonly cancelled = new EventEmitter<OrderResponse>();
-  // 409 ORDER_CANNOT_BE_CANCELLED — the order shipped since the page loaded. The global
-  // ErrorInterceptor already toasts a translated explanation; this just tells the parent
-  // to re-fetch the now-stale order.
   @Output() readonly orderStale = new EventEmitter<void>();
 
   @ViewChild('panel') private readonly panelRef?: ElementRef<HTMLElement>;
@@ -92,8 +89,6 @@ export class CancelOrderDialogComponent implements OnChanges, AfterViewInit, OnD
     }
   }
 
-  // Same fix as address-form-dialog: portalled to <body> to escape the account page's own
-  // stacking context (see that component's comment for the full explanation).
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.renderer.appendChild(document.body, this.elementRef.nativeElement);
@@ -176,7 +171,6 @@ export class CancelOrderDialogComponent implements OnChanges, AfterViewInit, OnD
           this.orderStale.emit();
           return;
         }
-        // Any other status is already toasted globally by ErrorInterceptor.
       },
     });
   }

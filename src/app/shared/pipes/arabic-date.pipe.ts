@@ -3,9 +3,6 @@ import { Pipe, PipeTransform, inject } from '@angular/core';
 import { Language } from '../../core/enums/language';
 import { LanguageStoreService } from '../../core/state/language-store.service';
 
-// Formats an ISO date/datetime string using the current UI language's month/weekday
-// names, but always with Latin digits (-u-nu-latn) — dates must stay LTR-readable inside
-// Arabic layouts per the admin RTL rules, only the words around the numbers localize.
 @Pipe({
   name: 'arabicDate',
   pure: false,

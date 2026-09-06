@@ -12,8 +12,6 @@ import {
   inject,
 } from '@angular/core';
 
-// Same hand-rolled backdrop+panel pattern as layout/mobile-nav-drawer — PrimeNG's
-// p-drawer breaks under this app's SSR hydration (see that component's doc comment).
 @Component({
   selector: 'app-mobile-filter-drawer',
   templateUrl: './mobile-filter-drawer.component.html',

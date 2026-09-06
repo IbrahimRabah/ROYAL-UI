@@ -35,9 +35,6 @@ export class OrderAuditPanelComponent {
     return TIME_FORMATTER.format(new Date(iso));
   }
 
-  // `to` holds either a FulfillmentStatus or a PaymentStatus depending on `kind` — the
-  // model can't type it more precisely (see the comment on OrderTimelineEntry), so this
-  // tries both label/tone maps and falls back to the raw value if neither matches.
   entryLabel(to: string): string {
     const isAr = this.languageStore.lang() === Language.AR;
     if (to in FULFILLMENT_STATUS_TONE) {

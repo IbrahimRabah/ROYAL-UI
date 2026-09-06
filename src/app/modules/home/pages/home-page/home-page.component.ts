@@ -21,11 +21,6 @@ export class HomePageComponent {
   readonly newArrivalsLoading = signal(true);
 
   constructor() {
-    // Re-runs on every lang() change (including once immediately): names/descriptions
-    // come back server-translated via Accept-Language (language.interceptor), so a
-    // language switch needs a fresh fetch, not just a re-render. On error, each signal
-    // is left as-is (categories) or just stops loading (products) rather than being
-    // cleared, so a transient failure doesn't blank out already-loaded sections.
     effect(() => {
       this.languageStore.lang();
 

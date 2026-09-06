@@ -1,6 +1,5 @@
 @use 'styles/breakpoints';
 
-// Mobile: horizontally scrollable. Desktop: three equal columns.
 .category-card-grid {
   display: flex;
   gap: var(--sp-4);
@@ -46,11 +45,6 @@
   inline-size: 100%;
   block-size: 100%;
   object-fit: contain;
-  // The wide banner art these cards reuse (2172x724) composes its subject toward the
-  // physical right edge, with empty space on the left reserved for hero text overlay
-  // — cropping to this portrait card from the right keeps the product in frame
-  // instead of centering into that empty space. Physical, not logical: the artwork
-  // itself doesn't mirror between LTR/RTL.
   object-position: right center;
   filter: brightness(0.62);
   transition: transform 300ms ease;

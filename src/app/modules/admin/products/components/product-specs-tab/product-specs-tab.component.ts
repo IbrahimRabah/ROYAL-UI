@@ -6,9 +6,6 @@ import { Language } from '../../../../../core/enums/language';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-taxonomy-api.service';
 
-// A row with neither a selected value nor typed text is meaningless to save — it would
-// send { attributeId, attributeValueId: null, valueText: null } and just occupy a slot.
-// Exported so product-form-page can block its single Save action on the same rule.
 export function isSpecRowIncomplete(row: ProductSpecificationInput): boolean {
   return row.attributeValueId == null && !row.valueText?.trim();
 }
@@ -23,13 +20,6 @@ export class ProductSpecsTabComponent implements OnInit {
   private readonly taxonomyApi = inject(AdminTaxonomyApiService);
   private readonly languageStore = inject(LanguageStoreService);
 
-  // Specifications ride the same full-replace product PUT as translations/category/etc —
-  // there's no dedicated specs endpoint, and this tab no longer has its own Save button
-  // (see product-form-page: the one "Save" action reads the draft back out via
-  // rowsChange and sends it in the same PUT as everything else). This tab is purely a
-  // draft editor: seed once from the product's saved specifications on ngOnInit, then
-  // every local edit both updates the internal signal and emits upward so the parent
-  // always has the current draft ready to send.
   @Input({ required: true, alias: 'rows' }) initialRows: ProductSpecificationInput[] = [];
   @Output() readonly rowsChange = new EventEmitter<ProductSpecificationInput[]>();
 
@@ -77,12 +67,6 @@ export class ProductSpecsTabComponent implements OnInit {
     return isSpecRowIncomplete(row);
   }
 
-  // Without this, NgForOf's default identity-based tracking sees a *different* object on
-  // every keystroke (updateRowText/updateRowValueId replace the row via .map(), which is
-  // correct for signal immutability but changes the object reference) and destroys +
-  // recreates that row's DOM — including the focused <input> — after every character.
-  // attributeId is stable for a row's whole lifetime, so keying on it keeps the same DOM
-  // node across edits and only its bindings update.
   trackByAttributeId(_index: number, row: ProductSpecificationInput): number {
     return row.attributeId;
   }

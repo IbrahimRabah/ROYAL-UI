@@ -3,10 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { adminGuard } from '../../core/guards/admin.guard';
 
-// The parent 'admin' route (app-routing.module.ts) already carries canActivate +
-// canActivateChild, and canActivateChild cascades to every descendant including these
-// lazy-loaded children — this wrapper re-applies both locally too, so this module stays
-// self-defending even if the parent route is ever restructured.
 const routes: Routes = [
   {
     path: '',
@@ -16,10 +12,6 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
-      // No path segment of its own — its own routes (categories/brands/attributes) mount
-      // directly under /admin, per the task's literal /admin/categories, /admin/brands,
-      // /admin/attributes (not /admin/taxonomy/...). "taxonomy" is just this module's
-      // internal/organizational name.
       { path: '', loadChildren: () => import('./taxonomy/taxonomy.module').then(m => m.TaxonomyModule) },
       { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule) },
       { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },

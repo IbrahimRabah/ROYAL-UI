@@ -35,8 +35,6 @@ export class AuthApiService {
     return this.http.post<AuthResponse>(API_ROUTES.auth.refresh(), body);
   }
 
-  // Public endpoint — sends the refresh token in the body rather than relying on the
-  // current Authorization header, so it works even if the access token already expired.
   logout(refreshToken: string): Observable<MessageResponse> {
     const body: LogoutRequest = { refreshToken };
     return this.http.post<MessageResponse>(API_ROUTES.auth.logout(), body);
@@ -46,9 +44,6 @@ export class AuthApiService {
     return this.http.post<MessageResponse>(API_ROUTES.auth.logoutAll(), null);
   }
 
-  // POST, not GET — the contract is explicit about this. Also note: firstName/lastName/
-  // fullName come back null here (built from JWT claims, not a DB lookup); see the
-  // warning on TokenStorageService for why the display name must come from login/register.
   me(): Observable<UserResponse> {
     return this.http.post<UserResponse>(API_ROUTES.auth.me(), null);
   }

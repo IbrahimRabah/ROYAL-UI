@@ -24,18 +24,12 @@
   block-size: 100%;
   object-fit: cover;
   object-position: center;
-  // Barely-perceptible one-shot drift, not a loop — "makes the screen feel alive"
-  // without drawing attention to itself.
   animation: auth-image-drift 8s ease-out both;
 }
 
 .auth-layout__scrim {
   position: absolute;
   inset: 0;
-  // Mobile only: the card is full-width-minus-padding here, so there's little photo
-  // showing around its edges — this extra scrim keeps that sliver from washing out the
-  // card's own glass edge. Above md the card floats over open background and its own
-  // background/border/shadow already read clearly against the photo, so no scrim.
   background: rgba(13, 13, 13, 0.35);
 
   @include breakpoints.md {
@@ -55,9 +49,6 @@
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
   animation: auth-card-enter 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
 
-  // backdrop-filter fallback: unsupported browsers keep the solid 0.88 fill above (no
-  // blur) instead of the lighter, blur-dependent 0.55 fill — the card must never become
-  // unreadable over a busy product photo.
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
     background: rgba(13, 13, 13, 0.55);
     backdrop-filter: blur(16px) saturate(1.1);
@@ -66,12 +57,6 @@
 
   @include breakpoints.md {
     padding: var(--sp-8);
-
-    // Physical margin-right (not margin-inline-end) pins the card opposite the product
-    // cluster in the cover photo regardless of language direction — see the template
-    // comment. Plain physical margin is immune to `direction`, so unlike about-hero's
-    // `direction: ltr` trick we don't need one here — this card holds an Arabic-typable
-    // form, and forcing ltr on it would flip input text flow for Arabic users.
     margin-left: auto;
     margin-right: var(--pad);
   }

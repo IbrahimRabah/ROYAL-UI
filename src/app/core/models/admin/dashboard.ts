@@ -56,7 +56,6 @@ export interface DashboardDeliveryHealth {
   refused: number;
   returnedToSeller: number;
   cancelled: number;
-  // A percentage rendered as a string ("87.5"), not a currency amount — not Money.
   successRatePercent: string;
 }
 
@@ -75,16 +74,12 @@ export interface DashboardCatalogStats {
 }
 
 export interface DashboardAlert {
-  // Explicitly documented order: HIGH > MEDIUM > LOW.
   severity: 'HIGH' | 'MEDIUM' | 'LOW';
-  // TODO: not in contract — only "STOCK" and "PAYMENT" are shown as examples, the full
-  // set of categories is never enumerated.
   category: string;
   message: string;
   actionPath: string;
 }
 
-// GET /admin/dashboard — single-call store overview.
 export interface DashboardResponse {
   sales: DashboardSales;
   codPosition: DashboardCodPosition;

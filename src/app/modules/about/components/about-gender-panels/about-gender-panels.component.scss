@@ -5,8 +5,6 @@
   flex-direction: column;
 
   @include breakpoints.md {
-    // Him stays the left panel and Her the right panel in both languages — deliberately
-    // not mirrored under RTL (see about-hero.component.scss for the same reasoning).
     direction: ltr;
     flex-direction: row;
     block-size: clamp(420px, 60vh, 640px);
@@ -32,8 +30,6 @@
   justify-content: center;
 
   @include breakpoints.md {
-    // Text sits at the panel's own left edge in both languages (direction: ltr on
-    // .about-gender above), not the reading-direction start.
     justify-content: flex-start;
   }
 }

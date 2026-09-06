@@ -26,9 +26,6 @@ export class ProfilePageComponent {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly router = inject(Router);
-
-  // Phone/email/roles come from POST /auth/me (the only place that returns them). The
-  // display name never does — see getDisplayName's warning.
   private readonly me = signal<UserResponse | null>(null);
   readonly loading = signal(true);
   readonly signingOutAll = signal(false);

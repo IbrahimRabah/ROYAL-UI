@@ -1,8 +1,6 @@
 import { FulfillmentStatus } from '../enums/fulfillment-status';
 import { PaymentStatus } from '../enums/payment-status';
 
-// PATCH /admin/orders/{orderId}/fulfillment-status — legal transitions, copied verbatim
-// from the contract's transition table. Terminal statuses map to an empty array.
 export const FULFILLMENT_TRANSITIONS: Record<FulfillmentStatus, readonly FulfillmentStatus[]> = {
   [FulfillmentStatus.PENDING]: [FulfillmentStatus.CONFIRMED, FulfillmentStatus.CANCELLED],
   [FulfillmentStatus.CONFIRMED]: [FulfillmentStatus.PROCESSING, FulfillmentStatus.CANCELLED],
@@ -30,8 +28,6 @@ export const FULFILLMENT_TRANSITIONS: Record<FulfillmentStatus, readonly Fulfill
   [FulfillmentStatus.RETURNED_TO_SELLER]: [],
 };
 
-// PATCH /admin/orders/{orderId}/payment-status — legal transitions, copied verbatim
-// from the contract's transition table.
 export const PAYMENT_TRANSITIONS: Record<PaymentStatus, readonly PaymentStatus[]> = {
   [PaymentStatus.PENDING]: [PaymentStatus.AUTHORIZED, PaymentStatus.PAID, PaymentStatus.FAILED, PaymentStatus.EXPIRED],
   [PaymentStatus.AUTHORIZED]: [PaymentStatus.PAID, PaymentStatus.FAILED, PaymentStatus.EXPIRED],
@@ -42,7 +38,6 @@ export const PAYMENT_TRANSITIONS: Record<PaymentStatus, readonly PaymentStatus[]
   [PaymentStatus.REFUNDED]: [],
 };
 
-// `note` is required on PATCH /admin/orders/{orderId}/fulfillment-status when moving to one of these.
 export const NOTE_REQUIRED_STATUSES: readonly FulfillmentStatus[] = [
   FulfillmentStatus.DELIVERY_FAILED,
   FulfillmentStatus.REFUSED_ON_DELIVERY,
@@ -50,8 +45,6 @@ export const NOTE_REQUIRED_STATUSES: readonly FulfillmentStatus[] = [
   FulfillmentStatus.CANCELLED,
 ];
 
-// UI labels — not part of the contract (statuses are plain enum strings there), but
-// needed everywhere a status is rendered to a user.
 export const FULFILLMENT_STATUS_LABELS_AR: Record<FulfillmentStatus, string> = {
   [FulfillmentStatus.PENDING]: 'بانتظار التأكيد',
   [FulfillmentStatus.CONFIRMED]: 'مؤكد',
@@ -82,9 +75,6 @@ export const FULFILLMENT_STATUS_LABELS_EN: Record<FulfillmentStatus, string> = {
   [FulfillmentStatus.PARTIALLY_RETURNED]: 'Partially returned',
 };
 
-// Kept short deliberately — these sit as a pill beside the (also-short) fulfilment badge
-// in a fixed-width table column; the longer, more formal phrasing used elsewhere (e.g.
-// account order history) would wrap or force the column wide.
 export const PAYMENT_STATUS_LABELS_AR: Record<PaymentStatus, string> = {
   [PaymentStatus.PENDING]: 'معلّق',
   [PaymentStatus.AUTHORIZED]: 'معتمد',
@@ -105,9 +95,7 @@ export const PAYMENT_STATUS_LABELS_EN: Record<PaymentStatus, string> = {
   [PaymentStatus.EXPIRED]: 'Expired',
 };
 
-// Shared admin colour spectrum for status badges — matches the palette already used on
-// the admin dashboard's action-queue cards, so a given status reads as the same colour
-// everywhere in the admin.
+
 export type StatusTone = 'warn' | 'info' | 'violet' | 'blue' | 'ok' | 'stop' | 'muted';
 
 export const FULFILLMENT_STATUS_TONE: Record<FulfillmentStatus, StatusTone> = {
@@ -135,8 +123,6 @@ export const PAYMENT_STATUS_TONE: Record<PaymentStatus, StatusTone> = {
   [PaymentStatus.EXPIRED]: 'stop',
 };
 
-// Statuses whose next transition is irreversible and needs a plain-language consequence
-// warning before the operator commits (see status-transition-panel).
 export const CONSEQUENCE_STATUSES: readonly FulfillmentStatus[] = [
   FulfillmentStatus.SHIPPED,
   FulfillmentStatus.DELIVERED,

@@ -8,14 +8,7 @@ import { StockConflictError } from '../../core/interceptors/error.interceptor';
 import { ToastService } from '../../core/services/toast.service';
 
 export interface InventoryMutationErrorResult {
-  // 409 NEGATIVE_STOCK / STOCK_BELOW_RESERVED — never a toast, the interceptor already
-  // threw a StockConflictError instead of toasting. Show inline next to the figures and
-  // keep the dialog open so the operator can correct the value.
   inlineMessage: string | null;
-  // 409 CONCURRENT_STOCK_CHANGE, and the interceptor's automatic one-shot retry also
-  // failed. The interceptor has ALREADY toasted this (with the exact "someone else
-  // changed this stock" wording) — the dialog's only job is to close and refetch the row,
-  // not show anything further itself.
   staleConflict: boolean;
 }
 
@@ -36,11 +29,9 @@ export function handleInventoryMutationError(err: unknown, toast: ToastService, 
     const apiError = isApiError(err.error) ? err.error : undefined;
 
     if (err.status === 409 && apiError?.code === ErrorCode.CONCURRENT_STOCK_CHANGE) {
-      // Already toasted by ErrorInterceptor's fallback path.
       return { inlineMessage: null, staleConflict: true };
     }
 
-    // Every other status is already toasted globally by ErrorInterceptor.
     return { inlineMessage: null, staleConflict: false };
   }
 

@@ -12,7 +12,6 @@ import { buildHttpParams } from './http-params.util';
 export class AdminExportApiService {
   private readonly http = inject(HttpClient);
 
-  // .xlsx — capped at 5,000 rows; cancelled orders excluded by default (excludeCancelled).
   accounting(filter: OrderExportFilter): Observable<Blob> {
     return this.http.get(API_ROUTES.admin.exports.accounting(), {
       params: this.buildParams(filter),
@@ -20,7 +19,6 @@ export class AdminExportApiService {
     });
   }
 
-  // PDF — defaults fulfillmentStatus to CONFIRMED when omitted; capped at 300 orders.
   pickingList(filter: OrderExportFilter): Observable<Blob> {
     return this.http.get(API_ROUTES.admin.exports.pickingList(), {
       params: this.buildParams(filter),

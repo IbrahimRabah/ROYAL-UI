@@ -1,6 +1,3 @@
-// General-purpose layout helpers only. NEVER add a button/card/input class here —
-// those are PrimeNG's job.
-
 @use 'mixins';
 @use 'breakpoints';
 
@@ -31,8 +28,6 @@
   @include mixins.visually-hidden;
 }
 
-// Section container — the standard vertical rhythm between page sections, wider once
-// there's room for it.
 .section {
   padding-block: var(--sp-8);
 

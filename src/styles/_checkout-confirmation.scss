@@ -1,6 +1,3 @@
-// Styles for app-order-confirmation-page (modules/checkout/pages/order-confirmation-page).
-// Lives here rather than the component's own styleUrl to stay under the anyComponentStyle
-// budget (4kb) — this block alone compiles past that on its own.
 @use 'breakpoints';
 
 .confirmation-page {

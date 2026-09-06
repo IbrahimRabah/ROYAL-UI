@@ -27,7 +27,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  // 44px — a real tap target on mobile, where this is the only way to open the sidebar.
   inline-size: 2.75rem;
   block-size: 2.75rem;
   border: none;
@@ -72,11 +71,6 @@
     gap: var(--sp-3);
   }
 }
-
-// Language switcher and "view store" used to be hidden below 576px with no mobile
-// equivalent anywhere else in the admin shell — on a phone there was simply no way to
-// change language or open the storefront. Both stay visible at every width now; "view
-// store" drops its label to an icon-only 44px tap target below sm to make room.
 .admin-topbar__lang {
   display: inline-flex;
 }
@@ -149,10 +143,6 @@
 }
 
 .admin-topbar__account-panel {
-  // No min-inline-size — a single "Sign out" item should hug its own content. The old
-  // 160px floor made the panel noticeably wider than the account button it's anchored
-  // to, so on a narrow screen its far edge reached back across the topbar toward the
-  // language switcher, reading as if it opened from there instead of from the button.
   padding: var(--sp-1);
 }
 

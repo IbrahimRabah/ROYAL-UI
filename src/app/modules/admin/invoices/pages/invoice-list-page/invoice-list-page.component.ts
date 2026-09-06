@@ -79,7 +79,6 @@ export class InvoiceListPageComponent {
     effect(
       () => {
         const page = this.page();
-        // Re-run whenever any filter param changes too.
         this.status();
         this.search();
         this.dateFrom();
@@ -166,9 +165,6 @@ export class InvoiceListPageComponent {
     this.invoiceApi.list(page, this.pageSize).subscribe({
       next: (res) => {
         let content = res.content;
-
-        // GET /admin/invoices has no filter query params — status/date-range/search are
-        // applied client-side over the fetched page, same approach as the orders list.
         const status = this.status();
         if (status) {
           content = content.filter((r) => r.status === status);

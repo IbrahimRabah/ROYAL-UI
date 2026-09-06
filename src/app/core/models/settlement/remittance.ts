@@ -11,15 +11,12 @@ export interface OutstandingRemittanceOrder {
   daysWaiting: number;
 }
 
-// GET /admin/remittances/outstanding
 export interface OutstandingRemittanceResponse {
   orderCount: number;
   totalAmount: Money;
   orders: OutstandingRemittanceOrder[];
 }
 
-// POST /admin/remittances — note required whenever receivedAmount differs from the sum
-// of the covered orders' totals (enforced by the caller, not the type system).
 export interface CreateRemittanceRequest {
   courierName: string;
   courierReference?: string;
@@ -39,7 +36,6 @@ export interface RemittanceResponse {
   id: number;
   reference: string;
   courierName: string;
-  // Inferred nullable — optional on create.
   courierReference: string | null;
   settlementDate: string;
   status: RemittanceStatus;
@@ -47,7 +43,6 @@ export interface RemittanceResponse {
   receivedAmount: Money;
   difference: Money;
   orderCount: number;
-  // Inferred nullable — only required on create when amounts mismatch.
   note: string | null;
   orders: RemittanceOrderLine[];
   createdAt: string;

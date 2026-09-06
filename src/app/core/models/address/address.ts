@@ -1,10 +1,5 @@
-// GET/POST/PUT /me/addresses — altPhone is explicitly null in the contract example.
-// area/building/floor/apartment/landmark are inferred nullable from the matching
-// "optional" fields on AddressUpsertRequest below.
 export interface AddressResponse {
   id: number;
-  // Free text, max 30 chars — the contract suggests HOME | WORK | OTHER as the intended
-  // values but doesn't declare them a closed enum, so this stays a plain string.
   label: string;
   recipientName: string;
   phone: string;
@@ -21,7 +16,6 @@ export interface AddressResponse {
   formatted: string;
 }
 
-// POST/PUT /me/addresses
 export interface AddressUpsertRequest {
   label?: string;
   recipientName: string;

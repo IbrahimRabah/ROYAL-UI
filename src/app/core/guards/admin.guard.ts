@@ -11,7 +11,6 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Not signed in at all -> give them a chance to log in; signed in but not an admin -> 403.
   if (!authStore.isLoggedIn()) {
     return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } });
   }

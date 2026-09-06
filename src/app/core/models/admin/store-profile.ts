@@ -1,6 +1,3 @@
-// GET/PUT /admin/settings/store-profile — single row, the seller's legal identity printed
-// on invoices. taxNumber/commercialRegister are explicitly null in the example; the rest
-// are inferred nullable because the PUT doc states "all other fields optional".
 export interface StoreProfileResponse {
   legalName: string;
   legalNameEn: string | null;
@@ -14,7 +11,6 @@ export interface StoreProfileResponse {
   missingFields: string[];
 }
 
-// PUT /admin/settings/store-profile
 export interface StoreProfileUpdateRequest {
   legalName: string;
   legalNameEn?: string;

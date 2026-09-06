@@ -15,9 +15,6 @@ import {
   AuditEntityType,
 } from '../../../../../core/constants/audit.constants';
 
-// Reached via /admin/audit/:entityType/:entityId — must stand on its own on a hard
-// refresh (deep link), so it reads everything it needs from the route params rather than
-// from any state handed down by the audit log page.
 @Component({
   selector: 'app-entity-history-panel',
   templateUrl: './entity-history-panel.component.html',
@@ -36,7 +33,6 @@ export class EntityHistoryPanelComponent {
   readonly loading = signal(true);
   readonly error = signal(false);
 
-  // Only entity types that map to a real admin screen get a link-through target.
   readonly linkTarget: string[] | null =
     this.entityType === 'REMITTANCE' && this.entityId ? ['/admin/remittances', this.entityId] : null;
 
@@ -74,7 +70,6 @@ export class EntityHistoryPanelComponent {
 
     this.auditApi.byEntity(this.entityType, this.entityId).subscribe({
       next: (res) => {
-        // Newest first.
         const sorted = [...res.content].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         this.entries.set(sorted);
         this.loading.set(false);

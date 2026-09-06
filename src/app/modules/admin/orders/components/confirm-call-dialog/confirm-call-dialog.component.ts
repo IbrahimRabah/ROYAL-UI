@@ -25,8 +25,6 @@ export class ConfirmCallDialogComponent extends DialogPortalBase implements OnCh
   @Input() orderId: number | null = null;
   @Output() readonly closed = new EventEmitter<void>();
   @Output() readonly confirmed = new EventEmitter<void>();
-  // The order moved (409) since the page loaded — the dialog stays open showing why, but
-  // the parent must refetch so the rest of the page stops showing stale state.
   @Output() readonly conflict = new EventEmitter<void>();
 
   readonly note = signal('');

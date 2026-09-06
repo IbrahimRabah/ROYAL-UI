@@ -40,8 +40,6 @@ export class FilterSidebarComponent {
     return this.filter.inStockOnly ?? false;
   }
 
-  // Only meaningful for color-type values (contract: hexColor is non-null there and
-  // only there), same heuristic the PDP uses to pick its swatch group out of variantOptions.
   get colorGroup(): AttributeGroupResponse | null {
     return this.facets?.attributes.find((group) => group.values.some((value) => value.hexColor != null)) ?? null;
   }

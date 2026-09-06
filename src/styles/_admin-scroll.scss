@@ -1,9 +1,4 @@
-// Horizontal-scroll wrapper for tables/wide content that can't be restructured into
-// cards at narrow widths (movements log, order line items). The PAGE itself must never
-// scroll horizontally — only this wrapper does — and the mask-image edge fade signals
-// there's more content off-screen. Gated to narrower viewports only: at desktop widths
-// the table already fits, and a fade there would wrongly crop content that isn't
-// actually scrollable.
+
 .admin-scroll-x {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

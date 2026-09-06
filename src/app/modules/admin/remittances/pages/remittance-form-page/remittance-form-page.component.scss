@@ -23,7 +23,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Empty state (no selection carried over) ═══
 
 .rfp__empty-state {
   display: flex;
@@ -55,7 +54,6 @@
   text-decoration: none;
 }
 
-// ═══ Layout ═══
 
 .rfp__layout {
   display: grid;
@@ -166,7 +164,6 @@
   }
 }
 
-// ═══ Live difference banner ═══
 
 .rfp__diff-banner {
   display: flex;
@@ -223,7 +220,6 @@
   }
 }
 
-// ═══ Selected orders panel ═══
 
 .rfp__orders-title {
   margin: 0 0 var(--sp-4);

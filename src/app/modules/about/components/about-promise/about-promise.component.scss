@@ -33,7 +33,6 @@
   text-decoration: none;
   color: inherit;
 
-  // The 5th item (WhatsApp) centers alone on its own row in the mobile 2-col grid.
   &:last-child {
     grid-column: 1 / -1;
 

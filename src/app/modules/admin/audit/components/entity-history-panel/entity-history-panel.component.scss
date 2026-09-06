@@ -77,7 +77,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ Timeline ═══
 
 .ehp__timeline {
   position: relative;
@@ -95,8 +94,6 @@
   gap: var(--sp-4);
   padding-inline-start: var(--sp-6);
 
-  // The connecting line — a single inset-inline-start rule reverses direction for free
-  // under RTL (logical property, not left/right), no separate RTL override needed.
   &::before {
     content: '';
     position: absolute;

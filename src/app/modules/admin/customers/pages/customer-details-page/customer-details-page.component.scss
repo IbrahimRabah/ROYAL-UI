@@ -10,7 +10,6 @@
   gap: var(--sp-5);
 }
 
-// ═══ Error / not-found ═══
 
 .cdp__error,
 .cdp__not-found {
@@ -50,7 +49,6 @@
   }
 }
 
-// ═══ Header ═══
 
 .cdp__header {
   padding: var(--sp-5);
@@ -84,8 +82,6 @@
   font-weight: 600;
   text-decoration: none;
   direction: ltr;
-  // text-align: start would resolve against this element's own (forced) ltr direction,
-  // not the page's, so it would always land left — explicit left/right + an RTL override.
   text-align: left;
   unicode-bidi: isolate;
 
@@ -117,7 +113,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ Purchase summary stats ═══
 
 .cdp__stats {
   display: grid;
@@ -166,7 +161,6 @@
   }
 }
 
-// ═══ Addresses ═══
 
 .cdp__section-title {
   margin: 0 0 var(--sp-4);

@@ -32,7 +32,6 @@ export class CatalogApiService {
     return this.http.get<ProductDetailResponse>(API_ROUTES.catalog.productBySlug(slug));
   }
 
-  // GET /products/{id}/related has a fixed internal limit of 8 — no page/size params exist.
   getRelated(productId: number): Observable<ProductSummaryResponse[]> {
     return this.http.get<ProductSummaryResponse[]>(API_ROUTES.catalog.relatedProducts(productId));
   }
@@ -55,11 +54,6 @@ export class CatalogApiService {
     return this.http.get<CategoryDetailResponse>(API_ROUTES.catalog.categoryBySlug(slug));
   }
 
-  // GET /categories/filters returns each brand/attribute-value row duplicated (a join
-  // without distinct on the backend — same shape as the product-images cartesian-product
-  // bug fixed earlier; confirmed by inspecting the raw response: every attribute value
-  // repeats with an *identical* id, not a distinct one, so deduping by id here is safe.
-  // See docs/BACKEND_NOTES.md item 4.
   getFilters(categoryId?: number): Observable<FilterFacetsResponse> {
     const params = categoryId == null ? undefined : new HttpParams().set('categoryId', categoryId);
     return this.http
@@ -81,9 +75,6 @@ export class CatalogApiService {
     return this.http.get<VariantAvailabilityResponse>(API_ROUTES.catalog.variantAvailability(variantId));
   }
 
-  // Drops undefined/null/'' fields entirely (never sends them as literal "undefined"
-  // strings) and joins array fields with commas (brandIds=1,2), per the contract's
-  // query param table for GET /products.
   private buildProductParams(filter: ProductFilter): HttpParams {
     let params = new HttpParams();
     params = this.appendString(params, 'q', filter.q);

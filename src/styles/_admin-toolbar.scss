@@ -1,28 +1,3 @@
-// Collapses a multi-control filter toolbar (selects, toggles, date pickers) behind a
-// single "Filters" trigger below tablet width. Deliberately plain <div>/<button> rather
-// than <details>/<summary>: recent Chromium wraps non-summary <details> content in an
-// internal ::details-content box governed by content-visibility, tied strictly to the
-// [open] attribute — no author `display` override (however specific) can force it open,
-// which broke the "always expanded at desktop, no toggle" requirement below. Plain
-// elements have no such native behavior, so the open/closed state here is entirely
-// author-controlled via the --open modifier class (driven by a component signal).
-//
-// Markup shape expected by callers:
-//   <div class="admin-toolbar">
-//     <button
-//       type="button"
-//       class="admin-toolbar__trigger"
-//       [attr.aria-expanded]="filtersOpen()"
-//       (click)="filtersOpen.set(!filtersOpen())"
-//     >
-//       <i class="pi pi-sliders-h" aria-hidden="true"></i>
-//       {{ 'common.filters' | translate }}
-//       <i class="pi pi-chevron-down admin-toolbar__chevron" aria-hidden="true"></i>
-//     </button>
-//     <div class="admin-toolbar__panel" [class.admin-toolbar__panel--open]="filtersOpen()">
-//       ...controls...
-//     </div>
-//   </div>
 .admin-toolbar {
   display: contents;
 
@@ -72,8 +47,6 @@
     gap: var(--sp-3);
     padding: 0 var(--sp-4) var(--sp-4);
 
-    // Every direct control (search box, p-select, toggle) goes full width and stacks
-    // one per row instead of squeezing into the desktop's flex-wrap row.
     > * {
       flex: 1 1 auto;
       inline-size: 100%;
@@ -87,26 +60,6 @@
     display: flex;
   }
 }
-
-// ═══ List-page toolbar row (search box + filters trigger) ═══
-//
-// Markup shape expected by callers:
-//   <div class="admin-list-toolbar">
-//     <div class="admin-toolbar__search">
-//       <i class="pi pi-search admin-toolbar__search-icon" aria-hidden="true"></i>
-//       <input type="search" class="admin-toolbar__search-input" ... />
-//     </div>
-//     <div class="admin-toolbar"> ...trigger + panel, see above... </div>
-//   </div>
-//
-// This whole block was duplicated near-identically across every admin list screen
-// (invoices, products, inventory, orders), each with its own slightly different values
-// and, critically, each independently making the same mistake: giving the search box a
-// fixed-px flex-basis (e.g. "flex: 2 1 240px") meant as a desktop WIDTH hint. Below 768px
-// this row switches to flex-direction: column, where flex-basis instead sets BLOCK-size —
-// so the search box rendered as an ~240px-tall empty box instead of a ~44px input, which
-// is what read as a huge blank gap. Fixed once here: the fixed basis only applies at
-// tablet width and up; reset to auto below it so the item sizes to its own content again.
 .admin-list-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -125,11 +78,6 @@
   align-items: center;
 }
 
-// The width hint below only makes sense sharing a row with the filters trigger — scoped
-// to that context rather than baked into .admin-toolbar__search itself, since some
-// screens (orders) use the search box as a lone, always-full-width block whose ancestor
-// is flex-direction: column at every width, not just below 768px; an unscoped flex-basis
-// there would hit the exact same px-becomes-height bug this file exists to fix.
 .admin-list-toolbar > .admin-toolbar__search {
   flex: 2 1 240px;
 
@@ -168,12 +116,6 @@
   }
 }
 
-// Filter control wrapper (p-select, p-datepicker) inside .admin-toolbar__panel — same
-// fixed-px-basis-becomes-height story as .admin-toolbar__search above. The panel already
-// resets its direct children to "flex: 1 1 auto" on mobile (below), but each screen's own
-// same-specificity, later-loaded component style was overriding that safe default with
-// its own "flex: 1 1 170px" (or 160/180px) — there's no longer a per-screen rule to do
-// that; screens use this shared one instead.
 .admin-toolbar__filter-field {
   flex: 1 1 170px;
   min-inline-size: 0;
@@ -188,8 +130,6 @@
   }
 }
 
-// Shared empty-list message — also duplicated identically across all four screens.
-// Padding tightens below 768px; screen real estate at 375px is scarce.
 .admin-list-empty {
   padding: var(--sp-8);
   text-align: center;

@@ -3,8 +3,6 @@
 .contact-cards {
   position: relative;
   z-index: 1;
-  // Pulls the panel up over the hero's bottom edge — the overlap is what makes the
-  // page read as designed surfaces rather than sections stacked one after another.
   margin-block-start: calc(-1 * var(--sp-8));
   margin-block-end: var(--sp-8);
 
@@ -38,8 +36,6 @@
   border-block-end: 1px solid var(--line);
   transition: transform 220ms ease;
 
-  // The 5th cell (Cash on Delivery) is last and centers alone on its own row in the
-  // mobile 2-col grid.
   &:last-child {
     grid-column: 1 / -1;
     border-block-end: none;

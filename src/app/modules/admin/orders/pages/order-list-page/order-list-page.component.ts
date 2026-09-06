@@ -53,11 +53,6 @@ const TABS: StatusTab[] = [
   { key: 'CANCELLED', status: FulfillmentStatus.CANCELLED, labelKey: 'admin.orders.tabs.failedCancelled' },
 ];
 
-// Digits (with optional leading + and internal spaces/dashes) reads as a phone search —
-// anything else (e.g. "VLR-260818-6925") is treated as an order-number search instead.
-// GET /admin/orders only supports a `phone` query param server-side; there is no
-// search-by-orderNumber endpoint for admins, so order-number text can only narrow what's
-// already loaded on the current page (see the comment in fetch() below).
 function isPhoneLike(text: string): boolean {
   const digitsOnly = text.trim().replace(/[\s-]/g, '');
   return /^\+?\d{4,}$/.test(digitsOnly);
@@ -131,7 +126,6 @@ export class OrderListPageComponent {
     this.fetchTabCounts();
 
     let first = true;
-    // Reacts to every URL query-param change — tab, search, filters, page — and re-fetches.
     effect(
       () => {
         const status = this.activeStatus();
@@ -142,8 +136,6 @@ export class OrderListPageComponent {
           this.searchDraft.set(search);
         }
         first = false;
-        // So a back link from an order's detail page can return to this exact filtered,
-        // paginated view instead of a reset one.
         this.listReturn.remember('/admin/orders', this.router.url);
         this.fetch(status, search, page, filters);
       },
@@ -192,10 +184,6 @@ export class OrderListPageComponent {
     return this.translate.instant('admin.orders.list.waitingDays', { days: Math.round(hours / 24) });
   }
 
-  // Transitions safe to fire directly from the list row: no required reason and no
-  // irreversible consequence (stock deduction / invoice issuance) needing a warning
-  // dialog first. Anything else routes the operator to the detail page instead, where
-  // the full reason/consequence dialogs live.
   quickTransitions(row: OrderSummaryResponse): readonly FulfillmentStatus[] {
     return FULFILLMENT_TRANSITIONS[row.fulfillmentStatus] ?? [];
   }
@@ -233,8 +221,6 @@ export class OrderListPageComponent {
       },
       error: (err: unknown) => {
         this.firing.set(null);
-        // No dedicated inline surface on a table row — a 409 here just means someone
-        // else already moved the order, so toast it and refresh to show the real state.
         const result = handleAdminMutationError(err, this.toast, lang);
         if (result.isConflict && result.message) {
           this.toast.error(result.message);
@@ -292,16 +278,11 @@ export class OrderListPageComponent {
       next: (res) => {
         let content = res.content;
 
-        // Order-number search has no backend equivalent — narrow within the page already
-        // fetched rather than pretending it searched every order.
         if (trimmed && !phone) {
           const q = trimmed.toLowerCase();
           content = content.filter((r) => r.orderNumber.toLowerCase().includes(q));
         }
 
-        // dateFrom/dateTo/governorate/paymentStatus aren't supported by GET /admin/orders
-        // either (only status/phone/page/size/sort are) — applied client-side over the
-        // current page for the same reason.
         if (filters.dateFrom) {
           const from = new Date(filters.dateFrom).getTime();
           content = content.filter((r) => new Date(r.placedAt).getTime() >= from);

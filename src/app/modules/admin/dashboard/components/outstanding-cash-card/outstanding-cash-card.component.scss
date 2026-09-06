@@ -8,17 +8,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-1);
-  // A grid item's default min-width is "auto" (its content's min-content size), not 0 —
-  // without this override the card refuses to shrink to its grid track's width even once
-  // the track itself is a shrinkable minmax(0, 1fr)/minmax(220px, 1fr), and the figure
-  // text pushes the card past its column, overflowing the row.
   min-inline-size: 0;
-  // The figure's font-size below is sized in cqw (container query width) rather than vw —
-  // this card's actual width depends on how many columns the row settles into (2 at
-  // tablet, up to 5-6 at ≥1400px via auto-fit), not on the viewport directly. A vw-based
-  // size doesn't know the column count and stays large even when the card itself is
-  // narrow, which is what let the currency suffix get squeezed past the card's edge for
-  // a long figure — cqw tracks the card's own rendered width instead.
   container-type: inline-size;
   height: 100%;
   padding: var(--admin-card-pad);
@@ -61,14 +51,7 @@
 
 .outstanding-cash-card__figure {
   min-inline-size: 0;
-  // Never break a money figure mid-number — overflow-wrap: anywhere let the card's own
-  // shrink-to-fit (min-inline-size: 0 above) wrap "64,538" onto two lines the moment the
-  // card got squeezed even slightly. nowrap keeps it one line; the card is already free to
-  // shrink around it without forcing the page wider.
   white-space: nowrap;
-  // cqw, not vw (see container-type on .outstanding-cash-card) — scales with this card's
-  // own width so a long figure (e.g. "1,264,538") shrinks enough to leave room for the
-  // currency suffix instead of pushing it past the card's padding.
   font-size: clamp(1.5rem, 12cqw, var(--fs-h1));
   font-weight: 400;
   line-height: 1.1;
@@ -86,8 +69,6 @@
   color: var(--admin-text-muted);
 }
 
-// Escalated state once the courier has held cash for more than a week — a stronger wash
-// than the card's always-on 4% tint, plus the border and figure turn fully --warn.
 .outstanding-cash-card--warn {
   border-color: var(--warn);
   background: var(--warn-bg);

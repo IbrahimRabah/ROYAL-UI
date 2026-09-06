@@ -9,16 +9,8 @@
   margin-block-end: var(--sp-4);
 }
 
-// Hero + promo banner share the dark-image-with-scrim shell. Both banner sets are
-// wide (~1916 x 821 for the current artwork) — sized to their own aspect ratio with a
-// max-height cap instead of a fixed height, so object-fit: contain never has to crop
-// the subject. min-block-size is a floor so the overlaid text always has room to
-// breathe on very narrow viewports (letterboxed against the --ink background, not
-// cropped) rather than a layout decision that fights the aspect ratio.
 .plp__hero,
 .plp__promo {
-  // Text pinned to the physical left in both languages — deliberately not mirrored
-  // under RTL (same exception as about-hero.component.scss / about-gender-panels).
   direction: ltr;
   text-align: left;
   position: relative;
@@ -26,12 +18,6 @@
   border-radius: var(--r-lg);
   background: var(--ink);
   text-decoration: none;
-  // .plp__promo is a flex item (.plp__main is display:flex); flex/grid items default
-  // to min-width: auto, which for an aspect-ratio box resolves to its *ratio-derived*
-  // intrinsic width (here, min-block-size 200 * ratio ≈ 467px) — that intrinsic
-  // contribution inflates the flex/grid container even though max-inline-size clamps
-  // the box's own final size. min-inline-size: 0 opts out, letting it actually shrink
-  // to fit the container instead of overflowing it on narrow viewports.
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
@@ -170,9 +156,6 @@
 .plp__main {
   display: flex;
   flex-direction: column;
-  // Grid item default min-width: auto would otherwise inherit the aspect-ratio
-  // banners' intrinsic width contribution and force the grid track wider — see the
-  // .plp__hero/.plp__promo comment.
   min-inline-size: 0;
   gap: var(--sp-10);
 }

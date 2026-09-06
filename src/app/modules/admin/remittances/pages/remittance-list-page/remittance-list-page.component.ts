@@ -20,14 +20,6 @@ const NUMBER_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   maximumFractionDigits: 2,
 });
 
-// GET /admin/remittances is a plain paginated list — no aggregate/totals field in the
-// contract, and no separate summary endpoint. At this app's data size, one request for
-// "everything" (a generously large `size`) and filtering/summing client-side is simpler
-// and, critically, more correct than juggling multiple page requests: it's the only way
-// the summary card can reflect the SAME filtered set the table shows rather than just
-// whatever happened to be on the current server page. If remittance volume ever outgrows
-// this, the right fix is a backend aggregate endpoint, not paging through thousands of
-// rows client-side.
 const FETCH_ALL_SIZE = 2000;
 
 @Component({
@@ -69,17 +61,11 @@ export class RemittanceListPageComponent {
   readonly loading = signal(true);
   readonly error = signal(false);
 
-  // Every courier name actually seen, for the filter dropdown — an exact-match select
-  // rather than free text, so "read the figures for this one courier" never misses a row
-  // to a typo or a partial-name mismatch.
   readonly courierOptions = computed(() => {
     const names = new Set(this.allRows().map((r) => r.courierName));
     return Array.from(names).sort((a, b) => a.localeCompare(b));
   });
 
-  // The filtered set — courier/status/date-range applied client-side, since none of them
-  // are server query params. Both the table and the summary derive from this SAME array,
-  // so the summary can never drift from what's actually on screen.
   readonly filteredRows = computed<RemittanceResponse[]>(() => {
     let content = this.allRows();
 
@@ -115,12 +101,6 @@ export class RemittanceListPageComponent {
     return this.filteredRows().slice(start, start + this.pageSize);
   });
 
-  // ═══ Summary — cumulative over the filtered set, not just the current page ═══
-
-  // A cancelled remittance's orders return to unpaid and reappear in outstanding — its
-  // expected/received amounts are no longer real money owed or collected, so counting
-  // them here would double-count against outstanding. The table still shows cancelled
-  // rows (the history matters); only the summary figures exclude them.
   readonly summaryActiveRows = computed(() => this.filteredRows().filter((r) => r.status !== RemittanceStatus.CANCELLED));
   readonly summaryCancelledCount = computed(
     () => this.filteredRows().length - this.summaryActiveRows().length,
@@ -128,13 +108,7 @@ export class RemittanceListPageComponent {
 
   readonly summaryExpected = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.expectedAmount), 0));
   readonly summaryReceived = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.receivedAmount), 0));
-  // Summed from each row's own `difference` (received − expected, the backend's sign
-  // convention — negative is short) rather than re-derived as expected − received, which
-  // would silently flip the sign relative to every per-row figure on this same screen.
   readonly summaryDifference = computed(() => this.summaryActiveRows().reduce((sum, r) => sum + money(r.difference), 0));
-  // Any non-zero difference, not just status === SHORT — a settlement can be CANCELLED
-  // (excluded above) or otherwise carry a difference without that exact status, and the
-  // count must agree with the total it's derived alongside, not with a status label.
   readonly summaryShortCount = computed(
     () => this.summaryActiveRows().filter((r) => Math.abs(money(r.difference)) >= 0.005).length,
   );
@@ -149,8 +123,6 @@ export class RemittanceListPageComponent {
   readonly summaryDiffSign = computed(() => (this.summaryDifference() > 0.005 ? '+' : ''));
 
   constructor() {
-    // Filters/page live in the URL for bookmarking and the back-link, but since every row
-    // is already fetched once, changing them never needs a new request — only remember().
     effect(() => {
       this.status();
       this.courier();

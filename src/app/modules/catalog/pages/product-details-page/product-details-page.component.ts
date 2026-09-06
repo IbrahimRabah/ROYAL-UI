@@ -17,9 +17,6 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { CartStoreService } from '../../../../core/state/cart-store.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
 
-// The only value-level attribute rendered as a swatch on the PDP — the group whose values
-// carry a hexColor. Other variant-defining attributes (if any) aren't surfaced here per the
-// approved layout, which shows color only.
 function findColorGroup(product: ProductDetailResponse): AttributeGroupResponse | null {
   return product.variantOptions.find((group) => group.values.some((value) => value.hexColor != null)) ?? null;
 }
@@ -68,11 +65,6 @@ export class ProductDetailsPageComponent {
     return match ?? product.variants[0];
   });
 
-  // Always poster + the selected variant's own shots — never just one or the other. The
-  // product-level "poster" (main: true) is pinned first regardless of variant, and variant
-  // photos with no images of their own (single-variant products, e.g. perfumes, whose
-  // photos all live at product level with only one flagged main) fall back to the full
-  // product image set so they keep their existing gallery instead of losing shots.
   readonly galleryImages = computed<ImageResponse[]>(() => {
     const product = this.product();
     if (!product) return [];
@@ -84,16 +76,8 @@ export class ProductDetailsPageComponent {
     return dedupeById(poster ? [poster, ...variantImages] : variantImages);
   });
 
-  // The image the gallery should focus. Plain (not computed) on purpose: it defaults to the
-  // poster when a product loads, and only jumps to the color's own shot when the customer
-  // explicitly picks one in selectValue() — so landing on the page always shows the poster,
-  // and re-selecting the poster's own thumbnail still works via the gallery's own click handling.
   readonly activeGalleryImageId = signal<number | null>(null);
 
-  // What the gallery is actually showing right now, reported back by the gallery via
-  // displayedImageIdChange. Used only to detect "the poster is on screen" so the color
-  // swatch's active mark can be cleared — selectedValueId itself (price/SKU/add-to-cart)
-  // stays on the last-picked color regardless of which image is being viewed.
   readonly displayedImageId = signal<number | null>(null);
 
   readonly posterImageId = computed<number | null>(() => {
@@ -106,12 +90,6 @@ export class ProductDetailsPageComponent {
     return displayed !== null && displayed === this.posterImageId();
   });
 
-  // The image shown next to the description copy on desktop. Prefers a product image not
-  // part of the currently displayed gallery set (e.g. a lifestyle shot excluded once the
-  // selected variant's own photos take over). Single-variant products (perfumes, no color
-  // group) have no such exclusive shot — every product image ends up in the gallery — so
-  // this falls back to the last product image instead of leaving the section imageless,
-  // keeping the description layout consistent across all product types.
   readonly descriptionImage = computed<ImageResponse | null>(() => {
     const product = this.product();
     if (!product || !product.images.length) return null;
@@ -130,10 +108,6 @@ export class ProductDetailsPageComponent {
   readonly inStock = computed(() => this.selectedVariant()?.inStock ?? this.product()?.inStock ?? false);
 
   constructor() {
-    // Re-fetches on slug change (navigating product-to-product via a related-products card
-    // reuses this route's component instance, so a route param subscription is required
-    // rather than a one-time constructor read) and on language change (names/descriptions
-    // come back server-translated via Accept-Language, same as the home page's pattern).
     effect(() => {
       const slug = this.slug();
       this.languageStore.lang();

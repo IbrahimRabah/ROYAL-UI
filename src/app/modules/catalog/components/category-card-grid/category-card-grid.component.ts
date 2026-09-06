@@ -16,8 +16,6 @@ export interface CategoryCard {
 export class CategoryCardGridComponent {
   @Input() cards: CategoryCard[] = [];
 
-  // Per-card broken-image tracking (a category added without a matching image folder
-  // shouldn't render a broken <img> icon) — same pattern as the hero/promo banners.
   private readonly brokenIds = new Set<number>();
 
   isBroken(id: number): boolean {

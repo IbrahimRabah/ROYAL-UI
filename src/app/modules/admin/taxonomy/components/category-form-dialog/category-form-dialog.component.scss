@@ -236,7 +236,6 @@
   }
 }
 
-// ═══ General fields grid ═══
 
 .cfd__grid {
   display: grid;
@@ -259,7 +258,6 @@
   grid-column: 1 / -1;
 }
 
-// ═══ Toggle (hand-rolled — see product-translations-tab for why not p-toggleswitch) ═══
 
 .cfd__toggle {
   display: inline-flex;
@@ -314,7 +312,6 @@
   outline-offset: 2px;
 }
 
-// ═══ Language panels ═══
 
 .cfd__languages {
   display: grid;

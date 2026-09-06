@@ -27,9 +27,6 @@ export class OrderConfirmationPageComponent {
   readonly orderNumber = this.route.snapshot.paramMap.get('orderNumber') ?? '';
   readonly order = signal<OrderResponse | null>(null);
   readonly loading = signal(false);
-  // True once we know we cannot recover the full order (guest, no navigation state, no
-  // authenticated GET /me/orders/{orderNumber} to fall back on) — GET is auth-scoped to the
-  // signed-in customer's own orders, so a guest simply has no endpoint to re-fetch this from.
   readonly unavailable = signal(false);
 
   constructor() {

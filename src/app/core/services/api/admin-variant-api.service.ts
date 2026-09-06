@@ -24,8 +24,6 @@ export class AdminVariantApiService {
     return this.http.post<VariantPreviewResponse>(API_ROUTES.admin.variants.preview(productId), body);
   }
 
-  // Returns only the variants actually created/updated — combinations already present
-  // among the create-items are silently skipped by the backend.
   bulkUpsert(productId: number, body: VariantBulkUpsertRequest): Observable<VariantAdminResponse[]> {
     return this.http.post<VariantAdminResponse[]>(API_ROUTES.admin.variants.byProduct(productId), body);
   }

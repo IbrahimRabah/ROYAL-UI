@@ -7,10 +7,6 @@ import { APP_CONFIG } from '../../constants/app-config';
 import { CancelInvoiceRequest, InvoiceResponse, PageResponse, UninvoicedReport } from '../../models';
 import { SUPPRESS_ERROR_TOAST } from '../../interceptors/error.interceptor';
 import { buildHttpParams } from './http-params.util';
-
-// issue/cancel suppress the interceptor's automatic error toast — both are handled via
-// admin-mutation-error.util.ts so a 400 VALIDATION_FAILED (e.g. a missing cancel reason)
-// binds inline instead of toasting.
 const NO_TOAST = { context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) };
 
 @Injectable({
@@ -31,9 +27,6 @@ export class AdminInvoiceApiService {
   downloadPdf(invoiceId: number): Observable<Blob> {
     return this.http.get(API_ROUTES.admin.invoices.pdf(invoiceId), { responseType: 'blob' });
   }
-
-  // Idempotent — if the order already has an invoice, that one is returned instead of
-  // consuming a new number.
   issue(orderId: number): Observable<InvoiceResponse> {
     return this.http.post<InvoiceResponse>(API_ROUTES.admin.invoices.issue(orderId), null, NO_TOAST);
   }
@@ -42,7 +35,6 @@ export class AdminInvoiceApiService {
     return this.http.post<InvoiceResponse>(API_ROUTES.admin.invoices.cancel(invoiceId), body, NO_TOAST);
   }
 
-  // Reconciliation check — should always come back { count: 0, orderIds: [] }.
   uninvoiced(): Observable<UninvoicedReport> {
     return this.http.get<UninvoicedReport>(API_ROUTES.admin.invoices.uninvoiced());
   }

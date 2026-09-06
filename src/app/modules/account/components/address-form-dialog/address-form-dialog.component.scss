@@ -1,7 +1,5 @@
 @use 'styles/breakpoints';
 
-// Portalled to <body> at runtime (see the .ts file) to escape ancestor stacking
-// contexts, so --z-modal here is what actually decides paint order vs. the header.
 .address-dialog {
   position: fixed;
   inset: 0;
@@ -46,10 +44,6 @@
     transform: none;
   }
 }
-
-// Header/footer — fixed, never scroll; the form body between them is the only
-// scrollable region. Hairlines fade in via .address-dialog__*--scrolled once the body
-// has actually scrolled (bound from the component on the body's scroll event).
 .address-dialog__header {
   flex-shrink: 0;
   display: flex;
@@ -226,8 +220,6 @@
   cursor: default;
 }
 
-// Mobile — bottom sheet. The base rule above already gives every corner --r-lg, so only
-// the block-end (bottom) pair needs squaring off — no need to restate the top pair.
 @media (max-width: 639px) {
   .address-dialog {
     align-items: flex-end;
@@ -254,8 +246,6 @@
   }
 }
 
-// Placed last so it wins the cascade over both the scale-in and slide-up keyframes above,
-// regardless of viewport width.
 @media (prefers-reduced-motion: reduce) {
   .address-dialog__panel {
     animation: none;

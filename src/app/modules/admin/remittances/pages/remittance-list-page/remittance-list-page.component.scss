@@ -47,10 +47,6 @@
   }
 }
 
-// ═══ Toolbar ═══
-// Search box, filters trigger/panel and filter-field sizing are all shared global
-// classes now (.admin-list-toolbar / .admin-toolbar__search* / .admin-toolbar__filter-field
-// in _admin-toolbar.scss).
 
 .rlp__clear-btn {
   flex-shrink: 0;
@@ -69,7 +65,6 @@
   }
 }
 
-// ═══ Error ═══
 
 .rlp__error {
   display: flex;
@@ -98,9 +93,6 @@
     color: #fff;
   }
 }
-
-// ═══ Summary — cumulative figures over the filtered set; the difference carries the
-// emphasis, per the visual spec (--fs-h2, tone-coded). ═══
 
 .rlp__summary {
   display: grid;
@@ -146,8 +138,6 @@
   color: var(--admin-text-muted);
 }
 
-// States what the figures above deliberately leave out — spans the full row so it
-// reads as a note about the whole summary, not just the difference figure beside it.
 .rlp__summary-excluded {
   grid-column: 1 / -1;
   padding-block-start: var(--sp-3);
@@ -156,7 +146,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ Table ═══
 
 .rlp__table-wrap {
   display: none;
@@ -212,7 +201,6 @@
   font-weight: 700;
 }
 
-// .rlp__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
 
 :host ::ng-deep .rlp__table {
   .p-datatable-thead > tr > th {
@@ -253,8 +241,6 @@
     padding: var(--sp-3);
   }
 }
-
-// ═══ Mobile cards ═══
 
 .rlp__cards {
   display: flex;

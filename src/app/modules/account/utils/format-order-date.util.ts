@@ -1,8 +1,5 @@
 import { Language } from '../../../core/enums/language';
 
-// -u-nu-latn forces Latin digits in Arabic too, matching vl-price's convention for numbers
-// elsewhere in the storefront (an ar-EG Intl.DateTimeFormat would otherwise render Eastern
-// Arabic numerals).
 const LOCALES: Record<Language, string> = {
   [Language.AR]: 'ar-EG-u-nu-latn',
   [Language.EN]: 'en-US',

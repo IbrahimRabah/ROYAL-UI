@@ -29,7 +29,6 @@ export class ProductImagesTabComponent implements OnInit {
   private readonly confirmDialog = inject(ConfirmDialogService);
 
   @Input({ required: true }) productId!: number;
-  // Fires on upload/delete — imageCount feeds the product's `warnings` ("No images").
   @Output() readonly imagesChanged = new EventEmitter<void>();
 
   readonly images = signal<AdminImageResponse[]>([]);
@@ -64,7 +63,6 @@ export class ProductImagesTabComponent implements OnInit {
     return `${variant.summary} — ${variant.sku}`;
   }
 
-  // ── Upload ──
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -129,14 +127,10 @@ export class ProductImagesTabComponent implements OnInit {
       },
       error: () => {
         this.uploading.set(false);
-        // Whatever succeeded before the failing one is still on the server — refresh
-        // to show the true state rather than silently losing track of it.
         this.fetchImages();
       },
     });
   }
-
-  // ── Set main / delete ──
 
   setMain(image: AdminImageResponse): void {
     if (image.main) {
@@ -175,8 +169,6 @@ export class ProductImagesTabComponent implements OnInit {
       });
   }
 
-  // ── Edit dialog (alt text + variant link + set-as-main) ──
-
   startEdit(image: AdminImageResponse): void {
     this.editingImage.set(image);
   }
@@ -196,9 +188,6 @@ export class ProductImagesTabComponent implements OnInit {
       altTextEn: payload.altTextEn,
       variantId: payload.variantId,
     };
-    // main only ever transitions false -> true here; there's no "unset main" operation
-    // (the contract only supports promoting a different image), and the checkbox is
-    // disabled once an image is already main, so this never regresses one to false.
     if (payload.setMain && !image.main) {
       body.main = true;
     }
@@ -213,7 +202,6 @@ export class ProductImagesTabComponent implements OnInit {
     });
   }
 
-  // ── Reorder (drag and drop) ──
 
   onReorderDrop(event: CdkDragDrop<AdminImageResponse[]>): void {
     if (event.previousIndex === event.currentIndex) {
@@ -238,7 +226,6 @@ export class ProductImagesTabComponent implements OnInit {
     }
     forkJoin(entries.map(([id, displayOrder]) => this.productApi.updateImage(this.productId, id, { displayOrder }))).subscribe({
       error: () => {
-        // Resync with the server rather than leaving optimistic local order out of sync.
         this.toast.error(this.translate.instant('admin.products.form.images.reorderError'));
         this.fetchImages();
       },

@@ -19,8 +19,6 @@ export class AboutPageComponent {
   readonly categoryIds = computed(() => findCategoryIds(this.categories()));
 
   constructor() {
-    // Category names come back server-translated via Accept-Language, so a language
-    // switch needs a fresh fetch — same reasoning as the home page's category tree.
     effect(() => {
       this.languageStore.lang();
 

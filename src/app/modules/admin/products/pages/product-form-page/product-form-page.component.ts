@@ -46,9 +46,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   private readonly translate = inject(TranslateService);
   private readonly confirmDialog = inject(ConfirmDialogService);
 
-  // The 'new' and ':id' routes both point at this component but are distinct route
-  // configs, so Angular recreates the component (fresh constructor run) when save()
-  // navigates from one to the other — no need to react to paramMap changes mid-lifetime.
   readonly isNew = !this.route.snapshot.paramMap.has('id');
   private readonly routeProductId = this.route.snapshot.paramMap.get('id');
 
@@ -60,10 +57,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   readonly actionBusy = signal(false);
   readonly activeTab = signal('details');
 
-  // The specs tab's draft state, lifted up here so the single Save action can send it —
-  // same reasoning as `form` above: seeded once from the loaded product (see fetch()),
-  // never re-synced by refreshProductSilently(), and updated live via rowsChange as the
-  // operator edits so it's still current if they switch tabs before saving.
   readonly specRows = signal<ProductSpecificationInput[]>([]);
 
   readonly categories = signal<CategoryAdminResponse[]>([]);
@@ -100,9 +93,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   });
 
   constructor() {
-    // Deliberately independent of the rest of the form — if either of these fails, the
-    // corresponding select shows an inline error and stays empty, but translations, slug
-    // and the toggles must still be fully usable (see product-translations-tab).
     this.taxonomyApi.listCategories().subscribe({ next: (c) => this.categories.set(c), error: () => this.categoriesError.set(true) });
     this.taxonomyApi.listBrands().subscribe({ next: (b) => this.brands.set(b), error: () => this.brandsError.set(true) });
 
@@ -116,27 +106,16 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   }
 
   hasUnsavedChanges(): boolean {
-    // While an existing product is still loading, savedSnapshot has no real baseline yet
-    // (it's only set once fetch() resolves) — treating the form as "changed" during that
-    // window makes unsavedChangesGuard prompt a confirm dialog for a navigation the user
-    // never touched (e.g. an auth redirect firing before the product finished loading),
-    // and that dialog then blocks navigation forever since nothing is there to answer it.
     if (this.loading()) {
       return false;
     }
     return this.snapshot() !== this.savedSnapshot;
   }
 
-  // Covers both the Details form and the specs draft — specifications ride the same
-  // single Save action now, so a change to either must count as "unsaved".
   private snapshot(): string {
     return JSON.stringify({ form: this.form.getRawValue(), specs: this.specRows() });
   }
-
-  // Per the API's omit-null convention, a row's attributeValueId/valueText key can be
-  // missing entirely rather than present as null — normalize both to null so every row
-  // always has both keys, matching what the specs tab and the PUT body expect.
-  private normalizeSpecs(specs: ProductSpecificationInput[] | undefined): ProductSpecificationInput[] {
+ private normalizeSpecs(specs: ProductSpecificationInput[] | undefined): ProductSpecificationInput[] {
     return (specs ?? []).map((s) => ({
       attributeId: s.attributeId,
       attributeValueId: s.attributeValueId ?? null,
@@ -171,9 +150,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
     }
   }
 
-  // Variant changes (generate, bulk-save, archive) can flip variantCount/warnings/status —
-  // refetch to pick those up without toggling `loading`, which would hide the tabs the
-  // operator is actively working in behind the page-level skeleton.
   refreshProductSilently(): void {
     const id = this.productId();
     if (!id) {
@@ -216,9 +192,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       },
       error: (err: unknown) => {
         this.saving.set(false);
-        // Every other failure (404 CATEGORY_NOT_FOUND, generic 500, etc.) is already
-        // toasted by the global error interceptor — only VALIDATION_FAILED is rethrown
-        // untouched for the caller to handle, since it never auto-toasts.
         if (err && typeof err === 'object' && (err as Partial<ValidationFailedError>).kind === 'VALIDATION_FAILED') {
           const validationError = err as ValidationFailedError;
           this.toast.error(validationError.fieldErrors[0]?.message || validationError.message);
@@ -304,10 +277,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
     });
   }
 
-  // translations[] is the source of truth for editing — nameAr/nameEn stay on the response
-  // for the list table only. The API's global "omit null fields" convention means a locale
-  // missing shortDescription/description/metaTitle/metaDescription just won't have that
-  // key at all; default every one of them to '' rather than treating the gap as an error.
   private patchForm(p: ProductAdminResponse): void {
     const ar = p.translations.find((t) => t.locale === Language.AR);
     const en = p.translations.find((t) => t.locale === Language.EN);
@@ -335,10 +304,6 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       },
     });
   }
-
-  // PUT replaces the whole translation object per locale — it is not a partial patch, so
-  // every one of the six fields must be sent on every save, including ones the operator
-  // never touched. Empty string, never omitted/undefined, for anything blank.
   private buildRequest(): ProductUpsertRequest {
     const v = this.form.getRawValue();
     const translations: ProductUpsertRequest['translations'] = [

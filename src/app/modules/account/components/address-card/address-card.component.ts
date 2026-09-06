@@ -20,9 +20,6 @@ export class AddressCardComponent {
     return this.deleting || this.settingDefault;
   }
 
-  // label is free text in the contract (max 30 chars) — HOME/WORK/OTHER are only the
-  // suggested values our own form writes. Anything else falls back to a generic icon and
-  // is shown as-is rather than mistranslated.
   get labelTranslateKey(): string | null {
     switch ((this.address.label || '').toUpperCase()) {
       case 'HOME':

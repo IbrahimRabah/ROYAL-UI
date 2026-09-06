@@ -8,22 +8,6 @@ import { AuthStoreService } from '../state/auth-store.service';
 import { CartStoreService } from '../state/cart-store.service';
 import { LanguageStoreService } from '../state/language-store.service';
 
-/**
- * Runs once at bootstrap, in this exact order:
- *   أ. Reading the language and applying lang/dir to documentElement already happens as
- *      a side effect of constructing LanguageService (isPlatformBrowser-guarded there) —
- *      listing LanguageStoreService as a dependency below is what forces that construction.
- *   ب. auth.store.restore() hydrates from whatever a previous session persisted. If that
- *      leaves us logged in, POST /auth/me confirms the session is still valid server-side.
- *      A failure (expired/revoked token) just means the stored session is stale — clear it
- *      quietly and continue rendering as a guest, no error surfaced to the user.
- *   ج. Only an anonymous visitor needs a guest cart token — a signed-in caller's cart
- *      resolves through the Bearer token instead (it takes priority over X-Guest-Token).
- *   د. Load the cart either way and put the response straight into cart.store.
- *
- * Entirely skipped on the server: SSR renders as a stateless guest and makes no network
- * calls at all here.
- */
 export function appInitializer(
   platformId: object,
   languageStore: LanguageStoreService,
@@ -34,7 +18,7 @@ export function appInitializer(
   cartStore: CartStoreService,
 ): () => Observable<void> {
   return () => {
-    void languageStore; // step أ — construction alone is what matters, see doc comment above
+    void languageStore;
 
     if (!isPlatformBrowser(platformId)) {
       return of(undefined);
@@ -57,7 +41,6 @@ export function appInitializer(
       switchMap(() => cartApi.getCart()),
       tap((cart) => cartStore.set(cart)),
       map(() => undefined),
-      // The cart failing to load shouldn't block the app from bootstrapping.
       catchError(() => of(undefined)),
     );
   };

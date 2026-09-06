@@ -15,10 +15,6 @@ interface ReasonChip {
   textAr: string;
   textEn: string;
 }
-
-// Suggested reasons — clickable chips that fill the (required) reason field. Free text is
-// still allowed; these just cover the common cases so the operator isn't stuck typing the
-// same phrases every time.
 const REASON_CHIPS: ReasonChip[] = [
   { labelKey: 'admin.inventory.adjustDialog.reasonChips.stocktake', textAr: 'تصحيح جرد', textEn: 'Stocktake correction' },
   { labelKey: 'admin.inventory.adjustDialog.reasonChips.damaged', textAr: 'بضاعة تالفة', textEn: 'Damaged goods' },
@@ -63,9 +59,6 @@ export class AdjustStockDialogComponent extends DialogPortalBase implements OnCh
     return (this.position()?.qtyOnHand ?? 0) + (this.quantityDelta() ?? 0);
   }
 
-  // --stop warning: the resulting on-hand would go negative, or would drop below what's
-  // already reserved by placed orders — both are situations the backend will also reject
-  // (NEGATIVE_STOCK / STOCK_BELOW_RESERVED), shown here as an early heads-up.
   get willGoBelowSafe(): boolean {
     const p = this.position();
     if (!p || this.quantityDelta() === null) {

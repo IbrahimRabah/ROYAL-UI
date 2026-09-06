@@ -152,9 +152,6 @@ export class AuditLogPageComponent {
       next: (res) => {
         let content = res.content;
 
-        // GET /admin/audit only accepts action/actorId server-side — entityType, date
-        // range and actor-name search are applied client-side over the fetched page,
-        // same approach as the invoice and order lists.
         const entityType = this.entityType();
         if (entityType) {
           content = content.filter((r) => r.entityType === entityType);

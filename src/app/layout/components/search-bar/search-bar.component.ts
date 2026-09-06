@@ -19,12 +19,6 @@ export class SearchBarComponent {
 
   openSearch(): void {
     this.isOpen.set(true);
-    // The toggle button was itself briefly focused by the click that opened this (the
-    // browser's default action for clicking a focusable element), then hidden — and
-    // hiding the focused element makes the browser reassign focus to <body>. That
-    // reassignment isn't synchronous, so a bare setTimeout(0)/queueMicrotask can still
-    // run before it and get silently overridden a tick later (reproduced and confirmed
-    // in a real browser: 0ms lost the race, 50ms didn't).
     setTimeout(() => this.searchInput?.nativeElement.focus(), 50);
   }
 

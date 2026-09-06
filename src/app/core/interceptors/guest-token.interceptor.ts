@@ -14,16 +14,8 @@ import { isApiError } from '../models';
 import { GuestTokenService } from '../services/guest-token.service';
 import { isGuestTokenScopeUrl } from './guest-scope.util';
 
-// Internal bookkeeping only — never sent over the wire. Guards the "retry once" rule so
-// a guest token that keeps failing can't loop forever.
 export const GUEST_TOKEN_RETRIED = new HttpContextToken<boolean>(() => false);
 
-/**
- * Adds X-Guest-Token to cart/orders/shipping-quote requests — but only when there's no
- * Authorization header (auth.interceptor runs first in the request direction, so by the
- * time this interceptor sees the request, a signed-in caller's Bearer token is already
- * attached and takes priority per the contract).
- */
 @Injectable()
 export class GuestTokenInterceptor implements HttpInterceptor {
   private readonly guestTokenService = inject(GuestTokenService);

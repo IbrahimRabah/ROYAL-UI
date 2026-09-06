@@ -110,8 +110,6 @@ export class ProductListPageComponent {
       if (status && p.status !== status) return false;
       if (categoryId && p.categoryId !== categoryId) return false;
       if (brandId && p.brandId !== brandId) return false;
-      // TODO: not in contract — ProductAdminResponse has no SKU field (SKUs live on
-      // variants, not returned here), so search only matches the Arabic/English name.
       if (q && !(p.nameAr ?? '').toLowerCase().includes(q) && !(p.nameEn ?? '').toLowerCase().includes(q)) return false;
       return true;
     });
@@ -132,8 +130,6 @@ export class ProductListPageComponent {
 
     this.fetchAll();
 
-    // So a back link from a product's detail page can return to this exact filtered,
-    // paginated view instead of a reset one.
     effect(() => {
       this.queryParamMap();
       this.listReturn.remember('/admin/products', this.router.url);
@@ -261,9 +257,6 @@ export class ProductListPageComponent {
     this.loading.set(true);
     this.error.set(false);
 
-    // GET /admin/products only takes page/size — no status/search/category/brand query
-    // params exist in the contract, so every filter above is applied client-side over the
-    // full catalog. First call learns totalElements, second pulls it all in one page.
     this.productApi
       .list(0, 1)
       .pipe(switchMap((first) => this.productApi.list(0, Math.max(first.totalElements, 1))))

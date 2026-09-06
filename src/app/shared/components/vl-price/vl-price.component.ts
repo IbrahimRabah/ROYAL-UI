@@ -2,10 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Money, money } from '../../../core/models';
 
-// -u-nu-latn forces Latin digits regardless of UI language (an ar-EG Intl.NumberFormat
-// would otherwise render Eastern Arabic numerals), and currencyDisplay: 'code' forces
-// the literal "EGP" code instead of the localized "ج.م." symbol — storefront pricing
-// uses "EGP" in both languages.
 const PRICE_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   style: 'currency',
   currency: 'EGP',

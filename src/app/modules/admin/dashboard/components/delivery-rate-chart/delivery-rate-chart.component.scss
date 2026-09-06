@@ -8,9 +8,6 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-3);
-  // A grid item's default min-width is "auto" (its content's min-content size), not 0 —
-  // without this override the card refuses to shrink to its grid track's width even once
-  // the track itself is a shrinkable minmax(0, 1fr)/minmax(220px, 1fr).
   min-inline-size: 0;
   max-inline-size: 100%;
   height: 100%;
@@ -37,8 +34,6 @@
   font-size: 1.25rem;
 }
 
-// Below 80%, the whole card escalates — wash, hover border, badge, ring and figure all
-// turn --stop so the alarm is unmistakable rather than a quiet statistic.
 .delivery-rate-chart--alarm {
   background: color-mix(in srgb, var(--stop) 8%, var(--admin-surface));
 
@@ -61,8 +56,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  // Sized to comfortably fit the --fs-h2 figure inside the ring without the text
-  // overlapping the stroke — a smaller donut and --fs-h2 don't fit together.
   inline-size: 160px;
   block-size: 160px;
   align-self: center;
@@ -93,7 +86,6 @@
 
 .delivery-rate-chart__figure {
   position: absolute;
-  // font-size: var(--fs-h2);
   font-weight: 700;
   color: var(--admin-text);
 }
@@ -102,8 +94,6 @@
   color: var(--stop);
 }
 
-// Grid rather than a single flex row — five figures no longer fit comfortably on one
-// line, so this settles into 3 + 2 instead of squeezing or wrapping unevenly.
 .delivery-rate-chart__legend {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -1,8 +1,3 @@
-// Shared field styling for the four auth pages (login/register/forgot/reset). Deliberately
-// hand-rolled instead of PrimeNG or the vl-input/vl-form-field stubs — the design is a
-// single hairline rule per field with a floating label, nothing PrimeNG's Aura theme does
-// out of the box, and identical across all four forms, so it lives here once rather than
-// duplicated (and re-budgeted against anyComponentStyle) in every page's own stylesheet.
 @use 'breakpoints';
 
 .auth-heading {
@@ -273,21 +268,7 @@ button.auth-submit {
     transform: none;
   }
 }
-
-// Dark-glass recolor for the four auth pages' shared field styling above, scoped to
-// .auth-card (the floating card in auth-layout.component.html) so checkout's
-// guest-address-form and account's address-form-dialog — which reuse these same
-// .auth-* classes on their normal light --paper backgrounds — are untouched.
-//
-// rgba(246, 242, 235, x) below is --cream (#f6f2eb) at various opacities — written as
-// literal rgba because CSS can't apply alpha to a var() hex color without color-mix().
 .auth-card {
-  // Seeds password-strength-meter's --line (segment track) / --text-muted (label) —
-  // that component is view-encapsulated so it can't be reached by a descendant
-  // selector from here, but custom-property inheritance crosses that boundary fine.
-  // The other consumers of these two tokens below (field underline, divider line) get
-  // their own explicit overrides anyway, since they each need a different opacity than
-  // spec'd here, so this redefinition can't conflict with them.
   --line: rgba(246, 242, 235, 0.25);
   --text-muted: rgba(246, 242, 235, 0.65);
 
@@ -357,9 +338,6 @@ button.auth-submit {
     }
 
     span {
-      // Matches the card's non-blur fallback fill (not the blurred 0.55 one) — a small
-      // text-sized patch reading slightly darker than the blurred backdrop around it is
-      // unnoticeable, whereas the alternative (a see-through gap in the divider line) is not.
       background: rgba(13, 13, 13, 0.88);
     }
   }

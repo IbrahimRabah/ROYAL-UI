@@ -24,8 +24,6 @@
   color: var(--admin-text);
 }
 
-// ═══ Tabs ═══
-
 .order-list-page__tabs {
   display: flex;
   flex-wrap: wrap;
@@ -78,11 +76,6 @@
   color: var(--gold);
 }
 
-// ═══ Search ═══
-// Now the shared .admin-toolbar__search* classes (_admin-toolbar.scss).
-
-// ═══ Error ═══
-
 .order-list-page__error {
   display: flex;
   align-items: center;
@@ -110,7 +103,6 @@
   }
 }
 
-// ═══ Table ═══
 
 .order-list-page__table-wrap {
   display: none;
@@ -136,8 +128,6 @@
   color: var(--admin-text-muted);
 }
 
-// Fulfilment/payment badge columns — nowrap and a floor width so neither status pill
-// (nor its longer sibling label) ever wraps or squeezes the row taller.
 .order-list-page__col-status {
   white-space: nowrap;
   inline-size: 1%;
@@ -246,10 +236,6 @@
   }
 }
 
-// .order-list-page__empty removed — shared .admin-list-empty (_admin-toolbar.scss).
-
-// p-table internals — --admin-row-height rows, alternating surface, hover tint, uppercase
-// header labels. ::ng-deep is required to reach PrimeNG's own DOM structure.
 :host ::ng-deep .order-list-page__table {
   .p-datatable-thead > tr > th {
     padding: var(--sp-3) var(--sp-4);
@@ -306,7 +292,6 @@
   }
 }
 
-// ═══ Mobile cards ═══
 
 .order-list-page__cards {
   display: flex;

@@ -25,8 +25,6 @@ export class OutstandingPageComponent {
   readonly error = signal(false);
   readonly selected = signal<ReadonlySet<number>>(new Set());
 
-  // Oldest first — the whole point of this screen is surfacing what's been sitting with
-  // the courier longest.
   readonly sortedOrders = computed<OutstandingRemittanceOrder[]>(() => {
     const orders = this.data()?.orders ?? [];
     return [...orders].sort((a, b) => b.daysWaiting - a.daysWaiting);

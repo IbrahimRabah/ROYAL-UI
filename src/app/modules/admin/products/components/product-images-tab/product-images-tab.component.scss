@@ -31,7 +31,6 @@
   }
 }
 
-// ═══ Note ═══
 
 .pit__note {
   display: flex;
@@ -53,7 +52,6 @@
   }
 }
 
-// ═══ Dropzone ═══
 
 .pit__dropzone {
   display: flex;
@@ -128,7 +126,6 @@
   font-size: var(--fs-sm);
 }
 
-// ═══ Grid ═══
 
 .pit__grid {
   display: grid;
@@ -204,8 +201,6 @@
   pointer-events: auto;
 }
 
-// Hover has no touch equivalent — without this, the edit/delete actions would be
-// completely unreachable on a phone or tablet, since :hover never triggers there.
 @media (hover: none) {
   .pit__tile-scrim {
     opacity: 1;

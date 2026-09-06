@@ -25,9 +25,6 @@
   background: rgba(13, 13, 13, 0.55);
 
   @include breakpoints.md {
-    // Above md the text sits over the image's own plain side, so no scrim is needed —
-    // same reasoning as about-hero.component.scss / plp__hero, just without the dark
-    // overlay since this artwork's empty side is already light.
     background: none;
   }
 }
@@ -46,10 +43,6 @@
   justify-content: center;
 
   @include breakpoints.md {
-    // Pinned to the physical left in both languages — banner.png's empty space is
-    // fixed there, so this must NOT mirror under RTL like the rest of the site (see
-    // src/styles/_rtl.scss's documented exception, and about-hero.component.scss /
-    // product-list-page.component.scss for the same left/direction:ltr pattern).
     direction: ltr;
     align-items: flex-start;
     max-inline-size: 460px;

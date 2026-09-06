@@ -22,17 +22,10 @@ export class RatesFormComponent extends DialogPortalBase implements OnChanges {
   readonly codFee = signal<number | null>(null);
   readonly deliveryDaysMin = signal<number | null>(null);
   readonly deliveryDaysMax = signal<number | null>(null);
-  // Not returned by GET /admin/shipping/zones (contract gap — ShippingZoneResponse has no
-  // maxWeightGrams/costPerExtraKg field), so these always start empty on open; whatever the
-  // operator enters is what gets saved, same as leaving them untouched sends nothing.
   readonly maxWeightGrams = signal<number | null>(null);
   readonly costPerExtraKg = signal<number | null>(null);
 
   readonly saving = signal(false);
-  // A second step within this SAME dialog rather than a second stacked modal — two
-  // independent DialogPortalBase-portalled overlays fighting over the same --z-modal
-  // layer is exactly what left the confirmation unreachable behind the edit panel.
-  // Swapping this dialog's own body/footer keeps everything in one stacking context.
   readonly confirmStep = signal(false);
 
   get open(): boolean {
@@ -70,7 +63,6 @@ export class RatesFormComponent extends DialogPortalBase implements OnChanges {
     this.closed.emit();
   }
 
-  // Step 1 -> step 2 — just swaps the panel's content, no async work yet.
   goToConfirm(): void {
     if (this.saving() || !this.canSubmit) {
       return;
@@ -78,8 +70,6 @@ export class RatesFormComponent extends DialogPortalBase implements OnChanges {
     this.confirmStep.set(true);
   }
 
-  // Step 2 -> step 1 — "keep the current rate" backs out of the pending change without
-  // losing what the operator already typed, rather than closing the whole dialog.
   backToEdit(): void {
     if (this.saving()) {
       return;

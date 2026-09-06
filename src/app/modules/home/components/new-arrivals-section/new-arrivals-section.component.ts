@@ -12,8 +12,6 @@ export class NewArrivalsSectionComponent {
   @Input() products: ProductSummaryResponse[] = [];
   @Input() loading = false;
 
-  // Placeholder count for the loading grid — not tied to the real page size, just
-  // enough to fill the first viewport without layout jumping once real data lands.
   readonly skeletonPlaceholders = Array.from({ length: 9 });
 
   get showSection(): boolean {

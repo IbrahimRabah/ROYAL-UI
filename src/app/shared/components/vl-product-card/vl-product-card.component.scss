@@ -31,16 +31,11 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  // contain, not cover: product photos aren't all square (perfume bottles are tall,
-  // watches are wide) — cover was cropping edges off product shots to force-fill the
-  // square tile. --surface-alt on the media wrapper fills the letterboxed space.
   object-fit: contain;
   object-position: center;
   transition: transform 300ms ease;
 }
 
-// Ready for `hoverImageUrl` (docs/BACKEND_NOTES.md item 1) — stacked on top of the
-// primary image, crossfades in on hover/focus. 250ms per spec.
 .vl-product-card__image--hover {
   opacity: 0;
   transition: opacity 250ms ease;
@@ -83,10 +78,6 @@
   background: var(--ink);
   color: var(--cream);
 }
-
-// Full-width bar along the image's bottom edge — clipped to the media's rounded
-// corners by its overflow: hidden. Always shown on mobile (no hover there); slides
-// up from below the image on hover/focus from md up.
 .vl-product-card__cta {
   position: absolute;
   inset-inline: 0;
@@ -128,8 +119,6 @@
 }
 
 .vl-product-card__name {
-  // Fixed block-size (not just line-clamp) so a one-line name and a two-line name
-  // leave the price at the exact same vertical offset within the card.
   margin-block-end: var(--sp-3);
   font-size: var(--fs-base);
   line-height: 1.3;

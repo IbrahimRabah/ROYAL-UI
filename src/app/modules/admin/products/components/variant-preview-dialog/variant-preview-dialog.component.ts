@@ -37,7 +37,6 @@ export class VariantPreviewDialogComponent extends DialogPortalBase implements O
   @Output() readonly create = new EventEmitter<VariantUpsertItem[]>();
 
   readonly step = signal<'preview' | 'details'>('preview');
-  // Keyed by the combination's index in preview.combinations — stable for one open dialog.
   readonly skuDrafts = signal<Record<number, string>>({});
   readonly rowDrafts = signal<Record<number, RowDetailDraft>>({});
   readonly bulkFill = signal<RowDetailDraft>({ ...DEFAULT_ROW });

@@ -50,9 +50,6 @@ export class AdminProductApiService {
     return this.http.get<AdminImageResponse[]>(API_ROUTES.admin.products.images(productId));
   }
 
-  // multipart/form-data with a `file` part; variantId (if given) travels as a query
-  // param, not part of the form. Never set Content-Type manually — the browser fills in
-  // the multipart boundary itself, and overriding it breaks the upload.
   uploadImage(productId: number, file: File, variantId?: number): Observable<AdminImageResponse> {
     const formData = new FormData();
     formData.append('file', file);

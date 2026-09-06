@@ -47,10 +47,6 @@ export class BrandFormDialogComponent extends DialogPortalBase implements OnChan
     return this.brand !== null;
   }
 
-  // Compared against the slug this dialog opened with — simpler than a valueChanges
-  // subscription, which (this component instance persists across open/close, only its
-  // *ngIf'd template content toggles) would otherwise accumulate one extra subscriber
-  // every time the dialog reopens.
   get slugChanged(): boolean {
     return this.isEdit && this.form.controls.slug.value !== this.originalSlug;
   }

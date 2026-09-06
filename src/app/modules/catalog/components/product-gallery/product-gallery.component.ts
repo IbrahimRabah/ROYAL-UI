@@ -18,12 +18,6 @@ export class ProductGalleryComponent implements OnDestroy {
 
   @Input({ required: true }) productName!: string;
 
-  // A signal-backed accessor, not a plain field — activeImage below reads imagesSignal()
-  // (a real signal), not the raw @Input. computed() only tracks signal reads: a plain
-  // @Input field mutated by Angular's input binding is invisible to it, so activeImage
-  // would never re-run when a new images array arrived. That's what caused the reported
-  // bug — the *ngFor thumbnail list re-scans the plain array every CD pass and looked
-  // fresh, while activeImage stayed frozen on stale data across variant/color switches.
   @Input({ required: true })
   set images(value: ImageResponse[]) {
     this.imagesSignal.set(value);
@@ -32,19 +26,11 @@ export class ProductGalleryComponent implements OnDestroy {
     return this.imagesSignal();
   }
 
-  // The image the gallery should land on whenever `images` is replaced by a variant/color
-  // switch — the new color's own shot, not necessarily index 0 (the poster is often pinned
-  // first in the rebuilt array). Ignored by direct navigation (thumbnail click, prev/next).
   @Input()
   set activeImageId(value: number | null) {
     this.preferredImageIdSignal.set(value ?? null);
   }
 
-  // Reports whichever image is actually on screen right now — distinct from the
-  // activeImageId input above (a "please jump here" request from the parent), this fires
-  // for every way the displayed image can change: thumbnail click, prev/next, or the
-  // preferred-id effect. The PDP page uses it to detect "the poster is on screen" so it
-  // can clear the color swatch's active mark without touching the underlying selection.
   @Output() readonly displayedImageIdChange = new EventEmitter<number | null>();
 
   readonly index = this.activeIndex.asReadonly();
@@ -52,11 +38,6 @@ export class ProductGalleryComponent implements OnDestroy {
   readonly activeImage = computed(() => this.imagesSignal()[this.activeIndex()] ?? null);
 
   constructor() {
-    // Re-lands the active index whenever the images array or the preferred image id changes.
-    // Reads both signals fresh on every run, so it lands correctly regardless of which
-    // @Input setter fired first within a given change-detection pass. Skips the crossfade
-    // on the very first non-empty images array (nothing was visible before, so there's
-    // nothing to fade from) — every array replacement after that is a variant/color switch.
     effect(() => {
       const images = this.imagesSignal();
       const preferredId = this.preferredImageIdSignal();
@@ -99,12 +80,6 @@ export class ProductGalleryComponent implements OnDestroy {
   }
 
   private goToIndex(index: number): void {
-    // untracked: this runs inside the constructor effect too (variant/color switch path).
-    // A plain read here would make activeIndex a tracked dependency of that effect — and
-    // since this method also writes activeIndex, any later write (e.g. a manual thumbnail
-    // click) would re-trigger the effect, which reapplies the stale preferredImageId and
-    // silently reverts the click. That was the reported bug: picking a color once "locked"
-    // the gallery, so a poster click no longer registered until the color was deselected.
     if (index === untracked(this.activeIndex)) return;
 
     this.activeIndex.set(index);

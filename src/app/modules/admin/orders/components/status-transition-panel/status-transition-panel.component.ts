@@ -49,8 +49,6 @@ const TRANSITION_ICON: Partial<Record<FulfillmentStatus, string>> = {
   [FulfillmentStatus.PARTIALLY_RETURNED]: 'pi-replay',
 };
 
-// SHIPPED/DELIVERED consequence copy — plain language, no mention of notifications or
-// courier tracking (this system has neither).
 const CONSEQUENCE_COPY: Partial<Record<FulfillmentStatus, string>> = {
   [FulfillmentStatus.SHIPPED]: 'admin.orders.detail.consequence.shipped',
   [FulfillmentStatus.DELIVERED]: 'admin.orders.detail.consequence.delivered',
@@ -72,9 +70,6 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
   private readonly translate = inject(TranslateService);
 
   @Input({ required: true }) order!: OrderResponse;
-  // A plain "please refetch" signal — not every path here (confirm-call, cancel) has the
-  // freshly updated OrderResponse in hand, so the parent always re-fetches on this rather
-  // than juggling two different update shapes.
   @Output() readonly changed = new EventEmitter<void>();
 
   @ViewChild('dialogRoot') private readonly dialogRootRef?: ElementRef<HTMLElement>;
@@ -85,20 +80,13 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
   readonly confirmDialogOpen = signal(false);
   readonly cancelOrderId = signal<number | null>(null);
 
-  // The generic reason/consequence dialog, shared by every transition that isn't the
-  // PENDING→CONFIRMED (confirm-call-dialog) or →CANCELLED (admin-cancel-dialog) case.
   readonly pendingStatus = signal<FulfillmentStatus | null>(null);
   readonly note = signal('');
   readonly saving = signal(false);
-  // Which direct-fire button (no dialog) is in flight — disables/spins just that button
-  // while the whole action row is disabled to prevent a second transition racing it.
   readonly firingStatus = signal<FulfillmentStatus | null>(null);
   readonly panelError = signal<string | null>(null);
 
   ngAfterViewInit(): void {
-    // Only the dialog sub-tree is portalled to <body> (see dialogRoot in the template) —
-    // moving the whole component would blank the rest of the side panel while a dialog is
-    // open. Same z-index fix as address-form-dialog, applied to just this fragment.
     if (isPlatformBrowser(this.platformId) && this.dialogRootRef) {
       this.renderer.appendChild(document.body, this.dialogRootRef.nativeElement);
     }
@@ -146,8 +134,6 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
   }
 
   onTransitionClick(status: FulfillmentStatus): void {
-    // A transition is already in flight (direct-fire or dialog submit) — ignore further
-    // clicks rather than risk a second request racing it (some of these are irreversible).
     if (this.saving() || this.firingStatus() !== null) {
       return;
     }
@@ -201,8 +187,6 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
     this.changed.emit();
   }
 
-  // Both confirm-call-dialog and admin-cancel-dialog can hit the same 409 race as a
-  // direct-fire transition — either way the order moved, so just refetch.
   onChildConflict(): void {
     this.changed.emit();
   }
@@ -232,7 +216,6 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
           this.panelError.set(result.message);
           this.changed.emit();
         } else if (result.fieldError) {
-          // Only the reason-dialog path can produce a field-level validation error.
           this.panelError.set(result.fieldError);
         }
       },

@@ -95,9 +95,6 @@
   flex: 1 1 auto;
   min-block-size: 0;
   overflow-y: auto;
-  // Only the body scrolls, and only vertically — this is the backstop; the real fix for
-  // the grid ever getting wider than the panel is the minmax(0, 1fr) tracks below, but a
-  // stray wide child (e.g. an untranslated string) should still never open a scrollbar.
   overflow-x: hidden;
   padding: 0 var(--sp-5) var(--sp-5);
 }
@@ -110,9 +107,6 @@
   color: var(--admin-text);
 }
 
-// Label above the input, input, then helper beneath — the same stacked pattern as the
-// storefront address form (address-form-dialog__helper), just with this admin surface's
-// own spacing/tone.
 .admin-dialog__helper {
   display: block;
   inline-size: 100%;
@@ -214,15 +208,9 @@
   }
 }
 
-// ═══ Rate fields grid — 3 columns desktop, 2 tablet, 1 mobile ═══
 
 .rf__grid {
   display: grid;
-  // minmax(0, 1fr), not bare 1fr — a bare 1fr track's automatic minimum size is based on
-  // its content's min-content width, so a long helper text or a p-inputnumber with its
-  // own intrinsic width forces the track (and the whole grid) wider than the panel, which
-  // is what was opening the horizontal scrollbar. minmax(0, ...) lets the track actually
-  // shrink to the space available and wrap its content instead of pushing past it.
   grid-template-columns: minmax(0, 1fr);
   row-gap: var(--sp-5);
   column-gap: var(--sp-5);
@@ -236,7 +224,6 @@
   }
 }
 
-// ═══ Confirm step ═══
 
 .rf__confirm-warning {
   display: flex;

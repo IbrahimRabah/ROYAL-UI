@@ -1,6 +1,5 @@
 import { Injectable, signal } from '@angular/core';
 
-// UI state only — no HTTP, no domain data.
 @Injectable({
   providedIn: 'root',
 })

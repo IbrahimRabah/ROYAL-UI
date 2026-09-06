@@ -31,10 +31,6 @@ export class InventoryListPageComponent {
 
   readonly pageSize = APP_CONFIG.pagination.inventory.size;
 
-  // '' and 'low-stock' are distinct route configs pointing at this same component, per
-  // the task ("don't build a separate page component, drift out of sync otherwise") — read
-  // once, safe because Angular recreates the component instance across distinct route
-  // configs even when they share a component class (see product-form-page's 'new'/':id').
   readonly isLowStockRoute = this.route.snapshot.data['lowStockOnly'] === true;
 
   private readonly queryParamMap = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
@@ -60,10 +56,6 @@ export class InventoryListPageComponent {
   readonly error = signal(false);
 
   readonly categoryOptions = signal<FlatCategoryOption[]>([]);
-  // Independent of the current filters/page — the dedicated, unpaginated endpoint's own
-  // count, so the toolbar chip reads correctly regardless of what's currently filtered/
-  // searched. Refetched after receive/adjust settles, since a stock change can move a
-  // variant in or out of "low stock".
   readonly lowStockCount = signal(0);
 
   readonly receiveDialogVariantId = signal<number | null>(null);
@@ -85,7 +77,6 @@ export class InventoryListPageComponent {
 
     this.fetchLowStockCount();
 
-    // Server-side filtering/sorting/pagination — refetch whenever any of these change.
     effect(() => {
       this.searchText();
       this.lowStockOnly();
@@ -93,9 +84,6 @@ export class InventoryListPageComponent {
       this.categoryId();
       this.sort();
       this.page();
-      // Both /admin/inventory and /admin/inventory/low-stock share this component and
-      // this group key — whichever the operator is actually on wins, so a back link from
-      // movements returns to the right one of the two, filtered and paginated.
       this.listReturn.remember('/admin/inventory', this.router.url);
       this.fetchRows();
     }, { allowSignalWrites: true });
@@ -120,8 +108,6 @@ export class InventoryListPageComponent {
     this.updateQueryParams({ lowStockOnly: value ? 'true' : null, page: null });
   }
 
-  // The toolbar's "Low stock (N)" chip — a one-click shortcut to the same toggle above,
-  // without opening the filters panel first.
   applyLowStockChip(): void {
     this.onLowStockToggle(true);
   }
@@ -161,8 +147,6 @@ export class InventoryListPageComponent {
     this.adjustDialogVariantId.set(null);
   }
 
-  // Successful write, or a stale CONCURRENT_STOCK_CHANGE conflict the interceptor already
-  // toasted about — either way, close the dialog and refetch so the row reflects the truth.
   onDialogSettled(): void {
     this.onDialogClosed();
     this.fetchRows();

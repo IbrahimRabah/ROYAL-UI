@@ -1,9 +1,6 @@
 import { ErrorCode } from '../enums/error-code';
 
-// User-facing translations of every ErrorCode (never developer-facing text).
-// `error.interceptor` (batch 4) looks these up by `ApiError.code`.
 export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
-  // Global
   [ErrorCode.INVALID_REQUEST_BODY]: 'تعذّر فهم الطلب المُرسل',
   [ErrorCode.INVALID_PARAMETER]: 'أحد قيم الطلب غير صالح',
   [ErrorCode.UNAUTHORIZED]: 'يجب تسجيل الدخول لإتمام هذا الإجراء',
@@ -11,7 +8,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.INTERNAL_ERROR]: 'حدث خطأ غير متوقع، حاول مرة أخرى لاحقاً',
   [ErrorCode.VALIDATION_FAILED]: 'يوجد بيانات غير صحيحة، برجاء المراجعة',
 
-  // Identity & Authentication
   [ErrorCode.INVALID_PHONE_FORMAT]: 'رقم الهاتف غير صحيح',
   [ErrorCode.PHONE_ALREADY_EXISTS]: 'رقم الهاتف مستخدم بالفعل',
   [ErrorCode.EMAIL_ALREADY_EXISTS]: 'البريد الإلكتروني مستخدم بالفعل',
@@ -23,7 +19,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.OTP_INVALID]: 'رمز التحقق غير صحيح',
   [ErrorCode.OTP_EXPIRED]: 'انتهت صلاحية رمز التحقق، اطلب رمزاً جديداً',
 
-  // Catalog
   [ErrorCode.PRODUCT_NOT_FOUND]: 'المنتج غير موجود',
   [ErrorCode.VARIANT_NOT_FOUND]: 'هذا الخيار من المنتج غير موجود',
   [ErrorCode.RESOURCE_NOT_FOUND]: 'العنصر المطلوب غير موجود',
@@ -47,7 +42,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.DUPLICATE_VALUE]: 'هذه القيمة مستخدمة بالفعل',
   [ErrorCode.REFERENCED_BY_OTHER_RECORDS]: 'لا يمكن حذف هذا العنصر لأنه مرتبط بعناصر أخرى',
 
-  // Cart & Checkout
   [ErrorCode.STOCK_UNAVAILABLE]: 'الكمية المطلوبة غير متاحة في المخزون',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'هذا المنتج غير متاح للبيع حالياً',
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'هذا العنصر غير موجود في السلة',
@@ -58,7 +52,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.PAYMENT_METHOD_UNAVAILABLE]: 'طريقة الدفع هذه غير متاحة حالياً',
   [ErrorCode.DUPLICATE_ORDER]: 'جاري تنفيذ هذا الطلب بالفعل',
 
-  // Orders
   [ErrorCode.ORDER_NOT_FOUND]: 'الطلب غير موجود',
   [ErrorCode.ORDER_CANNOT_BE_CANCELLED]: 'لا يمكن إلغاء هذا الطلب في حالته الحالية',
   [ErrorCode.INVALID_STATUS_TRANSITION]: 'لا يمكن تغيير حالة الطلب بهذه الطريقة',
@@ -66,7 +59,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.RETURN_QUANTITY_EXCEEDED]: 'الكمية المطلوب استرجاعها أكبر من المتاح',
   [ErrorCode.REFUND_EXCEEDS_ORDER_TOTAL]: 'قيمة الاسترداد أكبر من إجمالي الطلب',
 
-  // Inventory
   [ErrorCode.INVENTORY_RECORD_MISSING]: 'لا يوجد سجل مخزون لهذا المنتج',
   [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'شخص آخر عدّل هذا المخزون — تم التحديث، حاول مجددًا',
   [ErrorCode.NEGATIVE_STOCK]: 'هذا التعديل سيجعل الكمية بالسالب',
@@ -75,7 +67,6 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
-  // Global
   [ErrorCode.INVALID_REQUEST_BODY]: 'We could not understand the request sent',
   [ErrorCode.INVALID_PARAMETER]: 'One of the request values is invalid',
   [ErrorCode.UNAUTHORIZED]: 'Please sign in to continue',
@@ -83,7 +74,6 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.INTERNAL_ERROR]: 'Something went wrong, please try again later',
   [ErrorCode.VALIDATION_FAILED]: 'Some of the information provided is invalid',
 
-  // Identity & Authentication
   [ErrorCode.INVALID_PHONE_FORMAT]: 'This phone number is not valid',
   [ErrorCode.PHONE_ALREADY_EXISTS]: 'This phone number is already registered',
   [ErrorCode.EMAIL_ALREADY_EXISTS]: 'This email is already registered',
@@ -95,7 +85,6 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.OTP_INVALID]: 'This verification code is incorrect',
   [ErrorCode.OTP_EXPIRED]: 'This verification code has expired, request a new one',
 
-  // Catalog
   [ErrorCode.PRODUCT_NOT_FOUND]: 'This product could not be found',
   [ErrorCode.VARIANT_NOT_FOUND]: 'This product option could not be found',
   [ErrorCode.RESOURCE_NOT_FOUND]: 'This item could not be found',
@@ -119,7 +108,6 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.DUPLICATE_VALUE]: 'This value is already in use',
   [ErrorCode.REFERENCED_BY_OTHER_RECORDS]: 'This item cannot be deleted because other records depend on it',
 
-  // Cart & Checkout
   [ErrorCode.STOCK_UNAVAILABLE]: 'The requested quantity is not available in stock',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'This product is not currently available for purchase',
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'This item could not be found in your cart',
@@ -130,7 +118,6 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.PAYMENT_METHOD_UNAVAILABLE]: 'This payment method is not currently available',
   [ErrorCode.DUPLICATE_ORDER]: 'This order is already being processed',
 
-  // Orders
   [ErrorCode.ORDER_NOT_FOUND]: 'This order could not be found',
   [ErrorCode.ORDER_CANNOT_BE_CANCELLED]: 'This order can no longer be cancelled',
   [ErrorCode.INVALID_STATUS_TRANSITION]: 'This order status change is not allowed',
@@ -138,7 +125,6 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.RETURN_QUANTITY_EXCEEDED]: 'The requested return quantity exceeds what is available',
   [ErrorCode.REFUND_EXCEEDS_ORDER_TOTAL]: 'The refund amount exceeds the order total',
 
-  // Inventory
   [ErrorCode.INVENTORY_RECORD_MISSING]: 'No inventory record exists for this item',
   [ErrorCode.CONCURRENT_STOCK_CHANGE]: 'Someone else changed this stock — refreshed, please try again',
   [ErrorCode.NEGATIVE_STOCK]: 'This change would make the stock quantity negative',

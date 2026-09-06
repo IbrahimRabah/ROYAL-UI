@@ -1,8 +1,4 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
-// 0-5: +1 each for length >= 8, length >= 12, mixed case, a digit, a symbol. The contract
-// only requires 8-72 chars (no server-side complexity rule), so this is a soft usability
-// nudge, not something that can ever conflict with what the backend will accept.
 export function passwordStrengthScore(password: string): number {
   if (!password) {
     return 0;
@@ -16,9 +12,6 @@ export function passwordStrengthScore(password: string): number {
   return score;
 }
 
-// Blocks only passwords that are technically long enough (8+, satisfying the backend) but
-// otherwise trivial (e.g. "aaaaaaaa", "12345678") — anything with a second character class
-// on top of length already clears the bar.
 export function strongPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value as string | null;

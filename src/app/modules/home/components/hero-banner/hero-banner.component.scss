@@ -4,18 +4,11 @@
   position: relative;
   overflow: hidden;
   inline-size: 100%;
-  // Sized to hero_mobile.png's own portrait ratio so contain (below) never has to
-  // crop it — max-block-size is just a safety cap for short/landscape phones.
   aspect-ratio: 941 / 1672;
   max-block-size: 700px;
   background: var(--cream);
 }
 
-// <picture> is inline and height:auto by default, which breaks the percentage-height
-// chain down to the <img> (a % block-size only resolves against an ancestor with an
-// explicit height) — harmless back when the hero's own height was aspect-ratio-derived
-// from the image's natural size, but with a fixed-height hero now, the <img> needs
-// this to actually stretch to fill it instead of floating at its intrinsic size.
 .hero-banner picture {
   display: block;
   inline-size: 100%;
@@ -26,8 +19,6 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  // Below md this is hero_mobile.png, a portrait crop composed for phone aspect
-  // ratios — the section is sized to match its ratio, so contain shows it in full.
   object-fit: contain;
   object-position: center;
 }
@@ -39,20 +30,11 @@
   align-items: center;
   gap: var(--sp-5);
   inset-block-end: var(--sp-8);
-  // `left` + translateX(-50%), not inset-inline-start: the translateX(-50%) half-width
-  // shift only centers a box anchored by its physical left edge. Under RTL,
-  // inset-inline-start resolves to `right`, so the same translateX would shift the
-  // content a full width off-center instead of centering it — this has to stay
-  // physical even though it's mobile's *centering* rule, not the desktop pin.
   left: 50%;
   transform: translateX(-50%);
 }
 
 .hero-banner__tagline {
-  // Below md the crop is tight enough that there's no reliably clean spot for text —
-  // hero_mobile.png's own baked-in wordmark carries the branding there instead, and
-  // only the CTA shows. Reinstated once the wider artwork (with room under the
-  // wordmark) is in frame from md up.
   display: none;
   margin: 0;
   font-family: var(--display);
@@ -64,9 +46,6 @@
 
 @include breakpoints.md {
   .hero-banner {
-    // From here up it's the landscape hero.png/webp, not the mobile portrait crop —
-    // back to a fixed, vh-scaled height (clamp: never below 480px, never above 620px)
-    // instead of the mobile aspect-ratio sizing.
     aspect-ratio: auto;
     block-size: clamp(480px, 55vh, 620px);
     max-block-size: none;
@@ -78,9 +57,6 @@
 
   .hero-banner__content {
     inset-block-end: auto;
-    // Pinned under the wordmark's fixed position in the artwork — see the template
-    // comment. Physical `left` is intentional here too, for the same reason as above.
-    top: 62%;
     left: 28%;
     transform: translateX(-50%);
   }
@@ -91,11 +67,6 @@
   }
 }
 
-// From xl up there's enough width that cropping the artwork top/bottom loses the
-// wordmark's breathing room and the marble slab under the watch — switch to showing
-// the full frame. The box is sized to the image's own ratio so object-fit: contain
-// never actually needs to letterbox (--cream is the fallback fill if a viewport's own
-// height caps block-size before the ratio does).
 @include breakpoints.xl {
   .hero-banner {
     aspect-ratio: 1672 / 941;
@@ -109,8 +80,6 @@
   }
 
   .hero-banner__content {
-    // Recalibrated for the full, uncropped artwork (md's 62% assumes the top-crop
-    // that no longer happens at this size).
     top: 64%;
   }
 }

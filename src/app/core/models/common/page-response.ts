@@ -1,4 +1,3 @@
-// Every list endpoint returns this envelope, never a raw array or Spring's native Page.
 export interface PageResponse<T> {
   content: T[];
   page: number;

@@ -1,7 +1,6 @@
 import { Language } from '../../enums/language';
 import { UserResponse } from './user';
 
-// Shared success shape for register / login / refresh.
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;

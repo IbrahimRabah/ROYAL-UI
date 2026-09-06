@@ -22,8 +22,6 @@
   flex-direction: column;
   background: var(--surface);
   box-shadow: var(--shadow-md);
-  // transform can't be expressed with a logical property — the [dir='rtl'] override
-  // below (mirroring _rtl.scss's documented exception) is the deliberate escape hatch.
   transform: translateX(-100%);
   transition: transform 280ms ease;
   z-index: var(--z-drawer);
@@ -37,9 +35,6 @@
 .mobile-nav-drawer__panel--open {
   transform: translateX(0);
 
-  // Matches the :host-context([dir='rtl']) specificity above (0,2,0 vs. this rule's
-  // 0,1,0) — without it the closed-state RTL rule always wins and the panel never
-  // visibly opens in RTL, regardless of source order.
   :host-context([dir='rtl']) & {
     transform: translateX(0);
   }

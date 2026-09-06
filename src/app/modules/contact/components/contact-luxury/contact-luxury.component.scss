@@ -7,15 +7,9 @@
 
 .contact-luxury__top {
   display: flex;
-  // Text panel is first in the DOM (source order below matches the "text panel, then
-  // image panel" markup); column-reverse puts the image on top on mobile without
-  // duplicating markup, and flips back to row order — image last, i.e. physically
-  // right — once there's room for a side-by-side layout.
   flex-direction: column-reverse;
 
   @include breakpoints.md {
-    // Text stays the physically left panel and image the right one in both languages —
-    // deliberately not mirrored under RTL, same exception as about-hero/about-gender-panels.
     flex-direction: row;
     direction: ltr;
     align-items: stretch;

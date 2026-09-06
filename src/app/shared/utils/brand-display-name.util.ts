@@ -6,7 +6,6 @@ export interface FlatBrandOption {
   name: string;
 }
 
-// Current-language name, falling back to the other locale, then the slug.
 export function brandDisplayName(brand: BrandAdminResponse, lang: Language): string {
   const primary = lang === Language.AR ? brand.nameAr : brand.nameEn;
   const fallback = lang === Language.AR ? brand.nameEn : brand.nameAr;

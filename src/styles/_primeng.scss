@@ -1,19 +1,4 @@
-// PrimeNG 18 + Aura maps VELORA's tokens to its semantic design tokens at the
-// TypeScript level, not here: see src/app/core/theme/velora-preset.ts
-// (definePreset(Aura, {...}), wired in app.module.ts via providePrimeNG). Unlike the
-// old lara-light-blue build, Aura's component styles genuinely read those semantic
-// tokens (verified against the installed source, e.g.
-// node_modules/primeng/esm2022/select/style/selectstyle.mjs reading
-// `${dt('select.border.radius')}` etc.), so a plain `:root { --x: var(--y) }` override
-// file is no longer the right tool — Aura's own values are already `--p-*` CSS custom
-// properties generated from the preset, and definePreset is how you redirect them.
-//
-// This file is kept only as the documented placeholder for anything that genuinely
-// can't be expressed as a semantic token.
-//
-// p-skeleton's shimmer keyframes come from Aura's component CSS, not the token preset,
-// so honoring prefers-reduced-motion for it has to happen here rather than in
-// velora-preset.ts.
+
 @media (prefers-reduced-motion: reduce) {
   .p-skeleton::after {
     animation: none;

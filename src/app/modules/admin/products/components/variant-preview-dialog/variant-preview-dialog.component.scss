@@ -1,7 +1,5 @@
 @use 'styles/breakpoints';
 
-// Portalled to <body> at runtime (DialogPortalBase) to escape the product-form-page tab
-// panel's stacking context — same z-index fix as address-form-dialog.
 .vpd {
   position: fixed;
   inset: 0;
@@ -194,7 +192,6 @@
   }
 }
 
-// ═══ Step 2: bulk-fill + row details ═══
 
 .vpd__bulk-fill {
   display: flex;
@@ -292,8 +289,6 @@
   color: var(--admin-text-muted);
 }
 
-// Mobile-first: 1 column on phones, 2 from tablet width, 3 from desktop width — wraps
-// instead of forcing every field onto one overflowing line.
 .vpd__detail-grid {
   display: grid;
   grid-template-columns: 1fr;

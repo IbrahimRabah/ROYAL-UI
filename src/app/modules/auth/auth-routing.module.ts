@@ -9,8 +9,6 @@ import { guestOnlyGuard } from '../../core/guards/guest-only.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  // Only login/register are guest-only — reset-password and otp-verify (CHANGE_PHONE) are
-  // legitimately reachable while signed in.
   { path: 'login', component: LoginPageComponent, canActivate: [guestOnlyGuard] },
   { path: 'register', component: RegisterPageComponent, canActivate: [guestOnlyGuard] },
   { path: 'forgot-password', component: ForgotPasswordPageComponent },

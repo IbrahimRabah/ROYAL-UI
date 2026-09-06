@@ -28,9 +28,6 @@ export class RemittanceFormPageComponent {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
 
-  // Only exists on an in-app navigation from the outstanding screen — a hard refresh or a
-  // direct link has nothing to record a remittance against, so the template falls back to
-  // an empty-state pointing back to /admin/remittances/outstanding.
   readonly selectedOrders =
     (this.router.getCurrentNavigation()?.extras.state?.['selectedOrders'] as OutstandingRemittanceOrder[] | undefined) ?? [];
 
@@ -66,8 +63,6 @@ export class RemittanceFormPageComponent {
     return diff < 0 ? 'short' : 'over';
   });
 
-  // The critical rule: any mismatch makes the note mandatory — the backend rejects a
-  // shortfall (and an overage) with no explanation.
   readonly noteRequired = computed(() => this.receivedAmount() !== null && this.diffState() !== 'equal');
 
   readonly canSubmit = computed(() => {

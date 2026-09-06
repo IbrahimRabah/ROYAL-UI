@@ -42,8 +42,6 @@ export class UserMenuComponent {
     this.loggingOut.set(true);
     this.panel.hide();
     const refreshToken = this.tokenStorage.getRefreshToken();
-    // The session is cleared client-side regardless of whether the server call succeeds —
-    // an expired/unreachable refresh token shouldn't be able to strand the user logged in.
     const finish = () => {
       this.authStore.clear();
       this.postAuth.completeLogout();

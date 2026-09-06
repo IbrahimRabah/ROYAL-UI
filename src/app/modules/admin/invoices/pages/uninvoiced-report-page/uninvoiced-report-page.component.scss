@@ -42,8 +42,6 @@
   }
 }
 
-// ═══ Normal (ok) state ═══
-
 .urp__ok-state {
   display: flex;
   flex-direction: column;
@@ -74,8 +72,6 @@
   font-weight: 700;
   color: var(--admin-text);
 }
-
-// ═══ Alarm state ═══
 
 .urp__alarm-header {
   display: flex;
@@ -120,7 +116,6 @@
   color: var(--admin-text-muted);
 }
 
-// ═══ List ═══
 
 .urp__list {
   display: flex;

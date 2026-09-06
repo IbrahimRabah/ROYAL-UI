@@ -28,24 +28,18 @@ interface ResolvedCategory {
   isParentLevel: boolean;
 }
 
-// Curated artwork for the three top-level categories — same files used on the home
-// page's category showcase. Keyed by slug, not id, since ids come from the API.
 const TOP_CARD_IMAGES: Record<string, string> = {
   watches: 'assets/images/categories/watch.png',
   wallets: 'assets/images/categories/wallet.png',
   perfumes: 'assets/images/categories/perfume.png',
 };
 
-// Dedicated "All / Men / Women" card art only exists for the watches sub-tree today.
 const WATCHES_CHILD_CARD_IMAGES = {
   all: 'assets/images/products/all-products/all-watches-card.png',
   men: 'assets/images/products/all-products/men-card.png',
   women: 'assets/images/products/all-products/women-card.png',
 };
 
-// Two-level lookup only (root + one level of children) — matches this store's actual
-// category depth (watches/wallets/perfumes, each with a handful of children), even
-// though the contract allows up to 5 levels.
 function resolveCategory(tree: CategoryNode[], categoryId: number): ResolvedCategory | null {
   for (const root of tree) {
     if (root.id === categoryId) {
@@ -98,8 +92,6 @@ export class ProductListPageComponent {
     initialValue: this.route.snapshot.queryParamMap,
   });
 
-  // uiPage is 1-indexed for the URL/UI; `page` inside the filter itself stays
-  // 0-indexed to match PageResponse straight through to the API call.
   readonly queryFilter = computed<ProductFilter & { uiPage: number }>(() => {
     const params = this.queryParamMap();
     const uiPage = parseNumber(params, 'page') ?? 1;
@@ -135,7 +127,6 @@ export class ProductListPageComponent {
   readonly productsLoading = signal(true);
   readonly productsError = signal(false);
 
-  // Bumped by retryProducts() to re-run the search effect without changing the URL.
   private readonly retryTick = signal(0);
 
   readonly mobileFiltersOpen = signal(false);
@@ -147,8 +138,6 @@ export class ProductListPageComponent {
     return id == null ? null : resolveCategory(this.categoryTree(), id);
   });
 
-  // null while the category id hasn't resolved yet (tree still loading, or the id
-  // simply doesn't exist) — the category-detail effect treats that as "no category".
   private readonly categorySlug = computed(() => {
     if (this.categoryId() == null) return null;
     return this.resolved()?.node.slug ?? null;
@@ -172,11 +161,6 @@ export class ProductListPageComponent {
   readonly heroTitle = computed(() => this.categoryDetail()?.name ?? null);
   readonly heroDescription = computed(() => this.categoryDetail()?.description ?? null);
 
-  // Cards shown under the hero. Two states:
-  // - no category selected (browsing all products): the three top-level categories.
-  // - inside a top-level category (e.g. Watches): that category's own "All / Men /
-  //   Women" children. Hidden entirely on a leaf child page (nothing further to
-  //   browse into).
   readonly categoryCards = computed<CategoryCard[]>(() => {
     const res = this.resolved();
     this.languageStore.lang();
@@ -311,9 +295,6 @@ export class ProductListPageComponent {
   });
 
   constructor() {
-    // Category tree: fetched once per language (slugs are stable across languages,
-    // but names — used for the root-level "Category" filter and breadcrumb hand-off —
-    // are server-translated and need a refetch on switch).
     effect(() => {
       this.languageStore.lang();
       this.catalogApi.getCategoryTree().subscribe({
@@ -322,8 +303,6 @@ export class ProductListPageComponent {
       });
     }, { allowSignalWrites: true });
 
-    // Category detail: only depends on the resolved slug + language, not on the rest
-    // of the filters, so tweaking price/brand doesn't refetch it.
     effect(() => {
       const slug = this.categorySlug();
       this.languageStore.lang();
@@ -337,8 +316,6 @@ export class ProductListPageComponent {
       });
     }, { allowSignalWrites: true });
 
-    // Facets: scoped by categoryId only, per the contract (attribute facets are
-    // categoryId-scoped, brands are global) — never by the rest of the filter state.
     effect(() => {
       const categoryId = this.categoryId();
       this.languageStore.lang();
@@ -348,7 +325,6 @@ export class ProductListPageComponent {
       });
     }, { allowSignalWrites: true });
 
-    // The product search itself — every filter param plus language.
     effect(() => {
       const filter = this.queryFilter();
       this.languageStore.lang();
@@ -367,8 +343,6 @@ export class ProductListPageComponent {
       });
     }, { allowSignalWrites: true });
 
-    // A category switch (or its image path resolving) invalidates whatever broken
-    // state a previous category's images left behind.
     effect(() => {
       this.bannerUrl();
       this.bannerBroken.set(false);
@@ -481,9 +455,6 @@ export class ProductListPageComponent {
       : `assets/images/products/all-products/${file}`;
   }
 
-  // Card art for non-watches categories: reuses that category's own hero banner
-  // image (already curated per All/Men/Women scope for the hero — see
-  // buildImagePath) instead of one shared image repeated across all three cards.
   private categoryCardImage(parentSlug: string, scopeSlug: string): string {
     return `assets/images/products/${parentSlug}/${scopeSlug}/banner.png`;
   }

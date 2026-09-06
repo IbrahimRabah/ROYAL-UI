@@ -22,8 +22,6 @@ import { buildHttpParams } from './http-params.util';
 export class AdminInventoryApiService {
   private readonly http = inject(HttpClient);
 
-  // The search (`q`) is normalised Arabic server-side ("ساعه" finds "ساعة") — pass it
-  // through untouched, no client-side normalising.
   list(params: InventoryListParams): Observable<PageResponse<InventoryAdminResponse>> {
     const httpParams = buildHttpParams({
       q: params.q,
@@ -41,7 +39,6 @@ export class AdminInventoryApiService {
     return this.http.get<StockPositionResponse>(API_ROUTES.admin.inventory.position(variantId));
   }
 
-  // Not paginated — every variant at or below its minStockLevel, ordered by scarcity.
   lowStock(): Observable<StockPositionResponse[]> {
     return this.http.get<StockPositionResponse[]>(API_ROUTES.admin.inventory.lowStock());
   }
@@ -54,7 +51,6 @@ export class AdminInventoryApiService {
     return this.http.post<StockPositionResponse>(API_ROUTES.admin.inventory.adjust(variantId), body);
   }
 
-  // Omit variantId for the full ledger — an unrecognized one just yields an empty page.
   movements(params: InventoryMovementsParams = {}): Observable<PageResponse<StockMovementResponse>> {
     const httpParams = buildHttpParams({
       variantId: params.variantId,
