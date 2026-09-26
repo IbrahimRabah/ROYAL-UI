@@ -69,22 +69,78 @@
           <p class="admin-dialog__error" *ngIf="slugFieldError()">{{ slugFieldError() }}</p>
         </div>
 
-        <div class="cfd__field">
-          <label class="admin-dialog__field-label" for="cfd-image-url">{{ 'admin.categories.form.imageUrlLabel' | translate }}</label>
-          <input id="cfd-image-url" type="text" class="admin-dialog__text-input" formControlName="imageUrl" dir="ltr" />
-        </div>
-
-        <div class="cfd__field">
-          <label class="admin-dialog__field-label" for="cfd-banner-url">{{ 'admin.categories.form.bannerUrlLabel' | translate }}</label>
-          <input id="cfd-banner-url" type="text" class="admin-dialog__text-input" formControlName="bannerUrl" dir="ltr" />
-        </div>
-
         <label class="cfd__toggle">
           <input type="checkbox" class="cfd__toggle-input" formControlName="active" />
           <span class="cfd__toggle-track"><span class="cfd__toggle-thumb"></span></span>
           {{ 'admin.categories.form.activeLabel' | translate }}
         </label>
       </div>
+
+      <section class="cfd__images">
+        <h3 class="cfd__images-title">{{ 'admin.categories.form.images.title' | translate }}</h3>
+
+        <p class="cfd__images-note" *ngIf="!isEdit">
+          <i class="pi pi-info-circle" aria-hidden="true"></i>
+          {{ 'admin.categories.form.images.saveFirstNote' | translate }}
+        </p>
+
+        <div class="cfd__images-grid" [class.cfd__images-grid--disabled]="!isEdit">
+          <div
+            class="cfd__image-slot"
+            [class.cfd__image-slot--banner]="slot.type === 'BANNER'"
+            *ngFor="let slot of imageSlots"
+          >
+            <span class="cfd__image-slot-label">{{ slot.labelKey | translate }}</span>
+
+            <div class="cfd__image-preview" *ngIf="categoryImages()[slot.type] as previewUrl; else dropzone">
+              <img [src]="previewUrl" alt="" class="cfd__image-preview-img" />
+              <div class="cfd__image-preview-actions">
+                <button
+                  type="button"
+                  class="cfd__image-action"
+                  [disabled]="!isEdit || uploadingImage() === slot.type"
+                  (click)="fileInput.click()"
+                >
+                  {{ 'admin.categories.form.images.replace' | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="cfd__image-action cfd__image-action--danger"
+                  [disabled]="!isEdit || uploadingImage() === slot.type"
+                  (click)="removeImage(slot.type)"
+                >
+                  {{ 'admin.categories.form.images.remove' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <ng-template #dropzone>
+              <div
+                class="cfd__image-dropzone"
+                [class.cfd__image-dropzone--over]="dragOverSlot() === slot.type"
+                (dragover)="onImageDragOver(slot.type, $event)"
+                (dragleave)="onImageDragLeave()"
+                (drop)="onImageDrop(slot.type, $event)"
+                (click)="isEdit && fileInput.click()"
+              >
+                <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+                <span>{{ 'admin.categories.form.images.dropzoneHint' | translate }}</span>
+              </div>
+            </ng-template>
+
+            <i class="pi pi-spin pi-spinner cfd__image-spinner" *ngIf="uploadingImage() === slot.type" aria-hidden="true"></i>
+
+            <input
+              #fileInput
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+              class="cfd__image-file-input"
+              [disabled]="!isEdit"
+              (change)="onImageFileInputChange(slot.type, $event)"
+            />
+          </div>
+        </div>
+      </section>
 
       <div class="cfd__languages" formGroupName="translations">
         <section class="cfd__lang-panel" dir="rtl" formGroupName="ar">

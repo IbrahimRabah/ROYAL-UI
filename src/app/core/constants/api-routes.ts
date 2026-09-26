@@ -81,6 +81,8 @@ export const API_ROUTES = {
     categories: {
       categories: () => `${BASE}/admin/categories`,
       category: (categoryId: number) => `${BASE}/admin/categories/${categoryId}`,
+      images: (categoryId: number) => `${BASE}/admin/categories/${categoryId}/images`,
+      image: (categoryId: number, imageType: string) => `${BASE}/admin/categories/${categoryId}/images/${imageType}`,
     },
     brands: {
       brands: () => `${BASE}/admin/brands`,

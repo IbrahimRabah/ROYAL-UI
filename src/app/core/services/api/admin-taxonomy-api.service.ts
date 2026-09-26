@@ -9,6 +9,7 @@ import {
   BrandAdminResponse,
   BrandUpsertRequest,
   CategoryAdminResponse,
+  CategoryImageType,
   CategoryUpsertRequest,
   IdResponse,
 } from '../../models';
@@ -33,6 +34,17 @@ export class AdminTaxonomyApiService {
 
   updateCategory(categoryId: number, body: CategoryUpsertRequest): Observable<IdResponse> {
     return this.http.put<IdResponse>(API_ROUTES.admin.categories.category(categoryId), body, NO_TOAST);
+  }
+
+  uploadCategoryImage(categoryId: number, imageType: CategoryImageType, file: File): Observable<CategoryAdminResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const params = buildHttpParams({ imageType });
+    return this.http.post<CategoryAdminResponse>(API_ROUTES.admin.categories.images(categoryId), formData, { params, ...NO_TOAST });
+  }
+
+  deleteCategoryImage(categoryId: number, imageType: CategoryImageType): Observable<void> {
+    return this.http.delete<void>(API_ROUTES.admin.categories.image(categoryId, imageType), NO_TOAST);
   }
 
   listBrands(): Observable<BrandAdminResponse[]> {

@@ -667,7 +667,9 @@
     },
     "categories": {
       "created": "تم إنشاء التصنيف",
-      "updated": "تم تحديث التصنيف"
+      "updated": "تم تحديث التصنيف",
+      "imageUploaded": "تم رفع الصورة",
+      "imageDeleted": "تمت إزالة الصورة"
     },
     "brands": {
       "created": "تم إنشاء العلامة التجارية",
@@ -1573,8 +1575,24 @@
         "slugWarning": "تغيير الـ slug يكسر الروابط الحالية لهذا التصنيف",
         "displayOrderLabel": "ترتيب العرض",
         "activeLabel": "نشط",
-        "imageUrlLabel": "رابط الصورة",
-        "bannerUrlLabel": "رابط البانر",
+        "images": {
+          "title": "الصور",
+          "cardLabel": "صورة البطاقة",
+          "bannerLabel": "صورة البانر",
+          "dropzoneHint": "JPEG أو PNG أو WebP أو AVIF — حتى 5 ميجابايت",
+          "replace": "استبدال",
+          "remove": "إزالة",
+          "saveFirstNote": "احفظ التصنيف أولاً، ثم ارجع هنا لإضافة الصور.",
+          "deleteConfirm": {
+            "title": "إزالة الصورة",
+            "message": "ستتم إزالة هذه الصورة من التصنيف فورًا.",
+            "confirm": "إزالة"
+          },
+          "errors": {
+            "unsupportedType": "\"{{name}}\" ليس ملف JPEG أو PNG أو WebP أو AVIF",
+            "tooLarge": "\"{{name}}\" أكبر من 5 ميجابايت"
+          }
+        },
         "arabic": "العربية",
         "english": "الإنجليزية",
         "nameLabel": "الاسم",

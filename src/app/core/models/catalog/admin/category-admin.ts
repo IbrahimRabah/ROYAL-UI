@@ -1,11 +1,11 @@
 import { CategoryTranslationInput, CategoryTranslationOutput } from './translation';
 
+export type CategoryImageType = 'CARD' | 'BANNER';
+
 export interface CategoryUpsertRequest {
   parentId: number | null;
   slug?: string;
   translations: CategoryTranslationInput[];
-  imageUrl?: string | null;
-  bannerUrl?: string | null;
   displayOrder?: number;
   active?: boolean;
 }

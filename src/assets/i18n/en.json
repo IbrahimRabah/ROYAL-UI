@@ -667,7 +667,9 @@
     },
     "categories": {
       "created": "Category created",
-      "updated": "Category updated"
+      "updated": "Category updated",
+      "imageUploaded": "Image uploaded",
+      "imageDeleted": "Image removed"
     },
     "brands": {
       "created": "Brand created",
@@ -1573,8 +1575,24 @@
         "slugWarning": "Changing the slug breaks existing links to this category",
         "displayOrderLabel": "Display order",
         "activeLabel": "Active",
-        "imageUrlLabel": "Image URL",
-        "bannerUrlLabel": "Banner URL",
+        "images": {
+          "title": "Images",
+          "cardLabel": "Card image",
+          "bannerLabel": "Banner image",
+          "dropzoneHint": "JPEG, PNG, WebP or AVIF — up to 5MB",
+          "replace": "Replace",
+          "remove": "Remove",
+          "saveFirstNote": "Save the category first, then come back here to add images.",
+          "deleteConfirm": {
+            "title": "Remove image",
+            "message": "This image will be removed from the category immediately.",
+            "confirm": "Remove"
+          },
+          "errors": {
+            "unsupportedType": "\"{{name}}\" isn't a JPEG, PNG, WebP or AVIF file",
+            "tooLarge": "\"{{name}}\" is over 5MB"
+          }
+        },
         "arabic": "Arabic",
         "english": "English",
         "nameLabel": "Name",
