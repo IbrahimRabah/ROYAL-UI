@@ -18,8 +18,10 @@
 }
 
 .about-closing__content {
+  min-inline-size: 0;
+
   @include breakpoints.md {
-    flex: 1;
+    flex: 1 1 0;
   }
 }
 
@@ -42,7 +44,7 @@
   margin: 0 0 var(--sp-6);
   font-size: var(--fs-base);
   line-height: 1.8;
-  color: rgba(246, 242, 235, 0.75);
+  color: rgba(242, 235, 225, 0.75);
 }
 
 .about-closing__actions {
@@ -56,7 +58,7 @@
   align-items: center;
   gap: var(--sp-2);
   color: var(--paper) !important;
-  border-color: rgba(246, 242, 235, 0.4) !important;
+  border-color: rgba(242, 235, 225, 0.4) !important;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: var(--fs-sm);
@@ -65,23 +67,25 @@
 
 .about-closing__image-wrap {
   position: relative;
+  min-inline-size: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   min-block-size: 160px;
 
   @include breakpoints.md {
-    flex: 1;
+    flex: 1 1 0;
     min-block-size: 280px;
   }
 }
 
 .about-closing__watermark {
   font-family: var(--display);
-  font-size: clamp(4rem, 16vw, 9rem);
+  font-size: clamp(3rem, 10vw, 7rem);
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(176, 133, 66, 0.12);
-  white-space: nowrap;
+  color: rgba(184, 134, 63, 0.12);
+  text-align: center;
+  overflow-wrap: anywhere;
   pointer-events: none;
 }

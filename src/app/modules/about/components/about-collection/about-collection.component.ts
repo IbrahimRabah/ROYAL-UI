@@ -3,15 +3,15 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CategoryNode } from '../../../../core/models';
 
 interface CollectionCard {
-  key: 'watches' | 'wallets' | 'perfumes';
+  key: 'furniture' | 'woodAndIron' | 'ironwork';
   image: string;
   category: CategoryNode | undefined;
 }
 
 const CARD_IMAGES: Record<CollectionCard['key'], string> = {
-  watches: 'assets/images/about/watches.png',
-  wallets: 'assets/images/about/wallets.png',
-  perfumes: 'assets/images/about/perfumes.png',
+  furniture: 'assets/images/about/category3.png',
+  woodAndIron: 'assets/images/about/category2.png',
+  ironwork: 'assets/images/about/category1.png',
 };
 
 @Component({

@@ -60,8 +60,9 @@ export const APP_CONFIG = {
   },
 
   contact: {
-    whatsappUrl: 'https://wa.me/201090386165',
-    phone: '01090386165',
-    email: 'ibrahimrabah25@gmail.com',
+    whatsappUrl: 'https://wa.me/201033033636',
+    phone: '01033033636',
+    quotes: '01150500787',
+    email: 'theroyaliron@gmail.com',
   },
 } as const;

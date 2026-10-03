@@ -55,7 +55,7 @@ export class ExportPageComponent {
     request$.subscribe({
       next: (blob) => {
         this.downloading.set(null);
-        downloadBlob(blob, `velora-${stem}-${stamp}.${extension}`, this.platformId);
+        downloadBlob(blob, `royal-${stem}-${stamp}.${extension}`, this.platformId);
       },
       error: () => {
         this.downloading.set(null);

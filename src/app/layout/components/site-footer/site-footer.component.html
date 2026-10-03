@@ -1,49 +1,74 @@
 <footer class="site-footer">
-  <section class="site-footer__hero">
-    <div class="site-footer__hero-overlay"></div>
-    <div class="container-vl site-footer__hero-inner">
-      <p class="site-footer__hero-tagline">{{ 'footer.hero.tagline' | translate }}</p>
 
-      <ul class="site-footer__features">
-        <li class="site-footer__feature">
-          <i class="pi pi-sparkles" aria-hidden="true"></i>
-          <span>{{ 'footer.feature.timelessDesign' | translate }}</span>
-        </li>
-        <li class="site-footer__feature">
-          <i class="pi pi-crown" aria-hidden="true"></i>
-          <span>{{ 'footer.feature.luxuryQuality' | translate }}</span>
-        </li>
-        <li class="site-footer__feature">
-          <i class="pi pi-shield" aria-hidden="true"></i>
-          <span>{{ 'footer.feature.durability' | translate }}</span>
-        </li>
-        <li class="site-footer__feature">
-          <i class="pi pi-heart-fill" aria-hidden="true"></i>
-          <span>{{ 'footer.feature.madeForYou' | translate }}</span>
-        </li>
-      </ul>
-    </div>
-  </section>
 
   <div class="site-footer__bottom">
-    <div class="container-vl site-footer__bottom-inner">
-      <a routerLink="/" class="site-footer__logo">
-        <img src="assets/images/shared/dark_logo.jpg" [alt]="'header.logoAlt' | translate" />
-      </a>
-
-      <p class="site-footer__blurb">{{ 'footer.blurb' | translate }}</p>
-
-      <nav class="site-footer__social" [attr.aria-label]="'footer.socialAria' | translate">
-        <a
-          *ngFor="let link of socialLinks"
-          [href]="link.url"
-          class="site-footer__social-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="link.labelKey | translate"
-        >
-          <i class="pi" [ngClass]="link.icon" aria-hidden="true"></i>
+    <div class="container-vl site-footer__grid">
+      <div class="site-footer__brand">
+        <a routerLink="/" class="site-footer__logo">
+          <img src="assets/images/shared/dark_logo.jpg" [alt]="'header.logoAlt' | translate" />
         </a>
+        <p class="site-footer__tagline">{{ 'footer.hero.tagline' | translate }}</p>
+        <p class="site-footer__blurb">{{ 'footer.blurb' | translate }}</p>
+
+        <nav class="site-footer__social" [attr.aria-label]="'footer.socialAria' | translate">
+          <a
+            *ngFor="let link of socialLinks"
+            [href]="link.url"
+            class="site-footer__social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="link.labelKey | translate"
+          >
+            <i *ngIf="link.icon" class="pi" [ngClass]="link.icon" aria-hidden="true"></i>
+            <svg *ngIf="link.id === 'x'" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <svg *ngIf="link.id === 'tumblr'" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
+              <path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z" />
+            </svg>
+          </a>
+        </nav>
+      </div>
+
+      <section class="site-footer__col site-footer__col--contact">
+        <h2 class="site-footer__heading">{{ 'footer.contact.heading' | translate }}</h2>
+        <dl class="site-footer__list site-footer__list--pairs">
+          <div *ngFor="let item of contactItems" class="site-footer__item">
+            <dt>{{ item.labelKey | translate }}</dt>
+            <dd>
+              <a
+                class="site-footer__ltr"
+                [href]="item.href"
+                [attr.target]="item.external ? '_blank' : null"
+                [attr.rel]="item.external ? 'noopener noreferrer' : null"
+                >{{ item.value }}</a
+              >
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="site-footer__col site-footer__col--visit">
+        <h2 class="site-footer__heading">{{ 'footer.visit.heading' | translate }}</h2>
+        <dl class="site-footer__list">
+          <div class="site-footer__item">
+            <dt>{{ 'footer.contact.address' | translate }}</dt>
+            <dd>{{ 'footer.contact.addressValue' | translate }}</dd>
+          </div>
+          <div class="site-footer__item">
+            <dt>{{ 'footer.contact.hours' | translate }}</dt>
+            <dd>{{ 'footer.contact.hoursValue' | translate }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <nav class="site-footer__col site-footer__col--links" [attr.aria-label]="'footer.links.heading' | translate">
+        <h2 class="site-footer__heading">{{ 'footer.links.heading' | translate }}</h2>
+        <ul class="site-footer__list">
+          <li *ngFor="let link of navLinks">
+            <a [routerLink]="link.path">{{ link.labelKey | translate }}</a>
+          </li>
+        </ul>
       </nav>
 
       <span class="site-footer__copyright">{{ 'footer.copyright' | translate: { year } }}</span>

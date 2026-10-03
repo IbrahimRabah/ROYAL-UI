@@ -9,7 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { LayoutModule } from './layout/layout.module';
-import { VeloraPreset } from './core/theme/velora-preset';
+import { RoyalPreset } from './core/theme/royal-preset';
 import { translateLoaderFactory } from './core/services/translate-loader.factory';
 import { getInitialLanguage } from './core/constants/language-storage';
 
@@ -48,7 +48,7 @@ import { TagModule } from 'primeng/tag';
       provideClientHydration(withNoHttpTransferCache()),
       providePrimeNG({
         theme: {
-          preset: VeloraPreset,
+          preset: RoyalPreset,
           options: { darkModeSelector: 'none' }
         }
       })

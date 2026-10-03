@@ -23,7 +23,7 @@
     }
   },
   "header": {
-    "logoAlt": "VELORA",
+    "logoAlt": "ROYAL IRON",
     "searchPlaceholder": "Search for a product...",
     "search": "Search",
     "account": "My Account",
@@ -45,22 +45,42 @@
   },
   "footer": {
     "hero": {
-      "tagline": "Precision in every second"
+      "tagline": "Crafted to Last"
     },
     "feature": {
-      "timelessDesign": "Timeless Design",
-      "luxuryQuality": "Luxury Quality",
-      "durability": "Durability",
-      "madeForYou": "Made for You"
+      "delivery": "Free delivery in Cairo & Giza",
+      "cod": "Cash on delivery",
+      "madeToOrder": "Made to order",
+      "experience": "15 years of craftsmanship"
     },
-    "blurb": "VELORA — refined watches, wallets and perfumes for those who value lasting quality.",
+    "blurb": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
     "socialAria": "Follow us on social media",
     "social": {
       "facebook": "Facebook",
       "instagram": "Instagram",
-      "tiktok": "TikTok"
+      "x": "X",
+      "linkedin": "LinkedIn",
+      "pinterest": "Pinterest",
+      "tumblr": "Tumblr"
     },
-    "copyright": "© {{year}} VELORA. All rights reserved."
+    "copyright": "© {{year}} ROYAL IRON. All rights reserved.",
+    "contact": {
+      "heading": "Contact",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "quotes": "Online quotes",
+      "email": "Email",
+      "address": "Address",
+      "addressValue": "8 Al-Baqoushi Entrance St, off Ismailia Canal Rd, Cairo",
+      "hours": "Hours",
+      "hoursValue": "Open 24 hours, 7 days a week"
+    },
+    "visit": {
+      "heading": "Visit us"
+    },
+    "links": {
+      "heading": "Links"
+    }
   },
   "product": {
     "addToCart": "Add to Cart",
@@ -95,8 +115,8 @@
         "subtitle": "Cancel free before shipping"
       },
       "authentic": {
-        "title": "Authentic Products",
-        "subtitle": "100% genuine, guaranteed"
+        "title": "Solid Craftsmanship",
+        "subtitle": "Built by hand to last for years"
       }
     }
   },
@@ -164,7 +184,7 @@
         "cod": "Cash on Delivery",
         "cancelTitle": "Free Cancellation",
         "cancelSubtitle": "Before shipping",
-        "authentic": "Authentic Products"
+        "authentic": "Made to Order"
       }
     },
     "errors": {
@@ -183,7 +203,7 @@
   },
   "auth": {
     "layout": {
-      "tagline": "Timeless elegance, delivered to your door."
+      "tagline": "Crafted to Last."
     },
     "login": {
       "heading": "Welcome Back",
@@ -252,89 +272,76 @@
   },
   "about": {
     "hero": {
-      "imageAlt": "VELORA banner",
-      "titleLine1": "Timeless Elegance.",
-      "titleLine2": "Made for You.",
-      "subtitle": "We create refined watches, wallets and fragrances designed to become part of your everyday story.",
-      "cta": "Discover VELORA"
+      "imageAlt": "ROYAL IRON banner",
+      "titleLine1": "Crafted to Last.",
+      "titleLine2": "Made in Egypt.",
+      "subtitle": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
+      "cta": "Discover ROYAL IRON"
     },
     "story": {
       "eyebrow": "OUR STORY",
-      "headingLine1": "More Than Products.",
-      "headingLine2": "A Statement of Style.",
-      "imageAlt": "VELORA craftsmanship",
-      "paragraph1": "VELORA was created with a simple idea: everyday essentials should feel exceptional.",
-      "paragraph2": "From the watch you wear, to the wallet you carry, to the fragrance that defines your presence — every VELORA piece is selected to bring together timeless design, refined details and modern elegance.",
-      "paragraph3": "We believe luxury is not only about what you own. It is about how it makes you feel."
+      "headingLine1": "Wood and Iron.",
+      "headingLine2": "Made by Hand.",
+      "imageAlt": "ROYAL IRON craftsmanship",
+      "paragraph1": "ROYAL IRON is an Egyptian furniture workshop, founded in 2008 with a simple idea: furniture should be solid enough to outlast the home it is made for.",
+      "paragraph2": "Bedrooms, dining sets, tables, consoles, shelving, desks, mirrors and kitchen units — oak and walnut surfaces on black forged frames, sometimes with marble, glass or cane. We also build gates, railings and window grilles to order.",
+      "paragraph3": "After around 15 years at the bench and the forge, we still believe the best furniture is the kind you never need to replace."
     },
     "collection": {
-      "heading": "The VELORA Collection",
+      "heading": "What We Make",
       "explore": "Explore",
-      "watches": {
-        "title": "Time, Refined.",
-        "description": "Sophisticated timepieces designed for every moment.",
-        "imageAlt": "VELORA watches"
+      "furniture": {
+        "title": "Furniture for Every Room.",
+        "description": "Bedrooms, dining sets, tables, consoles, shelving and desks.",
+        "imageAlt": "ROYAL IRON furniture"
       },
-      "wallets": {
-        "title": "Crafted for Everyday Elegance.",
-        "description": "Refined designs that combine functionality with timeless style.",
-        "imageAlt": "VELORA wallets"
+      "woodAndIron": {
+        "title": "Wood Meets Forged Iron.",
+        "description": "Oak and walnut surfaces on black forged frames.",
+        "imageAlt": "ROYAL IRON wood and iron"
       },
-      "perfumes": {
-        "title": "Leave Your Signature.",
-        "description": "Distinctive fragrances created to make every presence memorable.",
-        "imageAlt": "VELORA perfumes"
+      "ironwork": {
+        "title": "Ironwork to Order.",
+        "description": "Gates, railings and window grilles made to your measurements.",
+        "imageAlt": "ROYAL IRON ironwork"
       }
     },
     "values": {
-      "heading": "Designed Around You",
+      "heading": "Built Around You",
       "timelessDesign": {
-        "title": "Timeless Design",
-        "description": "Styles that remain elegant beyond trends."
+        "title": "Solid Construction",
+        "description": "Joinery and frames made to last for decades."
       },
       "attentionToDetail": {
         "title": "Attention to Detail",
         "description": "Every detail is considered, from material to finishing."
       },
       "qualitySelection": {
-        "title": "Quality Selection",
-        "description": "Products chosen with quality, comfort and durability in mind."
+        "title": "Honest Materials",
+        "description": "Natural wood, forged iron, marble, glass and cane."
       },
       "madeForYou": {
-        "title": "Made for You",
-        "description": "Pieces designed to complement your personal style."
-      }
-    },
-    "genderPanels": {
-      "cta": "Explore Now",
-      "forHim": {
-        "title": "For Him",
-        "tagline": "Bold. Refined. Distinctive.",
-        "imageAlt": "VELORA for him"
-      },
-      "forHer": {
-        "title": "For Her",
-        "tagline": "Elegant. Graceful. Unforgettable.",
-        "imageAlt": "VELORA for her"
+        "title": "Made to Order",
+        "description": "Pieces built to your space and your measurements."
       }
     },
     "promise": {
-      "heading": "The VELORA Promise",
+      "heading": "The ROYAL IRON Promise",
       "cod": {
         "title": "Cash on Delivery",
         "description": "Pay when your order arrives."
       },
       "delivery": {
-        "title": "Delivery to All Governorates",
-        "description": "We deliver across Egypt."
+        "title": "Free Delivery in Cairo & Giza",
+        "description": "Everywhere else is charged per piece."
       },
       "cancellation": {
         "title": "Free Cancellation",
         "description": "Cancel any time before shipping."
       },
       "authentic": {
-        "title": "Authentic Products",
-        "description": "100% genuine, guaranteed."
+        "title": "Made to Order",
+        "description": "Built to your specifications."
       },
       "whatsapp": {
         "title": "WhatsApp Support",
@@ -342,17 +349,30 @@
       }
     },
     "closing": {
-      "headingLine1": "Your Time. Your Style.",
-      "headingLine2": "Your Signature.",
-      "paragraph": "A watch marks your moments. A wallet travels with you. A fragrance stays in memory. VELORA brings them together.",
-      "shopWatches": "Shop Watches",
-      "shopWallets": "Shop Wallets",
-      "shopPerfumes": "Shop Perfumes"
+      "headingLine1": "Wood. Iron.",
+      "headingLine2": "Built to Last.",
+      "paragraph": "From the bedroom to the dining table to the front gate, ROYAL IRON builds it by hand.",
+      "shopBedrooms": "Shop Bedrooms",
+      "shopDining": "Shop Dining",
+      "shopTables": "Shop Tables"
+    },
+    "craftPanels": {
+      "cta": "Explore Now",
+      "furniture": {
+        "title": "Home Furniture",
+        "tagline": "Solid. Warm. Built to last.",
+        "imageAlt": "ROYAL IRON home furniture"
+      },
+      "ironwork": {
+        "title": "Custom Ironwork",
+        "tagline": "Gates. Railings. Grilles.",
+        "imageAlt": "ROYAL IRON custom ironwork"
+      }
     }
   },
   "contact": {
     "hero": {
-      "imageAlt": "VELORA contact banner",
+      "imageAlt": "ROYAL IRON contact banner",
       "eyebrow": "WE'D LOVE TO HEAR FROM YOU",
       "heading": "Contact Us",
       "body": "Our team is here to help with any questions, requests, or feedback.",
@@ -361,17 +381,17 @@
     "cards": {
       "whatsapp": {
         "title": "WhatsApp",
-        "value": "01090386165",
+        "value": "01033033636",
         "detail": "Fastest way to reach us"
       },
       "phone": {
         "title": "Phone",
-        "value": "01090386165",
+        "value": "01033033636",
         "detail": "Call us directly"
       },
       "email": {
         "title": "Email",
-        "value": "ibrahimrabah25@gmail.com",
+        "value": "theroyaliron@gmail.com",
         "detail": "We reply within 24 hours"
       },
       "trackOrder": {
@@ -384,11 +404,11 @@
       }
     },
     "luxury": {
-      "imageAlt": "VELORA luxury delivery",
-      "headingLine1": "Luxury,",
+      "imageAlt": "ROYAL IRON delivery",
+      "headingLine1": "Crafted,",
       "headingLine2": "delivered",
       "headingLine3": "to you.",
-      "body": "Explore the VELORA collection online and enjoy a smooth checkout, delivery across Egypt, and support at every step.",
+      "body": "Explore the ROYAL IRON collection online and enjoy a smooth checkout, free delivery in Cairo & Giza, and support at every step.",
       "cta": "Shop Collection",
       "strip": {
         "cod": {
@@ -396,8 +416,8 @@
           "description": "Pay on arrival, no card needed"
         },
         "delivery": {
-          "title": "Delivery to All Governorates",
-          "description": "We deliver across Egypt"
+          "title": "Free Delivery in Cairo & Giza",
+          "description": "Charged per piece elsewhere"
         },
         "support": {
           "title": "Direct Support",
@@ -428,15 +448,15 @@
   },
   "home": {
     "hero": {
-      "imageAlt": "VELORA watch",
-      "tagline": "VELORA WATCHES — TIME. ELEGANCE. YOU.",
+      "imageAlt": "ROYAL IRON furniture",
+      "tagline": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
       "cta": "Shop Now"
     },
     "features": {
-      "cod": "Cash on Delivery",
-      "nationwideDelivery": "Delivery to All Governorates",
-      "freeCancellation": "Free Cancellation Before Shipping",
-      "authentic": "Authentic Products"
+      "cod": "Cash on delivery",
+      "nationwideDelivery": "Free delivery in Cairo & Giza",
+      "freeCancellation": "Made to order",
+      "authentic": "15 years of craftsmanship"
     },
     "categories": {
       "title": "Shop by Category"
@@ -739,7 +759,7 @@
       }
     },
     "sidebar": {
-      "logoAlt": "VELORA"
+      "logoAlt": "ROYAL IRON"
     },
     "topbar": {
       "viewStore": "View Store",
@@ -1121,105 +1141,105 @@
         "metaTitle": "Meta title",
         "metaDescription": "Meta description",
         "variants": {
-        "emptyTitle": "This product has no variants yet — it can't be published or bought.",
-        "addVariants": "Add variants",
-        "saveChanges": "Save changes",
-        "loadError": "We couldn't load these variants.",
-        "attributesLoadError": "We couldn't load variant-defining attributes.",
-        "retry": "Retry",
-        "columns": {
-          "sku": "SKU",
-          "attributes": "Attributes",
-          "price": "Price",
-          "compareAtPrice": "Compare-at",
-          "costPrice": "Cost",
-          "taxRate": "Tax rate",
-          "weight": "Weight",
-          "stock": "Stock",
-          "onHand": "On hand",
-          "reserved": "Reserved",
-          "available": "Available",
-          "lowStockThreshold": "Threshold",
-          "status": "Status"
+          "emptyTitle": "This product has no variants yet — it can't be published or bought.",
+          "addVariants": "Add variants",
+          "saveChanges": "Save changes",
+          "loadError": "We couldn't load these variants.",
+          "attributesLoadError": "We couldn't load variant-defining attributes.",
+          "retry": "Retry",
+          "columns": {
+            "sku": "SKU",
+            "attributes": "Attributes",
+            "price": "Price",
+            "compareAtPrice": "Compare-at",
+            "costPrice": "Cost",
+            "taxRate": "Tax rate",
+            "weight": "Weight",
+            "stock": "Stock",
+            "onHand": "On hand",
+            "reserved": "Reserved",
+            "available": "Available",
+            "lowStockThreshold": "Threshold",
+            "status": "Status"
+          },
+          "manageStock": "Manage stock",
+          "deleteConfirm": {
+            "title": "Archive variant",
+            "message": "This variant will be archived and hidden from the store.",
+            "confirm": "Archive"
+          },
+          "generator": {
+            "title": "Add variants",
+            "step1Title": "Select attribute values",
+            "step1Hint": "Choose the values that generate new SKUs — every combination across attributes becomes one variant.",
+            "relevanceNote": "This list shows every variant-defining attribute in the catalogue, not just the ones that make sense for this product — select only the attributes that actually apply (e.g. skip glass finishes on a dining chair, marble on a bed frame).",
+            "noAttributes": "No variant-defining attributes are set up yet.",
+            "previewButton": "Preview combinations",
+            "cancel": "Cancel",
+            "back": "Back",
+            "continue": "Continue",
+            "createButton": "Create {{count}} variants",
+            "summaryLine": "{{total}} combinations — {{existing}} already exist",
+            "alreadyExists": "Already exists",
+            "inUseBadge": "In use",
+            "inUseHint": "This value already appears on at least one existing variant of this product — selecting it again is fine (e.g. to add a new size in this colour).",
+            "skuLabel": "SKU",
+            "applyToAll": "Apply to all rows",
+            "applyToAllHint": "Fill once and apply to every row below — nothing is saved until you press Create",
+            "apply": "Apply",
+            "priceLabel": "Price",
+            "compareAtLabel": "Compare-at",
+            "costLabel": "Cost",
+            "taxRateLabel": "Tax rate",
+            "taxRateHint": "0.14 = 14%, extracted from the price, not added",
+            "weightLabel": "Weight",
+            "initialStockLabel": "Initial stock",
+            "initialStockWarning": "A variant with 0 stock exists but can't be bought — the product will look broken to shoppers, not just unavailable.",
+            "minStockLabel": "Low-stock threshold",
+            "priceRequired": "Every row needs a price of 0 or more",
+            "noSelection": "Select at least one value from at least one attribute"
+          },
+          "skuConflict": "This SKU is already in use"
         },
-        "manageStock": "Manage stock",
-        "deleteConfirm": {
-          "title": "Archive variant",
-          "message": "This variant will be archived and hidden from the store.",
-          "confirm": "Archive"
+        "images": {
+          "loadError": "We couldn't load these images.",
+          "note": "The variant link drives the storefront gallery: the product page shows the main poster plus whichever images are linked to the variant the shopper picked. An image left unlinked shows for every variant.",
+          "dropzoneTitle": "Drag images here or click to browse",
+          "dropzoneHint": "JPEG, PNG, WebP or AVIF — up to 5MB each, 20 images max",
+          "emptyWarning": "A product without images looks broken in the store.",
+          "editTitle": "Edit image",
+          "mainPill": "Main",
+          "setMain": "Set as main",
+          "edit": "Edit",
+          "delete": "Delete",
+          "altTextAr": "Alt text (Arabic)",
+          "altTextEn": "Alt text (English)",
+          "variantLink": "Linked variant",
+          "notLinked": "Not linked",
+          "uploading": "Uploading…",
+          "reorderError": "Couldn't save the new order — refreshed to the last saved state.",
+          "deleteConfirm": {
+            "title": "Delete image",
+            "message": "This image will be removed from the product permanently.",
+            "confirm": "Delete"
+          },
+          "errors": {
+            "unsupportedType": "\"{{name}}\" isn't a JPEG, PNG, WebP or AVIF file",
+            "tooLarge": "\"{{name}}\" is over 5MB",
+            "limitReached": "\"{{name}}\" wasn't added — this product already has 20 images"
+          }
         },
-        "generator": {
-          "title": "Add variants",
-          "step1Title": "Select attribute values",
-          "step1Hint": "Choose the values that generate new SKUs — every combination across attributes becomes one variant.",
-          "relevanceNote": "This list shows every variant-defining attribute in the catalogue, not just the ones that make sense for this product — select only the attributes that actually apply (e.g. skip volumes on a watch, colours on a perfume).",
-          "noAttributes": "No variant-defining attributes are set up yet.",
-          "previewButton": "Preview combinations",
-          "cancel": "Cancel",
-          "back": "Back",
-          "continue": "Continue",
-          "createButton": "Create {{count}} variants",
-          "summaryLine": "{{total}} combinations — {{existing}} already exist",
-          "alreadyExists": "Already exists",
-          "inUseBadge": "In use",
-          "inUseHint": "This value already appears on at least one existing variant of this product — selecting it again is fine (e.g. to add a new size in this colour).",
-          "skuLabel": "SKU",
-          "applyToAll": "Apply to all rows",
-          "applyToAllHint": "Fill once and apply to every row below — nothing is saved until you press Create",
-          "apply": "Apply",
-          "priceLabel": "Price",
-          "compareAtLabel": "Compare-at",
-          "costLabel": "Cost",
-          "taxRateLabel": "Tax rate",
-          "taxRateHint": "0.14 = 14%, extracted from the price, not added",
-          "weightLabel": "Weight",
-          "initialStockLabel": "Initial stock",
-          "initialStockWarning": "A variant with 0 stock exists but can't be bought — the product will look broken to shoppers, not just unavailable.",
-          "minStockLabel": "Low-stock threshold",
-          "priceRequired": "Every row needs a price of 0 or more",
-          "noSelection": "Select at least one value from at least one attribute"
-        },
-        "skuConflict": "This SKU is already in use"
-      },
-      "images": {
-        "loadError": "We couldn't load these images.",
-        "note": "The variant link drives the storefront gallery: the product page shows the main poster plus whichever images are linked to the variant the shopper picked. An image left unlinked shows for every variant.",
-        "dropzoneTitle": "Drag images here or click to browse",
-        "dropzoneHint": "JPEG, PNG, WebP or AVIF — up to 5MB each, 20 images max",
-        "emptyWarning": "A product without images looks broken in the store.",
-        "editTitle": "Edit image",
-        "mainPill": "Main",
-        "setMain": "Set as main",
-        "edit": "Edit",
-        "delete": "Delete",
-        "altTextAr": "Alt text (Arabic)",
-        "altTextEn": "Alt text (English)",
-        "variantLink": "Linked variant",
-        "notLinked": "Not linked",
-        "uploading": "Uploading…",
-        "reorderError": "Couldn't save the new order — refreshed to the last saved state.",
-        "deleteConfirm": {
-          "title": "Delete image",
-          "message": "This image will be removed from the product permanently.",
-          "confirm": "Delete"
-        },
-        "errors": {
-          "unsupportedType": "\"{{name}}\" isn't a JPEG, PNG, WebP or AVIF file",
-          "tooLarge": "\"{{name}}\" is over 5MB",
-          "limitReached": "\"{{name}}\" wasn't added — this product already has 20 images"
+        "specs": {
+          "attributesLoadError": "We couldn't load specification attributes.",
+          "emptyTitle": "No specifications set yet — add one below and it appears on the product page automatically.",
+          "selectValuePlaceholder": "Select a value",
+          "valuePlaceholder": "Value",
+          "remove": "Remove",
+          "addSpecification": "Add specification",
+          "noAttributesConfigured": "No specification attributes are set up yet.",
+          "allAttributesUsed": "Every specification attribute already has a value on this product.",
+          "incompleteRows": "Fill in a value for every specification row, or remove the empty ones, before saving."
         }
-      },
-      "specs": {
-        "attributesLoadError": "We couldn't load specification attributes.",
-        "emptyTitle": "No specifications set yet — add one below and it appears on the product page automatically.",
-        "selectValuePlaceholder": "Select a value",
-        "valuePlaceholder": "Value",
-        "remove": "Remove",
-        "addSpecification": "Add specification",
-        "noAttributesConfigured": "No specification attributes are set up yet.",
-        "allAttributesUsed": "Every specification attribute already has a value on this product.",
-        "incompleteRows": "Fill in a value for every specification row, or remove the empty ones, before saving."
-      }
       }
     },
     "customers": {

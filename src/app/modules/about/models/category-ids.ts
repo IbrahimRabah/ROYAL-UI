@@ -1,16 +1,16 @@
 import { CategoryNode } from '../../../core/models';
 
 export interface CategoryIds {
-  watches: number | null;
-  wallets: number | null;
-  perfumes: number | null;
+  bedrooms: number | null;
+  dining: number | null;
+  tables: number | null;
 }
 
 export function findCategoryIds(categories: CategoryNode[]): CategoryIds {
   const bySlug = new Map(categories.map((category) => [category.slug, category.id]));
   return {
-    watches: bySlug.get('watches') ?? null,
-    wallets: bySlug.get('wallets') ?? null,
-    perfumes: bySlug.get('perfumes') ?? null,
+    bedrooms: bySlug.get('bedrooms') ?? null,
+    dining: bySlug.get('dining') ?? null,
+    tables: bySlug.get('tables') ?? null,
   };
 }

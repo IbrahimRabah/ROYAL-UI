@@ -2,7 +2,7 @@ import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
 /**
- * Points Aura's semantic design tokens at VELORA's own tokens (src/styles/_tokens.scss)
+ * Points Aura's semantic design tokens at ROYAL IRON's own tokens (src/styles/_tokens.scss)
  * instead of redefining component-level CSS. Values are `var(--...)` references, not
  * literal colors — verified directly against the installed
  * node_modules/@primeuix/themes/dist/aura/base/index.mjs, which is where these semantic
@@ -10,14 +10,14 @@ import Aura from '@primeuix/themes/aura';
  * highlight.*) and `primitive.borderRadius.md` are actually defined and referenced from
  * (Aura's own component styles read them as `{primary.color}`, `{border.radius.md}`, etc.).
  *
- * Deliberately NOT redefining the full primary/surface 50–950 color scales — VELORA's
+ * Deliberately NOT redefining the full primary/surface 50–950 color scales — ROYAL IRON's
  * tokens only have three gold shades (--gold-lt/--gold/--gold-dp) and two surface shades
  * (--surface/--surface-alt), not a ten-step ramp, and fabricating one would mean
  * inventing colors that aren't in the token file. Every semantic leaf that Aura derives
  * from those scales for things this preset cares about (highlight, form fields, overlay
  * panels) is overridden directly with a real token instead.
  */
-export const VeloraPreset = definePreset(Aura, {
+export const RoyalPreset = definePreset(Aura, {
   primitive: {
     borderRadius: {
       md: 'var(--r-md)',

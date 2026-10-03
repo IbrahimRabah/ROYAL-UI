@@ -6,7 +6,7 @@ import { Observable, finalize, map, of, shareReplay, tap } from 'rxjs';
 import { API_ROUTES } from '../constants/api-routes';
 import { GuestTokenResponse } from '../models';
 
-const COOKIE_NAME = 'velora_guest_token';
+const COOKIE_NAME = 'royal_guest_token';
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; 
 @Injectable({
   providedIn: 'root',

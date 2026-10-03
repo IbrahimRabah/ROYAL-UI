@@ -3,15 +3,15 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CategoryIds } from '../../models/category-ids';
 
 interface ShopLink {
-  key: 'shopWatches' | 'shopWallets' | 'shopPerfumes';
+  key: 'shopBedrooms' | 'shopDining' | 'shopTables';
   icon: string;
   categoryKey: keyof CategoryIds;
 }
 
 const LINKS: ShopLink[] = [
-  { key: 'shopWatches', icon: 'pi-clock', categoryKey: 'watches' },
-  { key: 'shopWallets', icon: 'pi-wallet', categoryKey: 'wallets' },
-  { key: 'shopPerfumes', icon: 'pi-sparkles', categoryKey: 'perfumes' },
+  { key: 'shopBedrooms', icon: 'pi-moon', categoryKey: 'bedrooms' },
+  { key: 'shopDining', icon: 'pi-wallet', categoryKey: 'dining' },
+  { key: 'shopTables', icon: 'pi-sparkles', categoryKey: 'tables' },
 ];
 
 @Component({
@@ -21,7 +21,7 @@ const LINKS: ShopLink[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutClosingComponent {
-  @Input() categoryIds: CategoryIds = { watches: null, wallets: null, perfumes: null };
+  @Input() categoryIds: CategoryIds = { bedrooms: null, dining: null, tables: null };
 
   readonly links = LINKS;
 

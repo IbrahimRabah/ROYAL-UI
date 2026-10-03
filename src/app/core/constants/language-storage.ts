@@ -1,6 +1,6 @@
 import { Language } from '../enums/language';
 
-export const LANGUAGE_STORAGE_KEY = 'velora_lang';
+export const LANGUAGE_STORAGE_KEY = 'royal_lang';
 
 export function parseStoredLanguage(value: string | null): Language | null {
   return value === Language.AR || value === Language.EN ? (value as Language) : null;

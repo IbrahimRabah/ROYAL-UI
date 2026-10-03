@@ -3,9 +3,9 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { AuthResponse, UserResponse } from '../models';
 
-const ACCESS_TOKEN_KEY = 'velora_access_token';
-const REFRESH_TOKEN_KEY = 'velora_refresh_token';
-const USER_KEY = 'velora_user';
+const ACCESS_TOKEN_KEY = 'royal_access_token';
+const REFRESH_TOKEN_KEY = 'royal_refresh_token';
+const USER_KEY = 'royal_user';
 
 /**
  * Stores accessToken, refreshToken and the full UserResponse from login/register.

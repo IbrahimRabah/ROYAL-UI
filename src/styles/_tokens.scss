@@ -1,24 +1,27 @@
 :root {
-  --ink: #0d0d0d;
+  --ink: #14110f;
   --ink-2: #2c2825;
-  --gold: #b08542;
-  --gold-lt: #d8ba84;
-  --gold-dp: #7e5c2b;
-  --cream: #f6f2eb;
-  --paper: #fffdf9;
-  --taupe: #8b8177;
-  --line: rgba(176, 133, 66, 0.26);
-  --line-soft: rgba(13, 13, 13, 0.08);
-  --warn: #9a6a2e;
+  --walnut: #6b4a2f;
+  --oak: #c89b6a;
+  --iron: #2a2522;
+  --gold: #b8863f;
+  --gold-lt: #d4a862;
+  --gold-dp: #8f6329;
+  --cream: #f2ebe1;
+  --paper: #faf6f1;
+  --taupe: #a89684;
+  --line: #ede5da;
+  --line-soft: rgba(20, 17, 15, 0.08);
+  --warn: #c8833a;
   --warn-bg: #fbf3e4;
-  --stop: #8c3b2e;
+  --stop: #a94436;
   --stop-bg: #faedea;
-  --ok: #3f6b4a;
+  --ok: #4a7c59;
   --ok-bg: #edf3ee;
-  --info: #3a5570;
+  --info: #4a6b7c;
   --info-bg: #edf1f5;
-  --display: "Cormorant Garamond", Georgia, serif;
-  --body: "Jost", system-ui, sans-serif;
+  --display: "Fraunces", Georgia, serif;
+  --body: "Inter", system-ui, sans-serif;
   --pad: clamp(20px, 5vw, 72px);
   --maxw: 1280px;
 
@@ -40,16 +43,16 @@
   --r-md: 8px;
   --r-lg: 16px;
   --r-full: 999px;
-  --shadow-sm: 0 1px 3px rgba(13, 13, 13, 0.06);
-  --shadow-md: 0 4px 16px rgba(13, 13, 13, 0.08);
+  --shadow-sm: 0 1px 3px rgba(20, 17, 15, 0.06);
+  --shadow-md: 0 4px 16px rgba(20, 17, 15, 0.08);
 
   --surface: var(--paper);
   --surface-alt: var(--cream);
   --text: var(--ink);
-  --text-muted: var(--taupe);
+  --text-muted: #6b5d4f;
   --brand: var(--gold);
   --brand-hover: var(--gold-dp);
-  --border: var(--line);
+  --border: #e0d5c7;
 
   --fs-xs: clamp(0.6875rem, 0.66rem + 0.15vw, 0.75rem);
   --fs-sm: clamp(0.8125rem, 0.775rem + 0.2vw, 0.875rem);
@@ -62,7 +65,7 @@
   --fs-h2: clamp(2rem, 1.6rem + 2vw, 2.75rem);
   --fs-h1: clamp(2.5rem, 1.9rem + 3vw, 3.5rem);
 
-  --overlay: rgba(13, 13, 13, 0.5);
+  --overlay: rgba(20, 17, 15, 0.5);
   --admin-bg: #F6F5F3;
   --admin-surface: #FFFFFF;
   --admin-surface-alt: #FAFAFB;
@@ -80,6 +83,6 @@
   --admin-blue: #2563EB;
 }
 html[dir="rtl"] {
-  --display: "Reem Kufi", sans-serif;
+  --display: "Tajawal", sans-serif;
   --body: "IBM Plex Sans Arabic", system-ui, sans-serif;
 }

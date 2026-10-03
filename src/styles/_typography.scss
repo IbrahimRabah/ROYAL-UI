@@ -11,7 +11,8 @@ h4,
 h5,
 h6 {
   font-family: var(--display);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   line-height: 1.15;
 }
 
@@ -54,6 +55,8 @@ html[dir='rtl'] {
   h4,
   h5,
   h6 {
+    font-weight: 700;
+    letter-spacing: 0;
     line-height: 1.3;
   }
 }
