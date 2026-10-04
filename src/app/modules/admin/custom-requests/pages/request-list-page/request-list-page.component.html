@@ -1,0 +1,191 @@
+<div class="rl">
+  <header class="rl__header">
+    <h1 class="rl__title">{{ 'admin.customRequests.title' | translate }}</h1>
+    <p class="rl__lead">{{ 'admin.customRequests.lead' | translate }}</p>
+  </header>
+
+  <nav class="rl__tabs" [attr.aria-label]="'admin.customRequests.title' | translate">
+    <button
+      *ngFor="let status of pipeline"
+      type="button"
+      class="rl__tab"
+      [class.rl__tab--active]="statusFilter() === status"
+      [attr.aria-pressed]="statusFilter() === status"
+      (click)="selectStatus(status)"
+    >
+      {{ 'admin.customRequests.status.' + status | translate }}
+      <span class="rl__tab-count" [class.rl__tab-count--alert]="status === 'NEW' && counts()[status] > 0">{{ counts()[status] }}</span>
+    </button>
+    <button
+      type="button"
+      class="rl__tab"
+      [class.rl__tab--active]="statusFilter() === null"
+      [attr.aria-pressed]="statusFilter() === null"
+      (click)="selectStatus(null)"
+    >
+      {{ 'admin.customRequests.tabs.all' | translate }}
+      <span class="rl__tab-count">{{ counts()['all'] }}</span>
+    </button>
+  </nav>
+
+  <div class="rl__toolbar">
+    <div class="rl__search">
+      <i class="pi pi-search rl__search-icon" aria-hidden="true"></i>
+      <input
+        type="search"
+        class="rl__search-input"
+        [value]="searchDraft()"
+        (input)="onSearch($any($event.target).value)"
+        [placeholder]="'admin.customRequests.searchPlaceholder' | translate"
+        [attr.aria-label]="'admin.customRequests.searchPlaceholder' | translate"
+      />
+    </div>
+
+    <button type="button" class="rl__filters-toggle" [attr.aria-expanded]="filtersOpen()" (click)="filtersOpen.set(!filtersOpen())">
+      <i class="pi pi-sliders-h" aria-hidden="true"></i>
+      {{ 'common.filters' | translate }}
+    </button>
+
+    <div class="rl__filters" [class.rl__filters--open]="filtersOpen()">
+      <label class="rl__field">
+        <span class="rl__label">{{ 'admin.customRequests.filters.type' | translate }}</span>
+        <select class="rl__select" [value]="typeFilter() ?? ''" (change)="setFilter('type', $any($event.target).value)">
+          <option value="">{{ 'admin.customRequests.filters.allTypes' | translate }}</option>
+          <option *ngFor="let t of types" [value]="t">{{ 'admin.customRequests.type.' + t | translate }}</option>
+        </select>
+      </label>
+      <label class="rl__field">
+        <span class="rl__label">{{ 'admin.customRequests.filters.governorate' | translate }}</span>
+        <select class="rl__select" [value]="governorateFilter() ?? ''" (change)="setFilter('governorateId', $any($event.target).value)">
+          <option value="">{{ 'admin.customRequests.filters.allGovernorates' | translate }}</option>
+          <option *ngFor="let g of governorates()" [value]="g.id">{{ govLabel(g) }}</option>
+        </select>
+      </label>
+      <label class="rl__field">
+        <span class="rl__label">{{ 'admin.customRequests.filters.from' | translate }}</span>
+        <input type="date" class="rl__select rl__select--ltr" [value]="fromDate()" (change)="setFilter('from', $any($event.target).value)" />
+      </label>
+      <label class="rl__field">
+        <span class="rl__label">{{ 'admin.customRequests.filters.to' | translate }}</span>
+        <input type="date" class="rl__select rl__select--ltr" [value]="toDate()" (change)="setFilter('to', $any($event.target).value)" />
+      </label>
+      <button type="button" class="rl__clear" *ngIf="hasFilters()" (click)="clearFilters()">
+        <i class="pi pi-times" aria-hidden="true"></i>
+        {{ 'common.clear' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="rl__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.customRequests.errorMessage' | translate }}</span>
+    <button type="button" class="rl__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div class="rl__skeleton" *ngIf="loading()">
+    <p-skeleton height="52px" borderRadius="8px"></p-skeleton>
+    <p-skeleton height="52px" borderRadius="8px"></p-skeleton>
+    <p-skeleton height="52px" borderRadius="8px"></p-skeleton>
+  </div>
+
+  <!-- Empty -->
+  <div class="rl__empty" *ngIf="!loading() && !error() && !sortedRows().length">
+    <i class="pi pi-comments" aria-hidden="true"></i>
+    <ng-container *ngIf="!hasFilters() && statusFilter() === null; else noMatch">
+      <p class="rl__empty-title">{{ 'admin.customRequests.empty.title' | translate }}</p>
+      <p class="rl__empty-text">{{ 'admin.customRequests.empty.text' | translate }}</p>
+    </ng-container>
+    <ng-template #noMatch>
+      <p class="rl__empty-title">{{ 'admin.customRequests.empty.noMatch' | translate }}</p>
+    </ng-template>
+  </div>
+
+  <ng-container *ngIf="!loading() && !error() && sortedRows().length">
+    <!-- Desktop table -->
+    <div class="rl__table-wrap">
+      <table class="rl__table">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'admin.customRequests.columns.number' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.customer' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.phone' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.type' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.governorate' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.status' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.created' | translate }}</th>
+            <th scope="col">{{ 'admin.customRequests.columns.age' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of pageRows()" class="rl__row" [ngClass]="'rl__row--' + ageLevel(row)">
+            <td>
+              <a [routerLink]="[row.id]" class="rl__number">{{ row.requestNumber }}</a>
+            </td>
+            <td class="rl__name">{{ row.contactName }}</td>
+            <td><a [href]="telHref(row.phone)" class="rl__phone">{{ row.phone }}</a></td>
+            <td><app-vl-status-badge [label]="'admin.customRequests.type.' + row.type | translate" [tone]="typeTone(row.type)"></app-vl-status-badge></td>
+            <td>
+              <span class="rl__gov">
+                {{ row.governorateName || '—' }}
+                <i
+                  *ngIf="isClosed(row)"
+                  class="pi pi-exclamation-triangle rl__closed"
+                  role="img"
+                  tabindex="0"
+                  [attr.aria-label]="'admin.customRequests.closedGovernorate' | translate"
+                  [title]="'admin.customRequests.closedGovernorate' | translate"
+                ></i>
+              </span>
+            </td>
+            <td><app-vl-status-badge [label]="'admin.customRequests.status.' + row.status | translate" [tone]="statusTone(row.status)"></app-vl-status-badge></td>
+            <td class="rl__num">{{ formatDate(row.createdAt) }}</td>
+            <td class="rl__num" [ngClass]="'rl__age--' + ageLevel(row)">
+              <ng-container *ngIf="ageHours(row) >= 48; else hoursTpl">{{ 'admin.customRequests.age.days' | translate: { count: ageDays(row) } }}</ng-container>
+              <ng-template #hoursTpl>{{ 'admin.customRequests.age.hours' | translate: { count: ageHours(row) } }}</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="rl__cards">
+      <article *ngFor="let row of pageRows()" class="rl__card" [ngClass]="'rl__card--' + ageLevel(row)">
+        <div class="rl__card-top">
+          <a [routerLink]="[row.id]" class="rl__number">{{ row.requestNumber }}</a>
+          <span class="rl__num" [ngClass]="'rl__age--' + ageLevel(row)">
+            <ng-container *ngIf="ageHours(row) >= 48; else hoursTpl2">{{ 'admin.customRequests.age.days' | translate: { count: ageDays(row) } }}</ng-container>
+            <ng-template #hoursTpl2>{{ 'admin.customRequests.age.hours' | translate: { count: ageHours(row) } }}</ng-template>
+          </span>
+        </div>
+        <p class="rl__card-name">{{ row.contactName }}</p>
+        <a [href]="telHref(row.phone)" class="rl__card-phone">
+          <i class="pi pi-phone" aria-hidden="true"></i>
+          <span class="rl__num">{{ row.phone }}</span>
+        </a>
+        <p class="rl__card-gov" *ngIf="row.governorateName">
+          {{ row.governorateName }}
+          <i *ngIf="isClosed(row)" class="pi pi-exclamation-triangle rl__closed" role="img" [attr.aria-label]="'admin.customRequests.closedGovernorate' | translate"></i>
+        </p>
+        <div class="rl__card-badges">
+          <app-vl-status-badge [label]="'admin.customRequests.status.' + row.status | translate" [tone]="statusTone(row.status)"></app-vl-status-badge>
+          <app-vl-status-badge [label]="'admin.customRequests.type.' + row.type | translate" [tone]="typeTone(row.type)"></app-vl-status-badge>
+        </div>
+        <a [routerLink]="[row.id]" class="rl__card-action">
+          {{ 'admin.customRequests.open' | translate }}
+          <i class="pi pi-arrow-right rl__arrow" aria-hidden="true"></i>
+        </a>
+      </article>
+    </div>
+
+    <nav class="rl__pager" *ngIf="totalPages() > 1" [attr.aria-label]="'admin.customRequests.pagination' | translate">
+      <button type="button" class="rl__page-btn" [disabled]="page() === 0" (click)="goToPage(page() - 1)" [attr.aria-label]="'admin.customRequests.prevPage' | translate">
+        <i class="pi pi-chevron-left rl__arrow" aria-hidden="true"></i>
+      </button>
+      <span class="rl__num">{{ page() + 1 }} / {{ totalPages() }}</span>
+      <button type="button" class="rl__page-btn" [disabled]="page() + 1 >= totalPages()" (click)="goToPage(page() + 1)" [attr.aria-label]="'admin.customRequests.nextPage' | translate">
+        <i class="pi pi-chevron-right rl__arrow" aria-hidden="true"></i>
+      </button>
+    </nav>
+  </ng-container>
+</div>

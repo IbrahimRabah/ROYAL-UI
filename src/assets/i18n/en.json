@@ -721,6 +721,24 @@
     },
     "settings": {
       "profileSaved": "Store profile saved"
+    },
+    "portfolio": {
+      "created": "Portfolio item created",
+      "updated": "Portfolio item saved",
+      "published": "Item published",
+      "unpublished": "Item moved back to draft",
+      "archived": "Item archived",
+      "restored": "Item restored as a draft",
+      "imagesUploaded": "{{count}} images uploaded",
+      "imageSaved": "Image updated",
+      "imageMainSet": "Main image updated",
+      "imageDeleted": "Image deleted"
+    },
+    "customRequests": {
+      "contacted": "Marked as contacted",
+      "quoted": "Quote saved",
+      "accepted": "Request accepted",
+      "rejected": "Request rejected"
     }
   },
   "errorPage": {
@@ -766,7 +784,9 @@
         "finance": "Finance",
         "system": "System"
       },
-      "governorates": "Governorates"
+      "governorates": "Governorates",
+      "portfolio": "Portfolio",
+      "customRequests": "Custom requests"
     },
     "sidebar": {
       "logoAlt": "ROYAL IRON"
@@ -786,7 +806,9 @@
       },
       "actionQueues": {
         "heading": "Needs Action",
-        "viewOrders": "View orders"
+        "viewOrders": "View orders",
+        "newCustomRequests": "New custom requests",
+        "viewRequests": "View requests"
       },
       "outstandingCash": {
         "heading": "With the Courier",
@@ -1839,6 +1861,238 @@
           "confirm": "Remove",
           "cancel": "Cancel"
         }
+      }
+    },
+    "portfolio": {
+      "title": "Portfolio",
+      "newItem": "New item",
+      "backToList": "Back to portfolio",
+      "moreActions": "More actions",
+      "errorMessage": "We couldn't load the portfolio — try refreshing the page",
+      "noMatch": "No items match these filters.",
+      "filters": {
+        "state": "State",
+        "category": "Category",
+        "allCategories": "All categories",
+        "states": {
+          "all": "All",
+          "draft": "Draft",
+          "published": "Live",
+          "archived": "Archived"
+        }
+      },
+      "state": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Live",
+        "ARCHIVED": "Archived"
+      },
+      "actions": {
+        "edit": "Edit",
+        "publish": "Publish",
+        "unpublish": "Unpublish",
+        "archive": "Archive",
+        "restore": "Restore"
+      },
+      "archiveConfirm": {
+        "title": "Archive \"{{name}}\"?",
+        "message": "This hides the item from the public gallery. Images are kept and it can be restored.",
+        "confirm": "Archive"
+      },
+      "empty": {
+        "title": "No portfolio items yet",
+        "text": "The portfolio shows finished custom work — gates, railings, staircases — so customers can see what the workshop can build before they send a request. It has no prices and no cart."
+      },
+      "notFound": {
+        "title": "Item not found",
+        "text": "This portfolio item does not exist or was removed."
+      },
+      "form": {
+        "newTitle": "New portfolio item",
+        "save": "Save",
+        "details": "Details",
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "titleRequired": "The Arabic title is required",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionEn": "Description (English)",
+        "category": "Category",
+        "noCategory": "No category",
+        "completedAt": "Completion date",
+        "displayOrder": "Display order",
+        "displayOrderHint": "Lower numbers show first.",
+        "orderInvalid": "Enter 0 or more",
+        "slug": "Slug",
+        "slugHint": "Leave empty to generate from the title. Letters, digits and dashes only.",
+        "slugWarning": "Changing the slug breaks links already shared.",
+        "slugTaken": "This slug is already used by another item (including archived ones).",
+        "archivedNotice": "This item is archived. Restoring brings it back as a draft — it is not republished automatically.",
+        "fixFields": "Please fix the highlighted fields",
+        "loadError": "We couldn't load this item."
+      },
+      "images": {
+        "heading": "Images",
+        "saveFirst": "Save the item first — images can be added after it has been saved.",
+        "archivedNotice": "Images can’t be changed while the item is archived. Restore it to edit images.",
+        "dropzoneTitle": "Drag images here or click to browse",
+        "dropzoneHint": "JPEG, PNG, WebP or AVIF — up to 5MB each, 20 images max. The first upload becomes the main image.",
+        "emptyWarning": "A portfolio item without images shows nothing to the customer.",
+        "reorderHint": "Drag the image to reorder.",
+        "mainPill": "Main",
+        "altAr": "Alt text (Arabic)",
+        "altEn": "Alt text (English)",
+        "order": "Order",
+        "save": "Save",
+        "setMain": "Set as main",
+        "delete": "Delete image",
+        "dragHandle": "Drag to reorder",
+        "uploading": "Uploading…",
+        "loadError": "We couldn't load the images.",
+        "reorderError": "Couldn't save the new order — refreshed to the last saved state.",
+        "errors": {
+          "unsupportedType": "\"{{name}}\" isn't a JPEG, PNG, WebP or AVIF file",
+          "tooLarge": "\"{{name}}\" is over 5MB",
+          "limitReached": "\"{{name}}\" wasn't added — this item already has 20 images"
+        },
+        "deleteConfirm": {
+          "title": "Delete image",
+          "message": "This image and its file will be removed permanently.",
+          "confirm": "Delete"
+        }
+      }
+    },
+    "customRequests": {
+      "title": "Custom requests",
+      "lead": "Customers asking for something that is not on the shelf. A request is not a sale — nothing is reserved and there is no price until you quote it and the customer agrees.",
+      "errorMessage": "We couldn't load the requests — try refreshing the page",
+      "open": "Open request",
+      "pagination": "Pages",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "backToList": "Back to requests",
+      "closedGovernorate": "We don't currently deliver to this governorate",
+      "searchPlaceholder": "Search by name, phone or request number",
+      "tabs": {
+        "all": "All"
+      },
+      "status": {
+        "NEW": "New",
+        "CONTACTED": "Contacted",
+        "QUOTED": "Quoted",
+        "ACCEPTED": "Accepted",
+        "REJECTED": "Rejected",
+        "CONVERTED": "Converted"
+      },
+      "type": {
+        "SIZE_VARIANT": "Size change",
+        "MADE_TO_ORDER": "Made to order",
+        "CUSTOM_WORK": "Custom work"
+      },
+      "filters": {
+        "type": "Type",
+        "allTypes": "All types",
+        "governorate": "Governorate",
+        "allGovernorates": "All governorates",
+        "from": "From",
+        "to": "To"
+      },
+      "columns": {
+        "number": "Request",
+        "customer": "Customer",
+        "phone": "Phone",
+        "type": "Type",
+        "governorate": "Governorate",
+        "status": "Status",
+        "created": "Created",
+        "age": "Age"
+      },
+      "age": {
+        "hours": "{{count}}h",
+        "days": "{{count}}d"
+      },
+      "empty": {
+        "title": "No custom requests yet",
+        "text": "When a customer asks for a different size, a made-to-order piece or custom ironwork, the request appears here. New requests need a phone call first.",
+        "noMatch": "No requests match these filters."
+      },
+      "notFound": {
+        "title": "Request not found",
+        "text": "This request does not exist."
+      },
+      "detail": {
+        "loadError": "We couldn't load this request.",
+        "callCustomer": "Call customer",
+        "notServed": "We don't currently deliver to this governorate.",
+        "customer": "Customer",
+        "name": "Name",
+        "phone": "Phone",
+        "altPhone": "Alternate phone",
+        "email": "Email",
+        "governorate": "Governorate",
+        "area": "Area",
+        "street": "Street address",
+        "request": "Request",
+        "type": "Type",
+        "product": "Product",
+        "dimensions": "Dimensions",
+        "quantity": "Quantity",
+        "notes": "Customer's notes",
+        "images": "Reference photos",
+        "noImages": "The customer did not attach any photos.",
+        "openImage": "Open photo",
+        "quote": "Quote",
+        "quoteTotalNote": "Total including tax, for the full quantity.",
+        "noQuote": "Not quoted yet.",
+        "actions": "Actions",
+        "closedNote": "This request is closed — no further changes.",
+        "timeline": "Timeline"
+      },
+      "actions": {
+        "contacted": "Mark as contacted",
+        "quote": "Send quote",
+        "reviseQuote": "Revise quote",
+        "accept": "Accept",
+        "acceptDisabled": "Send a quote first — a request can only be accepted once it has been quoted.",
+        "reject": "Reject"
+      },
+      "acceptConfirm": {
+        "title": "Accept this request?",
+        "message": "This records that the customer agreed to the quote. It cannot be undone.",
+        "confirm": "Accept"
+      },
+      "timeline": {
+        "created": "Request received",
+        "status": "Status",
+        "quote": "Quote"
+      },
+      "dialog": {
+        "noteLabel": "Note",
+        "optional": "optional",
+        "notePlaceholder": "Anything worth recording",
+        "contacted": {
+          "title": "Mark as contacted",
+          "lead": "Record that you have spoken to the customer.",
+          "submit": "Mark contacted"
+        },
+        "quote": {
+          "title": "Send quote",
+          "amount": "Quote amount (EGP)",
+          "helper": "Total price including tax, for the full quantity.",
+          "invalid": "Enter an amount greater than 0.",
+          "submit": "Save quote"
+        },
+        "reject": {
+          "title": "Reject request",
+          "lead": "Say why — the customer is told this over the phone and it stays in the history.",
+          "reasonsLabel": "Suggested reasons",
+          "noteRequired": "A reason is required to reject a request.",
+          "submit": "Reject request"
+        }
+      },
+      "reasons": {
+        "outOfScope": "Outside our scope",
+        "notServed": "Governorate not served",
+        "noResponse": "Customer didn't respond",
+        "tooSmall": "Quantity too small"
       }
     }
   }

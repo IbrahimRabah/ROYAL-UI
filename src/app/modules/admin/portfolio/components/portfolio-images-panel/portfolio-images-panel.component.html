@@ -1,0 +1,173 @@
+<section class="pip" [class.pip--disabled]="disabled">
+  <div class="pip__header">
+    <div class="pip__icon-badge"><i class="pi pi-images" aria-hidden="true"></i></div>
+    <h2 class="pip__title">{{ 'admin.portfolio.images.heading' | translate }}</h2>
+    <span class="pip__count" *ngIf="itemId !== null"><span class="pip__num">{{ images().length }}</span> / 20</span>
+  </div>
+
+  <p class="pip__notice" *ngIf="itemId === null" role="note">
+    <i class="pi pi-info-circle" aria-hidden="true"></i>
+    {{ 'admin.portfolio.images.saveFirst' | translate }}
+  </p>
+
+  <p class="pip__notice pip__notice--warn" *ngIf="itemId !== null && archived" role="note">
+    <i class="pi pi-lock" aria-hidden="true"></i>
+    {{ 'admin.portfolio.images.archivedNotice' | translate }}
+  </p>
+
+  <!-- Disabled placeholder (new item) -->
+  <div class="pip__dropzone pip__dropzone--empty pip__dropzone--off" *ngIf="itemId === null" aria-disabled="true">
+    <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+    <p class="pip__dropzone-title">{{ 'admin.portfolio.images.dropzoneTitle' | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="itemId !== null">
+    <div class="pip__skeleton" *ngIf="loading()">
+      <p-skeleton height="180px" borderRadius="12px"></p-skeleton>
+    </div>
+
+    <div class="pip__error" *ngIf="error() && !loading()">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <span>{{ 'admin.portfolio.images.loadError' | translate }}</span>
+      <button type="button" class="pip__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+    </div>
+
+    <ng-container *ngIf="!loading() && !error()">
+      <!-- Empty: full-size drop zone -->
+      <button
+        type="button"
+        class="pip__dropzone pip__dropzone--empty"
+        [class.pip__dropzone--over]="dragOver()"
+        [disabled]="disabled"
+        *ngIf="!images().length"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()"
+      >
+        <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+        <span class="pip__dropzone-title">{{ 'admin.portfolio.images.dropzoneTitle' | translate }}</span>
+        <span class="pip__dropzone-hint">{{ 'admin.portfolio.images.dropzoneHint' | translate }}</span>
+        <span class="pip__empty-warning">{{ 'admin.portfolio.images.emptyWarning' | translate }}</span>
+      </button>
+
+      <ng-container *ngIf="images().length">
+        <button
+          type="button"
+          class="pip__dropzone"
+          [class.pip__dropzone--over]="dragOver()"
+          [disabled]="disabled || images().length >= 20"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+          (click)="fileInput.click()"
+        >
+          <i class="pi pi-cloud-upload" aria-hidden="true"></i>
+          <span>{{ 'admin.portfolio.images.dropzoneTitle' | translate }}</span>
+          <span class="pip__dropzone-hint">{{ 'admin.portfolio.images.dropzoneHint' | translate }}</span>
+        </button>
+
+        <p class="pip__hint" *ngIf="!disabled">{{ 'admin.portfolio.images.reorderHint' | translate }}</p>
+
+        <div
+          class="pip__grid"
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          [cdkDropListDisabled]="disabled"
+          (cdkDropListDropped)="onReorderDrop($event)"
+        >
+          <article *ngFor="let image of images()" cdkDrag class="pip__tile" [class.pip__tile--main]="image.main">
+            <div class="pip__media" cdkDragHandle [attr.aria-label]="'admin.portfolio.images.dragHandle' | translate">
+              <img [src]="image.url" [alt]="image.altTextEn || image.altTextAr || ''" loading="lazy" decoding="async" />
+              <span class="pip__main-pill" *ngIf="image.main">{{ 'admin.portfolio.images.mainPill' | translate }}</span>
+            </div>
+
+            <div class="pip__fields">
+              <label class="pip__field">
+                <span class="pip__label">{{ 'admin.portfolio.images.altAr' | translate }}</span>
+                <input
+                  type="text"
+                  dir="rtl"
+                  class="pip__input"
+                  [disabled]="disabled"
+                  [value]="draftOf(image).altTextAr"
+                  (input)="onDraft(image, 'altTextAr', $any($event.target).value)"
+                />
+              </label>
+              <label class="pip__field">
+                <span class="pip__label">{{ 'admin.portfolio.images.altEn' | translate }}</span>
+                <input
+                  type="text"
+                  dir="ltr"
+                  class="pip__input"
+                  [disabled]="disabled"
+                  [value]="draftOf(image).altTextEn"
+                  (input)="onDraft(image, 'altTextEn', $any($event.target).value)"
+                />
+              </label>
+              <label class="pip__field pip__field--order">
+                <span class="pip__label">{{ 'admin.portfolio.images.order' | translate }}</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  inputmode="numeric"
+                  class="pip__input pip__input--num"
+                  [disabled]="disabled"
+                  [value]="draftOf(image).displayOrder"
+                  (input)="onDraft(image, 'displayOrder', $any($event.target).value)"
+                />
+              </label>
+            </div>
+
+            <div class="pip__actions">
+              <button
+                type="button"
+                class="pip__btn pip__btn--primary"
+                [disabled]="disabled || !isDirty(image) || busyImageId() !== null"
+                (click)="saveImage(image)"
+              >
+                <i class="pi pi-check" aria-hidden="true"></i>
+                {{ 'admin.portfolio.images.save' | translate }}
+              </button>
+              <button
+                type="button"
+                class="pip__btn"
+                [disabled]="disabled || image.main || busyImageId() !== null"
+                (click)="setMain(image)"
+                [attr.aria-label]="'admin.portfolio.images.setMain' | translate"
+              >
+                <i class="pi pi-star" aria-hidden="true"></i>
+                <span class="pip__btn-label">{{ 'admin.portfolio.images.setMain' | translate }}</span>
+              </button>
+              <button
+                type="button"
+                class="pip__btn pip__btn--danger"
+                [disabled]="disabled"
+                (click)="deleteImage(image)"
+                [attr.aria-label]="'admin.portfolio.images.delete' | translate"
+              >
+                <i class="pi pi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+        </div>
+      </ng-container>
+
+      <div class="pip__uploading" *ngIf="uploading()">
+        <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        {{ 'admin.portfolio.images.uploading' | translate }}
+      </div>
+
+      <input
+        #fileInput
+        type="file"
+        multiple
+        accept="image/jpeg,image/png,image/webp,image/avif"
+        class="pip__file-input"
+        [disabled]="disabled"
+        (change)="onFileInputChange($event)"
+      />
+    </ng-container>
+  </ng-container>
+</section>

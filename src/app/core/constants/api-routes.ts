@@ -93,6 +93,22 @@ export const API_ROUTES = {
       attribute: (attributeId: number) => `${BASE}/admin/attributes/${attributeId}`,
     },
 
+    customRequests: {
+      list: () => `${BASE}/admin/custom-requests`,
+      item: (id: number) => `${BASE}/admin/custom-requests/${id}`,
+      status: (id: number) => `${BASE}/admin/custom-requests/${id}/status`,
+      quote: (id: number) => `${BASE}/admin/custom-requests/${id}/quote`,
+    },
+
+    portfolio: {
+      list: () => `${BASE}/admin/portfolio`,
+      item: (id: number) => `${BASE}/admin/portfolio/${id}`,
+      publish: (id: number) => `${BASE}/admin/portfolio/${id}/publish`,
+      restore: (id: number) => `${BASE}/admin/portfolio/${id}/restore`,
+      images: (id: number) => `${BASE}/admin/portfolio/${id}/images`,
+      image: (id: number, imageId: number) => `${BASE}/admin/portfolio/${id}/images/${imageId}`,
+    },
+
     inventory: {
       list: () => `${BASE}/admin/inventory`,
       position: (variantId: number) => `${BASE}/admin/inventory/${variantId}`,

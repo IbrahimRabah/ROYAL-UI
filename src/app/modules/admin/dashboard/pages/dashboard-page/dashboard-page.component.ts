@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { AdminCustomRequestApiService } from '../../../../../core/services/api/admin-custom-request-api.service';
 
 import { DashboardResponse } from '../../../../../core/models';
 import { FulfillmentStatus } from '../../../../../core/enums/fulfillment-status';
@@ -64,12 +65,17 @@ const ACTION_QUEUE_ICON: Partial<Record<FulfillmentStatus, string>> = {
 })
 export class DashboardPageComponent {
   private readonly dashboardApi = inject(AdminDashboardApiService);
+  private readonly customRequestApi = inject(AdminCustomRequestApiService);
+
+  /** Requests waiting for a first call — not part of the dashboard payload, so counted separately. */
+  readonly newRequestCount = signal(0);
 
   readonly data = signal<DashboardResponse | null>(null);
   readonly loading = signal(true);
   readonly error = signal(false);
 
   constructor() {
+    this.customRequestApi.countNew().subscribe({ next: (count) => this.newRequestCount.set(count), error: () => {} });
     this.fetch();
   }
 

@@ -1,4 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { AdminCustomRequestApiService } from '../../../core/services/api/admin-custom-request-api.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,7 +29,7 @@ interface AdminNavItem {
   labelKey: string;
   icon: string;
   route: string;
-  badge?: true;
+  badge?: 'orders' | 'requests';
   children?: AdminNavChild[];
 }
 
@@ -42,7 +43,8 @@ const NAV_GROUPS: AdminNavGroup[] = [
     labelKey: 'admin.nav.groups.operations',
     items: [
       { labelKey: 'admin.nav.dashboard', icon: 'pi-home', route: '/admin/dashboard' },
-      { labelKey: 'admin.nav.orders', icon: 'pi-shopping-cart', route: '/admin/orders', badge: true },
+      { labelKey: 'admin.nav.orders', icon: 'pi-shopping-cart', route: '/admin/orders', badge: 'orders' },
+      { labelKey: 'admin.nav.customRequests', icon: 'pi-comments', route: '/admin/custom-requests', badge: 'requests' },
       { labelKey: 'admin.nav.customers', icon: 'pi-users', route: '/admin/customers' },
     ],
   },
@@ -50,6 +52,7 @@ const NAV_GROUPS: AdminNavGroup[] = [
     labelKey: 'admin.nav.groups.catalog',
     items: [
       { labelKey: 'admin.nav.products', icon: 'pi-box', route: '/admin/products' },
+      { labelKey: 'admin.nav.portfolio', icon: 'pi-images', route: '/admin/portfolio' },
       { labelKey: 'admin.nav.categories', icon: 'pi-sitemap', route: '/admin/categories' },
       { labelKey: 'admin.nav.brands', icon: 'pi-tag', route: '/admin/brands' },
       { labelKey: 'admin.nav.attributes', icon: 'pi-sliders-h', route: '/admin/attributes' },
@@ -109,6 +112,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
   private readonly dashboardApi = inject(AdminDashboardApiService);
+  private readonly customRequestApi = inject(AdminCustomRequestApiService);
 
   @Input() mobileOpen = false;
   @Output() readonly mobileOpenChange = new EventEmitter<boolean>();
@@ -120,6 +124,11 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
   readonly navGroups = NAV_GROUPS;
   readonly pendingOrderCount = signal(0);
+  readonly newRequestCount = signal(0);
+
+  badgeCount(item: AdminNavItem): number {
+    return item.badge === 'orders' ? this.pendingOrderCount() : item.badge === 'requests' ? this.newRequestCount() : 0;
+  }
 
   ngOnInit(): void {
     this.dashboardApi.get().subscribe({
@@ -129,6 +138,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
       },
       error: () => {},
     });
+    this.customRequestApi.countNew().subscribe({ next: (count) => this.newRequestCount.set(count), error: () => {} });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

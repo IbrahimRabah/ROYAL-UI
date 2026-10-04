@@ -14,9 +14,9 @@
         <i class="pi {{ item.icon }} admin-sidebar__icon" aria-hidden="true"></i>
         <span class="admin-sidebar__label">{{ item.labelKey | translate }}</span>
         <span
-          *ngIf="item.badge && pendingOrderCount() > 0"
+          *ngIf="item.badge && badgeCount(item) > 0"
           class="admin-sidebar__badge"
-        >{{ pendingOrderCount() }}</span>
+        >{{ badgeCount(item) }}</span>
       </a>
 
       <!-- Sections covering more than one screen: a non-navigating header (hidden when

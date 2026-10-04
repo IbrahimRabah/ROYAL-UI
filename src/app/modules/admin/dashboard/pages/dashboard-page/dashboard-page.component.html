@@ -69,6 +69,27 @@
             <i class="pi {{ actionQueueIcon(queue.status) }}" aria-hidden="true"></i>
           </div>
         </a>
+
+        <!-- Uncontacted custom requests: a customer waiting by the phone. Only when there are some. -->
+        <a
+          *ngIf="newRequestCount() > 0"
+          routerLink="/admin/custom-requests"
+          [queryParams]="{ status: 'NEW' }"
+          class="dashboard-page__queue-tile dashboard-page__queue-tile--stop"
+        >
+          <div class="dashboard-page__queue-bar"></div>
+          <div class="dashboard-page__queue-body">
+            <span class="dashboard-page__queue-count">{{ newRequestCount() }}</span>
+            <span class="dashboard-page__queue-label">{{ 'admin.dashboard.actionQueues.newCustomRequests' | translate }}</span>
+            <span class="dashboard-page__queue-link">
+              {{ 'admin.dashboard.actionQueues.viewRequests' | translate }}
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="dashboard-page__queue-icon-badge">
+            <i class="pi pi-comments" aria-hidden="true"></i>
+          </div>
+        </a>
       </div>
 
       <!-- Order status distribution — a proportional view of the same actionQueues data,

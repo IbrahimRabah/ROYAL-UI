@@ -1,0 +1,102 @@
+<div class="admin-dialog" *ngIf="open">
+  <div class="admin-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="admin-dialog__panel admin-dialog__panel--sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="request-action-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+    (keydown.tab)="onTab($event)"
+  >
+    <header class="admin-dialog__header" [class.admin-dialog__header--scrolled]="scrolled()">
+      <h2 id="request-action-title" class="admin-dialog__title">
+        {{ 'admin.customRequests.dialog.' + mode + '.title' | translate }}
+        <span class="admin-dialog__title-ref">{{ requestNumber }}</span>
+      </h2>
+      <button type="button" class="admin-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="admin-dialog__body" (scroll)="onBodyScroll($event)">
+      <p class="admin-dialog__lead" *ngIf="mode === 'contacted'">{{ 'admin.customRequests.dialog.contacted.lead' | translate }}</p>
+
+      <div class="admin-dialog__inline-error" role="alert" *ngIf="errorMessage">
+        <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <div class="admin-dialog__field" *ngIf="mode === 'quote'">
+        <label class="admin-dialog__field-label" for="request-quote-amount">
+          {{ 'admin.customRequests.dialog.quote.amount' | translate }} *
+        </label>
+        <input
+          id="request-quote-amount"
+          type="number"
+          inputmode="decimal"
+          min="0.01"
+          step="0.01"
+          class="admin-dialog__input"
+          [ngModel]="amount()"
+          (ngModelChange)="amount.set($event)"
+        />
+        <p class="admin-dialog__helper">{{ 'admin.customRequests.dialog.quote.helper' | translate }}</p>
+        <p class="admin-dialog__field-error" *ngIf="touched() && !amountValid">
+          {{ 'admin.customRequests.dialog.quote.invalid' | translate }}
+        </p>
+      </div>
+
+      <ng-container *ngIf="mode === 'reject'">
+        <p class="admin-dialog__lead">{{ 'admin.customRequests.dialog.reject.lead' | translate }}</p>
+        <div class="admin-dialog__chips" role="group" [attr.aria-label]="'admin.customRequests.dialog.reject.reasonsLabel' | translate">
+          <button
+            *ngFor="let reason of reasons"
+            type="button"
+            class="admin-dialog__chip"
+            (click)="pickReason(reason)"
+          >
+            {{ 'admin.customRequests.reasons.' + reason | translate }}
+          </button>
+        </div>
+      </ng-container>
+
+      <label class="admin-dialog__field-label" for="request-action-note">
+        {{ 'admin.customRequests.dialog.noteLabel' | translate }}<span *ngIf="mode === 'reject'"> *</span>
+        <span class="admin-dialog__optional" *ngIf="mode !== 'reject'"> ({{ 'admin.customRequests.dialog.optional' | translate }})</span>
+      </label>
+      <textarea
+        id="request-action-note"
+        class="admin-dialog__textarea"
+        rows="3"
+        [maxLength]="noteMaxLength"
+        [ngModel]="note()"
+        (ngModelChange)="note.set($event)"
+        [placeholder]="'admin.customRequests.dialog.notePlaceholder' | translate"
+      ></textarea>
+      <p class="admin-dialog__field-error" *ngIf="touched() && !noteValid">
+        {{ 'admin.customRequests.dialog.reject.noteRequired' | translate }}
+      </p>
+      <span class="admin-dialog__counter">{{ note().length }}/{{ noteMaxLength }}</span>
+    </div>
+
+    <footer class="admin-dialog__footer" [class.admin-dialog__footer--scrolled]="scrolled()">
+      <button type="button" class="admin-dialog__cancel" [disabled]="saving" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="admin-dialog__submit"
+        [class.admin-dialog__submit--stop]="mode === 'reject'"
+        [class.admin-dialog__submit--ok]="mode !== 'reject'"
+        [disabled]="saving || !canSubmit"
+        (click)="submit()"
+      >
+        <i class="pi" [ngClass]="saving ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+        {{ 'admin.customRequests.dialog.' + mode + '.submit' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

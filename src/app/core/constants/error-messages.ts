@@ -44,6 +44,11 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
 
   [ErrorCode.STOCK_UNAVAILABLE]: 'الكمية المطلوبة غير متاحة في المخزون',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'هذا المنتج غير متاح للبيع حالياً',
+  [ErrorCode.CUSTOM_REQUEST_NOT_FOUND]: 'الطلب غير موجود',
+  [ErrorCode.CUSTOM_REQUEST_QUOTE_REQUIRED]: 'سعّر الطلب أولاً قبل قبوله',
+  [ErrorCode.CUSTOM_REQUEST_CLOSED]: 'هذا الطلب لم يعد جديدًا ولا يقبل تعديلات من العميل',
+  [ErrorCode.PORTFOLIO_ITEM_NOT_FOUND]: 'عنصر المعرض غير موجود',
+  [ErrorCode.PORTFOLIO_ITEM_ARCHIVED]: 'العنصر مؤرشف — استرجعه أولاً',
   [ErrorCode.PRODUCT_NOT_PURCHASABLE]: 'هذا المنتج يُصنَّع حسب الطلب — اطلب عرض سعر بدلاً من الشراء',
   [ErrorCode.SHIPPING_SIZE_MISSING]: 'تعذّر حساب الشحن لأحد المنتجات، يرجى التواصل معنا',
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'هذا العنصر غير موجود في السلة',
@@ -112,6 +117,11 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
 
   [ErrorCode.STOCK_UNAVAILABLE]: 'The requested quantity is not available in stock',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'This product is not currently available for purchase',
+  [ErrorCode.CUSTOM_REQUEST_NOT_FOUND]: 'This request could not be found',
+  [ErrorCode.CUSTOM_REQUEST_QUOTE_REQUIRED]: 'Send a quote before accepting this request',
+  [ErrorCode.CUSTOM_REQUEST_CLOSED]: 'This request is no longer new and no longer accepts changes from the customer',
+  [ErrorCode.PORTFOLIO_ITEM_NOT_FOUND]: 'This portfolio item could not be found',
+  [ErrorCode.PORTFOLIO_ITEM_ARCHIVED]: 'This item is archived — restore it first',
   [ErrorCode.PRODUCT_NOT_PURCHASABLE]: 'This product is made to order — request a quote instead of buying it',
   [ErrorCode.SHIPPING_SIZE_MISSING]: "We couldn't calculate shipping for one of the items — please contact us",
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'This item could not be found in your cart',

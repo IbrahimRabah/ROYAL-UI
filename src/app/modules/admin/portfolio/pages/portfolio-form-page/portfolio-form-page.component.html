@@ -1,0 +1,140 @@
+<div class="pf">
+  <app-admin-back-link parentPath="/admin/portfolio" labelKey="admin.portfolio.backToList"></app-admin-back-link>
+
+  <div class="pf__skeleton" *ngIf="loading()">
+    <p-skeleton height="60px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="420px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <!-- PORTFOLIO_ITEM_NOT_FOUND -->
+  <div class="pf__empty" *ngIf="notFound() && !loading()">
+    <i class="pi pi-search" aria-hidden="true"></i>
+    <p class="pf__empty-title">{{ 'admin.portfolio.notFound.title' | translate }}</p>
+    <p class="pf__empty-text">{{ 'admin.portfolio.notFound.text' | translate }}</p>
+    <a routerLink="/admin/portfolio" class="pf__btn pf__btn--primary">{{ 'admin.portfolio.backToList' | translate }}</a>
+  </div>
+
+  <div class="pf__error" *ngIf="loadError() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.portfolio.form.loadError' | translate }}</span>
+    <button type="button" class="pf__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!loading() && !notFound() && !loadError()">
+    <header class="pf__header">
+      <div class="pf__title-group">
+        <h1 class="pf__title">{{ isNew ? ('admin.portfolio.form.newTitle' | translate) : displayName() }}</h1>
+        <app-vl-status-badge
+          *ngIf="state() as s"
+          [label]="'admin.portfolio.state.' + s | translate"
+          [tone]="tone()"
+        ></app-vl-status-badge>
+      </div>
+
+      <div class="pf__actions">
+        <button type="button" class="pf__btn pf__btn--primary" [disabled]="saving()" (click)="save()">
+          <i class="pi" [ngClass]="saving() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+          {{ 'admin.portfolio.form.save' | translate }}
+        </button>
+
+        <ng-container *ngIf="!isNew">
+          <button *ngIf="state() === 'DRAFT'" type="button" class="pf__btn" [disabled]="busy()" (click)="publish(true)">
+            {{ 'admin.portfolio.actions.publish' | translate }}
+          </button>
+          <button *ngIf="state() === 'PUBLISHED'" type="button" class="pf__btn" [disabled]="busy()" (click)="publish(false)">
+            {{ 'admin.portfolio.actions.unpublish' | translate }}
+          </button>
+          <button *ngIf="state() === 'ARCHIVED'" type="button" class="pf__btn" [disabled]="busy()" (click)="restore()">
+            {{ 'admin.portfolio.actions.restore' | translate }}
+          </button>
+          <button *ngIf="state() !== 'ARCHIVED'" type="button" class="pf__btn pf__btn--danger" [disabled]="busy()" (click)="archive()">
+            {{ 'admin.portfolio.actions.archive' | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </header>
+
+    <!-- Archived: explain, offer Restore. Restoring does NOT republish. -->
+    <div class="pf__notice pf__notice--warn" role="alert" *ngIf="archived() || archivedConflict()">
+      <i class="pi pi-inbox" aria-hidden="true"></i>
+      <span>{{ 'admin.portfolio.form.archivedNotice' | translate }}</span>
+      <button type="button" class="pf__link-btn" [disabled]="busy()" (click)="restore()">
+        {{ 'admin.portfolio.actions.restore' | translate }}
+      </button>
+    </div>
+
+    <form class="pf__panel" [formGroup]="form" (ngSubmit)="save()" novalidate>
+      <div class="pf__section-header">
+        <div class="pf__icon-badge"><i class="pi pi-pencil" aria-hidden="true"></i></div>
+        <h2 class="pf__section-title">{{ 'admin.portfolio.form.details' | translate }}</h2>
+      </div>
+
+      <div class="pf__grid">
+        <div class="pf__field">
+          <label class="pf__label" for="pf-title-ar">{{ 'admin.portfolio.form.titleAr' | translate }} *</label>
+          <input id="pf-title-ar" type="text" dir="rtl" class="pf__input" formControlName="titleAr" />
+          <p class="pf__error-text" *ngIf="form.controls.titleAr.invalid && form.controls.titleAr.touched">
+            {{ 'admin.portfolio.form.titleRequired' | translate }}
+          </p>
+          <p class="pf__error-text" *ngIf="fieldError('titleAr') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-title-en">{{ 'admin.portfolio.form.titleEn' | translate }}</label>
+          <input id="pf-title-en" type="text" dir="ltr" class="pf__input" formControlName="titleEn" />
+          <p class="pf__error-text" *ngIf="fieldError('titleEn') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-desc-ar">{{ 'admin.portfolio.form.descriptionAr' | translate }}</label>
+          <textarea id="pf-desc-ar" rows="4" dir="rtl" class="pf__input pf__textarea" formControlName="descriptionAr"></textarea>
+          <p class="pf__error-text" *ngIf="fieldError('descriptionAr') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-desc-en">{{ 'admin.portfolio.form.descriptionEn' | translate }}</label>
+          <textarea id="pf-desc-en" rows="4" dir="ltr" class="pf__input pf__textarea" formControlName="descriptionEn"></textarea>
+          <p class="pf__error-text" *ngIf="fieldError('descriptionEn') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-category">{{ 'admin.portfolio.form.category' | translate }}</label>
+          <select id="pf-category" class="pf__input pf__select" formControlName="categoryId">
+            <option [ngValue]="null">{{ 'admin.portfolio.form.noCategory' | translate }}</option>
+            <option *ngFor="let c of categoryOptions()" [ngValue]="c.id">{{ c.name }}</option>
+          </select>
+          <p class="pf__error-text" *ngIf="fieldError('categoryId') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-completed">{{ 'admin.portfolio.form.completedAt' | translate }}</label>
+          <input id="pf-completed" type="date" class="pf__input pf__input--ltr" formControlName="completedAt" />
+          <p class="pf__error-text" *ngIf="fieldError('completedAt') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-order">{{ 'admin.portfolio.form.displayOrder' | translate }}</label>
+          <input id="pf-order" type="number" min="0" step="1" inputmode="numeric" class="pf__input pf__input--ltr" formControlName="displayOrder" />
+          <p class="pf__hint">{{ 'admin.portfolio.form.displayOrderHint' | translate }}</p>
+          <p class="pf__error-text" *ngIf="form.controls.displayOrder.invalid && form.controls.displayOrder.touched">
+            {{ 'admin.portfolio.form.orderInvalid' | translate }}
+          </p>
+          <p class="pf__error-text" *ngIf="fieldError('displayOrder') as e">{{ e }}</p>
+        </div>
+
+        <div class="pf__field">
+          <label class="pf__label" for="pf-slug">{{ 'admin.portfolio.form.slug' | translate }}</label>
+          <input id="pf-slug" type="text" dir="ltr" class="pf__input pf__input--ltr" formControlName="slug" autocomplete="off" />
+          <p class="pf__hint" *ngIf="!slugChanged && !fieldError('slug')">{{ 'admin.portfolio.form.slugHint' | translate }}</p>
+          <p class="pf__warn-text" *ngIf="slugChanged">
+            <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+            {{ 'admin.portfolio.form.slugWarning' | translate }}
+          </p>
+          <p class="pf__error-text" *ngIf="fieldError('slug') as e">{{ e }}</p>
+        </div>
+      </div>
+    </form>
+
+    <app-portfolio-images-panel [itemId]="itemId()" [archived]="archived()"></app-portfolio-images-panel>
+  </ng-container>
+</div>

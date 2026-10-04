@@ -1,0 +1,113 @@
+<div class="pl">
+  <header class="pl__header">
+    <h1 class="pl__title">{{ 'admin.portfolio.title' | translate }}</h1>
+    <a routerLink="new" class="pl__new-btn">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      {{ 'admin.portfolio.newItem' | translate }}
+    </a>
+  </header>
+
+  <div class="pl__toolbar" *ngIf="!trulyEmpty()">
+    <div class="pl__field">
+      <label class="pl__label" for="pl-state">{{ 'admin.portfolio.filters.state' | translate }}</label>
+      <select id="pl-state" class="pl__select" [value]="stateFilter()" (change)="setState($any($event.target).value)">
+        <option *ngFor="let f of stateFilters" [value]="f">{{ 'admin.portfolio.filters.states.' + f | translate }}</option>
+      </select>
+    </div>
+    <div class="pl__field">
+      <label class="pl__label" for="pl-category">{{ 'admin.portfolio.filters.category' | translate }}</label>
+      <select id="pl-category" class="pl__select" [value]="categoryFilter() ?? ''" (change)="setCategory($any($event.target).value)">
+        <option value="">{{ 'admin.portfolio.filters.allCategories' | translate }}</option>
+        <option *ngFor="let c of categoryOptions()" [value]="c.id">{{ c.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="pl__grid" *ngIf="loading()">
+    <p-skeleton height="300px" borderRadius="16px"></p-skeleton>
+    <p-skeleton height="300px" borderRadius="16px"></p-skeleton>
+    <p-skeleton height="300px" borderRadius="16px"></p-skeleton>
+  </div>
+
+  <div class="pl__error" *ngIf="error() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.portfolio.errorMessage' | translate }}</span>
+    <button type="button" class="pl__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <!-- Empty: nothing in the portfolio yet -->
+  <div class="pl__empty" *ngIf="trulyEmpty()">
+    <i class="pi pi-images" aria-hidden="true"></i>
+    <p class="pl__empty-title">{{ 'admin.portfolio.empty.title' | translate }}</p>
+    <p class="pl__empty-text">{{ 'admin.portfolio.empty.text' | translate }}</p>
+    <a routerLink="new" class="pl__new-btn">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      {{ 'admin.portfolio.newItem' | translate }}
+    </a>
+  </div>
+
+  <p class="pl__no-match" *ngIf="!loading() && !error() && !trulyEmpty() && !rows().length">
+    {{ 'admin.portfolio.noMatch' | translate }}
+  </p>
+
+  <div class="pl__grid" *ngIf="!loading() && !error() && rows().length">
+    <article class="pl__card" *ngFor="let item of rows()" [class.pl__card--archived]="state(item) === 'ARCHIVED'">
+      <a class="pl__media" [routerLink]="[item.id]" [attr.aria-label]="title(item)">
+        <img *ngIf="mainImage(item) as src; else noImage" [src]="src" [alt]="mainAlt(item)" loading="lazy" decoding="async" />
+        <ng-template #noImage>
+          <span class="pl__no-image"><i class="pi pi-image" aria-hidden="true"></i></span>
+        </ng-template>
+      </a>
+
+      <div class="pl__body">
+        <div class="pl__row">
+          <a [routerLink]="[item.id]" class="pl__item-title">{{ title(item) }}</a>
+
+          <button
+            type="button"
+            class="pl__menu-btn"
+            [disabled]="busyId() !== null"
+            (click)="menu.toggle($event)"
+            [attr.aria-label]="'admin.portfolio.moreActions' | translate"
+          >
+            <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <p class="pl__category" *ngIf="item.categoryName">{{ item.categoryName }}</p>
+
+        <div class="pl__meta">
+          <app-vl-status-badge [label]="'admin.portfolio.state.' + state(item) | translate" [tone]="tone(item)"></app-vl-status-badge>
+          <span class="pl__meta-item">
+            <i class="pi pi-images" aria-hidden="true"></i>
+            <span class="pl__num">{{ item.images.length }}</span>
+          </span>
+          <span class="pl__meta-item" *ngIf="item.completedAt">
+            <i class="pi pi-calendar" aria-hidden="true"></i>
+            <span class="pl__num">{{ item.completedAt }}</span>
+          </span>
+        </div>
+      </div>
+
+      <p-popover #menu>
+        <div class="pl__menu">
+          <a [routerLink]="[item.id]" class="pl__menu-item" (click)="menu.hide()">{{ 'admin.portfolio.actions.edit' | translate }}</a>
+
+          <button *ngIf="state(item) === 'DRAFT'" type="button" class="pl__menu-item" (click)="publish(item, true); menu.hide()">
+            {{ 'admin.portfolio.actions.publish' | translate }}
+          </button>
+          <button *ngIf="state(item) === 'PUBLISHED'" type="button" class="pl__menu-item" (click)="publish(item, false); menu.hide()">
+            {{ 'admin.portfolio.actions.unpublish' | translate }}
+          </button>
+
+          <button *ngIf="state(item) !== 'ARCHIVED'" type="button" class="pl__menu-item pl__menu-item--danger" (click)="archive(item); menu.hide()">
+            {{ 'admin.portfolio.actions.archive' | translate }}
+          </button>
+          <button *ngIf="state(item) === 'ARCHIVED'" type="button" class="pl__menu-item" (click)="restore(item); menu.hide()">
+            {{ 'admin.portfolio.actions.restore' | translate }}
+          </button>
+        </div>
+      </p-popover>
+    </article>
+  </div>
+</div>

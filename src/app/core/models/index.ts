@@ -44,6 +44,8 @@ export * from './invoice/invoice';
 export * from './settlement/remittance';
 
 export * from './admin/dashboard';
+export * from './portfolio/portfolio';
+export * from './custom-request/custom-request';
 export * from './admin/customer';
 export * from './admin/audit';
 export * from './admin/store-profile';

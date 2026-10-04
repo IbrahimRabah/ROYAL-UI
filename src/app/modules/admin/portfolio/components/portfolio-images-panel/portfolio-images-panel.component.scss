@@ -1,0 +1,351 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.pip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-lg);
+}
+
+.pip__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pip__icon-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #fff;
+  font-size: 1.125rem;
+}
+
+.pip__title {
+  margin: 0;
+  font-family: var(--body);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.pip__count {
+  margin-inline-start: auto;
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.pip__num {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.pip__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--info-bg);
+  color: var(--info);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+
+  i {
+    margin-block-start: 3px;
+  }
+}
+
+.pip__notice--warn {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.pip__hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--admin-text-muted);
+}
+
+.pip__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--stop-bg);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-md);
+  color: var(--stop);
+}
+
+.pip__retry {
+  margin-inline-start: auto;
+  min-block-size: 44px;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--stop);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pip__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  min-block-size: 88px;
+  padding: var(--sp-4);
+  border: 2px dashed var(--admin-border-strong);
+  border-radius: var(--r-lg);
+  background: var(--admin-surface-alt);
+  color: var(--admin-text-muted);
+  font-family: var(--body);
+  font-size: var(--fs-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+
+  i {
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    border-color: var(--gold);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.pip__dropzone--empty {
+  min-block-size: 220px;
+
+  i {
+    font-size: 2.5rem;
+  }
+}
+
+.pip__dropzone--over {
+  border-color: var(--gold);
+  background: var(--cream);
+}
+
+.pip__dropzone--off {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pip__dropzone-title {
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.pip__dropzone-hint {
+  font-size: var(--fs-xs);
+}
+
+.pip__empty-warning {
+  max-inline-size: 44ch;
+  margin-block-start: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--warn);
+}
+
+.pip__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+
+  @include breakpoints.md {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include breakpoints.xl {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.pip__tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  padding: var(--sp-2);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+}
+
+.pip__tile--main {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.pip__media {
+  cursor: grab;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--admin-surface-alt);
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+}
+
+.pip__main-pill {
+  position: absolute;
+  inset-block-start: var(--sp-2);
+  inset-inline-start: var(--sp-2);
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.pip__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pip__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.pip__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.pip__input {
+  min-inline-size: 0;
+  min-block-size: 40px;
+  padding-inline: var(--sp-2);
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--r-sm);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-family: var(--body);
+  font-size: var(--fs-sm);
+
+  &:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(184, 134, 63, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.pip__input--num {
+  direction: ltr;
+  text-align: start;
+}
+
+.pip__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.pip__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  padding-inline: var(--sp-2);
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--r-sm);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-family: var(--body);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+}
+
+.pip__btn--primary {
+  flex: 1 1 100%;
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    background: var(--gold-dp);
+    color: #fff;
+  }
+}
+
+.pip__btn--danger {
+  color: var(--stop);
+  border-color: var(--stop);
+}
+
+.pip__btn-label {
+  white-space: nowrap;
+}
+
+.pip__uploading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.pip__file-input {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pip__dropzone {
+    transition: none;
+  }
+}

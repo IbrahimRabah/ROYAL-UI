@@ -1,0 +1,265 @@
+<div class="rd">
+  <app-admin-back-link parentPath="/admin/custom-requests" labelKey="admin.customRequests.backToList"></app-admin-back-link>
+
+  <div class="rd__skeleton" *ngIf="loading()">
+    <p-skeleton height="96px" borderRadius="12px"></p-skeleton>
+    <p-skeleton height="320px" borderRadius="12px"></p-skeleton>
+  </div>
+
+  <!-- CUSTOM_REQUEST_NOT_FOUND -->
+  <div class="rd__empty" *ngIf="notFound() && !loading()">
+    <i class="pi pi-search" aria-hidden="true"></i>
+    <p class="rd__empty-title">{{ 'admin.customRequests.notFound.title' | translate }}</p>
+    <p class="rd__empty-text">{{ 'admin.customRequests.notFound.text' | translate }}</p>
+    <a routerLink="/admin/custom-requests" class="rd__btn rd__btn--primary">{{ 'admin.customRequests.backToList' | translate }}</a>
+  </div>
+
+  <div class="rd__error" *ngIf="loadError() && !loading()">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'admin.customRequests.detail.loadError' | translate }}</span>
+    <button type="button" class="rd__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="request() as r">
+    <ng-container *ngIf="!loading() && !notFound() && !loadError()">
+      <!-- Header: the call is the whole job -->
+      <header class="rd__header">
+        <div class="rd__title-block">
+          <h1 class="rd__number">{{ r.requestNumber }}</h1>
+          <div class="rd__badges">
+            <app-vl-status-badge [label]="'admin.customRequests.status.' + r.status | translate" [tone]="statusTone(r.status)"></app-vl-status-badge>
+            <app-vl-status-badge [label]="'admin.customRequests.type.' + r.type | translate" [tone]="typeTone(r.type)"></app-vl-status-badge>
+            <span class="rd__created">{{ formatDateTime(r.createdAt) }}</span>
+          </div>
+        </div>
+
+        <a [href]="telHref(r.phone)" class="rd__call">
+          <i class="pi pi-phone" aria-hidden="true"></i>
+          <span class="rd__call-text">
+            <span class="rd__call-label">{{ 'admin.customRequests.detail.callCustomer' | translate }}</span>
+            <span class="rd__call-number">{{ r.phone }}</span>
+          </span>
+        </a>
+      </header>
+
+      <div class="rd__strip" role="alert" *ngIf="!r.governorateServed">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        <span>{{ 'admin.customRequests.detail.notServed' | translate }}</span>
+      </div>
+
+      <div class="rd__layout">
+        <div class="rd__main">
+          <!-- Customer -->
+          <section class="rd__panel">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-user" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">{{ 'admin.customRequests.detail.customer' | translate }}</h2>
+            </div>
+            <dl class="rd__facts">
+              <div class="rd__fact">
+                <dt>{{ 'admin.customRequests.detail.name' | translate }}</dt>
+                <dd>{{ r.contactName }}</dd>
+              </div>
+              <div class="rd__fact">
+                <dt>{{ 'admin.customRequests.detail.phone' | translate }}</dt>
+                <dd><a [href]="telHref(r.phone)" class="rd__link rd__ltr">{{ r.phone }}</a></dd>
+              </div>
+              <div class="rd__fact" *ngIf="r.altPhone">
+                <dt>{{ 'admin.customRequests.detail.altPhone' | translate }}</dt>
+                <dd><a [href]="telHref(r.altPhone)" class="rd__link rd__ltr">{{ r.altPhone }}</a></dd>
+              </div>
+              <div class="rd__fact" *ngIf="r.email">
+                <dt>{{ 'admin.customRequests.detail.email' | translate }}</dt>
+                <dd><a [href]="'mailto:' + r.email" class="rd__link rd__ltr">{{ r.email }}</a></dd>
+              </div>
+              <div class="rd__fact">
+                <dt>{{ 'admin.customRequests.detail.governorate' | translate }}</dt>
+                <dd>
+                  {{ r.governorateName || '—' }}
+                  <i *ngIf="!r.governorateServed" class="pi pi-exclamation-triangle rd__closed" role="img" [attr.aria-label]="'admin.customRequests.closedGovernorate' | translate"></i>
+                </dd>
+              </div>
+              <div class="rd__fact" *ngIf="r.area">
+                <dt>{{ 'admin.customRequests.detail.area' | translate }}</dt>
+                <dd>{{ r.area }}</dd>
+              </div>
+              <div class="rd__fact rd__fact--wide" *ngIf="r.streetAddress">
+                <dt>{{ 'admin.customRequests.detail.street' | translate }}</dt>
+                <dd>{{ r.streetAddress }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- Request -->
+          <section class="rd__panel">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-clipboard" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">{{ 'admin.customRequests.detail.request' | translate }}</h2>
+            </div>
+            <dl class="rd__facts">
+              <div class="rd__fact">
+                <dt>{{ 'admin.customRequests.detail.type' | translate }}</dt>
+                <dd>{{ 'admin.customRequests.type.' + r.type | translate }}</dd>
+              </div>
+              <div class="rd__fact" *ngIf="r.product as product">
+                <dt>{{ 'admin.customRequests.detail.product' | translate }}</dt>
+                <dd><a [routerLink]="['/admin/products', product.id]" class="rd__link">{{ product.name }}</a></dd>
+              </div>
+              <div class="rd__fact" *ngIf="dimensions() as dims">
+                <dt>{{ 'admin.customRequests.detail.dimensions' | translate }}</dt>
+                <dd><span class="rd__dims">{{ dims }}</span></dd>
+              </div>
+              <div class="rd__fact">
+                <dt>{{ 'admin.customRequests.detail.quantity' | translate }}</dt>
+                <dd class="rd__ltr">{{ r.quantity }}</dd>
+              </div>
+              <div class="rd__fact rd__fact--wide" *ngIf="r.notes">
+                <dt>{{ 'admin.customRequests.detail.notes' | translate }}</dt>
+                <dd class="rd__notes">{{ r.notes }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- Images -->
+          <section class="rd__panel">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-images" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">
+                {{ 'admin.customRequests.detail.images' | translate }}
+                <span class="rd__count">{{ r.attachments.length }}</span>
+              </h2>
+            </div>
+            <p class="rd__muted" *ngIf="!r.attachments.length">{{ 'admin.customRequests.detail.noImages' | translate }}</p>
+            <div class="rd__images" *ngIf="r.attachments.length">
+              <button
+                *ngFor="let image of r.attachments; let i = index"
+                type="button"
+                class="rd__thumb"
+                (click)="openLightbox(i)"
+                [attr.aria-label]="('admin.customRequests.detail.openImage' | translate) + ' ' + (i + 1)"
+              >
+                <img [src]="image.url" alt="" loading="lazy" decoding="async" />
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="rd__side">
+          <!-- Quote -->
+          <section class="rd__panel rd__panel--quote">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-tag" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">{{ 'admin.customRequests.detail.quote' | translate }}</h2>
+            </div>
+            <ng-container *ngIf="hasQuote(); else noQuote">
+              <p class="rd__amount">{{ formatMoney(r.quotedAmount) }}</p>
+              <p class="rd__muted">{{ 'admin.customRequests.detail.quoteTotalNote' | translate }}</p>
+              <p class="rd__quote-note" *ngIf="r.adminNote">{{ r.adminNote }}</p>
+            </ng-container>
+            <ng-template #noQuote>
+              <p class="rd__muted">{{ 'admin.customRequests.detail.noQuote' | translate }}</p>
+            </ng-template>
+          </section>
+
+          <!-- Actions: only what the current status allows -->
+          <section class="rd__panel">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-bolt" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">{{ 'admin.customRequests.detail.actions' | translate }}</h2>
+            </div>
+
+            <p class="rd__muted" *ngIf="isClosed()">{{ 'admin.customRequests.detail.closedNote' | translate }}</p>
+
+            <div class="rd__actions" *ngIf="!isClosed()">
+              <button *ngIf="canContact()" type="button" class="rd__btn" (click)="openAction('contacted')">
+                <i class="pi pi-phone" aria-hidden="true"></i>
+                {{ 'admin.customRequests.actions.contacted' | translate }}
+              </button>
+              <button *ngIf="canQuote()" type="button" class="rd__btn rd__btn--primary" (click)="openAction('quote')">
+                <i class="pi pi-tag" aria-hidden="true"></i>
+                {{ (hasQuote() ? 'admin.customRequests.actions.reviseQuote' : 'admin.customRequests.actions.quote') | translate }}
+              </button>
+              <span class="rd__tip" *ngIf="showAccept()" [attr.title]="canAccept() ? null : ('admin.customRequests.actions.acceptDisabled' | translate)">
+                <button type="button" class="rd__btn rd__btn--ok" [disabled]="!canAccept() || busy()" [attr.aria-describedby]="canAccept() ? null : 'accept-hint'" (click)="accept()">
+                  <i class="pi pi-check" aria-hidden="true"></i>
+                  {{ 'admin.customRequests.actions.accept' | translate }}
+                </button>
+              </span>
+              <p id="accept-hint" class="rd__hint" *ngIf="showAccept() && !canAccept()">{{ 'admin.customRequests.actions.acceptDisabled' | translate }}</p>
+              <button *ngIf="canReject()" type="button" class="rd__btn rd__btn--danger" (click)="openAction('reject')">
+                <i class="pi pi-times" aria-hidden="true"></i>
+                {{ 'admin.customRequests.actions.reject' | translate }}
+              </button>
+            </div>
+          </section>
+
+          <!-- Timeline -->
+          <section class="rd__panel">
+            <div class="rd__section-header">
+              <div class="rd__icon-badge"><i class="pi pi-history" aria-hidden="true"></i></div>
+              <h2 class="rd__section-title">{{ 'admin.customRequests.detail.timeline' | translate }}</h2>
+            </div>
+            <ol class="rd__timeline">
+              <li class="rd__event" *ngFor="let item of timeline(); trackBy: trackTimeline">
+                <span class="rd__dot" aria-hidden="true"></span>
+                <div class="rd__event-body">
+                  <p class="rd__event-title">
+                    <ng-container [ngSwitch]="item.kind">
+                      <ng-container *ngSwitchCase="'created'">{{ 'admin.customRequests.timeline.created' | translate }}</ng-container>
+                      <ng-container *ngSwitchCase="'status'">
+                        {{ 'admin.customRequests.timeline.status' | translate }}:
+                        <span *ngIf="item.from">{{ 'admin.customRequests.status.' + item.from | translate }} → </span>
+                        {{ item.to ? ('admin.customRequests.status.' + item.to | translate) : '' }}
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'quote'">
+                        {{ 'admin.customRequests.timeline.quote' | translate }}:
+                        <span class="rd__ltr" *ngIf="item.from">{{ formatMoney(item.from) }} → </span>
+                        <span class="rd__ltr">{{ formatMoney(item.to) }}</span>
+                      </ng-container>
+                    </ng-container>
+                  </p>
+                  <p class="rd__event-note" *ngIf="item.note">{{ item.note }}</p>
+                  <p class="rd__event-meta">
+                    <span class="rd__ltr">{{ formatDateTime(item.at) }}</span>
+                    <span *ngIf="item.actor"> · {{ item.actor }}</span>
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </section>
+        </aside>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+
+<!-- Lightbox -->
+<div
+  class="rd__lightbox"
+  *ngIf="lightboxIndex() !== null && request() as lbReq"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'admin.customRequests.detail.images' | translate"
+  (click)="closeLightbox()"
+>
+  <button type="button" class="rd__lb-btn rd__lb-close" (click)="closeLightbox()" [attr.aria-label]="'common.close' | translate">
+    <i class="pi pi-times" aria-hidden="true"></i>
+  </button>
+  <button *ngIf="lbReq.attachments.length > 1" type="button" class="rd__lb-btn rd__lb-prev" (click)="$event.stopPropagation(); stepLightbox(-1)" [attr.aria-label]="'common.carousel.previous' | translate">
+    <i class="pi pi-chevron-left rd__arrow" aria-hidden="true"></i>
+  </button>
+  <img class="rd__lb-img" [src]="lbReq.attachments[lightboxIndex()!].url" alt="" (click)="$event.stopPropagation()" />
+  <button *ngIf="lbReq.attachments.length > 1" type="button" class="rd__lb-btn rd__lb-next" (click)="$event.stopPropagation(); stepLightbox(1)" [attr.aria-label]="'common.carousel.next' | translate">
+    <i class="pi pi-chevron-right rd__arrow" aria-hidden="true"></i>
+  </button>
+</div>
+
+<app-request-action-dialog
+  [mode]="dialogMode()"
+  [requestNumber]="request()?.requestNumber ?? ''"
+  [initialAmount]="quotedNumber()"
+  [saving]="dialogSaving()"
+  [errorMessage]="dialogError()"
+  (closed)="closeDialog()"
+  (submitted)="submitAction($event)"
+></app-request-action-dialog>

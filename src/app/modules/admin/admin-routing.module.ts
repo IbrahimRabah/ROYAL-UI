@@ -12,6 +12,8 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
+      { path: 'custom-requests', loadChildren: () => import('./custom-requests/custom-requests.module').then(m => m.CustomRequestsModule) },
+      { path: 'portfolio', loadChildren: () => import('./portfolio/portfolio.module').then(m => m.PortfolioModule) },
       { path: '', loadChildren: () => import('./taxonomy/taxonomy.module').then(m => m.TaxonomyModule) },
       { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule) },
       { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
