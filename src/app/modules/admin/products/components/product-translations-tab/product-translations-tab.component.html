@@ -2,6 +2,88 @@
   <section class="ptt__panel">
     <div class="ptt__section-header">
       <div class="ptt__icon-badge">
+        <i class="pi pi-truck" aria-hidden="true"></i>
+      </div>
+      <h2 class="ptt__section-title">{{ 'admin.products.form.sales.heading' | translate }}</h2>
+    </div>
+
+    <div class="ptt__stack">
+      <div class="ptt__field">
+        <span class="ptt__label" id="ptt-type-label">{{ 'admin.products.form.sales.typeLabel' | translate }}</span>
+        <div class="ptt__segments" role="radiogroup" aria-labelledby="ptt-type-label">
+          <button
+            *ngFor="let type of fulfillmentTypes"
+            type="button"
+            role="radio"
+            class="ptt__segment"
+            [class.ptt__segment--active]="fulfillmentType?.value === type"
+            [attr.aria-checked]="fulfillmentType?.value === type"
+            (click)="selectType(type)"
+          >
+            <span class="ptt__segment-title">{{ 'admin.products.form.sales.types.' + type + '.label' | translate }}</span>
+            <span class="ptt__segment-desc">{{ 'admin.products.form.sales.types.' + type + '.desc' | translate }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ptt__field">
+        <label class="ptt__label" for="ptt-size">
+          {{ 'admin.products.form.sales.size.label' | translate }}<span *ngIf="isReadyMade"> *</span>
+        </label>
+        <p-select
+          inputId="ptt-size"
+          formControlName="shippingSizeClass"
+          [options]="sizeClasses"
+          appendTo="self"
+          [placeholder]="'admin.products.form.sales.size.placeholder' | translate"
+          styleClass="ptt__select"
+        >
+          <ng-template let-code pTemplate="selectedItem">
+            {{ 'admin.products.form.sales.size.options.' + code + '.label' | translate }}
+          </ng-template>
+          <ng-template let-code pTemplate="item">
+            <span class="ptt__size-option">
+              <span class="ptt__size-name">{{ 'admin.products.form.sales.size.options.' + code + '.label' | translate }}</span>
+              <span class="ptt__size-examples">{{ 'admin.products.form.sales.size.options.' + code + '.examples' | translate }}</span>
+            </span>
+          </ng-template>
+        </p-select>
+        <p class="ptt__error" *ngIf="shippingSize?.hasError('required') && shippingSize?.touched">
+          {{ 'admin.products.form.sales.size.required' | translate }}
+        </p>
+        <p class="ptt__hint">{{ 'admin.products.form.sales.size.helper' | translate }}</p>
+      </div>
+
+      <div class="ptt__field">
+        <label class="ptt__toggle">
+          <input type="checkbox" class="ptt__toggle-input" formControlName="requiresAssembly" />
+          <span class="ptt__toggle-track"><span class="ptt__toggle-thumb"></span></span>
+          {{ 'admin.products.form.sales.assembly.toggle' | translate }}
+        </label>
+      </div>
+
+      <div class="ptt__field ptt__field--fee" *ngIf="requiresAssembly">
+        <label class="ptt__label" for="ptt-assembly-fee">{{ 'admin.products.form.sales.assembly.fee' | translate }}</label>
+        <input
+          id="ptt-assembly-fee"
+          type="number"
+          inputmode="decimal"
+          min="0"
+          step="1"
+          class="ptt__input ptt__input--number"
+          formControlName="assemblyFee"
+        />
+        <p class="ptt__error" *ngIf="assemblyFee?.invalid && assemblyFee?.touched">
+          {{ 'admin.products.form.sales.assembly.feeInvalid' | translate }}
+        </p>
+        <p class="ptt__hint">{{ 'admin.products.form.sales.assembly.helper' | translate }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ptt__panel">
+    <div class="ptt__section-header">
+      <div class="ptt__icon-badge">
         <i class="pi pi-tags" aria-hidden="true"></i>
       </div>
       <h2 class="ptt__section-title">{{ 'admin.products.form.generalHeading' | translate }}</h2>

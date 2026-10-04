@@ -1,9 +1,12 @@
 <div class="plp container-vl">
   <app-vl-breadcrumb class="plp__breadcrumb" [items]="breadcrumbItems()"></app-vl-breadcrumb>
 
-  <section class="plp__hero">
+  <h1 *ngIf="!bannerUrl() || bannerBroken()" class="visually-hidden">
+    {{ heroTitle() ?? ('common.allProducts' | translate) }}
+  </h1>
+
+  <section *ngIf="bannerUrl() && !bannerBroken()" class="plp__hero">
     <img
-      *ngIf="!bannerBroken()"
       class="plp__hero-image"
       [src]="bannerUrl()"
       alt=""

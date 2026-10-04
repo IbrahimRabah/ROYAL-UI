@@ -1,6 +1,9 @@
 <ul *ngIf="cards.length" class="category-card-grid">
   <li *ngFor="let card of cards" class="category-card-grid__item">
-    <a class="category-card-grid__link" routerLink="/products" [queryParams]="{ categoryId: card.id }">
+    <a
+      class="category-card-grid__link"
+      [class.category-card-grid__link--plain]="!card.image || isBroken(card.id)"
+      routerLink="/products" [queryParams]="{ categoryId: card.id }">
       <img
         *ngIf="card.image && !isBroken(card.id)"
         class="category-card-grid__image"

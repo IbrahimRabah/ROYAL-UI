@@ -324,3 +324,21 @@
     transition: none;
   }
 }
+
+.product-list-page__type-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-1);
+}
+
+.product-list-page__no-size {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 24px;
+  min-block-size: 24px;
+  color: var(--stop);
+  font-size: 1.125rem;
+  cursor: help;
+}

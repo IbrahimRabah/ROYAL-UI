@@ -14,6 +14,9 @@ import { isSpecRowIncomplete } from '../../components/product-specs-tab/product-
 import { brandDisplayName } from '../../../../../shared/utils/brand-display-name.util';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
+import { FulfillmentType, isReadyMade } from '../../../../../core/enums/fulfillment-type';
+import { ShippingSizeClass } from '../../../../../core/enums/shipping-size-class';
+import { money } from '../../../../../core/models';
 import {
   PRODUCT_STATUS_LABELS_AR,
   PRODUCT_STATUS_LABELS_EN,
@@ -74,6 +77,10 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
     slug: this.fb.nonNullable.control<string>(''),
     featured: this.fb.nonNullable.control<boolean>(false),
     newArrival: this.fb.nonNullable.control<boolean>(false),
+    fulfillmentType: this.fb.nonNullable.control<FulfillmentType>(FulfillmentType.READY_MADE),
+    shippingSizeClass: this.fb.control<ShippingSizeClass | null>(null, Validators.required),
+    requiresAssembly: this.fb.nonNullable.control<boolean>(false),
+    assemblyFee: this.fb.nonNullable.control<number>(0, [Validators.required, Validators.min(0)]),
     translations: this.fb.group({
       ar: this.fb.group({
         name: this.fb.nonNullable.control<string>('', Validators.required),
@@ -93,6 +100,9 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   });
 
   constructor() {
+    this.syncSizeRequirement(this.form.controls.fulfillmentType.value);
+    this.form.controls.fulfillmentType.valueChanges.subscribe((type) => this.syncSizeRequirement(type));
+
     this.taxonomyApi.listCategories().subscribe({ next: (c) => this.categories.set(c), error: () => this.categoriesError.set(true) });
     this.taxonomyApi.listBrands().subscribe({ next: (b) => this.brands.set(b), error: () => this.brandsError.set(true) });
 
@@ -104,6 +114,19 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       this.savedSnapshot = this.snapshot();
     }
   }
+
+  /** The size class is only mandatory for ready-made products; the server enforces the same rule. */
+  private syncSizeRequirement(type: FulfillmentType): void {
+    const size = this.form.controls.shippingSizeClass;
+    if (type === FulfillmentType.READY_MADE) {
+      size.addValidators(Validators.required);
+    } else {
+      size.removeValidators(Validators.required);
+    }
+    size.updateValueAndValidity({ emitEvent: false });
+  }
+
+  readonly readyMade = computed(() => isReadyMade(this.product()));
 
   hasUnsavedChanges(): boolean {
     if (this.loading()) {
@@ -164,7 +187,11 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.toast.error(this.translate.instant('toast.products.validationError'));
+      this.activeTab.set('details');
+      const sizeMissing = this.form.controls.shippingSizeClass.hasError('required');
+      this.toast.error(
+        this.translate.instant(sizeMissing ? 'admin.products.form.sales.size.requiredToast' : 'toast.products.validationError'),
+      );
       return;
     }
     if (this.specRows().some(isSpecRowIncomplete)) {
@@ -286,6 +313,10 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       slug: p.slug,
       featured: p.featured,
       newArrival: p.newArrival,
+      fulfillmentType: p.fulfillmentType ?? FulfillmentType.READY_MADE,
+      shippingSizeClass: p.shippingSizeClass ?? null,
+      requiresAssembly: p.requiresAssembly ?? false,
+      assemblyFee: p.assemblyFee == null ? 0 : money(p.assemblyFee),
       translations: {
         ar: {
           name: ar?.name ?? '',
@@ -333,6 +364,10 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
       slug: v.slug || null,
       featured: v.featured ?? false,
       newArrival: v.newArrival ?? false,
+      fulfillmentType: v.fulfillmentType,
+      ...(v.shippingSizeClass ? { shippingSizeClass: v.shippingSizeClass } : {}),
+      requiresAssembly: v.requiresAssembly,
+      assemblyFee: v.requiresAssembly ? v.assemblyFee : 0,
       translations,
       specifications: this.specRows(),
     };

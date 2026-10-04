@@ -33,6 +33,7 @@ export class ProductVariantsTabComponent implements OnInit {
   private readonly confirmDialog = inject(ConfirmDialogService);
 
   @Input({ required: true }) productId!: number;
+  @Input() readyMade = true;
   @Output() readonly variantsChanged = new EventEmitter<void>();
 
   readonly variants = signal<VariantAdminResponse[]>([]);

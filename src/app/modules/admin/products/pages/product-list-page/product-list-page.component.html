@@ -63,6 +63,19 @@
         </p-select>
 
         <p-select
+          [ngModel]="fulfillmentFilter()"
+          (ngModelChange)="onFulfillmentFilterChange($event)"
+          [options]="fulfillmentOptions"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.products.list.allFulfillment' | translate"
+          styleClass="admin-toolbar__filter-field"
+        >
+          <ng-template let-code pTemplate="selectedItem">{{ fulfillmentLabelKey(code) | translate }}</ng-template>
+          <ng-template let-code pTemplate="item">{{ fulfillmentLabelKey(code) | translate }}</ng-template>
+        </p-select>
+
+        <p-select
           [ngModel]="brandFilter()"
           (ngModelChange)="onBrandFilterChange($event)"
           [options]="brandOptions()"
@@ -122,6 +135,18 @@
             </td>
             <td>
               <a [routerLink]="[row.id]" class="product-list-page__name-link">{{ displayName(row) }}</a>
+              <div class="product-list-page__type-row">
+                <app-vl-status-badge [label]="fulfillmentLabelKey(row.fulfillmentType) | translate" [tone]="fulfillmentTone(row.fulfillmentType)"></app-vl-status-badge>
+                <i
+                  *ngIf="missingSize(row)"
+                  class="pi pi-exclamation-circle product-list-page__no-size"
+                  tabindex="0"
+                  role="img"
+                  [attr.aria-label]="'admin.products.list.noSizeWarning' | translate"
+                  [pTooltip]="'admin.products.list.noSizeWarning' | translate"
+                  tooltipPosition="top"
+                ></i>
+              </div>
             </td>
             <td>{{ row.categoryName }}</td>
             <td>{{ row.brandName || '—' }}</td>
@@ -244,6 +269,16 @@
 
         <div class="admin-card__badges">
           <app-vl-status-badge [label]="statusLabel(row.status)" [tone]="statusTone(row.status)"></app-vl-status-badge>
+          <app-vl-status-badge [label]="fulfillmentLabelKey(row.fulfillmentType) | translate" [tone]="fulfillmentTone(row.fulfillmentType)"></app-vl-status-badge>
+          <i
+            *ngIf="missingSize(row)"
+            class="pi pi-exclamation-circle product-list-page__no-size"
+            tabindex="0"
+            role="img"
+            [attr.aria-label]="'admin.products.list.noSizeWarning' | translate"
+            [pTooltip]="'admin.products.list.noSizeWarning' | translate"
+            tooltipPosition="top"
+          ></i>
           <span
             *ngIf="row.warnings.length"
             class="product-list-page__warning"

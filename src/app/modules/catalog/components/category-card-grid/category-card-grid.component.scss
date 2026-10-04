@@ -39,6 +39,22 @@
   text-decoration: none;
 }
 
+.category-card-grid__link--plain {
+  background: var(--cream);
+
+  .category-card-grid__scrim {
+    display: none;
+  }
+
+  .category-card-grid__name {
+    color: var(--text);
+  }
+
+  .category-card-grid__count {
+    color: var(--text-muted);
+  }
+}
+
 .category-card-grid__image {
   position: absolute;
   inset: 0;

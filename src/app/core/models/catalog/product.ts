@@ -1,4 +1,6 @@
 import { Money } from '../common/money';
+import { FulfillmentType } from '../../enums/fulfillment-type';
+import { ShippingSizeClass } from '../../enums/shipping-size-class';
 import { SortOption } from '../../enums/sort-option';
 import { AttributeGroupResponse } from './attribute';
 import { BrandResponse } from './brand';
@@ -22,6 +24,10 @@ export interface ProductSummaryResponse {
   availableQty: number;
   featured: boolean;
   newArrival: boolean;
+  fulfillmentType: FulfillmentType;
+  shippingSizeClass: ShippingSizeClass | null;
+  requiresAssembly: boolean;
+  assemblyFee: Money | null;
 }
 
 export interface ProductDetailResponse {
@@ -40,6 +46,10 @@ export interface ProductDetailResponse {
   inStock: boolean;
   featured: boolean;
   newArrival: boolean;
+  fulfillmentType: FulfillmentType;
+  shippingSizeClass: ShippingSizeClass | null;
+  requiresAssembly: boolean;
+  assemblyFee: Money | null;
   seo: ProductSeo;
 }
 

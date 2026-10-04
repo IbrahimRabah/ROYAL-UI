@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { isReadyMade } from '../../../core/enums/fulfillment-type';
 import { ProductSummaryResponse } from '../../../core/models';
 
 @Component({
@@ -10,4 +11,8 @@ import { ProductSummaryResponse } from '../../../core/models';
 })
 export class VlProductCardComponent {
   @Input({ required: true }) product!: ProductSummaryResponse;
+
+  get readyMade(): boolean {
+    return isReadyMade(this.product);
+  }
 }

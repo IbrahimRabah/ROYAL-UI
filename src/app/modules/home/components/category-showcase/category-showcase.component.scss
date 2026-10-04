@@ -26,6 +26,18 @@
   text-decoration: none;
 }
 
+.category-showcase__card--plain {
+  background: var(--cream);
+
+  .category-showcase__name {
+    color: var(--text);
+    inset-block: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .category-showcase__image {
   inline-size: 100%;
   block-size: 100%;

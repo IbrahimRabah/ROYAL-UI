@@ -7,8 +7,12 @@
     </h2>
 
     <div class="about-collection__cards">
-      <article class="about-collection__card" *ngFor="let card of cards">
-        <div class="about-collection__image-wrap">
+      <article
+        class="about-collection__card"
+        [class.about-collection__card--plain]="!card.image"
+        *ngFor="let card of cards"
+      >
+        <div class="about-collection__image-wrap" *ngIf="card.image">
           <img
             class="about-collection__image"
             [src]="card.image"

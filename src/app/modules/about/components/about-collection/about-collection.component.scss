@@ -42,6 +42,27 @@
   background: var(--ink);
 }
 
+.about-collection__card--plain {
+  background: var(--cream);
+
+  .about-collection__name {
+    color: var(--gold-dp);
+  }
+
+  .about-collection__tagline {
+    color: var(--text);
+  }
+
+  .about-collection__description {
+    color: var(--text-muted);
+  }
+
+  .about-collection__cta {
+    color: var(--text) !important;
+    border-color: var(--text) !important;
+  }
+}
+
 .about-collection__image-wrap {
   position: relative;
   aspect-ratio: 4 / 3;

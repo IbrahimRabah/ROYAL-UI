@@ -20,18 +20,24 @@
             <span>{{ selectedVariant()?.sku }}</span>
           </p>
 
-          <app-product-price-block [price]="displayPrice()"></app-product-price-block>
+          <app-product-price-block *ngIf="readyMade(); else priceOnRequest" [price]="displayPrice()"></app-product-price-block>
+          <ng-template #priceOnRequest>
+            <p class="pdp__price-on-request">{{ 'product.priceOnRequest' | translate }}</p>
+          </ng-template>
 
           <p class="pdp__short-desc">{{ p.shortDescription }}</p>
 
           <app-variant-selector
-            *ngIf="colorGroup() as group"
+            *ngIf="readyMade() && colorGroup() as group"
             [colorGroup]="group"
             [selectedValueId]="isPosterDisplayed() ? null : selectedValueId()"
             (selectedValueIdChange)="selectValue($event)"
           ></app-variant-selector>
 
           <app-add-to-cart-box
+            [quoteProductId]="readyMade() ? null : p.id"
+            [quoteType]="quoteType()"
+            [quoteLabelKey]="quoteLabelKey()"
             [disabled]="!inStock()"
             [loading]="addingToCart()"
             [success]="justAddedToCart()"

@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BrandAdminResponse, Money, ProductAdminResponse, money } from '../../../../../core/models';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
+import { FulfillmentType, isReadyMade } from '../../../../../core/enums/fulfillment-type';
 import {
   PRODUCT_STATUS_LABELS_AR,
   PRODUCT_STATUS_LABELS_EN,
@@ -76,6 +77,11 @@ export class ProductListPageComponent {
   readonly categoryFilter = computed(() => (this.queryParamMap().get('categoryId') ? Number(this.queryParamMap().get('categoryId')) : null));
   readonly brandFilter = computed(() => (this.queryParamMap().get('brandId') ? Number(this.queryParamMap().get('brandId')) : null));
   readonly page = computed(() => Number(this.queryParamMap().get('page') ?? '0') || 0);
+  readonly fulfillmentFilter = computed<FulfillmentType | null>(() => {
+    const raw = this.queryParamMap().get('fulfillmentType');
+    return raw && (Object.values(FulfillmentType) as string[]).includes(raw) ? (raw as FulfillmentType) : null;
+  });
+  readonly fulfillmentOptions = Object.values(FulfillmentType);
 
   readonly searchDraft = signal('');
   readonly filtersOpen = signal(false);
@@ -105,8 +111,10 @@ export class ProductListPageComponent {
     const q = this.searchText().trim().toLowerCase();
     const categoryId = this.categoryFilter();
     const brandId = this.brandFilter();
+    const fulfillment = this.fulfillmentFilter();
 
     return this.allProducts().filter((p) => {
+      if (fulfillment && (p.fulfillmentType ?? FulfillmentType.READY_MADE) !== fulfillment) return false;
       if (status && p.status !== status) return false;
       if (categoryId && p.categoryId !== categoryId) return false;
       if (brandId && p.brandId !== brandId) return false;
@@ -152,6 +160,28 @@ export class ProductListPageComponent {
     return PRODUCT_STATUS_TONE[status];
   }
 
+  fulfillmentTone(type: FulfillmentType | null | undefined): StatusTone {
+    const tones: Record<FulfillmentType, StatusTone> = {
+      [FulfillmentType.READY_MADE]: 'ok',
+      [FulfillmentType.MADE_TO_ORDER]: 'info',
+      [FulfillmentType.CUSTOM_WORK]: 'violet',
+    };
+    return tones[type ?? FulfillmentType.READY_MADE];
+  }
+
+  fulfillmentLabelKey(type: FulfillmentType | null | undefined): string {
+    return 'admin.products.list.fulfillment.' + (type ?? FulfillmentType.READY_MADE);
+  }
+
+  /** A ready-made product with no size class looks published but fails at checkout. */
+  missingSize(row: ProductAdminResponse): boolean {
+    return isReadyMade(row) && !row.shippingSizeClass;
+  }
+
+  onFulfillmentFilterChange(type: FulfillmentType | null): void {
+    this.updateQueryParams({ fulfillmentType: type, page: null });
+  }
+
   formatMoney(value: Money): string {
     return MONEY_FORMATTER.format(money(value));
   }
@@ -171,7 +201,7 @@ export class ProductListPageComponent {
   }
 
   canPublish(row: ProductAdminResponse): boolean {
-    return row.status === ProductStatus.DRAFT && row.variantCount > 0;
+    return row.status === ProductStatus.DRAFT && (row.variantCount > 0 || !isReadyMade(row));
   }
 
   selectTab(tab: StatusTab): void {

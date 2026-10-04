@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { FulfillmentType, customRequestTypeFor, isReadyMade } from '../../../../core/enums/fulfillment-type';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -143,9 +144,16 @@ export class ProductDetailsPageComponent {
     this.activeGalleryImageId.set(image?.id ?? (product ? this.posterId(product) : null));
   }
 
+  readonly readyMade = computed(() => isReadyMade(this.product()));
+  readonly quoteType = computed(() => customRequestTypeFor(this.product()?.fulfillmentType));
+  readonly quoteLabelKey = computed(() =>
+    this.product()?.fulfillmentType === FulfillmentType.MADE_TO_ORDER ? 'product.orderMadeToMeasure' : 'product.requestQuote',
+  );
+
   addToCart(): void {
     const variant = this.selectedVariant();
-    if (!variant || this.addingToCart()) return;
+    // The cart rejects non-ready-made products (409 PRODUCT_NOT_PURCHASABLE) — never send one.
+    if (!variant || !this.readyMade() || this.addingToCart()) return;
 
     this.addingToCart.set(true);
     this.cartApi.addItem({ variantId: variant.id, quantity: 1 }).subscribe({

@@ -17,8 +17,8 @@
         *ngIf="p.status === ProductStatus.DRAFT"
         type="button"
         class="publish-actions-bar__action publish-actions-bar__action--ok"
-        [disabled]="busy || p.variantCount === 0"
-        [pTooltip]="p.variantCount === 0 ? ('admin.products.form.publishDisabledHint' | translate) : ''"
+        [disabled]="busy || (readyMade && p.variantCount === 0)"
+        [pTooltip]="readyMade && p.variantCount === 0 ? ('admin.products.form.publishDisabledHint' | translate) : ''"
         (click)="publish.emit()"
       >
         {{ 'admin.products.form.publish' | translate }}

@@ -4,15 +4,11 @@ import { CategoryNode } from '../../../../core/models';
 
 interface CollectionCard {
   key: 'furniture' | 'woodAndIron' | 'ironwork';
-  image: string;
+  image: string | null;
   category: CategoryNode | undefined;
 }
 
-const CARD_IMAGES: Record<CollectionCard['key'], string> = {
-  furniture: 'assets/images/about/category3.png',
-  woodAndIron: 'assets/images/about/category2.png',
-  ironwork: 'assets/images/about/category1.png',
-};
+const CARD_KEYS: CollectionCard['key'][] = ['furniture', 'woodAndIron', 'ironwork'];
 
 @Component({
   selector: 'app-about-collection',
@@ -41,10 +37,9 @@ export class AboutCollectionComponent {
 
   private buildCards(): CollectionCard[] {
     const bySlug = new Map(this._categories.map((category) => [category.slug, category]));
-    return (Object.keys(CARD_IMAGES) as CollectionCard['key'][]).map((key) => ({
-      key,
-      image: CARD_IMAGES[key],
-      category: bySlug.get(key),
-    }));
+    return CARD_KEYS.map((key) => {
+      const category = bySlug.get(key);
+      return { key, image: category?.imageUrl ?? null, category };
+    });
   }
 }

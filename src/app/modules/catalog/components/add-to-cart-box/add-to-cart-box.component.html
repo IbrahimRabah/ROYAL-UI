@@ -1,3 +1,14 @@
+<a
+  *ngIf="quoteProductId != null; else cartButton"
+  class="add-to-cart-box"
+  routerLink="/custom-request"
+  [queryParams]="{ productId: quoteProductId, type: quoteType }"
+>
+  <i class="pi pi-comments" aria-hidden="true"></i>
+  <span>{{ quoteLabelKey | translate }}</span>
+</a>
+
+<ng-template #cartButton>
 <button type="button" class="add-to-cart-box" [disabled]="disabled || loading" (click)="onClick()">
   <i
     class="pi"
@@ -6,3 +17,4 @@
   ></i>
   <span>{{ (disabled ? 'product.outOfStock' : 'product.addToCart') | translate }}</span>
 </button>
+</ng-template>

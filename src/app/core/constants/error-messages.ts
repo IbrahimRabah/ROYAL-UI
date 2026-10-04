@@ -44,6 +44,8 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
 
   [ErrorCode.STOCK_UNAVAILABLE]: 'الكمية المطلوبة غير متاحة في المخزون',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'هذا المنتج غير متاح للبيع حالياً',
+  [ErrorCode.PRODUCT_NOT_PURCHASABLE]: 'هذا المنتج يُصنَّع حسب الطلب — اطلب عرض سعر بدلاً من الشراء',
+  [ErrorCode.SHIPPING_SIZE_MISSING]: 'تعذّر حساب الشحن لأحد المنتجات، يرجى التواصل معنا',
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'هذا العنصر غير موجود في السلة',
   [ErrorCode.CART_EMPTY]: 'السلة فارغة',
   [ErrorCode.INVALID_ADDRESS]: 'برجاء اختيار أو إدخال عنوان صحيح',
@@ -110,6 +112,8 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
 
   [ErrorCode.STOCK_UNAVAILABLE]: 'The requested quantity is not available in stock',
   [ErrorCode.PRODUCT_NOT_ACTIVE]: 'This product is not currently available for purchase',
+  [ErrorCode.PRODUCT_NOT_PURCHASABLE]: 'This product is made to order — request a quote instead of buying it',
+  [ErrorCode.SHIPPING_SIZE_MISSING]: "We couldn't calculate shipping for one of the items — please contact us",
   [ErrorCode.CART_ITEM_NOT_FOUND]: 'This item could not be found in your cart',
   [ErrorCode.CART_EMPTY]: 'Your cart is empty',
   [ErrorCode.INVALID_ADDRESS]: 'Please provide a valid address',

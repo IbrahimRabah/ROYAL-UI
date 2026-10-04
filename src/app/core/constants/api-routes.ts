@@ -128,6 +128,9 @@ export const API_ROUTES = {
     shipping: {
       zones: () => `${BASE}/admin/shipping/zones`,
       rates: () => `${BASE}/admin/shipping/rates`,
+      maxShippingCost: (zoneId: number) => `${BASE}/admin/shipping/zones/${zoneId}/max-shipping-cost`,
+      governorates: () => `${BASE}/admin/shipping/governorates`,
+      governorateZone: (governorateId: number) => `${BASE}/admin/shipping/governorates/${governorateId}/zone`,
     },
 
     audit: {

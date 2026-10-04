@@ -1,5 +1,7 @@
 import { Money } from '../../common/money';
 import { ProductStatus } from '../../../enums/product-status';
+import { FulfillmentType } from '../../../enums/fulfillment-type';
+import { ShippingSizeClass } from '../../../enums/shipping-size-class';
 import { TranslationInput, TranslationOutput } from './translation';
 
 export interface ProductAdminResponse {
@@ -15,6 +17,10 @@ export interface ProductAdminResponse {
   brandName: string | null;
   featured: boolean;
   newArrival: boolean;
+  fulfillmentType: FulfillmentType;
+  shippingSizeClass: ShippingSizeClass | null;
+  requiresAssembly: boolean;
+  assemblyFee: Money | null;
   variantCount: number;
   imageCount: number;
   minPrice: Money | null;
@@ -41,5 +47,11 @@ export interface ProductUpsertRequest {
   translations: TranslationInput[];
   featured?: boolean;
   newArrival?: boolean;
+  fulfillmentType: FulfillmentType;
+  /** Omitted when empty — PUT keeps any field it isn't sent. */
+  shippingSizeClass?: ShippingSizeClass;
+  requiresAssembly: boolean;
+  /** Turning assembly off needs requiresAssembly:false AND assemblyFee:0 — a field can't be nulled. */
+  assemblyFee: number;
   specifications?: ProductSpecificationInput[];
 }

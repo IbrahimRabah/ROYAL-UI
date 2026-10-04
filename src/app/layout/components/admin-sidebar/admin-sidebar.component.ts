@@ -91,6 +91,7 @@ const NAV_GROUPS: AdminNavGroup[] = [
     labelKey: 'admin.nav.groups.system',
     items: [
       { labelKey: 'admin.nav.shipping', icon: 'pi-truck', route: '/admin/shipping' },
+      { labelKey: 'admin.nav.governorates', icon: 'pi-map', route: '/admin/shipping/governorates' },
       { labelKey: 'admin.nav.exports', icon: 'pi-download', route: '/admin/exports' },
       { labelKey: 'admin.nav.audit', icon: 'pi-shield', route: '/admin/audit' },
       { labelKey: 'admin.nav.settings', icon: 'pi-cog', route: '/admin/settings' },

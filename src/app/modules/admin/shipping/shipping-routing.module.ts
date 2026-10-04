@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ZonesPageComponent } from './pages/zones-page/zones-page.component';
 
 const routes: Routes = [
-  { path: '', component: ZonesPageComponent }
+  { path: '', component: ZonesPageComponent, data: { tab: 'zones' } },
+  { path: 'governorates', component: ZonesPageComponent, data: { tab: 'governorates' } }
 ];
 
 @NgModule({

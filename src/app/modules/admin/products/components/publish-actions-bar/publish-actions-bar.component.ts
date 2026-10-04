@@ -14,6 +14,8 @@ export class PublishActionsBarComponent {
   @Input() isNew = false;
   @Input() saving = false;
   @Input() busy = false;
+  /** Ready-made products need a variant to publish; made-to-order and custom work don't. */
+  @Input() readyMade = true;
 
   @Output() readonly save = new EventEmitter<void>();
   @Output() readonly publish = new EventEmitter<void>();

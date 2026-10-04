@@ -11,20 +11,17 @@ does today.
    field exists on `GET /products` (and `/products/featured`,
    `/products/new-arrivals`, `/products/{id}/related`).
 
-2. **Category banner/new-arrivals images are bound to fixed frontend slugs,
-   not served by the API.** `CategoryDetailResponse.bannerUrl` exists on the
-   contract but isn't used — the product listing page (`/products`) instead
-   builds a local asset path client-side from the category's own slug:
-   `assets/images/products/{parentSlug}/{scopeSlug}/banner.png` (and
-   `new-arrivals.png` for the promo banner), where `parentSlug` is the
-   top-level category's slug and `scopeSlug` is the child's slug or
-   `all-{parentSlug}` for the parent/no-category view. A category added from
-   the admin panel will render with no banner (hidden gracefully, never a
-   broken `<img>`) until a matching image folder is added under
-   `src/assets/images/products/` and the app is rebuilt. The proper fix is to
-   actually serve `bannerUrl`/`imageUrl` from the category record — the
-   backend already returns these fields, the frontend just isn't using them
-   for this page yet, by design, until image management moves server-side.
+2. **RESOLVED — category images now come from the API.** The product
+   listing page, the home category showcase and the About collection cards
+   read `imageUrl` / `bannerUrl` straight off the category object
+   (`GET /categories/tree` for cards, `GET /categories/{slug}` for the
+   hero banner) — full URLs served by the backend. The slug-based local paths
+   (`assets/images/products/{parentSlug}/{scopeSlug}/banner.png`,
+   `assets/images/categories/*.png`) are gone, along with the files.
+   Fallbacks: no `bannerUrl` hides the hero section entirely (a visually
+   hidden h1 keeps the page title); no `imageUrl` renders the card on a
+   `--cream` background with the name alone. Only the promotional
+   `new-arrivals.png` banner stays local, by design.
 
 3. **RESOLVED — `productCount` added to `CategoryNode`.** The product listing
    page's "Category" filter (radio rows with a count) and the child-category

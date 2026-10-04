@@ -28,18 +28,6 @@ interface ResolvedCategory {
   isParentLevel: boolean;
 }
 
-const TOP_CARD_IMAGES: Record<string, string> = {
-  watches: 'assets/images/categories/watch.png',
-  wallets: 'assets/images/categories/wallet.png',
-  perfumes: 'assets/images/categories/perfume.png',
-};
-
-const WATCHES_CHILD_CARD_IMAGES = {
-  all: 'assets/images/products/all-products/all-watches-card.png',
-  men: 'assets/images/products/all-products/men-card.png',
-  women: 'assets/images/products/all-products/women-card.png',
-};
-
 function resolveCategory(tree: CategoryNode[], categoryId: number): ResolvedCategory | null {
   for (const root of tree) {
     if (root.id === categoryId) {
@@ -155,8 +143,8 @@ export class ProductListPageComponent {
     return res.isParentLevel ? `all-${res.node.slug}` : res.node.slug;
   });
 
-  readonly bannerUrl = computed(() => this.buildImagePath('banner.png'));
-  readonly promoUrl = computed(() => this.buildImagePath('new-arrivals.png'));
+  readonly bannerUrl = computed(() => this.categoryDetail()?.bannerUrl ?? null);
+  readonly promoUrl = computed(() => this.buildPromoPath());
 
   readonly heroTitle = computed(() => this.categoryDetail()?.name ?? null);
   readonly heroDescription = computed(() => this.categoryDetail()?.description ?? null);
@@ -170,31 +158,25 @@ export class ProductListPageComponent {
         id: root.id,
         label: root.name,
         count: root.productCount ?? null,
-        image: TOP_CARD_IMAGES[root.slug] ?? null,
+        image: root.imageUrl ?? null,
       }));
     }
 
     if (!res.isParentLevel) return [];
 
     const parent = res.node;
-    const hasDedicatedArt = parent.slug === 'watches';
-
     const allCard: CategoryCard = {
       id: parent.id,
       label: this.translate.instant('products.filters.allCategory', { name: parent.name }),
       count: parent.productCount ?? this.productsPage().totalElements,
-      image: hasDedicatedArt
-        ? WATCHES_CHILD_CARD_IMAGES.all
-        : this.categoryCardImage(parent.slug, `all-${parent.slug}`),
+      image: parent.imageUrl ?? null,
     };
 
     const childCards: CategoryCard[] = parent.children.map((child) => ({
       id: child.id,
       label: child.name,
       count: child.productCount ?? null,
-      image: hasDedicatedArt
-        ? (child.slug.includes('women') ? WATCHES_CHILD_CARD_IMAGES.women : WATCHES_CHILD_CARD_IMAGES.men)
-        : this.categoryCardImage(parent.slug, child.slug),
+      image: child.imageUrl ?? null,
     }));
 
     return [allCard, ...childCards];
@@ -447,16 +429,13 @@ export class ProductListPageComponent {
     });
   }
 
-  private buildImagePath(file: 'banner.png' | 'new-arrivals.png'): string {
+  // Promotional, not category data — stays a local asset by design.
+  private buildPromoPath(): string {
     const parent = this.parentSlug();
     const scope = this.scopeSlug();
     return parent && scope
-      ? `assets/images/products/${parent}/${scope}/${file}`
-      : `assets/images/products/all-products/${file}`;
-  }
-
-  private categoryCardImage(parentSlug: string, scopeSlug: string): string {
-    return `assets/images/products/${parentSlug}/${scopeSlug}/banner.png`;
+      ? `assets/images/products/${parent}/${scope}/new-arrivals.png`
+      : 'assets/images/products/all-products/new-arrivals.png';
   }
 
   private scrollToTop(): void {

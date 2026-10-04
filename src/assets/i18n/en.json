@@ -48,10 +48,11 @@
       "tagline": "Crafted to Last"
     },
     "feature": {
-      "delivery": "Free delivery in Cairo & Giza",
+      "delivery": "Free delivery in Greater Cairo",
       "cod": "Cash on delivery",
       "madeToOrder": "Made to order",
-      "experience": "15 years of craftsmanship"
+      "experience": "15 years of craftsmanship",
+      "deliveryHelper": "Cairo, Giza and Qalyubia"
     },
     "blurb": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
     "socialAria": "Follow us on social media",
@@ -118,7 +119,10 @@
         "title": "Solid Craftsmanship",
         "subtitle": "Built by hand to last for years"
       }
-    }
+    },
+    "requestQuote": "Request a quote",
+    "priceOnRequest": "Price on request",
+    "orderMadeToMeasure": "Order made to measure"
   },
   "cart": {
     "title": "Your Cart",
@@ -332,8 +336,8 @@
         "description": "Pay when your order arrives."
       },
       "delivery": {
-        "title": "Free Delivery in Cairo & Giza",
-        "description": "Everywhere else is charged per piece."
+        "title": "Free Delivery in Greater Cairo",
+        "description": "Cairo, Giza and Qalyubia — everywhere else is charged per piece."
       },
       "cancellation": {
         "title": "Free Cancellation",
@@ -408,7 +412,7 @@
       "headingLine1": "Crafted,",
       "headingLine2": "delivered",
       "headingLine3": "to you.",
-      "body": "Explore the ROYAL IRON collection online and enjoy a smooth checkout, free delivery in Cairo & Giza, and support at every step.",
+      "body": "Explore the ROYAL IRON collection online and enjoy a smooth checkout, free delivery in Greater Cairo, and support at every step.",
       "cta": "Shop Collection",
       "strip": {
         "cod": {
@@ -416,8 +420,8 @@
           "description": "Pay on arrival, no card needed"
         },
         "delivery": {
-          "title": "Free Delivery in Cairo & Giza",
-          "description": "Charged per piece elsewhere"
+          "title": "Free Delivery in Greater Cairo",
+          "description": "Cairo, Giza and Qalyubia · Charged per piece elsewhere"
         },
         "support": {
           "title": "Direct Support",
@@ -454,7 +458,7 @@
     },
     "features": {
       "cod": "Cash on delivery",
-      "nationwideDelivery": "Free delivery in Cairo & Giza",
+      "nationwideDelivery": "Free delivery in Greater Cairo",
       "freeCancellation": "Made to order",
       "authentic": "15 years of craftsmanship"
     },
@@ -708,7 +712,12 @@
       "cancelled": "Remittance cancelled"
     },
     "shipping": {
-      "rateUpdated": "Shipping rate updated"
+      "rateUpdated": "Shipping rate updated",
+      "capUpdated": "Shipping cap updated",
+      "termsUpdated": "Terms updated",
+      "governorateOpened": "Governorate opened for delivery",
+      "governorateMoved": "Governorate moved",
+      "governorateClosed": "Governorate closed"
     },
     "settings": {
       "profileSaved": "Store profile saved"
@@ -756,7 +765,8 @@
         "catalog": "Catalog",
         "finance": "Finance",
         "system": "System"
-      }
+      },
+      "governorates": "Governorates"
     },
     "sidebar": {
       "logoAlt": "ROYAL IRON"
@@ -1103,6 +1113,13 @@
           "title": "Archive product",
           "message": "\"{{name}}\" will be hidden from the store. This can't be undone from here.",
           "confirm": "Archive"
+        },
+        "allFulfillment": "All types",
+        "noSizeWarning": "No shipping size — this product cannot be bought.",
+        "fulfillment": {
+          "READY_MADE": "Ready",
+          "MADE_TO_ORDER": "To order",
+          "CUSTOM_WORK": "Custom"
         }
       },
       "form": {
@@ -1199,7 +1216,8 @@
             "priceRequired": "Every row needs a price of 0 or more",
             "noSelection": "Select at least one value from at least one attribute"
           },
-          "skuConflict": "This SKU is already in use"
+          "skuConflict": "This SKU is already in use",
+          "madeToOrderNote": "Made-to-order products don't need variants. They can be published without one."
         },
         "images": {
           "loadError": "We couldn't load these images.",
@@ -1239,6 +1257,51 @@
           "noAttributesConfigured": "No specification attributes are set up yet.",
           "allAttributesUsed": "Every specification attribute already has a value on this product.",
           "incompleteRows": "Fill in a value for every specification row, or remove the empty ones, before saving."
+        },
+        "sales": {
+          "heading": "Sales & shipping",
+          "typeLabel": "Fulfillment type",
+          "types": {
+            "READY_MADE": {
+              "label": "Ready made",
+              "desc": "Sold from stock. Has price, variants and inventory."
+            },
+            "MADE_TO_ORDER": {
+              "label": "Made to order",
+              "desc": "Made after the order. No stock, no cart — customers send a request."
+            },
+            "CUSTOM_WORK": {
+              "label": "Custom work",
+              "desc": "Architectural ironwork quoted on site — gates, railings, grilles."
+            }
+          },
+          "size": {
+            "label": "Shipping size class",
+            "placeholder": "Select a size",
+            "required": "Choose a shipping size — ready-made products can't be saved or bought without one.",
+            "requiredToast": "Choose a shipping size before saving",
+            "helper": "Shipping outside Greater Cairo is charged per piece by size.",
+            "options": {
+              "SMALL": {
+                "label": "Small",
+                "examples": "Mirrors, towel racks, bar stools, bedside tables"
+              },
+              "MEDIUM": {
+                "label": "Medium",
+                "examples": "Consoles, side tables, dressing tables, desks"
+              },
+              "LARGE": {
+                "label": "Large",
+                "examples": "Dining sets, beds, TV units, wardrobes"
+              }
+            }
+          },
+          "assembly": {
+            "toggle": "Needs assembly",
+            "fee": "Assembly fee per piece",
+            "helper": "Tax inclusive. Leave 0 for free assembly.",
+            "feeInvalid": "Enter 0 or more"
+          }
         }
       }
     },
@@ -1512,38 +1575,91 @@
     },
     "shipping": {
       "title": "Shipping Zones",
-      "borderNote": "The border governorate rates (Sinai, Red Sea, New Valley, Matrouh) were priced on an estimate before a courier contract existed. If those rates haven't been reviewed against the actual contract, they should be.",
-      "errorMessage": "We couldn't load shipping zones — try refreshing the page",
-      "empty": "No shipping zones configured yet.",
-      "inactiveBadge": "Inactive",
-      "edit": "Edit",
-      "noRate": "No rate configured",
-      "fields": {
-        "baseCost": "Base cost",
-        "freeShippingOver": "Free shipping over",
-        "noFreeShipping": "No free shipping",
-        "codFee": "COD fee",
-        "deliveryDays": "Delivery",
-        "deliveryDaysValue": "{{min}}–{{max}} days",
-        "maxWeight": "Max weight",
-        "costPerExtraKg": "Cost per extra kg"
+      "estimateNote": "These rates are estimates, not a courier quote — review them once a courier contract is signed.",
+      "tabs": {
+        "zones": "Zones & rates",
+        "governorates": "Governorates"
       },
-      "ratesForm": {
-        "title": "Edit rate — {{zone}}",
-        "baseCostLabel": "Base cost",
-        "freeShippingLabel": "Free shipping threshold",
-        "freeShippingHelper": "Leave empty for no free shipping. Set an amount and orders above it ship free.",
-        "codFeeLabel": "COD fee",
-        "codFeeHelper": "Charged on top of shipping — appears as its own line on the order.",
-        "deliveryDaysMinLabel": "Delivery days (min)",
-        "deliveryDaysMaxLabel": "Delivery days (max)",
-        "maxWeightLabel": "Max weight (g)",
-        "costPerExtraKgLabel": "Cost per extra kg",
-        "submit": "Save changes",
-        "confirmTitle": "Update this rate?",
-        "confirmMessage": "This changes what every customer pays from now on. Orders already placed keep their original shipping cost.",
-        "confirmSubmit": "Save changes",
-        "confirmCancel": "Keep current rate"
+      "errorMessage": "We couldn't load shipping — try refreshing the page",
+      "empty": "No shipping zones configured yet.",
+      "activeBadge": "Active",
+      "inactiveBadge": "Inactive",
+      "govCount": "{{count}} governorates",
+      "free": "Free",
+      "notSet": "Not set",
+      "save": "Save",
+      "unpricedWarning": "This zone can't take orders for unpriced sizes.",
+      "rates": {
+        "heading": "Unit cost by size",
+        "hint": "The price of ONE piece of that size. Shipping = unit cost × quantity, then capped.",
+        "unitCost": "Unit cost",
+        "placeholder": "EGP"
+      },
+      "sizes": {
+        "SMALL": {
+          "name": "Small",
+          "examples": "Mirrors, stools"
+        },
+        "MEDIUM": {
+          "name": "Medium",
+          "examples": "Consoles, desks"
+        },
+        "LARGE": {
+          "name": "Large",
+          "examples": "Beds, dining"
+        }
+      },
+      "cap": {
+        "label": "Maximum shipping per order",
+        "none": "No cap",
+        "helper": "Maximum shipping for one order, however many pieces. Leave empty for no cap."
+      },
+      "terms": {
+        "heading": "Cash on delivery & delivery time",
+        "codFee": "COD fee",
+        "daysMin": "Days (min)",
+        "daysMax": "Days (max)",
+        "invalid": "Enter 0 or more, and make the minimum no larger than the maximum.",
+        "needsRate": "Price at least one size before editing these."
+      },
+      "confirm": {
+        "title": "Save this change?",
+        "message": "This changes what every customer pays from now on. Orders already placed keep their original shipping cost.",
+        "confirm": "Save change"
+      },
+      "governorates": {
+        "served": "Served",
+        "notServed": "Not served",
+        "notServedNote": "Closed governorates still appear to customers, marked as unavailable.",
+        "noneClosed": "Every governorate is open for delivery.",
+        "servedBadge": "Served",
+        "closedBadge": "Closed",
+        "move": "Move to zone",
+        "assign": "Assign",
+        "assignPlaceholder": "Choose a zone…",
+        "zoneIncomplete": "sizes unpriced",
+        "close": "Close",
+        "closeConfirm": {
+          "title": "Close {{name}}?",
+          "message": "Customers in this governorate won't be able to order. Existing orders are unaffected.",
+          "confirm": "Close governorate"
+        }
+      },
+      "calc": {
+        "title": "Shipping calculator",
+        "estimateBadge": "Estimate",
+        "intro": "A what-if tool for checking a price change. It uses the rates and cap shown above — it is not a real quote.",
+        "governorate": "Governorate",
+        "placeholder": "Choose a governorate…",
+        "quantity": "Quantity",
+        "pickGovernorate": "Choose a governorate and enter quantities to see the estimate.",
+        "subtotal": "Per-size total",
+        "cap": "Zone cap",
+        "capApplied": "cap applied",
+        "capNotApplied": "not reached",
+        "final": "Shipping",
+        "codNote": "A COD fee of {{fee}} EGP is added on top and is never capped.",
+        "unpricedFail": "An order with an unpriced size would fail for this zone."
       }
     },
     "settings": {

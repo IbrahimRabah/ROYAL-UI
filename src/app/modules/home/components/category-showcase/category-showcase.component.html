@@ -4,19 +4,22 @@
 
     <div class="category-showcase__grid">
       <a
-        *ngFor="let category of items"
+        *ngFor="let category of categories"
         class="category-showcase__card"
+        [class.category-showcase__card--plain]="!hasImage(category)"
         routerLink="/products"
         [queryParams]="{ categoryId: category.id }"
       >
         <img
+          *ngIf="hasImage(category)"
           class="category-showcase__image"
-          [src]="imageFor(category)"
+          [src]="category.imageUrl"
           [alt]="category.name"
           loading="lazy"
           decoding="async"
+          (error)="onImageError(category.id)"
         />
-        <span class="category-showcase__overlay"></span>
+        <span *ngIf="hasImage(category)" class="category-showcase__overlay"></span>
         <span class="category-showcase__name">{{ category.name }}</span>
       </a>
     </div>
