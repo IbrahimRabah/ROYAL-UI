@@ -64,7 +64,7 @@
         routerLink="/products"
         [queryParams]="{ newArrival: true }"
       >
-        <img class="plp__promo-image" [src]="promoUrl()" alt="" (error)="onPromoError()" />
+        <img class="plp__promo-image" [src]="promoUrl" alt="" (error)="onPromoError()" />
         <div class="plp__promo-content">
           <span class="plp__promo-eyebrow">{{ 'products.promo.eyebrow' | translate }}</span>
           <span class="plp__promo-headline">{{ 'products.promo.headline' | translate }}</span>

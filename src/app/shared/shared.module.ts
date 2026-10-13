@@ -58,6 +58,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { HasRoleDirective } from './directives/has-role.directive';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { LazyImgDirective } from './directives/lazy-img.directive';
+import { ImgFallbackDirective } from './directives/img-fallback.directive';
+import { ImageUrlPipe } from './pipes/image-url.pipe';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceInputDirective } from './directives/debounce-input.directive';
 import { OnlyDigitsDirective } from './directives/only-digits.directive';
@@ -118,6 +120,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     HasRoleDirective,
     ClickOutsideDirective,
     LazyImgDirective,
+    ImgFallbackDirective,
+    ImageUrlPipe,
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,
@@ -188,6 +192,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     HasRoleDirective,
     ClickOutsideDirective,
     LazyImgDirective,
+    ImgFallbackDirective,
+    ImageUrlPipe,
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,

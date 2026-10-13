@@ -10,14 +10,4 @@ import { CategoryNode } from '../../../../core/models';
 })
 export class CategoryShowcaseComponent {
   @Input() categories: CategoryNode[] = [];
-
-  private readonly brokenIds = new Set<number>();
-
-  hasImage(category: CategoryNode): boolean {
-    return !!category.imageUrl && !this.brokenIds.has(category.id);
-  }
-
-  onImageError(id: number): void {
-    this.brokenIds.add(id);
-  }
 }

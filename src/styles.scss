@@ -15,3 +15,8 @@
 @use 'styles/admin-card';
 @use 'styles/admin-toolbar';
 @use 'styles/admin-scroll';
+img.img-loading {
+  opacity: 0.4;
+  background: #1c1c1c;
+  transition: opacity 0.2s ease;
+}

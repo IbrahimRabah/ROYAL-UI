@@ -2,16 +2,14 @@
   <li *ngFor="let card of cards" class="category-card-grid__item">
     <a
       class="category-card-grid__link"
-      [class.category-card-grid__link--plain]="!card.image || isBroken(card.id)"
       routerLink="/products" [queryParams]="{ categoryId: card.id }">
       <img
-        *ngIf="card.image && !isBroken(card.id)"
+        appImgFallback
         class="category-card-grid__image"
-        [src]="card.image"
+        [src]="card.image | imageUrl"
         [alt]="card.label"
         loading="lazy"
         decoding="async"
-        (error)="onImageError(card.id)"
       />
       <span class="category-card-grid__scrim"></span>
       <span class="category-card-grid__body">

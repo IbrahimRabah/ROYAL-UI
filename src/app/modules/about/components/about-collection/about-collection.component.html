@@ -9,13 +9,13 @@
     <div class="about-collection__cards">
       <article
         class="about-collection__card"
-        [class.about-collection__card--plain]="!card.image"
         *ngFor="let card of cards"
       >
-        <div class="about-collection__image-wrap" *ngIf="card.image">
+        <div class="about-collection__image-wrap">
           <img
+            appImgFallback
             class="about-collection__image"
-            [src]="card.image"
+            [src]="card.image | imageUrl"
             [alt]="'about.collection.' + card.key + '.imageAlt' | translate"
             loading="lazy"
             decoding="async"

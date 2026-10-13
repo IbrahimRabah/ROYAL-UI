@@ -1,8 +1,9 @@
 <a class="vl-product-card" [routerLink]="['/products', product.slug]">
   <span class="vl-product-card__media">
     <img
+      appImgFallback
       class="vl-product-card__image"
-      [src]="product.imageUrl"
+      [src]="product.imageUrl | imageUrl"
       [alt]="product.imageAlt"
       loading="lazy"
       decoding="async"

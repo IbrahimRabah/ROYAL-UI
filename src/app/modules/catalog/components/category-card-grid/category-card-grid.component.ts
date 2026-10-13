@@ -15,14 +15,4 @@ export interface CategoryCard {
 })
 export class CategoryCardGridComponent {
   @Input() cards: CategoryCard[] = [];
-
-  private readonly brokenIds = new Set<number>();
-
-  isBroken(id: number): boolean {
-    return this.brokenIds.has(id);
-  }
-
-  onImageError(id: number): void {
-    this.brokenIds.add(id);
-  }
 }

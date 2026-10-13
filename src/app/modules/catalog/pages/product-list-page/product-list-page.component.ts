@@ -144,7 +144,8 @@ export class ProductListPageComponent {
   });
 
   readonly bannerUrl = computed(() => this.categoryDetail()?.bannerUrl ?? null);
-  readonly promoUrl = computed(() => this.buildPromoPath());
+  // Promotional tile: one fixed committed asset, never derived from a category slug.
+  readonly promoUrl = 'assets/images/products/all-products/new-arrivals.png';
 
   readonly heroTitle = computed(() => this.categoryDetail()?.name ?? null);
   readonly heroDescription = computed(() => this.categoryDetail()?.description ?? null);
@@ -329,10 +330,6 @@ export class ProductListPageComponent {
       this.bannerUrl();
       this.bannerBroken.set(false);
     }, { allowSignalWrites: true });
-    effect(() => {
-      this.promoUrl();
-      this.promoBroken.set(false);
-    }, { allowSignalWrites: true });
   }
 
   onPriceChange(range: { min: number; max: number }): void {
@@ -427,15 +424,6 @@ export class ProductListPageComponent {
       queryParams,
       queryParamsHandling: 'merge',
     });
-  }
-
-  // Promotional, not category data — stays a local asset by design.
-  private buildPromoPath(): string {
-    const parent = this.parentSlug();
-    const scope = this.scopeSlug();
-    return parent && scope
-      ? `assets/images/products/${parent}/${scope}/new-arrivals.png`
-      : 'assets/images/products/all-products/new-arrivals.png';
   }
 
   private scrollToTop(): void {
