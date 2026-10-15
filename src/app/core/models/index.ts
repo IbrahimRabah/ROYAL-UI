@@ -45,6 +45,7 @@ export * from './settlement/remittance';
 
 export * from './admin/dashboard';
 export * from './portfolio/portfolio';
+export * from './portfolio/portfolio-public';
 export * from './custom-request/custom-request';
 export * from './admin/customer';
 export * from './admin/audit';

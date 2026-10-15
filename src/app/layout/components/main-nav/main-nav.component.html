@@ -1,53 +1,59 @@
-<nav class="main-nav" [attr.aria-label]="'common.categories' | translate" (keydown.escape)="closeAll()">
+<nav class="main-nav" [attr.aria-label]="'common.menu' | translate">
   <a routerLink="/" routerLinkActive="main-nav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="main-nav__link">
     {{ 'common.home' | translate }}
   </a>
 
-  <div class="main-nav__item" *ngFor="let category of categories" [class.main-nav__item--open]="isOpen(category.id)">
-    <a
-      class="main-nav__link"
-      routerLink="/products"
-      [queryParams]="{ categoryId: category.id }"
-    >
-      {{ category.name }}
-    </a>
-
+  <div class="main-nav__shop" (mouseenter)="hoverOpen()" (mouseleave)="hoverClose()">
     <button
-      *ngIf="category.children.length"
+      #shopBtn
       type="button"
-      class="main-nav__caret"
-      [attr.aria-expanded]="isOpen(category.id)"
-      [attr.aria-controls]="'main-nav-dropdown-' + category.id"
-      [attr.aria-label]="category.name"
-      (click)="toggle(category.id)"
+      class="main-nav__link main-nav__shop-btn"
+      [class.main-nav__link--active]="open()"
+      [attr.aria-expanded]="open()"
+      aria-haspopup="true"
+      aria-controls="main-nav-mega"
+      (click)="toggle()"
     >
-      <i class="pi pi-angle-down" aria-hidden="true"></i>
+      <span>{{ 'common.shop' | translate }}</span>
+      <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
     </button>
 
-    <div
-      *ngIf="category.children.length"
-      [id]="'main-nav-dropdown-' + category.id"
-      class="main-nav__dropdown"
-    >
-      <a
-        *ngFor="let child of category.children"
-        class="main-nav__dropdown-link"
-        routerLink="/products"
-        [queryParams]="{ categoryId: child.id }"
-        (click)="closeAll()"
-      >
-        {{ child.name }}
-      </a>
+    <div id="main-nav-mega" class="main-nav__mega" [class.main-nav__mega--open]="open()">
+      <div class="container-vl main-nav__mega-inner">
+        <div class="main-nav__mega-grid">
+          <div class="main-nav__col" *ngFor="let category of categories">
+            <a
+              class="main-nav__col-title"
+              routerLink="/products"
+              [queryParams]="{ categoryId: category.id }"
+              (click)="closeAll()"
+            >{{ category.name }}</a>
+            <ul class="main-nav__col-list" *ngIf="category.children.length">
+              <li *ngFor="let child of category.children">
+                <a
+                  class="main-nav__child"
+                  routerLink="/products"
+                  [queryParams]="{ categoryId: child.id }"
+                  (click)="closeAll()"
+                >{{ child.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <a class="main-nav__all" routerLink="/products" (click)="closeAll()">
+          {{ 'common.allProducts' | translate }}
+        </a>
+      </div>
     </div>
   </div>
 
-  <a routerLink="/products" class="main-nav__link">
-    {{ 'common.allProducts' | translate }}
+  <a routerLink="/portfolio" routerLinkActive="main-nav__link--active" class="main-nav__link">
+    {{ 'common.portfolio' | translate }}
   </a>
-  <a routerLink="/about" class="main-nav__link">
+  <a routerLink="/about" routerLinkActive="main-nav__link--active" class="main-nav__link">
     {{ 'common.about' | translate }}
   </a>
-  <a routerLink="/contact" class="main-nav__link">
+  <a routerLink="/contact" routerLinkActive="main-nav__link--active" class="main-nav__link">
     {{ 'common.contact' | translate }}
   </a>
 </nav>

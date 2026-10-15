@@ -116,27 +116,33 @@
   display: none;
 }
 
-@include breakpoints.md {
+// Desktop: a grid with an explicit icon track. The nav gets whatever is left (minmax(0,1fr)),
+// the logo and the icon cluster are content-sized and can never be overlapped by the links.
+@include breakpoints.lg {
+  .site-header__row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    column-gap: var(--sp-5);
+  }
+
   .site-header__menu-btn {
     display: none;
   }
 
   .site-header__logo {
     order: 1;
-    flex: 0 0 auto;
     justify-content: flex-start;
   }
 
   .site-header__nav {
     order: 2;
-    flex-shrink: 1;
     min-inline-size: 0;
     display: flex;
+    justify-content: center;
   }
 
   .site-header__search {
     order: 3;
-    margin-inline-start: auto;
   }
 
   .site-header__actions {

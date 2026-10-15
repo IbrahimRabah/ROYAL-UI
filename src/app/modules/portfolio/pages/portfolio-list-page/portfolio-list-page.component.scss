@@ -1,0 +1,295 @@
+:host {
+  display: block;
+}
+
+.pf-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: var(--ink);
+  min-block-size: 260px;
+  padding-block: var(--sp-7, var(--sp-6));
+  text-align: center;
+
+  @media (min-width: 768px) {
+    // Height only: aspect-ratio + max-block-size would also cap the WIDTH (520px * 8/3 = 1387px).
+    min-block-size: clamp(300px, 28vw, 520px);
+    padding-block: var(--sp-8);
+  }
+}
+
+.pf-hero__image {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+// The wall is bright amber (relative luminance ~0.45, highlights ~0.7), so white text needs the
+// overlay at >= ~0.45 for 4.5:1 and >= ~0.35 for the large heading's 3:1. A flat 0.42 base, deepened
+// to 0.64 through an ellipse centred on the (centred) text block.
+.pf-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 100% at 50% 50%,
+    rgba(13, 13, 13, 0.64) 0%,
+    rgba(13, 13, 13, 0.6) 45%,
+    rgba(13, 13, 13, 0.42) 100%
+  );
+}
+
+.pf-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  max-inline-size: 56ch;
+  margin-inline: auto;
+  text-align: center;
+  text-shadow: 0 1px 12px rgba(13, 13, 13, 0.5);
+}
+
+.pf-hero__eyebrow {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-lt);
+}
+
+.pf-hero__title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: var(--display);
+  font-size: var(--fs-h1);
+  line-height: 1.15;
+  color: var(--paper);
+}
+
+.pf-hero__title--gold {
+  color: var(--gold-lt);
+}
+
+.pf-hero__rule {
+  inline-size: 72px;
+  block-size: 1px;
+  background: var(--gold);
+}
+
+.pf-hero__subtitle {
+  margin-block: 0;
+  margin-inline: auto;
+  max-inline-size: 54ch;
+  font-size: var(--fs-base);
+  line-height: 1.8;
+  color: var(--cream);
+}
+
+.pf-grid-section {
+  background: var(--paper);
+  padding-block: clamp(var(--sp-8), 8vw, 96px);
+}
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: clamp(var(--sp-6), 4vw, 56px);
+  max-inline-size: 1200px;
+  margin-inline: auto;
+}
+
+.pf-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-6px);
+
+    .pf-card__media {
+      box-shadow: 0 18px 36px rgba(20, 17, 15, 0.18);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+  }
+}
+
+.pf-card__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--cream);
+  transition: box-shadow 0.35s ease;
+}
+
+.pf-card__image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.pf-card__caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-4);
+  padding-block-end: var(--sp-3);
+  border-block-end: 1px solid var(--line);
+}
+
+.pf-card__title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: var(--fs-lg);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.pf-card__year {
+  flex-shrink: 0;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+.pf-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  margin: 0;
+  padding-block: var(--sp-8);
+  text-align: center;
+  color: var(--ink);
+}
+
+.pf-state__btn {
+  border-radius: var(--r-sm) !important;
+}
+
+.pf-more {
+  display: flex;
+  justify-content: center;
+  margin-block-start: var(--sp-8);
+}
+
+.pf-skeleton__image,
+.pf-skeleton__line {
+  background: linear-gradient(90deg, var(--cream) 25%, var(--line) 50%, var(--cream) 75%);
+  background-size: 200% 100%;
+  animation: pf-shimmer 1.4s linear infinite;
+}
+
+.pf-skeleton__image {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-sm);
+}
+
+.pf-skeleton__line {
+  block-size: 14px;
+  margin-block-start: var(--sp-4);
+  border-radius: var(--r-sm);
+
+  &--title { inline-size: 60%; block-size: 20px; }
+  &--meta { inline-size: 25%; }
+}
+
+.pf-cta {
+  background: var(--ink);
+  padding-block: clamp(var(--sp-8), 8vw, 96px);
+  text-align: center;
+}
+
+.pf-cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.pf-cta__heading {
+  margin: 0;
+  font-family: var(--display);
+  font-size: var(--fs-h2);
+  color: var(--paper);
+}
+
+.pf-cta__text {
+  margin: 0;
+  max-inline-size: 48ch;
+  line-height: 1.8;
+  color: rgba(242, 235, 225, 0.75);
+}
+
+.pf-cta__btn {
+  margin-block-start: var(--sp-3);
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: var(--ink) !important;
+  padding-inline: var(--sp-6) !important;
+  padding-block: var(--sp-3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--fs-sm);
+  border-radius: var(--r-sm) !important;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease var(--reveal-delay, 0ms), transform 0.7s ease var(--reveal-delay, 0ms), box-shadow 0.35s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Hover lift must win over the settled reveal state.
+.pf-card.is-visible:hover,
+.pf-card.is-visible:focus-visible {
+  transform: translateY(-6px);
+}
+
+@keyframes pf-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .pf-card,
+  .pf-card__media {
+    transition: none;
+  }
+
+  .pf-card:hover,
+  .pf-card:focus-visible,
+  .pf-card.is-visible:hover {
+    transform: none;
+  }
+
+  .pf-skeleton__image,
+  .pf-skeleton__line {
+    animation: none;
+  }
+}

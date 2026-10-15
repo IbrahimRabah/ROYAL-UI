@@ -16,6 +16,11 @@ export const API_ROUTES = {
     resetPassword: () => `${BASE}/auth/password/reset`,
   },
 
+  portfolio: {
+    list: () => `${BASE}/portfolio`,
+    bySlug: (slug: string) => `${BASE}/portfolio/${encodeURIComponent(slug)}`,
+  },
+
   catalog: {
     products: () => `${BASE}/products`,
     productBySlug: (slug: string) => `${BASE}/products/${slug}`,

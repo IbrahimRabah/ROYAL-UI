@@ -1,0 +1,73 @@
+<section class="pf-hero">
+  <img class="pf-hero__image" src="assets/images/portfolio/banner.png" alt="" fetchpriority="high" loading="eager" />
+  <span class="pf-hero__scrim" aria-hidden="true"></span>
+  <div class="container-vl pf-hero__inner">
+    <span class="pf-hero__eyebrow">{{ 'portfolio.hero.eyebrow' | translate }}</span>
+    <h1 class="pf-hero__title">
+      <span>{{ 'portfolio.hero.titleLine1' | translate }}</span>
+      <span class="pf-hero__title--gold">{{ 'portfolio.hero.titleLine2' | translate }}</span>
+    </h1>
+    <span class="pf-hero__rule" aria-hidden="true"></span>
+    <p class="pf-hero__subtitle">{{ 'portfolio.hero.subtitle' | translate }}</p>
+  </div>
+</section>
+
+<section class="pf-grid-section section">
+  <div class="container-vl">
+    <div class="pf-grid" *ngIf="loading()" aria-busy="true">
+      <div class="pf-skeleton" *ngFor="let s of skeletons">
+        <div class="pf-skeleton__image"></div>
+        <div class="pf-skeleton__line pf-skeleton__line--title"></div>
+        <div class="pf-skeleton__line pf-skeleton__line--meta"></div>
+      </div>
+    </div>
+
+    <div class="pf-state" *ngIf="!loading() && failed()">
+      <p>{{ 'portfolio.error' | translate }}</p>
+      <button type="button" pButton outlined class="pf-state__btn" (click)="retry()">
+        {{ 'portfolio.retry' | translate }}
+      </button>
+    </div>
+
+    <p class="pf-state" *ngIf="!loading() && !failed() && items().length === 0">
+      {{ 'portfolio.empty' | translate }}
+    </p>
+
+    <div class="pf-grid" *ngIf="!loading() && items().length > 0">
+      <a
+        *ngFor="let item of items(); let i = index; trackBy: trackById"
+        class="pf-card"
+        [appReveal]="i"
+        [routerLink]="['/portfolio', item.slug]"
+      >
+        <div class="pf-card__media">
+          <img
+            appImgFallback
+            class="pf-card__image"
+            [src]="item.imageUrl | imageUrl"
+            [alt]="item.imageAlt || item.title"
+            loading="lazy"
+          />
+        </div>
+        <div class="pf-card__caption">
+          <h2 class="pf-card__title">{{ item.title }}</h2>
+          <span class="pf-card__year" *ngIf="year(item) as y"><bdi dir="ltr">{{ y }}</bdi></span>
+        </div>
+      </a>
+    </div>
+
+    <div class="pf-more" *ngIf="!loading() && hasMore()">
+      <button type="button" pButton outlined class="pf-state__btn" [disabled]="loadingMore()" (click)="loadMore()">
+        {{ 'portfolio.loadMore' | translate }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="pf-cta section">
+  <div class="container-vl pf-cta__inner">
+    <h2 class="pf-cta__heading">{{ 'portfolio.cta.heading' | translate }}</h2>
+    <p class="pf-cta__text">{{ 'portfolio.cta.text' | translate }}</p>
+    <a routerLink="/custom-request" pButton pRipple class="pf-cta__btn">{{ 'portfolio.cta.button' | translate }}</a>
+  </div>
+</section>

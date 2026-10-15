@@ -5,6 +5,8 @@
     "english": "English",
     "categories": "Categories",
     "allProducts": "All Products",
+    "shop": "Shop",
+    "portfolio": "Portfolio",
     "home": "Home",
     "about": "About Us",
     "contact": "Contact Us",
@@ -372,6 +374,26 @@
         "tagline": "Gates. Railings. Grilles.",
         "imageAlt": "ROYAL IRON custom ironwork"
       }
+    }
+  },
+  "portfolio": {
+    "hero": {
+      "eyebrow": "Our work",
+      "titleLine1": "Built by hand,",
+      "titleLine2": "built to last",
+      "subtitle": "Gates, railings, staircases and windows — each one designed, forged and fitted by our workshop."
+    },
+    "completed": "Completed",
+    "back": "All projects",
+    "loadMore": "Show more",
+    "empty": "New projects are on the way. Check back soon.",
+    "error": "We couldn't load the projects.",
+    "retry": "Try again",
+    "notFound": "This project could not be found.",
+    "cta": {
+      "heading": "Have a project in mind?",
+      "text": "Tell us what you need and we will come back to you with a quote.",
+      "button": "Request a quote"
     }
   },
   "contact": {

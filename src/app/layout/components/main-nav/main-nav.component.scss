@@ -1,25 +1,25 @@
 .main-nav {
   display: flex;
   align-items: center;
-  gap: var(--sp-5);
-}
-
-.main-nav__item {
-  position: relative;
-  display: flex;
-  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
 }
 
 .main-nav__link {
   display: inline-flex;
   align-items: center;
+  gap: var(--sp-1);
   color: var(--text);
   text-decoration: none;
+  font-family: inherit;
   font-size: var(--fs-sm);
   letter-spacing: 0.02em;
   white-space: nowrap;
   padding-block: var(--sp-2);
-  border-bottom: 1px solid transparent;
+  border: none;
+  border-block-end: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
   transition: color 220ms ease, border-color 220ms ease;
 
   &:hover,
@@ -33,24 +33,64 @@
   border-block-end-color: var(--brand);
 }
 
-.main-nav__caret {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  margin-inline-start: var(--sp-1);
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: var(--text);
+.main-nav__chevron {
   font-size: 0.6rem;
-  cursor: pointer;
-  border-radius: var(--r-sm);
+  transition: transform 150ms ease;
+}
 
-  i {
-    transition: transform 220ms ease;
-  }
+.main-nav__shop-btn[aria-expanded='true'] .main-nav__chevron {
+  transform: rotate(180deg);
+}
+
+// Anchored to .site-header (the nearest positioned ancestor), full width, so it is
+// symmetric in LTR and RTL and independent of where the Shop button sits.
+.main-nav__mega {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  z-index: var(--z-header);
+  background: var(--surface);
+  border-block: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
+  max-block-size: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+.main-nav__mega--open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.main-nav__mega-inner {
+  padding-block: var(--sp-6);
+}
+
+.main-nav__mega-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: var(--sp-6) var(--sp-5);
+}
+
+.main-nav__col {
+  min-inline-size: 0;
+}
+
+.main-nav__col-title {
+  display: block;
+  padding-block-end: var(--sp-2);
+  margin-block-end: var(--sp-2);
+  border-block-end: 1px solid var(--border);
+  font-family: var(--display);
+  font-size: var(--fs-base);
+  color: var(--text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color 220ms ease;
 
   &:hover,
   &:focus-visible {
@@ -58,58 +98,52 @@
   }
 }
 
-.main-nav__item:hover .main-nav__caret i,
-.main-nav__item:focus-within .main-nav__caret i,
-.main-nav__item--open .main-nav__caret i {
-  transform: rotate(180deg);
-}
-
-.main-nav__dropdown {
-  position: absolute;
-  inset-inline-start: 0;
-  top: 100%;
-  min-inline-size: 200px;
+.main-nav__col-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-md);
-  padding: var(--sp-2);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(4px);
-  transition: opacity 240ms ease, transform 240ms ease, visibility 240ms ease;
-  z-index: var(--z-header);
+  gap: var(--sp-1);
 }
 
-.main-nav__item:hover .main-nav__dropdown,
-.main-nav__item:focus-within .main-nav__dropdown,
-.main-nav__item--open .main-nav__dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.main-nav__dropdown-link {
-  color: var(--text);
-  text-decoration: none;
+.main-nav__child {
+  display: block;
+  padding-block: var(--sp-1);
   font-size: var(--fs-sm);
-  white-space: nowrap;
-  padding: var(--sp-2) var(--sp-3);
-  border-radius: var(--r-sm);
-  transition: background 220ms ease, color 220ms ease;
+  color: var(--text-muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color 220ms ease;
 
   &:hover,
   &:focus-visible {
-    background: var(--surface-alt);
+    color: var(--brand);
+  }
+}
+
+.main-nav__all {
+  display: inline-block;
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 220ms ease;
+
+  &:hover,
+  &:focus-visible {
     color: var(--brand);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .main-nav__caret i,
-  .main-nav__dropdown {
+  .main-nav__chevron,
+  .main-nav__mega {
     transition: none;
+    transform: none;
   }
 }

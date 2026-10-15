@@ -86,6 +86,12 @@
   border-radius: var(--r-sm);
 }
 
+.mobile-nav-drawer__categories {
+  padding-inline-start: var(--sp-3);
+  border-inline-start: 1px solid var(--border);
+  margin-inline-start: var(--sp-2);
+}
+
 .mobile-nav-drawer__category {
   display: flex;
   align-items: center;

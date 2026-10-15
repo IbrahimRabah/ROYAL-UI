@@ -1,0 +1,45 @@
+<div class="container-vl pf-detail">
+  <a routerLink="/portfolio" class="pf-detail__back">
+    <i class="pi pi-arrow-left pf-detail__back-icon" aria-hidden="true"></i>
+    <span>{{ 'portfolio.back' | translate }}</span>
+  </a>
+
+  <div *ngIf="loading()" class="pf-detail__skeleton" aria-busy="true">
+    <div class="pf-detail__skeleton-title"></div>
+    <div class="pf-detail__skeleton-image"></div>
+  </div>
+
+  <div *ngIf="!loading() && notFound()" class="pf-detail__state">
+    <p>{{ 'portfolio.notFound' | translate }}</p>
+    <a routerLink="/portfolio" pButton outlined class="pf-detail__btn">{{ 'portfolio.back' | translate }}</a>
+  </div>
+
+  <ng-container *ngIf="!loading() && item() as it">
+    <header class="pf-detail__header">
+      <h1 class="pf-detail__title">{{ it.title }}</h1>
+      <span class="pf-detail__rule" aria-hidden="true"></span>
+      <p class="pf-detail__meta" *ngIf="completed() as c">
+        <span class="pf-detail__meta-label">{{ 'portfolio.completed' | translate }}</span>
+        <bdi dir="ltr">{{ c }}</bdi>
+      </p>
+    </header>
+
+    <div class="pf-detail__gallery" *ngIf="images().length > 0">
+      <figure
+        *ngFor="let img of images(); let i = index"
+        class="pf-detail__figure"
+        [class.pf-detail__figure--lead]="i === 0"
+        [appReveal]="i"
+      >
+        <img appImgFallback [src]="img.url | imageUrl" [alt]="img.alt || it.title" [loading]="i === 0 ? 'eager' : 'lazy'" />
+      </figure>
+    </div>
+
+    <p class="pf-detail__description" *ngIf="it.description">{{ it.description }}</p>
+
+    <div class="pf-detail__cta">
+      <h2>{{ 'portfolio.cta.heading' | translate }}</h2>
+      <a routerLink="/custom-request" pButton pRipple class="pf-detail__quote">{{ 'portfolio.cta.button' | translate }}</a>
+    </div>
+  </ng-container>
+</div>

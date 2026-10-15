@@ -32,6 +32,11 @@
       {{ 'common.home' | translate }}
     </a>
 
+    <a routerLink="/products" class="mobile-nav-drawer__link" (click)="close()">
+      {{ 'common.shop' | translate }}
+    </a>
+
+    <div class="mobile-nav-drawer__categories">
     <ng-container *ngFor="let category of categories">
       <div class="mobile-nav-drawer__category">
         <a
@@ -72,9 +77,10 @@
         </div>
       </div>
     </ng-container>
+    </div>
 
-    <a routerLink="/products" class="mobile-nav-drawer__link" (click)="close()">
-      {{ 'common.allProducts' | translate }}
+    <a routerLink="/portfolio" class="mobile-nav-drawer__link" (click)="close()">
+      {{ 'common.portfolio' | translate }}
     </a>
     <a routerLink="/about" class="mobile-nav-drawer__link" (click)="close()">
       {{ 'common.about' | translate }}
