@@ -170,6 +170,13 @@
 
             <p class="rd__muted" *ngIf="isClosed()">{{ 'admin.customRequests.detail.closedNote' | translate }}</p>
 
+            <div class="rd__actions" *ngIf="canComplete()">
+              <button type="button" class="rd__btn rd__btn--ok" (click)="openAction('complete')">
+                <i class="pi pi-check-circle" aria-hidden="true"></i>
+                {{ 'admin.customRequests.actions.complete' | translate }}
+              </button>
+            </div>
+
             <div class="rd__actions" *ngIf="!isClosed()">
               <button *ngIf="canContact()" type="button" class="rd__btn" (click)="openAction('contacted')">
                 <i class="pi pi-phone" aria-hidden="true"></i>

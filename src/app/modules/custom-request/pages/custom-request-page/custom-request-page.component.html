@@ -1,0 +1,189 @@
+<section class="cr-hero">
+  <img class="cr-hero__image" src="assets/images/portfolio/banner.jpg" alt="" fetchpriority="high" loading="eager" />
+  <span class="cr-hero__scrim" aria-hidden="true"></span>
+  <div class="container-vl cr-hero__inner">
+    <span class="cr-hero__eyebrow">{{ 'customRequest.hero.eyebrow' | translate }}</span>
+    <h1 class="cr-hero__title">
+      <span>{{ 'customRequest.hero.titleLine1' | translate }}</span>
+      <span class="cr-hero__title--gold">{{ 'customRequest.hero.titleLine2' | translate }}</span>
+    </h1>
+  </div>
+</section>
+
+<section class="cr-body section">
+  <div class="cr-body__inner">
+
+    <ng-container *ngIf="!reference(); else done">
+      <p class="cr-intro">{{ 'customRequest.intro' | translate }}</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="cr-form">
+        <div class="cr-segmented" role="group" [attr.aria-label]="'customRequest.form.typeLabel' | translate">
+          <button
+            *ngFor="let option of typeOptions"
+            type="button"
+            class="cr-segment"
+            [class.cr-segment--active]="form.controls.type.value === option.value"
+            [attr.aria-pressed]="form.controls.type.value === option.value"
+            (click)="selectType(option.value)"
+          >
+            <i class="pi" [ngClass]="option.icon" aria-hidden="true"></i>
+            {{ option.key | translate }}
+          </button>
+        </div>
+
+        <div class="auth-field" [class.auth-field--invalid]="fieldError('contactName') || serverError('contactName')">
+          <label class="auth-field__label" for="cr-name">{{ 'customRequest.form.name' | translate }}</label>
+          <input id="cr-name" type="text" class="auth-field__input" formControlName="contactName" maxlength="150" autocomplete="name" />
+          <p class="auth-field__error" *ngIf="serverError('contactName') as m">{{ m }}</p>
+          <p class="auth-field__error" *ngIf="fieldError('contactName') as key">{{ key | translate }}</p>
+        </div>
+
+        <div class="auth-field" [class.auth-field--invalid]="fieldError('phone') || serverError('phone')">
+          <label class="auth-field__label" for="cr-phone">{{ 'customRequest.form.phone' | translate }}</label>
+          <input id="cr-phone" type="tel" dir="ltr" class="auth-field__input cr-ltr" formControlName="phone" placeholder="01xxxxxxxxx" autocomplete="tel" />
+          <p class="auth-field__error" *ngIf="serverError('phone') as m">{{ m }}</p>
+          <p class="auth-field__error" *ngIf="fieldError('phone') as key">{{ key | translate }}</p>
+        </div>
+
+        <div class="auth-field" [class.auth-field--invalid]="fieldError('email') || serverError('email')">
+          <label class="auth-field__label" for="cr-email">{{ 'customRequest.form.email' | translate }}</label>
+          <input id="cr-email" type="email" dir="ltr" class="auth-field__input cr-ltr" formControlName="email" maxlength="255" autocomplete="email" />
+          <p class="auth-field__error" *ngIf="serverError('email') as m">{{ m }}</p>
+          <p class="auth-field__error" *ngIf="fieldError('email') as key">{{ key | translate }}</p>
+        </div>
+
+        <div class="auth-field" [class.auth-field--invalid]="fieldError('governorateId') || serverError('governorateId')">
+          <label class="auth-field__label" for="cr-gov">{{ 'customRequest.form.governorate' | translate }}</label>
+          <select id="cr-gov" class="auth-field__input" formControlName="governorateId">
+            <option [ngValue]="null" disabled>{{ 'account.addressForm.governoratePlaceholder' | translate }}</option>
+            <option *ngFor="let gov of governorates()" [ngValue]="gov.id" >{{ gov.name }}</option>
+          </select>
+          <p class="auth-field__error" *ngIf="serverError('governorateId') as m">{{ m }}</p>
+          <p class="auth-field__error" *ngIf="fieldError('governorateId') as key">{{ key | translate }}</p>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-field__label" for="cr-area">{{ 'customRequest.form.area' | translate }}</label>
+          <input id="cr-area" type="text" class="auth-field__input" formControlName="area" maxlength="150" />
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-field__label" for="cr-street">{{ 'customRequest.form.street' | translate }}</label>
+          <input id="cr-street" type="text" class="auth-field__input" formControlName="streetAddress" maxlength="255" />
+        </div>
+
+        <fieldset class="cr-dims">
+          <legend class="auth-field__label">{{ 'customRequest.form.dimensions' | translate }}</legend>
+          <p class="cr-helper">{{ 'customRequest.form.dimensionsHelper' | translate }}</p>
+          <div class="cr-dims__row">
+            <div class="auth-field" [class.auth-field--invalid]="fieldError('widthCm')">
+              <label class="auth-field__label" for="cr-w">{{ 'customRequest.form.width' | translate }}</label>
+              <input id="cr-w" type="number" dir="ltr" inputmode="decimal" min="0" max="10000" class="auth-field__input cr-ltr" formControlName="widthCm" />
+            </div>
+            <div class="auth-field" [class.auth-field--invalid]="fieldError('heightCm')">
+              <label class="auth-field__label" for="cr-h">{{ 'customRequest.form.height' | translate }}</label>
+              <input id="cr-h" type="number" dir="ltr" inputmode="decimal" min="0" max="10000" class="auth-field__input cr-ltr" formControlName="heightCm" />
+            </div>
+            <div class="auth-field" [class.auth-field--invalid]="fieldError('depthCm')">
+              <label class="auth-field__label" for="cr-d">{{ 'customRequest.form.depth' | translate }}</label>
+              <input id="cr-d" type="number" dir="ltr" inputmode="decimal" min="0" max="10000" class="auth-field__input cr-ltr" formControlName="depthCm" />
+            </div>
+          </div>
+          <p class="auth-field__error" *ngIf="fieldError('widthCm') || fieldError('heightCm') || fieldError('depthCm')">
+            {{ 'customRequest.errors.dimension' | translate }}
+          </p>
+        </fieldset>
+
+        <div class="auth-field cr-quantity" [class.auth-field--invalid]="fieldError('quantity')">
+          <label class="auth-field__label" for="cr-qty">{{ 'customRequest.form.quantity' | translate }}</label>
+          <input id="cr-qty" type="number" dir="ltr" inputmode="numeric" min="1" max="10000" step="1" class="auth-field__input cr-ltr" formControlName="quantity" />
+          <p class="auth-field__error" *ngIf="fieldError('quantity') as key">{{ key | translate }}</p>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-field__label" for="cr-notes">{{ 'customRequest.form.notes' | translate }}</label>
+          <textarea id="cr-notes" rows="6" maxlength="1000" class="auth-field__input cr-textarea" formControlName="notes"
+            [placeholder]="'customRequest.form.notesPlaceholder' | translate"></textarea>
+          <p class="auth-field__error" *ngIf="serverError('notes') as m">{{ m }}</p>
+        </div>
+
+        <div class="cr-photos">
+          <span class="auth-field__label">{{ 'customRequest.form.photos' | translate }}</span>
+          <p class="cr-helper">{{ 'customRequest.form.photosHelp' | translate }}</p>
+
+          <div
+            class="cr-drop"
+            [class.cr-drop--active]="dragging()"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop($event)"
+          >
+            <i class="pi pi-image cr-drop__icon" aria-hidden="true"></i>
+            <span class="cr-drop__text">{{ 'customRequest.form.photosDrop' | translate }}</span>
+            <label class="cr-drop__btn" for="cr-files">{{ 'customRequest.form.photosChoose' | translate }}</label>
+            <input id="cr-files" class="cr-drop__input" type="file" multiple accept="image/jpeg,image/png,image/webp,image/avif" (change)="onFilesPicked($event)" />
+            <span class="cr-drop__limits">{{ 'customRequest.form.photosLimits' | translate }}</span>
+          </div>
+
+          <p class="auth-field__error" role="alert" *ngIf="photoError() as pe">{{ pe.key | translate: pe.params }}</p>
+
+          <ul class="cr-thumbs" *ngIf="photos().length">
+            <li class="cr-thumb" *ngFor="let p of photos(); let i = index">
+              <img [src]="p.previewUrl" [alt]="p.file.name" />
+              <button type="button" class="cr-thumb__remove" (click)="removePhoto(i)" [attr.aria-label]="'customRequest.form.removePhoto' | translate">
+                <i class="pi pi-times" aria-hidden="true"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <p class="cr-alert" role="alert" *ngIf="rateLimited()">{{ 'customRequest.errors.rateLimited' | translate }}</p>
+        <p class="cr-alert cr-alert--error" role="alert" *ngIf="failed()">{{ 'customRequest.errors.failed' | translate }}</p>
+
+        <button type="submit" class="cr-submit" [disabled]="submitting()">
+          {{ (submitting() ? 'customRequest.form.submitting' : 'customRequest.form.submit') | translate }}
+        </button>
+      </form>
+    </ng-container>
+
+    <ng-template #done>
+      <div class="cr-done" role="status">
+        <span class="cr-done__eyebrow">{{ 'customRequest.done.eyebrow' | translate }}</span>
+        <h2 class="cr-done__title">{{ 'customRequest.done.title' | translate }}</h2>
+        <p class="cr-done__label">{{ 'customRequest.done.referenceLabel' | translate }}</p>
+        <div class="cr-done__ref-row">
+          <bdi dir="ltr" class="cr-done__ref">{{ reference() }}</bdi>
+          <button type="button" class="cr-done__copy" (click)="copyReference()">
+            {{ (copied() ? 'customRequest.done.copied' : 'customRequest.done.copy') | translate }}
+          </button>
+        </div>
+        <p class="cr-done__text">{{ 'customRequest.done.keep' | translate }}</p>
+
+        <div class="cr-upload" *ngIf="uploadTotal() > 0" role="status" aria-live="polite">
+          <ng-container *ngIf="uploading()">
+            <span>{{ 'customRequest.done.uploading' | translate: { done: uploadDone() + uploadFailed() + 1, total: uploadTotal() } }}</span>
+            <span class="cr-upload__bar"><span class="cr-upload__fill" [style.inline-size.%]="uploadPercent()"></span></span>
+          </ng-container>
+          <ng-container *ngIf="!uploading()">
+            <span *ngIf="uploadFailed() === 0">{{ 'customRequest.done.photosOk' | translate }}</span>
+            <p class="cr-alert" *ngIf="uploadFailed() > 0">
+              {{ 'customRequest.done.photosFailed' | translate }}
+              <a class="cr-upload__wa" dir="ltr" href="https://wa.me/201033033636" target="_blank" rel="noopener">01033033636</a>
+            </p>
+          </ng-container>
+        </div>
+        <a routerLink="/portfolio" class="cr-done__link">{{ 'customRequest.done.back' | translate }}</a>
+      </div>
+    </ng-template>
+
+    <section class="cr-steps" *ngIf="!reference()">
+      <h2 class="cr-steps__title">{{ 'customRequest.steps.title' | translate }}</h2>
+      <ol class="cr-steps__list">
+        <li class="cr-steps__item" *ngFor="let s of steps; let i = index">
+          <span class="cr-steps__num" dir="ltr">{{ i + 1 }}</span>
+          <span>{{ 'customRequest.steps.' + s | translate }}</span>
+        </li>
+      </ol>
+    </section>
+  </div>
+</section>

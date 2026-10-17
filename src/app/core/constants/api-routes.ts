@@ -16,6 +16,11 @@ export const API_ROUTES = {
     resetPassword: () => `${BASE}/auth/password/reset`,
   },
 
+  customRequests: {
+    create: () => `${BASE}/custom-requests`,
+    attachments: (id: number) => `${BASE}/custom-requests/${id}/attachments`,
+  },
+
   portfolio: {
     list: () => `${BASE}/portfolio`,
     bySlug: (slug: string) => `${BASE}/portfolio/${encodeURIComponent(slug)}`,

@@ -396,6 +396,68 @@
       "button": "Request a quote"
     }
   },
+  "customRequest": {
+    "hero": {
+      "eyebrow": "Custom work",
+      "titleLine1": "Request a quote",
+      "titleLine2": "for your project"
+    },
+    "intro": "Tell us what you have in mind and we'll get back to you with a price. Gates, railings, staircases, windows, or a piece of furniture made to your measurements.",
+    "form": {
+      "name": "Your name",
+      "phone": "Mobile number",
+      "email": "Email (optional)",
+      "governorate": "Governorate",
+      "area": "Area (optional)",
+      "street": "Street address (optional)",
+      "dimensions": "Measurements (optional)",
+      "dimensionsHelper": "In centimetres, if you already know them.",
+      "width": "Width",
+      "height": "Height",
+      "depth": "Depth",
+      "notes": "Tell us about your project (optional)",
+      "notesPlaceholder": "What would you like made, and where will it go?",
+      "submit": "Send request",
+      "submitting": "Sending...",
+      "typeLabel": "What do you need?",
+      "typeIronwork": "Custom ironwork",
+      "typeFurniture": "Made-to-order piece",
+      "quantity": "How many pieces?",
+      "photos": "Add photos (optional)",
+      "photosHelp": "A photo of the entrance, the wall, or a design you like means a faster and more accurate price.",
+      "photosDrop": "Drag photos here, or",
+      "photosChoose": "Choose photos",
+      "photosLimits": "Up to 5 photos, 5 MB each (JPG, PNG, WebP or AVIF)",
+      "removePhoto": "Remove photo"
+    },
+    "errors": {
+      "dimension": "Enter a measurement between 0.01 and 10000 cm",
+      "rateLimited": "We've already received your earlier request. Please wait a while before sending another — what you typed is still here.",
+      "failed": "We couldn't send your request. Nothing you typed was lost — please try again.",
+      "quantity": "Enter a whole number from 1 to 10000",
+      "tooManyPhotos": "You can add up to {{max}} photos.",
+      "photoTooLarge": "{{name}} is larger than 5 MB.",
+      "photoType": "{{name}} is not a supported image (use JPG, PNG, WebP or AVIF)."
+    },
+    "done": {
+      "eyebrow": "Request received",
+      "title": "Thank you",
+      "referenceLabel": "Your reference number",
+      "copy": "Copy",
+      "copied": "Copied",
+      "keep": "Please keep this number — quote it whenever you contact us about this request.",
+      "back": "Back to our work",
+      "uploading": "Uploading your photos ({{done}} of {{total}})...",
+      "photosOk": "Your photos were attached.",
+      "photosFailed": "Your request is received, but your photos did not upload. You can send them to us on WhatsApp at"
+    },
+    "steps": {
+      "title": "What happens next",
+      "one": "We read your request",
+      "two": "We call you to agree the details and measurements",
+      "three": "We send you a price"
+    }
+  },
   "contact": {
     "hero": {
       "imageAlt": "ROYAL IRON contact banner",
@@ -760,7 +822,8 @@
       "contacted": "Marked as contacted",
       "quoted": "Quote saved",
       "accepted": "Request accepted",
-      "rejected": "Request rejected"
+      "rejected": "Request rejected",
+      "completed": "Request completed"
     }
   },
   "errorPage": {
@@ -828,9 +891,7 @@
       },
       "actionQueues": {
         "heading": "Needs Action",
-        "viewOrders": "View orders",
-        "newCustomRequests": "New custom requests",
-        "viewRequests": "View requests"
+        "viewOrders": "View orders"
       },
       "outstandingCash": {
         "heading": "With the Courier",
@@ -887,6 +948,10 @@
         "name": "Product",
         "units": "Units sold",
         "revenue": "Revenue"
+      },
+      "customRequests": {
+        "heading": "Custom requests",
+        "oldest": "oldest {{oldestDays}} days"
       }
     },
     "orders": {
@@ -2001,6 +2066,7 @@
         "CONTACTED": "Contacted",
         "QUOTED": "Quoted",
         "ACCEPTED": "Accepted",
+        "COMPLETED": "Completed",
         "REJECTED": "Rejected",
         "CONVERTED": "Converted"
       },
@@ -2074,7 +2140,8 @@
         "reviseQuote": "Revise quote",
         "accept": "Accept",
         "acceptDisabled": "Send a quote first — a request can only be accepted once it has been quoted.",
-        "reject": "Reject"
+        "reject": "Reject",
+        "complete": "Mark as completed"
       },
       "acceptConfirm": {
         "title": "Accept this request?",
@@ -2108,6 +2175,11 @@
           "reasonsLabel": "Suggested reasons",
           "noteRequired": "A reason is required to reject a request.",
           "submit": "Reject request"
+        },
+        "complete": {
+          "title": "Mark as completed",
+          "lead": "This closes the request. It cannot be reopened.",
+          "submit": "Mark completed"
         }
       },
       "reasons": {

@@ -53,3 +53,4 @@ export * from './admin/store-profile';
 export * from './admin/export';
 
 export * from './system/ping';
+export * from './custom-request/custom-request-public';

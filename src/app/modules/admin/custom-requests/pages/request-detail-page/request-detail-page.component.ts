@@ -17,6 +17,7 @@ import { AdminCustomRequestApiService } from '../../../../../core/services/api/a
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
+import { isApiError } from '../../../../../core/models';
 import { ValidationFailedError } from '../../../../../core/interceptors/error.interceptor';
 import { errorMessageFor, parseApiError } from '../../../portfolio/portfolio-error.util';
 import { RequestActionMode, RequestActionPayload } from '../../components/request-action-dialog/request-action-dialog.component';
@@ -31,6 +32,19 @@ const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
 });
 
 const DATE_TIME = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+const STATUS_FOR_MODE: Partial<Record<RequestActionMode, CustomRequestStatus>> = {
+  contacted: 'CONTACTED',
+  reject: 'REJECTED',
+  complete: 'COMPLETED',
+};
+
+const TOAST_FOR_MODE: Record<RequestActionMode, string> = {
+  contacted: 'toast.customRequests.contacted',
+  quote: 'toast.customRequests.quoted',
+  reject: 'toast.customRequests.rejected',
+  complete: 'toast.customRequests.completed',
+};
 
 interface TimelineItem {
   key: string;
@@ -78,7 +92,9 @@ export class RequestDetailPageComponent {
     return amount != null && money(amount) > 0;
   });
   readonly quotedNumber = computed(() => (this.hasQuote() ? money(this.request()!.quotedAmount) : null));
-  readonly isClosed = computed(() => this.status() === 'ACCEPTED' || this.status() === 'REJECTED' || this.status() === 'CONVERTED');
+  readonly isClosed = computed(() => ['ACCEPTED', 'COMPLETED', 'REJECTED', 'CONVERTED'].includes(this.status() ?? ''));
+  /** ACCEPTED is "closed" for the quote pipeline, but is the one state that can still be finished. */
+  readonly canComplete = computed(() => this.status() === 'ACCEPTED');
 
   readonly canContact = computed(() => this.status() === 'NEW');
   readonly canQuote = computed(() => ['NEW', 'CONTACTED', 'QUOTED'].includes(this.status() ?? ''));
@@ -152,17 +168,17 @@ export class RequestDetailPageComponent {
     const call =
       mode === 'quote'
         ? this.api.quote(this.requestId, { amount: payload.amount!, note: payload.note })
-        : this.api.setStatus(this.requestId, { status: mode === 'reject' ? 'REJECTED' : 'CONTACTED', note: payload.note });
+        : this.api.setStatus(this.requestId, { status: STATUS_FOR_MODE[mode] ?? 'CONTACTED', note: payload.note });
 
     call.subscribe({
       next: (res) => {
         this.dialogSaving.set(false);
         this.dialogMode.set(null);
-        this.applyResult(res, mode === 'quote' ? 'toast.customRequests.quoted' : mode === 'reject' ? 'toast.customRequests.rejected' : 'toast.customRequests.contacted');
+        this.applyResult(res, TOAST_FOR_MODE[mode]);
       },
       error: (err: unknown) => {
         this.dialogSaving.set(false);
-        this.handleError(err, true);
+        this.handleError(err, true, mode);
       },
     });
   }
@@ -193,7 +209,7 @@ export class RequestDetailPageComponent {
   }
 
   /** The interceptor already toasted anything that isn't a validation error; this adds the recovery. */
-  private handleError(err: unknown, inDialog: boolean): void {
+  private handleError(err: unknown, inDialog: boolean, mode?: RequestActionMode): void {
     const validation = err as Partial<ValidationFailedError>;
     if (validation?.kind === 'VALIDATION_FAILED') {
       this.dialogError.set(validation.fieldErrors?.[0]?.message || validation.message || null);
@@ -207,6 +223,13 @@ export class RequestDetailPageComponent {
         this.dialogError.set(message);
         break;
       case ErrorCode.INVALID_STATUS_TRANSITION:
+        if (mode === 'complete') {
+          // Keep the dialog open with the server's own explanation; reload so the panel matches reality.
+          const detail = err instanceof HttpErrorResponse && isApiError(err.error) ? err.error.detail : '';
+          this.dialogError.set(detail || message);
+          this.fetch(false);
+          break;
+        }
         // The request moved on elsewhere — reload and close, the buttons will match the real state.
         this.dialogMode.set(null);
         this.fetch(false);

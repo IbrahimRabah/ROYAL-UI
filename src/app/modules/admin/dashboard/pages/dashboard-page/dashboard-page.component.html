@@ -51,8 +51,8 @@
       <div class="dashboard-page__queue-grid">
         <a
           *ngFor="let queue of d.actionQueues; let i = index"
-          [routerLink]="['/admin/orders']"
-          [queryParams]="{ status: queue.status }"
+          [attr.href]="queue.actionPath"
+          (click)="go($event, queue.actionPath)"
           class="dashboard-page__queue-tile dashboard-page__queue-tile--{{ actionQueueTone(queue.status) }}"
           [style.animation-delay.ms]="i * 40"
         >
@@ -67,27 +67,6 @@
           </div>
           <div class="dashboard-page__queue-icon-badge">
             <i class="pi {{ actionQueueIcon(queue.status) }}" aria-hidden="true"></i>
-          </div>
-        </a>
-
-        <!-- Uncontacted custom requests: a customer waiting by the phone. Only when there are some. -->
-        <a
-          *ngIf="newRequestCount() > 0"
-          routerLink="/admin/custom-requests"
-          [queryParams]="{ status: 'NEW' }"
-          class="dashboard-page__queue-tile dashboard-page__queue-tile--stop"
-        >
-          <div class="dashboard-page__queue-bar"></div>
-          <div class="dashboard-page__queue-body">
-            <span class="dashboard-page__queue-count">{{ newRequestCount() }}</span>
-            <span class="dashboard-page__queue-label">{{ 'admin.dashboard.actionQueues.newCustomRequests' | translate }}</span>
-            <span class="dashboard-page__queue-link">
-              {{ 'admin.dashboard.actionQueues.viewRequests' | translate }}
-              <i class="pi pi-arrow-right" aria-hidden="true"></i>
-            </span>
-          </div>
-          <div class="dashboard-page__queue-icon-badge">
-            <i class="pi pi-comments" aria-hidden="true"></i>
           </div>
         </a>
       </div>
@@ -112,6 +91,41 @@
             <strong>{{ queue.count }}</strong>
           </span>
         </div>
+      </div>
+    </section>
+
+    <!-- Custom requests: queues and labels come from the server, already localised. Hidden when empty. -->
+    <section
+      class="dashboard-page__card dashboard-page__action-queues"
+      style="animation-delay: 20ms"
+      *ngIf="d.customRequests?.queues?.length"
+    >
+      <h2 class="dashboard-page__section-heading dashboard-page__section-heading--rule">
+        <i class="pi pi-comments" aria-hidden="true"></i>
+        {{ 'admin.dashboard.customRequests.heading' | translate }}
+        <span class="dashboard-page__section-count">{{ d.customRequests!.totalCount }}</span>
+      </h2>
+      <div class="dashboard-page__queue-grid">
+        <a
+          *ngFor="let queue of d.customRequests!.queues; let i = index"
+          [attr.href]="queue.actionPath"
+          (click)="go($event, queue.actionPath)"
+          class="dashboard-page__queue-tile dashboard-page__queue-tile--violet"
+          [style.animation-delay.ms]="i * 40"
+        >
+          <div class="dashboard-page__queue-bar"></div>
+          <div class="dashboard-page__queue-body">
+            <span class="dashboard-page__queue-count">{{ queue.count }}</span>
+            <span class="dashboard-page__queue-label">{{ queue.label }}</span>
+            <span class="dashboard-page__queue-link">
+              {{ 'admin.dashboard.customRequests.oldest' | translate: { oldestDays: queue.oldestDays } }}
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="dashboard-page__queue-icon-badge">
+            <i class="pi pi-comments" aria-hidden="true"></i>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -172,8 +186,8 @@
         <div class="dashboard-page__alert-rows">
           <a
             *ngFor="let alert of d.alerts"
-            [routerLink]="alertPath(alert.actionPath)"
-            [queryParams]="alertQueryParams(alert.actionPath)"
+            [attr.href]="alert.actionPath"
+            (click)="go($event, alert.actionPath)"
             class="dashboard-page__alert-row"
           >
             <span class="dashboard-page__alert-dot dashboard-page__alert-dot--{{ severityTone(alert.severity) }}"></span>

@@ -1,10 +1,10 @@
 export type CustomRequestType = 'SIZE_VARIANT' | 'MADE_TO_ORDER' | 'CUSTOM_WORK';
 
 /** CONVERTED exists in the contract but is refused for now — never offered. */
-export type CustomRequestStatus = 'NEW' | 'CONTACTED' | 'QUOTED' | 'ACCEPTED' | 'REJECTED' | 'CONVERTED';
+export type CustomRequestStatus = 'NEW' | 'CONTACTED' | 'QUOTED' | 'ACCEPTED' | 'COMPLETED' | 'REJECTED' | 'CONVERTED';
 
 export const CUSTOM_REQUEST_TYPES: CustomRequestType[] = ['SIZE_VARIANT', 'MADE_TO_ORDER', 'CUSTOM_WORK'];
-export const CUSTOM_REQUEST_PIPELINE: CustomRequestStatus[] = ['NEW', 'CONTACTED', 'QUOTED', 'ACCEPTED', 'REJECTED'];
+export const CUSTOM_REQUEST_PIPELINE: CustomRequestStatus[] = ['NEW', 'CONTACTED', 'QUOTED', 'ACCEPTED', 'COMPLETED', 'REJECTED'];
 
 export interface CustomRequestSummary {
   id: number;

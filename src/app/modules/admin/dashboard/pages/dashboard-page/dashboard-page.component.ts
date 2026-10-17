@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { AdminCustomRequestApiService } from '../../../../../core/services/api/admin-custom-request-api.service';
+import { Router } from '@angular/router';
 
 import { DashboardResponse } from '../../../../../core/models';
 import { FulfillmentStatus } from '../../../../../core/enums/fulfillment-status';
@@ -65,17 +65,13 @@ const ACTION_QUEUE_ICON: Partial<Record<FulfillmentStatus, string>> = {
 })
 export class DashboardPageComponent {
   private readonly dashboardApi = inject(AdminDashboardApiService);
-  private readonly customRequestApi = inject(AdminCustomRequestApiService);
-
-  /** Requests waiting for a first call — not part of the dashboard payload, so counted separately. */
-  readonly newRequestCount = signal(0);
+  private readonly router = inject(Router);
 
   readonly data = signal<DashboardResponse | null>(null);
   readonly loading = signal(true);
   readonly error = signal(false);
 
   constructor() {
-    this.customRequestApi.countNew().subscribe({ next: (count) => this.newRequestCount.set(count), error: () => {} });
     this.fetch();
   }
 
@@ -103,13 +99,13 @@ export class DashboardPageComponent {
     return SEVERITY_TONE[severity];
   }
 
-  alertPath(actionPath: string): string {
-    return actionPath.split('?')[0];
-  }
-
-  alertQueryParams(actionPath: string): Record<string, string> {
-    const queryString = actionPath.split('?')[1];
-    return queryString ? Object.fromEntries(new URLSearchParams(queryString)) : {};
+  /**
+   * actionPath carries a query string. routerLink would percent-encode its "?" and "=" into a dead
+   * route, so every server-supplied path goes through navigateByUrl instead.
+   */
+  go(event: Event, actionPath: string): void {
+    event.preventDefault();
+    void this.router.navigateByUrl(actionPath);
   }
 
   totalActionQueueCount(dashboard: DashboardResponse): number {

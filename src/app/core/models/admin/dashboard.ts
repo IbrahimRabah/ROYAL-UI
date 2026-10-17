@@ -21,6 +21,7 @@ export interface DashboardActionQueueItem {
   status: FulfillmentStatus;
   label: string;
   count: number;
+  actionPath: string;
 }
 
 export interface DashboardStaleOrder {
@@ -80,6 +81,21 @@ export interface DashboardAlert {
   actionPath: string;
 }
 
+export interface DashboardCustomRequestQueue {
+  status: string;
+  /** Already localised by the server — print as-is. */
+  label: string;
+  count: number;
+  oldestDays: number;
+  actionPath: string;
+}
+
+export interface DashboardCustomRequests {
+  totalCount: number;
+  oldestDays: number;
+  queues: DashboardCustomRequestQueue[];
+}
+
 export interface DashboardResponse {
   sales: DashboardSales;
   codPosition: DashboardCodPosition;
@@ -92,5 +108,6 @@ export interface DashboardResponse {
   customers: DashboardCustomerStats;
   catalog: DashboardCatalogStats;
   alerts: DashboardAlert[];
+  customRequests?: DashboardCustomRequests | null;
   generatedAt: string;
 }

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject, signal } from '@angular/core';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import { DialogPortalBase } from '../../../../../shared/base/dialog-portal.base';
 
-export type RequestActionMode = 'contacted' | 'quote' | 'reject';
+export type RequestActionMode = 'contacted' | 'quote' | 'reject' | 'complete';
 
 export interface RequestActionPayload {
   amount?: number;
@@ -12,6 +13,23 @@ export interface RequestActionPayload {
 
 const NOTE_MAX_LENGTH = 1000;
 const AMOUNT_MAX = 100_000_000;
+
+/**
+ * The amount input is numeric, so its value is number | null (null when empty or cleared) — never a
+ * string. Strictly greater than zero, because the API rejects zero.
+ */
+export const quoteAmountValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const value: unknown = control.value;
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 && value <= AMOUNT_MAX
+    ? null
+    : { amount: true };
+};
+
+/** A textarea can hold null once cleared, so guard before reading it as text. */
+export const notBlankValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const value: unknown = control.value;
+  return typeof value === 'string' && value.trim().length > 0 ? null : { required: true };
+};
 
 export const REJECTION_REASONS = ['outOfScope', 'notServed', 'noResponse', 'tooSmall'] as const;
 
@@ -37,8 +55,8 @@ export class RequestActionDialogComponent extends DialogPortalBase implements On
   @Output() readonly closed = new EventEmitter<void>();
   @Output() readonly submitted = new EventEmitter<RequestActionPayload>();
 
-  readonly note = signal('');
-  readonly amount = signal('');
+  readonly amountControl = new FormControl<number | null>(null, quoteAmountValidator);
+  readonly noteControl = new FormControl<string | null>('');
   readonly touched = signal(false);
 
   readonly noteMaxLength = NOTE_MAX_LENGTH;
@@ -48,29 +66,28 @@ export class RequestActionDialogComponent extends DialogPortalBase implements On
     return this.mode !== null;
   }
 
-  get amountValue(): number {
-    return Number(this.amount());
-  }
-
   get amountValid(): boolean {
-    const value = this.amountValue;
-    return this.amount().trim() !== '' && Number.isFinite(value) && value > 0 && value <= AMOUNT_MAX;
+    return this.amountControl.valid;
   }
 
   get noteValid(): boolean {
-    return this.mode !== 'reject' || this.note().trim().length > 0;
+    return this.noteControl.valid;
+  }
+
+  get noteLength(): number {
+    return this.noteControl.value?.length ?? 0;
   }
 
   get canSubmit(): boolean {
-    if (this.mode === 'quote') return this.amountValid;
-    return this.noteValid;
+    return this.mode === 'quote' ? this.amountControl.valid : this.noteControl.valid;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!('mode' in changes)) return;
     if (this.open) {
-      this.note.set('');
-      this.amount.set(this.mode === 'quote' && this.initialAmount != null ? String(this.initialAmount) : '');
+      this.noteControl.setValidators(this.mode === 'reject' ? notBlankValidator : null);
+      this.noteControl.setValue('');
+      this.amountControl.setValue(this.mode === 'quote' && this.initialAmount != null ? this.initialAmount : null);
       this.touched.set(false);
       this.onOpen();
     } else {
@@ -85,13 +102,14 @@ export class RequestActionDialogComponent extends DialogPortalBase implements On
 
   pickReason(reason: string): void {
     const text = this.translate.instant('admin.customRequests.reasons.' + reason);
-    this.note.set(text);
+    this.noteControl.setValue(text);
   }
 
   submit(): void {
     this.touched.set(true);
     if (this.saving || !this.canSubmit) return;
-    const note = this.note().trim() || undefined;
-    this.submitted.emit(this.mode === 'quote' ? { amount: this.amountValue, note } : { note });
+    const raw = this.noteControl.value;
+    const note = typeof raw === 'string' && raw.trim() ? raw.trim() : undefined;
+    this.submitted.emit(this.mode === 'quote' ? { amount: this.amountControl.value as number, note } : { note });
   }
 }

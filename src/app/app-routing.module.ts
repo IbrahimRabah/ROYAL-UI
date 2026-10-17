@@ -19,6 +19,7 @@ const routes: Routes = [
       { path: 'checkout', loadChildren: () => import('./modules/checkout/checkout.module').then(m => m.CheckoutModule) },
       { path: 'about', loadChildren: () => import('./modules/about/about.module').then(m => m.AboutModule) },
       { path: 'portfolio', loadChildren: () => import('./modules/portfolio/portfolio.module').then(m => m.PortfolioModule) },
+      { path: 'custom-request', loadChildren: () => import('./modules/custom-request/custom-request.module').then(m => m.CustomRequestModule) },
       { path: 'contact', loadChildren: () => import('./modules/contact/contact.module').then(m => m.ContactModule) },
       { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
       {

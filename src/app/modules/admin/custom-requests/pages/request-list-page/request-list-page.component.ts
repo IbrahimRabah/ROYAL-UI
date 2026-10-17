@@ -28,6 +28,7 @@ export const REQUEST_STATUS_TONE: Record<CustomRequestStatus, StatusTone> = {
   CONTACTED: 'warn',
   QUOTED: 'info',
   ACCEPTED: 'ok',
+  COMPLETED: 'ok',
   REJECTED: 'muted',
   CONVERTED: 'ok',
 };
