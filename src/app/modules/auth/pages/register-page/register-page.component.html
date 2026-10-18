@@ -1,7 +1,7 @@
 <app-auth-layout>
   <h1 class="auth-heading">{{ 'auth.register.heading' | translate }}</h1>
   <p class="auth-sub">{{ 'auth.register.sub' | translate }}</p>
-  <span class="auth-rule" aria-hidden="true"></span>
+  <app-auth-ornament></app-auth-ornament>
 
   <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div class="auth-field-row">

@@ -1,23 +1,8 @@
 <div class="auth-layout">
-  <!--
-    Full-bleed cover photo, fixed behind the card. login-cover.png/registration-cover.png
-    have a fixed composition (product cluster on the physical left) with no reading
-    direction, so the card is pinned to the physical right in auth-layout.component.scss —
-    in both languages, same documented exception as about-hero/hero-banner (see
-    src/styles/_rtl.scss).
-  -->
-  <div class="auth-layout__image" aria-hidden="true">
-    <img
-      class="auth-layout__image-img"
-      [src]="'assets/images/shared/' + coverImage + '.png'"
-      alt=""
-      loading="eager"
-      fetchpriority="high"
-    />
-    <span class="auth-layout__scrim"></span>
-  </div>
-
-  <div class="auth-card">
+  <div class="auth-column">
+    <a routerLink="/" class="auth-column__logo">
+      <img src="assets/images/shared/logo.png" [alt]="'header.logoAlt' | translate" />
+    </a>
     <ng-content></ng-content>
   </div>
 </div>

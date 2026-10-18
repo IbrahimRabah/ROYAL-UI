@@ -1,7 +1,7 @@
 <app-auth-layout>
   <h1 class="auth-heading">{{ 'auth.login.heading' | translate }}</h1>
   <p class="auth-sub">{{ 'auth.login.sub' | translate }}</p>
-  <span class="auth-rule" aria-hidden="true"></span>
+  <app-auth-ornament></app-auth-ornament>
 
   <p class="auth-form-error" *ngIf="formError()" role="alert">{{ formError() }}</p>
 

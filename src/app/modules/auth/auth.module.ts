@@ -10,6 +10,7 @@ import { ForgotPasswordPageComponent } from './pages/forgot-password-page/forgot
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import { OtpVerifyPageComponent } from './pages/otp-verify-page/otp-verify-page.component';
 import { PasswordStrengthMeterComponent } from './components/password-strength-meter/password-strength-meter.component';
+import { AuthOrnamentComponent } from './components/auth-ornament/auth-ornament.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { PasswordStrengthMeterComponent } from './components/password-strength-m
     ForgotPasswordPageComponent,
     ResetPasswordPageComponent,
     OtpVerifyPageComponent,
-    PasswordStrengthMeterComponent
+    PasswordStrengthMeterComponent,
+    AuthOrnamentComponent
   ],
   imports: [
     CommonModule,
