@@ -549,7 +549,7 @@
     "categories": {
       "title": "Shop by Category",
       "browse": "Browse",
-      "scrollHint": "Scroll to see more categories"
+      "all": "All categories"
     },
     "featured": {
       "title": "Featured Products",
