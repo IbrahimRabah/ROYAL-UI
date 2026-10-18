@@ -547,7 +547,9 @@
       "authentic": "15 years of craftsmanship"
     },
     "categories": {
-      "title": "Shop by Category"
+      "title": "Shop by Category",
+      "browse": "Browse",
+      "scrollHint": "Scroll to see more categories"
     },
     "featured": {
       "title": "Featured Products",

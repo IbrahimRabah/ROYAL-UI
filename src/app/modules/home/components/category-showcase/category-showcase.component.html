@@ -2,24 +2,42 @@
   <div class="container-vl">
     <h2 class="category-showcase__title">{{ 'home.categories.title' | translate }}</h2>
 
-    <div class="category-showcase__grid">
+    <div
+      class="category-showcase__row"
+      [class.category-showcase__row--scroll]="scrollable"
+      (mouseleave)="deactivate()"
+      (focusout)="deactivate()"
+    >
       <a
-        *ngFor="let category of categories"
-        class="category-showcase__card"
+        *ngFor="let category of categories; trackBy: trackById"
+        class="category-showcase__panel"
+        [class.is-active]="activeId === category.id"
         routerLink="/products"
         [queryParams]="{ categoryId: category.id }"
+        (mouseenter)="activate(category.id)"
+        (focus)="activate(category.id)"
       >
         <img
           appImgFallback
           class="category-showcase__image"
           [src]="category.imageUrl | imageUrl"
-          [alt]="category.name"
+          alt=""
           loading="lazy"
           decoding="async"
         />
-        <span class="category-showcase__overlay"></span>
-        <span class="category-showcase__name">{{ category.name }}</span>
+        <span class="category-showcase__overlay" aria-hidden="true"></span>
+
+        <span class="category-showcase__name-vertical" aria-hidden="true">{{ category.name }}</span>
+
+        <span class="category-showcase__content">
+          <span class="category-showcase__name">{{ category.name }}</span>
+          <span class="category-showcase__rule" aria-hidden="true"></span>
+          <span class="category-showcase__description" *ngIf="category.description">{{ category.description }}</span>
+          <span class="category-showcase__browse">{{ 'home.categories.browse' | translate }}</span>
+        </span>
       </a>
     </div>
+
+    <p class="category-showcase__hint" *ngIf="scrollable">{{ 'home.categories.scrollHint' | translate }}</p>
   </div>
 </section>

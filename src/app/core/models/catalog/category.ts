@@ -9,6 +9,8 @@ export interface CategoryNode {
   name: string;
   imageUrl: string | null;
   bannerUrl: string | null;
+  /** Not sent by the tree endpoint today; rendered when present. */
+  description?: string | null;
   displayOrder: number;
   productCount: number | null;
   children: CategoryNode[];
