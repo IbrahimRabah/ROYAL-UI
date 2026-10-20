@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { PrimeNG } from 'primeng/config';
 import { Observable } from 'rxjs';
 
 import { PortfolioAdminResponse, PortfolioState, PortfolioUpsertRequest, portfolioState } from '../../../../../core/models';
@@ -15,6 +16,7 @@ import { ToastService } from '../../../../../core/services/toast.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
 import { FlatCategoryOption, flattenCategoryTree } from '../../../../../shared/utils/flatten-category-tree.util';
+import { primeDateTranslation } from '../../../../../shared/utils/primeng-date-locale.util';
 import { errorMessageFor, parseApiError } from '../../portfolio-error.util';
 
 const STATE_TONE: Record<PortfolioState, StatusTone> = {
@@ -39,6 +41,7 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
   private readonly translate = inject(TranslateService);
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly languageStore = inject(LanguageStoreService);
+  private readonly primeConfig = inject(PrimeNG);
 
   readonly isNew = !this.route.snapshot.paramMap.has('id');
   readonly itemId = signal<number | null>(this.route.snapshot.paramMap.get('id') ? Number(this.route.snapshot.paramMap.get('id')) : null);
@@ -71,12 +74,15 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
     descriptionAr: this.fb.nonNullable.control(''),
     descriptionEn: this.fb.nonNullable.control(''),
     categoryId: this.fb.control<number | null>(null),
-    completedAt: this.fb.nonNullable.control(''),
+    completedAt: this.fb.control<Date | null>(null),
     displayOrder: this.fb.nonNullable.control(0, [Validators.required, Validators.min(0)]),
     slug: this.fb.nonNullable.control(''),
   });
 
   constructor() {
+    // Month/day names for the date picker follow the app language.
+    effect(() => this.primeConfig.setTranslation(primeDateTranslation(this.languageStore.lang()) as never));
+
     this.taxonomyApi.listCategories().subscribe({
       next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
       error: () => {},
@@ -160,7 +166,7 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
       descriptionAr: blank(v.descriptionAr),
       descriptionEn: blank(v.descriptionEn),
       categoryId: v.categoryId ?? null,
-      completedAt: blank(v.completedAt),
+      completedAt: toIsoDate(v.completedAt),
       displayOrder: Number(v.displayOrder) || 0,
     };
   }
@@ -297,7 +303,7 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
         descriptionAr: item.descriptionAr ?? '',
         descriptionEn: item.descriptionEn ?? '',
         categoryId: item.categoryId ?? null,
-        completedAt: item.completedAt ?? '',
+        completedAt: fromIsoDate(item.completedAt),
         displayOrder: item.displayOrder ?? 0,
         slug: item.slug ?? '',
       },
@@ -305,4 +311,17 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
     );
     this.savedSnapshot = this.snapshot();
   }
+}
+
+/** API wants yyyy-MM-dd; build it from local parts so the timezone never shifts the day. */
+function toIsoDate(date: Date | null): string | null {
+  if (!date) return null;
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${mm}-${dd}`;
+}
+
+function fromIsoDate(value: string | null | undefined): Date | null {
+  const m = /^(d{4})-(d{2})-(d{2})/.exec(value ?? '');
+  return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
 }

@@ -18,6 +18,8 @@ import { FlatCategoryOption, flattenCategoryTree } from '../../../../../shared/u
 type StateFilter = 'all' | 'draft' | 'published' | 'archived';
 const STATE_FILTERS: StateFilter[] = ['all', 'draft', 'published', 'archived'];
 const PAGE_SIZE = 100;
+/** Sentinel id for the "All categories" option. Never matches the null model, so the placeholder shows until a category is picked. */
+const ALL_CATEGORIES = 0;
 
 const STATE_TONE: Record<PortfolioState, StatusTone> = {
   DRAFT: 'warn',
@@ -59,6 +61,12 @@ export class PortfolioListPageComponent {
   readonly error = signal(false);
   readonly busyId = signal<number | null>(null);
   readonly categoryOptions = signal<FlatCategoryOption[]>([]);
+
+  /** "All categories" is a real, selectable option (id null) so users can clear back to no filter. */
+  readonly categoryChoices = computed<{ id: number; name: string; depth: number }[]>(() => [
+    { id: ALL_CATEGORIES, name: '', depth: 0 },
+    ...this.categoryOptions(),
+  ]);
 
   readonly rows = computed(() => {
     const filter = this.stateFilter();
@@ -112,9 +120,9 @@ export class PortfolioListPageComponent {
     this.fetch(filter);
   }
 
-  setCategory(value: string): void {
-    this.router.navigate([], { relativeTo: this.route, queryParams: { categoryId: value || null }, queryParamsHandling: 'merge' });
-    this.fetch(this.stateFilter(), value ? Number(value) : null);
+  setCategory(id: number | null): void {
+    this.router.navigate([], { relativeTo: this.route, queryParams: { categoryId: id || null }, queryParamsHandling: 'merge' });
+    this.fetch(this.stateFilter(), id || null);
   }
 
   retry(): void {

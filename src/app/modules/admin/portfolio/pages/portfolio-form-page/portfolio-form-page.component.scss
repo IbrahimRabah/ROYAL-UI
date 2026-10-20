@@ -216,6 +216,13 @@
   line-height: 1.6;
 }
 
+.pf__field ::ng-deep {
+  .p-select,
+  .p-datepicker {
+    inline-size: 100%;
+  }
+}
+
 .pf__input--ltr {
   direction: ltr;
   text-align: start;

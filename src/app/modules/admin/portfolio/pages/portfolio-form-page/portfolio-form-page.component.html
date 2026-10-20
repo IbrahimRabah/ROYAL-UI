@@ -99,16 +99,35 @@
 
         <div class="pf__field">
           <label class="pf__label" for="pf-category">{{ 'admin.portfolio.form.category' | translate }}</label>
-          <select id="pf-category" class="pf__input pf__select" formControlName="categoryId">
-            <option [ngValue]="null">{{ 'admin.portfolio.form.noCategory' | translate }}</option>
-            <option *ngFor="let c of categoryOptions()" [ngValue]="c.id">{{ c.name }}</option>
-          </select>
+          <p-select
+            inputId="pf-category"
+            formControlName="categoryId"
+            [options]="categoryOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [showClear]="true"
+            appendTo="self"
+            [placeholder]="'admin.portfolio.form.noCategory' | translate"
+          >
+            <ng-template let-option pTemplate="item">
+              <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
+            </ng-template>
+          </p-select>
           <p class="pf__error-text" *ngIf="fieldError('categoryId') as e">{{ e }}</p>
         </div>
 
         <div class="pf__field">
           <label class="pf__label" for="pf-completed">{{ 'admin.portfolio.form.completedAt' | translate }}</label>
-          <input id="pf-completed" type="date" class="pf__input pf__input--ltr" formControlName="completedAt" />
+          <p-datepicker
+            inputId="pf-completed"
+            formControlName="completedAt"
+            dateFormat="yy-mm-dd"
+            [showIcon]="true"
+            [iconDisplay]="'input'"
+            [showClear]="true"
+            appendTo="body"
+            [placeholder]="'admin.portfolio.form.completedAt' | translate"
+          ></p-datepicker>
           <p class="pf__error-text" *ngIf="fieldError('completedAt') as e">{{ e }}</p>
         </div>
 

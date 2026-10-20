@@ -70,21 +70,9 @@
   color: var(--admin-text-muted);
 }
 
-.pl__select {
-  min-block-size: 44px;
-  padding-inline: var(--sp-3);
-  border: 1px solid var(--admin-border-strong);
-  border-radius: var(--r-md);
-  background: var(--admin-surface);
-  color: var(--admin-text);
-  font-family: var(--body);
-  font-size: var(--fs-sm);
-
-  &:focus {
-    outline: none;
-    border-color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(184, 134, 63, 0.25);
-  }
+.pl__field ::ng-deep .pl__select {
+  inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .pl__grid {

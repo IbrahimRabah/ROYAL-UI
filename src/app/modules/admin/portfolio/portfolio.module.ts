@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { DatePickerModule } from 'primeng/datepicker';
 import { PopoverModule } from 'primeng/popover';
+import { SelectModule } from 'primeng/select';
 
 import { unsavedChangesGuard } from '../../../core/guards/unsaved-changes.guard';
 import { SharedModule } from '../../../shared/shared.module';
@@ -26,6 +28,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     DragDropModule,
     PopoverModule,
+    SelectModule,
+    DatePickerModule,
     RouterModule.forChild(routes),
     SharedModule,
     AdminSharedModule,

@@ -10,16 +10,40 @@
   <div class="pl__toolbar" *ngIf="!trulyEmpty()">
     <div class="pl__field">
       <label class="pl__label" for="pl-state">{{ 'admin.portfolio.filters.state' | translate }}</label>
-      <select id="pl-state" class="pl__select" [value]="stateFilter()" (change)="setState($any($event.target).value)">
-        <option *ngFor="let f of stateFilters" [value]="f">{{ 'admin.portfolio.filters.states.' + f | translate }}</option>
-      </select>
+      <p-select
+        inputId="pl-state"
+        [ngModel]="stateFilter()"
+        (ngModelChange)="setState($event ?? 'all')"
+        [options]="stateFilters"
+        appendTo="self"
+        styleClass="pl__select"
+      >
+        <ng-template let-f pTemplate="selectedItem">{{ 'admin.portfolio.filters.states.' + f | translate }}</ng-template>
+        <ng-template let-f pTemplate="item">{{ 'admin.portfolio.filters.states.' + f | translate }}</ng-template>
+      </p-select>
     </div>
     <div class="pl__field">
       <label class="pl__label" for="pl-category">{{ 'admin.portfolio.filters.category' | translate }}</label>
-      <select id="pl-category" class="pl__select" [value]="categoryFilter() ?? ''" (change)="setCategory($any($event.target).value)">
-        <option value="">{{ 'admin.portfolio.filters.allCategories' | translate }}</option>
-        <option *ngFor="let c of categoryOptions()" [value]="c.id">{{ c.name }}</option>
-      </select>
+      <p-select
+        inputId="pl-category"
+        [ngModel]="categoryFilter()"
+        (ngModelChange)="setCategory($event)"
+        [options]="categoryChoices()"
+        optionLabel="name"
+        optionValue="id"
+        appendTo="self"
+        [placeholder]="'admin.portfolio.filters.allCategories' | translate"
+        styleClass="pl__select"
+      >
+        <ng-template let-option pTemplate="selectedItem">
+          {{ option.id === 0 ? ('admin.portfolio.filters.allCategories' | translate) : option.name }}
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <span [style.padding-inline-start.px]="option.depth * 16">
+            {{ option.id === 0 ? ('admin.portfolio.filters.allCategories' | translate) : option.name }}
+          </span>
+        </ng-template>
+      </p-select>
     </div>
   </div>
 
