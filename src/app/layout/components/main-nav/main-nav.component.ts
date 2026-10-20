@@ -90,6 +90,13 @@ export class MainNavComponent implements OnDestroy {
     }
   }
 
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (this.open()) {
+      this.closeAll();
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (this.open() && !this.elementRef.nativeElement.contains(event.target as Node)) {

@@ -1,14 +1,17 @@
 <button
+  #trigger
   type="button"
   class="user-menu__trigger"
+  aria-haspopup="true"
+  [attr.aria-expanded]="open()"
   (click)="toggle($event)"
   [attr.aria-label]="'header.account' | translate"
 >
   <i class="pi pi-user" aria-hidden="true"></i>
 </button>
 
-<p-popover #panel>
-  <div class="user-menu__panel">
+<p-popover #panel (onShow)="onShow()" (onHide)="onHide()">
+  <div class="user-menu__panel" (click)="onPanelClick($event)">
     <ng-container *ngIf="isLoggedIn(); else guestLinks">
       <a routerLink="/me/profile" class="user-menu__link">
         <i class="pi pi-user" aria-hidden="true"></i>

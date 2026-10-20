@@ -3,7 +3,7 @@
 .auth-heading {
   margin: 0;
   font-family: var(--display);
-  font-size: var(--fs-h2);
+  font-size: var(--fs-h3);
   font-weight: 400;
   line-height: 1.15;
   text-align: center;
@@ -27,7 +27,7 @@
 
 .auth-field {
   position: relative;
-  margin-block-end: var(--sp-5);
+  margin-block-end: var(--sp-4);
 }
 
 .auth-field-row {
@@ -73,7 +73,7 @@
   flex: 1;
   min-inline-size: 0;
   inline-size: 100%;
-  padding-block: var(--sp-3);
+  padding-block: var(--sp-2);
   padding-inline: 0;
   border: none;
   border-block-end: 1px solid var(--line);

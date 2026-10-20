@@ -1,8 +1,13 @@
-<div class="auth-layout">
+<div class="auth-layout" [class.auth-layout--split]="split">
   <div class="auth-column">
-    <a routerLink="/" class="auth-column__logo">
-      <img src="assets/images/shared/logo.png" [alt]="'header.logoAlt' | translate" />
-    </a>
-    <ng-content></ng-content>
+    <div class="auth-brand">
+      <a routerLink="/" class="auth-brand__logo">
+        <img src="assets/images/shared/logo.png" [alt]="'header.logoAlt' | translate" />
+      </a>
+      <ng-content select="[authBrand]"></ng-content>
+    </div>
+    <div class="auth-main">
+      <ng-content></ng-content>
+    </div>
   </div>
 </div>

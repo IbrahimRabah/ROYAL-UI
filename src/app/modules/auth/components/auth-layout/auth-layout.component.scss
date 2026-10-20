@@ -1,7 +1,9 @@
+@use 'styles/breakpoints';
+
 .auth-layout {
   display: flex;
   justify-content: center;
-  padding-block: var(--sp-10);
+  padding-block: var(--sp-8);
   padding-inline: var(--sp-5);
   background: var(--surface);
 }
@@ -9,18 +11,57 @@
 .auth-column {
   inline-size: 100%;
   max-inline-size: 420px;
-  margin-block: auto;
   animation: auth-column-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.auth-column__logo {
+.auth-brand__logo {
   display: flex;
   justify-content: center;
-  margin-block-end: var(--sp-8);
+  margin-block-end: var(--sp-5);
 
   img {
-    block-size: 2.5rem;
+    block-size: 1.75rem;
     inline-size: auto;
+  }
+}
+
+// Brand on one side, form on the other, one shared sheet (no panel, card or rule).
+// Columns follow the writing direction, so they swap in Arabic.
+.auth-layout--split {
+  @include breakpoints.lg {
+    align-items: center;
+    min-block-size: calc(100vh - 8rem);
+    padding-block: var(--sp-6);
+    padding-inline: var(--pad);
+
+    .auth-column {
+      display: grid;
+      grid-template-columns: minmax(0, 440px) minmax(0, 400px);
+      justify-content: center;
+      column-gap: clamp(var(--sp-8), 8vw, 128px);
+      align-items: center;
+      max-inline-size: var(--maxw);
+      margin-inline: auto;
+    }
+
+    .auth-brand__logo {
+      justify-content: flex-start;
+      margin-block-end: var(--sp-6);
+    }
+
+    .auth-brand {
+      justify-self: start;
+      max-inline-size: 480px;
+    }
+
+    .auth-brand .auth-heading,
+    .auth-brand .auth-sub {
+      text-align: start;
+    }
+
+    .auth-brand app-auth-ornament {
+      justify-content: flex-start;
+    }
   }
 }
 
