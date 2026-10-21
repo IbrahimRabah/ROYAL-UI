@@ -103,7 +103,12 @@ export class StatusTransitionPanelComponent implements AfterViewInit, OnDestroy 
   }
 
   get transitions(): readonly FulfillmentStatus[] {
-    return FULFILLMENT_TRANSITIONS[this.order.fulfillmentStatus] ?? [];
+    // Cancel is offered purely from the server's `cancellable`; the table only supplies the
+    // forward transitions.
+    const forward = (FULFILLMENT_TRANSITIONS[this.order.fulfillmentStatus] ?? []).filter(
+      (s) => s !== FulfillmentStatus.CANCELLED,
+    );
+    return this.order.cancellable ? [...forward, FulfillmentStatus.CANCELLED] : forward;
   }
 
   get pendingKind(): 'reason' | 'consequence' | null {

@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:velora": "node dist/mawgoud/server/server.mjs"
+    "serve:ssr:velora": "node dist/velora/server/server.mjs"
   },
   "private": true,
   "dependencies": {

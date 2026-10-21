@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
+import { ErrorCode } from '../../../../../core/enums/error-code';
+import { isApiError } from '../../../../../core/models';
 import { Language } from '../../../../../core/enums/language';
 import { AdminOrderApiService } from '../../../../../core/services/api/admin-order-api.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
@@ -9,6 +12,15 @@ import { DialogPortalBase } from '../../../../../shared/base/dialog-portal.base'
 import { handleAdminMutationError } from '../../../../../shared/utils/admin-mutation-error.util';
 
 const REASON_MAX_LENGTH = 255;
+
+function isCancelConflict(err: unknown): boolean {
+  return (
+    err instanceof HttpErrorResponse &&
+    err.status === 409 &&
+    isApiError(err.error) &&
+    (err.error.code === ErrorCode.ORDER_CANNOT_BE_CANCELLED || err.error.code === ErrorCode.INVALID_STATUS_TRANSITION)
+  );
+}
 
 @Component({
   selector: 'app-admin-cancel-dialog',
@@ -77,6 +89,11 @@ export class AdminCancelDialogComponent extends DialogPortalBase implements OnCh
       },
       error: (err: unknown) => {
         this.saving.set(false);
+        if (isCancelConflict(err)) {
+          this.errorMessage.set(this.translate.instant('admin.orders.cancelDialog.cannotCancel'));
+          this.conflict.emit();
+          return;
+        }
         const result = handleAdminMutationError(err, this.toast, lang);
         if (result.isConflict) {
           this.errorMessage.set(result.message);

@@ -113,6 +113,7 @@
               tooltipPosition="top"
             >
               {{ row.invoiceNumber }}
+              <small class="ilp__replaces" *ngIf="row.replacesInvoiceNumber">{{ 'admin.invoices.replaces' | translate: { number: row.replacesInvoiceNumber } }}</small>
             </td>
             <td>
               <a [routerLink]="['/admin/orders', row.orderId]" class="ilp__order-link">{{ row.orderNumber }}</a>
@@ -129,6 +130,7 @@
                 <i class="pi pi-eye" aria-hidden="true"></i>
               </a>
               <button
+                *ngIf="hasPdf(row)"
                 type="button"
                 class="ilp__icon-btn"
                 [disabled]="downloadingId() === row.id"
@@ -166,6 +168,7 @@
               <i class="pi pi-eye" aria-hidden="true"></i>
             </a>
             <button
+              *ngIf="hasPdf(row)"
               type="button"
               class="admin-card__action"
               [disabled]="downloadingId() === row.id"
@@ -177,6 +180,7 @@
           </div>
         </div>
 
+        <div class="admin-card__secondary" *ngIf="row.replacesInvoiceNumber">{{ 'admin.invoices.replaces' | translate: { number: row.replacesInvoiceNumber } }}</div>
         <div class="admin-card__secondary">{{ row.buyerName }}</div>
         <a [routerLink]="['/admin/orders', row.orderId]" class="admin-card__secondary admin-card__secondary--code">{{ row.orderNumber }}</a>
 

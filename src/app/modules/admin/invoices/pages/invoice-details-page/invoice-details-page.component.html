@@ -20,9 +20,10 @@
         </h1>
         <app-vl-status-badge [label]="statusLabel(inv.status)" [tone]="statusTone(inv.status)"></app-vl-status-badge>
         <span class="idp__date">{{ inv.issuedAt | arabicDate }}</span>
+        <span class="idp__date" *ngIf="inv.replacesInvoiceNumber">{{ 'admin.invoices.replaces' | translate: { number: inv.replacesInvoiceNumber } }}</span>
       </div>
       <div class="idp__header-end">
-        <button type="button" class="idp__pdf-btn" [disabled]="downloading()" (click)="downloadPdf()">
+        <button type="button" class="idp__pdf-btn" *ngIf="hasPdf(inv)" [disabled]="downloading()" (click)="downloadPdf()">
           <i class="pi" [ngClass]="downloading() ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
           {{ 'admin.invoices.detail.downloadPdf' | translate }}
         </button>

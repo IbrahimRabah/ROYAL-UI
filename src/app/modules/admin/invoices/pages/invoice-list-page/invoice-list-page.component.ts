@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, effect, inje
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 
 import { InvoiceResponse, Money, money } from '../../../../../core/models';
 import { InvoiceStatus } from '../../../../../core/enums/invoice-status';
@@ -15,6 +15,7 @@ import {
   INVOICE_STATUS_TONE,
 } from '../../../../../core/constants/invoice-status.constants';
 import { AdminInvoiceApiService } from '../../../../../core/services/api/admin-invoice-api.service';
+import { AdminInvoicePdfService } from '../../../../../core/services/admin-invoice-pdf.service';
 import { AdminListReturnService } from '../../../../../core/services/admin-list-return.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 
@@ -33,6 +34,7 @@ export class InvoiceListPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly invoiceApi = inject(AdminInvoiceApiService);
+  private readonly pdfService = inject(AdminInvoicePdfService);
   private readonly listReturn = inject(AdminListReturnService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly platformId = inject(PLATFORM_ID);
@@ -144,18 +146,14 @@ export class InvoiceListPageComponent {
       return;
     }
     this.downloadingId.set(row.id);
-    this.invoiceApi.downloadPdf(row.id).subscribe({
-      next: (blob) => {
-        this.downloadingId.set(null);
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${row.invoiceNumber}.pdf`;
-        link.click();
-        URL.revokeObjectURL(url);
-      },
-      error: () => this.downloadingId.set(null),
-    });
+    this.pdfService
+      .download(row)
+      .pipe(finalize(() => this.downloadingId.set(null)))
+      .subscribe();
+  }
+
+  hasPdf(row: InvoiceResponse): boolean {
+    return this.pdfService.hasPdf(row);
   }
 
   private fetch(page: number): void {

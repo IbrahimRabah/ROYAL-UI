@@ -185,7 +185,9 @@ export class OrderListPageComponent {
   }
 
   quickTransitions(row: OrderSummaryResponse): readonly FulfillmentStatus[] {
-    return FULFILLMENT_TRANSITIONS[row.fulfillmentStatus] ?? [];
+    // Summary rows carry no `cancellable`, so cancel is not offered here; it lives on the
+    // order detail screen, which follows the server.
+    return (FULFILLMENT_TRANSITIONS[row.fulfillmentStatus] ?? []).filter((s) => s !== FulfillmentStatus.CANCELLED);
   }
 
   isDirectFireable(status: FulfillmentStatus): boolean {

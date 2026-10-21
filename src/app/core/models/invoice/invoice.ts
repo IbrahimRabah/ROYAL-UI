@@ -13,9 +13,12 @@ export interface InvoiceResponse {
   taxTotal: Money;
   netTotal: Money;
   currency: string;
-  pdfUrl: string;
+  /** Relative path to the authenticated PDF endpoint; absent (not null) when no PDF is stored. */
+  pdfUrl?: string;
   issuedAt: string;
   cancelReason: string | null;
+  /** Number of the cancelled invoice this one replaces; absent when it replaces nothing. */
+  replacesInvoiceNumber?: string;
 }
 
 export interface CancelInvoiceRequest {

@@ -441,3 +441,57 @@
     animation: none;
   }
 }
+
+.order-details-page__invoice-none {
+  margin: 0 0 var(--sp-3);
+  color: var(--admin-text-muted);
+}
+
+.order-details-page__invoice-history {
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--admin-border);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.order-details-page__invoice-history-title {
+  margin: var(--sp-4) 0 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--admin-text-muted);
+}
+
+.order-details-page__invoice-history-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.order-details-page__invoice-history-number {
+  font-weight: 700;
+  color: var(--admin-text);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.order-details-page__invoice-history-replaces {
+  font-size: var(--fs-sm);
+  color: var(--admin-text-muted);
+}
+
+.order-details-page__invoice-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-3);
+  color: var(--admin-text-muted);
+  overflow-wrap: anywhere;
+}

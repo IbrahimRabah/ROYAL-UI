@@ -1,5 +1,5 @@
 import { NgModule, PLATFORM_ID } from '@angular/core';
-import { BrowserModule, provideClientHydration, withNoHttpTransferCache } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration, withHttpTransferCacheOptions } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -12,6 +12,7 @@ import { LayoutModule } from './layout/layout.module';
 import { RoyalPreset } from './core/theme/royal-preset';
 import { translateLoaderFactory } from './core/services/translate-loader.factory';
 import { getInitialLanguage } from './core/constants/language-storage';
+import { Language } from './core/enums/language';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -45,7 +46,9 @@ import { TagModule } from 'primeng/tag';
   ],
   providers: [
       provideHttpClient(withFetch(), withInterceptorsFromDi()),
-      provideClientHydration(withNoHttpTransferCache()),
+      // The server always renders in the default language (it cannot read localStorage), so
+      // its cached responses are only valid for a browser that starts in that same language.
+      provideClientHydration(withHttpTransferCacheOptions({ filter: () => getInitialLanguage() === Language.AR })),
       providePrimeNG({
         theme: {
           preset: RoyalPreset,

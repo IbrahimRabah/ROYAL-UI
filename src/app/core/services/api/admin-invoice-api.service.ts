@@ -15,8 +15,8 @@ const NO_TOAST = { context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) };
 export class AdminInvoiceApiService {
   private readonly http = inject(HttpClient);
 
-  list(page?: number, size?: number): Observable<PageResponse<InvoiceResponse>> {
-    const params = buildHttpParams({ page, size: size ?? APP_CONFIG.pagination.invoices.size });
+  list(page?: number, size?: number, orderId?: number): Observable<PageResponse<InvoiceResponse>> {
+    const params = buildHttpParams({ page, size: size ?? APP_CONFIG.pagination.invoices.size, orderId });
     return this.http.get<PageResponse<InvoiceResponse>>(API_ROUTES.admin.invoices.invoices(), { params });
   }
 
@@ -25,8 +25,9 @@ export class AdminInvoiceApiService {
   }
 
   downloadPdf(invoiceId: number): Observable<Blob> {
-    return this.http.get(API_ROUTES.admin.invoices.pdf(invoiceId), { responseType: 'blob' });
+    return this.http.get(API_ROUTES.admin.invoices.pdf(invoiceId), { ...NO_TOAST, responseType: 'blob' });
   }
+
   issue(orderId: number): Observable<InvoiceResponse> {
     return this.http.post<InvoiceResponse>(API_ROUTES.admin.invoices.issue(orderId), null, NO_TOAST);
   }

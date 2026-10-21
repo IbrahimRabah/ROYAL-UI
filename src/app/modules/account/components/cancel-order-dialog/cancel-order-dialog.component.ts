@@ -166,7 +166,7 @@ export class CancelOrderDialogComponent implements OnChanges, AfterViewInit, OnD
           err instanceof HttpErrorResponse &&
           err.status === 409 &&
           isApiError(err.error) &&
-          err.error.code === ErrorCode.ORDER_CANNOT_BE_CANCELLED
+          (err.error.code === ErrorCode.ORDER_CANNOT_BE_CANCELLED || err.error.code === ErrorCode.INVALID_STATUS_TRANSITION)
         ) {
           this.orderStale.emit();
           return;

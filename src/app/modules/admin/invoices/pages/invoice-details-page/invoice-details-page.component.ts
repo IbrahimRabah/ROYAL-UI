@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
 
 import { InvoiceResponse, Money, money } from '../../../../../core/models';
 import { InvoiceStatus } from '../../../../../core/enums/invoice-status';
@@ -13,6 +14,7 @@ import {
   INVOICE_STATUS_TONE,
 } from '../../../../../core/constants/invoice-status.constants';
 import { AdminInvoiceApiService } from '../../../../../core/services/api/admin-invoice-api.service';
+import { AdminInvoicePdfService } from '../../../../../core/services/admin-invoice-pdf.service';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 
@@ -31,6 +33,7 @@ export class InvoiceDetailsPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly invoiceApi = inject(AdminInvoiceApiService);
+  private readonly pdfService = inject(AdminInvoicePdfService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
@@ -72,18 +75,14 @@ export class InvoiceDetailsPageComponent {
       return;
     }
     this.downloading.set(true);
-    this.invoiceApi.downloadPdf(inv.id).subscribe({
-      next: (blob) => {
-        this.downloading.set(false);
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${inv.invoiceNumber}.pdf`;
-        link.click();
-        URL.revokeObjectURL(url);
-      },
-      error: () => this.downloading.set(false),
-    });
+    this.pdfService
+      .download(inv)
+      .pipe(finalize(() => this.downloading.set(false)))
+      .subscribe();
+  }
+
+  hasPdf(inv: InvoiceResponse): boolean {
+    return this.pdfService.hasPdf(inv);
   }
 
   openCancelDialog(): void {

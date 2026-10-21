@@ -264,3 +264,11 @@
     transition: none;
   }
 }
+
+.ilp__replaces {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  color: var(--admin-text-muted);
+  overflow-wrap: anywhere;
+}

@@ -19,6 +19,9 @@ import { ToastService } from '../services/toast.service';
 
 const CONCURRENT_STOCK_RETRIED = new HttpContextToken<boolean>(() => false);
 
+/** Customer and admin order-cancel endpoints; both 409 codes mean "this order cannot be cancelled". */
+const CANCEL_ORDER_URL = /\/orders\/[^/]+\/cancel$/;
+
 export const SUPPRESS_ERROR_TOAST = new HttpContextToken<boolean>(() => false);
 
 export interface ValidationFailedError {
@@ -82,8 +85,18 @@ export class ErrorInterceptor implements HttpInterceptor {
       return throwError(() => stockError);
     }
 
+    if (err.status === 403) {
+      this.toast.error(this.translate(ErrorCode.FORBIDDEN));
+      return throwError(() => err);
+    }
+
     if (err.status === 500 && this.isKnownBuggy500(req.url)) {
       this.toast.error(this.translate(ErrorCode.INTERNAL_ERROR));
+      return throwError(() => err);
+    }
+
+    if (err.status === 409 && code === ErrorCode.INVALID_STATUS_TRANSITION && CANCEL_ORDER_URL.test(req.url)) {
+      this.toast.error(this.translate(ErrorCode.ORDER_CANNOT_BE_CANCELLED));
       return throwError(() => err);
     }
 

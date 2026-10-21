@@ -42,10 +42,14 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handle401(err: unknown, req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!(err instanceof HttpErrorResponse) || err.status !== 401  && err.status !== 403) {
+    // Only the HTTP status decides whether this is a session problem. 403 means an
+    // authenticated caller lacks permission: no refresh, no logout, the caller handles it.
+    if (!(err instanceof HttpErrorResponse) || err.status !== 401) {
       return throwError(() => err);
     }
 
+    // `code` is read only for the exclusions below; it is undefined for blob bodies, which
+    // is fine because none of those exclusions apply to blob requests.
     const code = isApiError(err.error) ? err.error.code : undefined;
     if (req.url === API_ROUTES.auth.refresh()) {
       this.clearSessionAndRedirect();
@@ -57,25 +61,33 @@ export class AuthInterceptor implements HttpInterceptor {
     if (code === ErrorCode.TOKEN_INVALID && isGuestTokenScopeUrl(req.url)) {
       return throwError(() => err);
     }
-  const isPublicAuthPath = PUBLIC_AUTH_PATHS.some((p) => req.url.includes(p));
- const isSecurityRejection = code === ErrorCode.UNAUTHORIZED || code === undefined;
-
-    if (isSecurityRejection && !isPublicAuthPath) {
-      if (!this.tokenStorage.getRefreshToken()) {
-        this.clearSessionAndRedirect();
-        return throwError(() => err);
-      }
-
-      return this.performRefresh().pipe(
-        switchMap((auth) => next.handle(this.withAuth(req, auth.accessToken))),
-        catchError((refreshErr: unknown) => {
-          this.clearSessionAndRedirect();
-          return throwError(() => refreshErr);
-        }),
-      );
+    if (PUBLIC_AUTH_PATHS.some((p) => req.url.includes(p))) {
+      return throwError(() => err);
     }
 
-    return throwError(() => err);
+    if (!this.tokenStorage.getRefreshToken()) {
+      this.clearSessionAndRedirect();
+      return throwError(() => err);
+    }
+
+    return this.performRefresh().pipe(
+      catchError((refreshErr: unknown) => {
+        this.clearSessionAndRedirect();
+        return throwError(() => refreshErr);
+      }),
+      switchMap((auth) =>
+        next.handle(this.withAuth(req, auth.accessToken)).pipe(
+          catchError((replayErr: unknown) => {
+            // A fresh token that is still rejected with 401 is a dead session; a 403 or any
+            // other replay failure is the caller's to handle.
+            if (replayErr instanceof HttpErrorResponse && replayErr.status === 401) {
+              this.clearSessionAndRedirect();
+            }
+            return throwError(() => replayErr);
+          }),
+        ),
+      ),
+    );
   }
 
   private performRefresh(): Observable<AuthResponse> {
@@ -100,6 +112,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private clearSessionAndRedirect(): void {
     this.tokenStorage.clear();
-    void this.router.navigateByUrl('/auth/login');
+    const current = this.router.url;
+    const onAuthPage = current.startsWith('/auth/');
+    void this.router.navigate(['/auth/login'], {
+      queryParams: onAuthPage || current === '/' ? {} : { returnUrl: current },
+    });
   }
 }

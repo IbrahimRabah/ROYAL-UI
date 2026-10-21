@@ -172,18 +172,42 @@
         <app-status-transition-panel [order]="o" (changed)="onTransitionChanged()"></app-status-transition-panel>
 
         <!-- Invoice -->
-        <section class="order-details-page__card" *ngIf="o.fulfillmentStatus === 'DELIVERED' && invoice() as inv">
+        <section class="order-details-page__card" *ngIf="showInvoiceCard(o)">
           <div class="order-details-page__card-header">
             <div class="order-details-page__icon-badge order-details-page__icon-badge--ok">
               <i class="pi pi-file-pdf" aria-hidden="true"></i>
             </div>
             <h2 class="order-details-page__card-title">{{ 'admin.orders.detail.invoice.heading' | translate }}</h2>
           </div>
-          <p class="order-details-page__invoice-number">{{ inv.invoiceNumber }}</p>
-          <button type="button" class="order-details-page__invoice-download" [disabled]="downloadingInvoice()" (click)="downloadInvoice()">
-            <i class="pi" [ngClass]="downloadingInvoice() ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
-            {{ 'admin.orders.detail.invoice.download' | translate }}
+          <div class="order-details-page__invoice-error" *ngIf="invoiceLookupFailed()">
+            <span>{{ 'admin.orders.detail.invoice.loadFailed' | translate }}</span>
+            <button type="button" class="order-details-page__retry" (click)="retryInvoiceLookup()">{{ 'common.retry' | translate }}</button>
+          </div>
+          <ng-container *ngIf="invoice() as inv; else noLiveInvoice">
+            <p class="order-details-page__invoice-number">{{ inv.invoiceNumber }}</p>
+            <button type="button" class="order-details-page__invoice-download" *ngIf="hasInvoicePdf(inv)" [disabled]="downloadingInvoice()" (click)="downloadInvoice()">
+              <i class="pi" [ngClass]="downloadingInvoice() ? 'pi-spin pi-spinner' : 'pi-download'" aria-hidden="true"></i>
+              {{ 'admin.orders.detail.invoice.download' | translate }}
+            </button>
+          </ng-container>
+          <ng-template #noLiveInvoice>
+            <p class="order-details-page__invoice-none" *ngIf="invoiceChecked()">{{ 'admin.orders.detail.invoice.none' | translate }}</p>
+          </ng-template>
+          <button type="button" class="order-details-page__invoice-download" *ngIf="canIssueInvoice(o)" [disabled]="issuing()" (click)="issueInvoice()">
+            <i class="pi" [ngClass]="issuing() ? 'pi-spin pi-spinner' : 'pi-plus'" aria-hidden="true"></i>
+            {{ 'admin.orders.detail.invoice.issue' | translate }}
           </button>
+
+          <ng-container *ngIf="o.hasCancelledInvoices && invoiceHistory().length">
+            <h3 class="order-details-page__invoice-history-title">{{ 'admin.orders.detail.invoice.history' | translate }}</h3>
+            <ul class="order-details-page__invoice-history">
+              <li class="order-details-page__invoice-history-item" *ngFor="let h of invoiceHistory()">
+                <span class="order-details-page__invoice-history-number">{{ h.invoiceNumber }}</span>
+                <app-vl-status-badge [label]="invoiceStatusLabel(h.status)" [tone]="invoiceStatusTone(h.status)"></app-vl-status-badge>
+                <span class="order-details-page__invoice-history-replaces" *ngIf="h.replacesInvoiceNumber">{{ 'admin.invoices.replaces' | translate: { number: h.replacesInvoiceNumber } }}</span>
+              </li>
+            </ul>
+          </ng-container>
         </section>
       </div>
     </div>

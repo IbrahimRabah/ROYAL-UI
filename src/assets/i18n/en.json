@@ -791,7 +791,13 @@
     },
     "invoices": {
       "issued": "Invoice issued",
-      "cancelled": "Invoice cancelled"
+      "cancelled": "Invoice cancelled",
+      "pdf": {
+        "forbidden": "You don't have permission to download this invoice",
+        "notFound": "This invoice's PDF could not be found",
+        "network": "Network error — check your connection and try again",
+        "failed": "Could not download the invoice PDF, please try again"
+      }
     },
     "remittances": {
       "created": "Remittance recorded",
@@ -1019,7 +1025,8 @@
         "reasonLabel": "Reason",
         "reasonPlaceholder": "Tell the customer record why this order was cancelled",
         "keepOrder": "Keep order",
-        "submit": "Cancel order"
+        "submit": "Cancel order",
+        "cannotCancel": "This order can no longer be cancelled. The page has been refreshed."
       },
       "detail": {
         "errorMessage": "We couldn't load this order.",
@@ -1068,7 +1075,11 @@
         },
         "invoice": {
           "heading": "Invoice",
-          "download": "Download PDF"
+          "download": "Download PDF",
+          "none": "No active invoice for this order.",
+          "loadFailed": "Couldn't load the invoice status for this order.",
+          "issue": "Issue invoice",
+          "history": "Invoice history"
         },
         "timeline": {
           "heading": "Timeline",
@@ -1527,6 +1538,7 @@
     },
     "invoices": {
       "backToList": "Back to invoices",
+      "replaces": "Replaces {{number}}",
       "list": {
         "title": "Invoices",
         "uninvoicedLink": "Uninvoiced report",

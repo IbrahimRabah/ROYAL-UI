@@ -75,7 +75,10 @@ export interface OrderResponse {
   deliveredAt: string | null;
   cancelledAt: string | null;
   cancelReason: string | null;
-  invoiceNumber: string | null;
+  /** Live invoice only; absent (not null) when none or the only invoice was cancelled. */
+  invoiceNumber?: string | null;
+  /** Admin responses only; absent means false. */
+  hasCancelledInvoices?: boolean;
 }
 
 export interface OrderSummaryResponse {
