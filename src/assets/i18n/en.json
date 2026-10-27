@@ -121,17 +121,17 @@
         "title": "Cash on Delivery",
         "subtitle": "Pay when your order arrives"
       },
-      "delivery": {
-        "title": "Nationwide Delivery",
-        "subtitle": "Delivery to all governorates"
+      "workshop": {
+        "title": "Made in Our Own Workshop",
+        "subtitle": "Every piece is built by our team"
       },
-      "returns": {
-        "title": "Free Cancellation",
-        "subtitle": "Cancel free before shipping"
+      "warranty": {
+        "title": "Two-Year Warranty",
+        "subtitle": "Backed by our workshop for two years"
       },
-      "authentic": {
-        "title": "Solid Craftsmanship",
-        "subtitle": "Built by hand to last for years"
+      "cancellation": {
+        "title": "Free Cancellation Before Shipping",
+        "subtitle": "Cancel any time until your order ships"
       }
     },
     "requestQuote": "Request a quote",
@@ -568,12 +568,6 @@
       "tagline": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
       "cta": "Shop Now"
     },
-    "features": {
-      "cod": "Cash on delivery",
-      "nationwideDelivery": "Free delivery in Greater Cairo",
-      "freeCancellation": "Made to order",
-      "authentic": "15 years of craftsmanship"
-    },
     "categories": {
       "title": "Shop by Category",
       "browse": "Browse",
@@ -586,6 +580,13 @@
     "newArrivals": {
       "title": "New Arrivals",
       "viewAll": "View All"
+    },
+    "valueProps": {
+      "label": "Why customers choose us",
+      "cod": "Cash on delivery",
+      "workshop": "Made in our own workshop",
+      "warranty": "Two-year warranty",
+      "delivery": "Delivery across Egypt"
     }
   },
   "products": {

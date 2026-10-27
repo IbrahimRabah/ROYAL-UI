@@ -1,31 +1,43 @@
 @use 'styles/breakpoints';
 
-.home-features {
+// Quiet by design: small muted text, no background, one hairline. It should read as part of the page.
+.home-values {
   border-block-end: 1px solid var(--border);
-  padding-block: var(--sp-6);
+  padding-block: var(--sp-3);
 }
 
-.home-features__grid {
+.home-values__list {
+  list-style: none;
+  margin-block: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--sp-5);
+  // Two by two on phones; never four squeezed into one row.
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3) var(--sp-4);
 
   @include breakpoints.md {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.home-features__item {
+.home-values__item {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--sp-2);
-  text-align: center;
+  min-inline-size: 0;
+  color: var(--text-muted);
   font-size: var(--fs-sm);
-  color: var(--text);
+  line-height: 1.4;
+  text-align: start;
 
   i {
-    font-size: 1.5rem;
+    flex: none;
+    font-size: 1.125rem;
     color: var(--brand);
+  }
+
+  span {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
 }
