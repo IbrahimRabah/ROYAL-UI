@@ -54,7 +54,8 @@
     "orders": "My Orders",
     "addresses": "Addresses",
     "admin": "Admin Dashboard",
-    "logout": "Logout"
+    "logout": "Logout",
+    "customRequests": "Custom requests"
   },
   "footer": {
     "hero": {
@@ -634,7 +635,9 @@
       "profile": "My Profile",
       "addresses": "My Addresses",
       "orders": "My Orders",
-      "signOut": "Sign Out"
+      "signOut": "Sign Out",
+      "customRequests": "Custom requests",
+      "awaitingAria": "{{count}} waiting for your answer"
     },
     "empty": {
       "heading": "My Account",
@@ -751,6 +754,74 @@
       },
       "keepOrder": "Keep Order",
       "confirmButton": "Cancel Order"
+    },
+    "customRequests": {
+      "heading": "Custom requests",
+      "subline": "Your requests for custom and made-to-order work, and their quotes.",
+      "errorTitle": "We couldn't load your requests",
+      "errorMessage": "Please check your connection and try again.",
+      "viewAria": "View request {{number}}",
+      "needsAnswer": "Waiting for your answer",
+      "types": {
+        "SIZE_VARIANT": "Size change",
+        "MADE_TO_ORDER": "Made to order",
+        "CUSTOM_WORK": "Custom work"
+      },
+      "status": {
+        "NEW": "Received",
+        "CONTACTED": "We have contacted you",
+        "QUOTED": "Quote ready",
+        "ACCEPTED": "Quote accepted",
+        "REJECTED": "Declined",
+        "CONVERTED": "Turned into an order",
+        "COMPLETED": "Completed"
+      },
+      "currency": "EGP",
+      "emptyHeading": "No custom requests yet",
+      "emptyMessage": "When you send a custom request while signed in, it appears here with its quote.",
+      "guestNote": "Requests sent without signing in don't appear here, because they aren't linked to an account.",
+      "emptyCta": "Send a custom request",
+      "back": "Back to custom requests",
+      "detailHeading": "Custom request",
+      "detailErrorTitle": "We couldn't load this request",
+      "detailErrorMessage": "Please check your connection and try again.",
+      "notFoundTitle": "Request not found",
+      "notFoundMessage": "We couldn't find this request. Check the reference number, or go back to your list.",
+      "notice": {
+        "changed": "The price was updated, so your answer was not sent. Please review the new price and decide again:",
+        "answered": "This request was already answered — possibly by phone with our team. Its current status is shown below.",
+        "failed": "We couldn't complete that. Nothing was changed — please try again."
+      },
+      "quote": {
+        "title": "Quote",
+        "forFullQuantity": "Total price for the full quantity.",
+        "quotedOn": "Quoted on {{date}}"
+      },
+      "actions": {
+        "accept": "Accept quote",
+        "reject": "Reject quote"
+      },
+      "acceptConfirm": {
+        "title": "Accept this quote?",
+        "message": "You are accepting a quote of {{amount}} {{currency}}, the total for the full quantity.",
+        "confirm": "Accept quote"
+      },
+      "rejectConfirm": {
+        "title": "Reject this quote?",
+        "message": "Are you sure you want to reject this quote?",
+        "confirm": "Reject quote"
+      },
+      "details": {
+        "title": "Your request",
+        "submitted": "Sent on",
+        "product": "Product",
+        "quantity": "Quantity",
+        "width": "Width",
+        "height": "Height",
+        "depth": "Depth",
+        "cm": "cm",
+        "description": "Your description"
+      }
     }
   },
   "toast": {
@@ -858,6 +929,10 @@
       "accepted": "Request accepted",
       "rejected": "Request rejected",
       "completed": "Request completed"
+    },
+    "myCustomRequests": {
+      "accepted": "Quote accepted",
+      "rejected": "Quote rejected"
     }
   },
   "errorPage": {

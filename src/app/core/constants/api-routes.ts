@@ -19,6 +19,11 @@ export const API_ROUTES = {
   customRequests: {
     create: () => `${BASE}/custom-requests`,
     attachments: (id: number) => `${BASE}/custom-requests/${id}/attachments`,
+    mine: () => `${BASE}/me/custom-requests`,
+    mineSummary: () => `${BASE}/me/custom-requests/summary`,
+    mineByNumber: (requestNumber: string) => `${BASE}/me/custom-requests/${encodeURIComponent(requestNumber)}`,
+    mineAccept: (requestNumber: string) => `${BASE}/me/custom-requests/${encodeURIComponent(requestNumber)}/accept`,
+    mineReject: (requestNumber: string) => `${BASE}/me/custom-requests/${encodeURIComponent(requestNumber)}/reject`,
   },
 
   search: {

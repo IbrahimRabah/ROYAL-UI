@@ -8,6 +8,7 @@ import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { TokenStorageService } from '../../../core/services/token-storage.service';
 import { AuthStoreService } from '../../../core/state/auth-store.service';
+import { CustomRequestSummaryStoreService } from '../../../core/state/custom-request-summary-store.service';
 import { PostAuthService } from '../../../modules/auth/services/post-auth.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class UserMenuComponent implements OnDestroy {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly router = inject(Router);
+  private readonly summaryStore = inject(CustomRequestSummaryStoreService);
 
   @ViewChild('panel') private readonly panel!: Popover;
   @ViewChild('trigger') private readonly trigger!: ElementRef<HTMLButtonElement>;
@@ -39,6 +41,9 @@ export class UserMenuComponent implements OnDestroy {
   readonly isAdmin = this.authStore.isAdmin;
   readonly user = this.authStore.user;
   readonly loggingOut = signal(false);
+
+  /** Custom requests waiting for the customer's answer — loaded once per session by the store. */
+  readonly awaitingResponse = this.summaryStore.awaiting;
 
   ngOnDestroy(): void {
     this.navSub.unsubscribe();
@@ -92,6 +97,7 @@ export class UserMenuComponent implements OnDestroy {
     this.panel.hide();
     const refreshToken = this.tokenStorage.getRefreshToken();
     const finish = () => {
+      this.summaryStore.reset();
       this.authStore.clear();
       this.postAuth.completeLogout();
       this.loggingOut.set(false);

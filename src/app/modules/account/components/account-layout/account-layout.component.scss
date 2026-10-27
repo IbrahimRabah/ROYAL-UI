@@ -193,3 +193,19 @@
   max-inline-size: 40ch;
   color: var(--text-muted);
 }
+
+.account-sidebar__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.5rem;
+  block-size: 1.5rem;
+  margin-inline-start: auto;
+  padding-inline: var(--sp-2);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1;
+}

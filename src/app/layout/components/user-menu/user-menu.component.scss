@@ -1,4 +1,5 @@
 .user-menu__trigger {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -61,4 +62,28 @@
   border: none;
   border-block-start: 1px solid var(--border);
   margin-block: var(--sp-2);
+}
+
+.user-menu__badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  min-inline-size: 1.125rem;
+  block-size: 1.125rem;
+  padding-inline: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+
+  &--inline {
+    position: static;
+    margin-inline-start: auto;
+  }
 }

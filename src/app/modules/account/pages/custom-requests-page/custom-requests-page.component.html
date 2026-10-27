@@ -1,0 +1,66 @@
+<div class="crp auth-page-enter">
+  <header class="crp__header">
+    <h1 class="crp__heading">{{ 'account.customRequests.heading' | translate }}</h1>
+    <span class="crp__rule" aria-hidden="true"></span>
+    <p class="crp__subline">{{ 'account.customRequests.subline' | translate }}</p>
+  </header>
+
+  <app-vl-error-state
+    *ngIf="error()"
+    [title]="'account.customRequests.errorTitle' | translate"
+    [message]="'account.customRequests.errorMessage' | translate"
+    (retry)="retry()"
+  ></app-vl-error-state>
+
+  <ng-container *ngIf="!error()">
+    <ng-container *ngIf="!loading(); else skeletonTpl">
+      <div class="crp__list" *ngIf="requests().length">
+        <a
+          *ngFor="let r of requests(); trackBy: trackByNumber"
+          class="crp-card"
+          [class.crp-card--attention]="needsAnswer(r)"
+          [routerLink]="['/me/custom-requests', r.requestNumber]"
+          [attr.aria-label]="'account.customRequests.viewAria' | translate: { number: r.requestNumber }"
+        >
+          <span class="crp-card__main">
+            <span class="crp-card__attention" *ngIf="needsAnswer(r)">
+              <i class="pi pi-bell" aria-hidden="true"></i>
+              {{ 'account.customRequests.needsAnswer' | translate }}
+            </span>
+            <span class="crp-card__number" dir="ltr">{{ r.requestNumber }}</span>
+            <span class="crp-card__type">{{ 'account.customRequests.types.' + r.type | translate }}</span>
+            <span class="crp-card__product" *ngIf="r.product as p">{{ p.name }}</span>
+            <span class="crp-card__date">{{ formatDate(r.submittedAt) }}</span>
+          </span>
+
+          <span class="crp-card__side">
+            <span class="status-pill status-pill--{{ tone(r.status) }}">
+              <span class="status-pill__dot" aria-hidden="true"></span>
+              {{ 'account.customRequests.status.' + r.status | translate }}
+            </span>
+            <span class="crp-card__amount" *ngIf="amount(r) as a">
+              <bdi dir="ltr">{{ a }}</bdi> {{ 'account.customRequests.currency' | translate }}
+            </span>
+          </span>
+          <i class="pi pi-chevron-right crp-card__chevron" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="crp__empty" *ngIf="!requests().length">
+        <span class="crp__empty-icon" aria-hidden="true"><i class="pi pi-comments"></i></span>
+        <h2 class="crp__empty-heading">{{ 'account.customRequests.emptyHeading' | translate }}</h2>
+        <p class="crp__empty-message">{{ 'account.customRequests.emptyMessage' | translate }}</p>
+        <p class="crp__empty-note">{{ 'account.customRequests.guestNote' | translate }}</p>
+        <a routerLink="/custom-request" class="crp__empty-cta">{{ 'account.customRequests.emptyCta' | translate }}</a>
+      </div>
+
+      <app-vl-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)"></app-vl-pagination>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #skeletonTpl>
+    <div class="crp__list">
+      <p-skeleton *ngFor="let row of [0, 1, 2]" height="104px" borderRadius="var(--r-lg)"></p-skeleton>
+    </div>
+  </ng-template>
+</div>

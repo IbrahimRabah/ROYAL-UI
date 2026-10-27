@@ -1,0 +1,176 @@
+.crp__header {
+  margin-block-end: var(--sp-6);
+}
+
+.crp__heading {
+  margin: 0;
+  font-family: var(--display);
+  font-size: var(--fs-h3);
+  color: var(--ink);
+}
+
+.crp__rule {
+  display: block;
+  inline-size: 40px;
+  block-size: 2px;
+  margin-block: var(--sp-3);
+  background: var(--gold);
+}
+
+.crp__subline {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+}
+
+.crp__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin-block-end: var(--sp-6);
+}
+
+.crp-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  // Waiting for the customer's answer: unmistakable against the quiet cards around it.
+  &--attention {
+    border-color: var(--gold);
+    border-inline-start-width: 4px;
+    background: var(--cream);
+  }
+}
+
+.crp-card__main {
+  flex: 1 1 200px;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.crp-card__attention {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--sp-2);
+  padding: 2px var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.crp-card__number {
+  font-family: monospace;
+  font-size: var(--fs-base);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  unicode-bidi: isolate;
+}
+
+.crp-card__type,
+.crp-card__date {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.crp-card__product {
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.crp-card__side {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+}
+
+.crp-card__amount {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.crp-card__chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  margin-inline-start: auto;
+}
+
+.crp__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-3);
+  padding-block: var(--sp-8);
+}
+
+.crp__empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 72px;
+  block-size: 72px;
+  margin-block-end: var(--sp-2);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold-dp);
+  font-size: 1.5rem;
+}
+
+.crp__empty-heading {
+  margin: 0;
+  font-family: var(--display);
+  font-size: var(--fs-h5);
+  color: var(--ink);
+}
+
+.crp__empty-message,
+.crp__empty-note {
+  margin: 0;
+  max-inline-size: 46ch;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+}
+
+.crp__empty-note {
+  font-size: var(--fs-sm);
+}
+
+.crp__empty-cta {
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crp-card {
+    transition: none;
+  }
+}

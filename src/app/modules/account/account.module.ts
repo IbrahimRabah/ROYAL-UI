@@ -8,6 +8,8 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
 import { AddressesPageComponent } from './pages/addresses-page/addresses-page.component';
 import { OrdersPageComponent } from './pages/orders-page/orders-page.component';
 import { OrderDetailsPageComponent } from './pages/order-details-page/order-details-page.component';
+import { CustomRequestsPageComponent } from './pages/custom-requests-page/custom-requests-page.component';
+import { CustomRequestDetailsPageComponent } from './pages/custom-request-details-page/custom-request-details-page.component';
 import { AddressCardComponent } from './components/address-card/address-card.component';
 import { AddressFormDialogComponent } from './components/address-form-dialog/address-form-dialog.component';
 import { OrderTimelineComponent } from './components/order-timeline/order-timeline.component';
@@ -24,6 +26,8 @@ import { SessionsPanelComponent } from './components/sessions-panel/sessions-pan
     AddressesPageComponent,
     OrdersPageComponent,
     OrderDetailsPageComponent,
+    CustomRequestsPageComponent,
+    CustomRequestDetailsPageComponent,
     AddressCardComponent,
     AddressFormDialogComponent,
     OrderTimelineComponent,

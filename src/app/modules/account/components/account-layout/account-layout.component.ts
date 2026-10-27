@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs';
 import { AuthApiService } from '../../../../core/services/api/auth-api.service';
 import { TokenStorageService } from '../../../../core/services/token-storage.service';
 import { AuthStoreService } from '../../../../core/state/auth-store.service';
+import { CustomRequestSummaryStoreService } from '../../../../core/state/custom-request-summary-store.service';
 import { getDisplayName } from '../../../../shared/utils/display-name.util';
 import { PostAuthService } from '../../../auth/services/post-auth.service';
 
@@ -26,6 +27,10 @@ export class AccountLayoutComponent {
   private readonly authStore = inject(AuthStoreService);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly postAuth = inject(PostAuthService);
+  private readonly summaryStore = inject(CustomRequestSummaryStoreService);
+
+  /** Requests waiting for the customer's answer; the only way they learn a quote arrived. */
+  readonly awaitingResponse = this.summaryStore.awaiting;
 
   readonly isIndex = toSignal(
     this.router.events.pipe(
@@ -41,6 +46,7 @@ export class AccountLayoutComponent {
   signOut(): void {
     const refreshToken = this.tokenStorage.getRefreshToken();
     const finish = () => {
+      this.summaryStore.reset();
       this.authStore.clear();
       this.postAuth.completeLogout();
       this.router.navigateByUrl('/');

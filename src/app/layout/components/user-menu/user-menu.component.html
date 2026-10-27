@@ -8,6 +8,10 @@
   [attr.aria-label]="'header.account' | translate"
 >
   <i class="pi pi-user" aria-hidden="true"></i>
+  <ng-container *ngIf="isLoggedIn() && awaitingResponse() > 0">
+    <span class="user-menu__badge" aria-hidden="true">{{ awaitingResponse() }}</span>
+    <span class="visually-hidden">{{ 'account.nav.awaitingAria' | translate: { count: awaitingResponse() } }}</span>
+  </ng-container>
 </button>
 
 <p-popover #panel (onShow)="onShow()" (onHide)="onHide()">
@@ -20,6 +24,11 @@
       <a routerLink="/me/orders" class="user-menu__link">
         <i class="pi pi-shopping-bag" aria-hidden="true"></i>
         {{ 'userMenu.orders' | translate }}
+      </a>
+      <a routerLink="/me/custom-requests" class="user-menu__link">
+        <i class="pi pi-comments" aria-hidden="true"></i>
+        {{ 'userMenu.customRequests' | translate }}
+        <span class="user-menu__badge user-menu__badge--inline" *ngIf="awaitingResponse() > 0">{{ awaitingResponse() }}</span>
       </a>
       <a routerLink="/me/addresses" class="user-menu__link">
         <i class="pi pi-map-marker" aria-hidden="true"></i>

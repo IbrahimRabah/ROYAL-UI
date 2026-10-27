@@ -1,0 +1,108 @@
+<div class="crd auth-page-enter">
+  <a routerLink="/me/custom-requests" class="crd__back">
+    <i class="pi pi-arrow-left crd__back-icon" aria-hidden="true"></i>
+    {{ 'account.customRequests.back' | translate }}
+  </a>
+
+  <app-vl-error-state
+    *ngIf="error() && !notFound()"
+    [title]="'account.customRequests.detailErrorTitle' | translate"
+    [message]="'account.customRequests.detailErrorMessage' | translate"
+    (retry)="retry()"
+  ></app-vl-error-state>
+
+  <div class="crd__notfound" *ngIf="notFound()" role="alert">
+    <h1 class="crd__heading">{{ 'account.customRequests.notFoundTitle' | translate }}</h1>
+    <p class="crd__muted">{{ 'account.customRequests.notFoundMessage' | translate }}</p>
+  </div>
+
+  <div class="crd__loading" *ngIf="loading()">
+    <p-skeleton height="120px" borderRadius="var(--r-lg)"></p-skeleton>
+    <p-skeleton height="180px" borderRadius="var(--r-lg)"></p-skeleton>
+  </div>
+
+  <ng-container *ngIf="!loading() && !error() && !notFound() && request() as r">
+    <header class="crd__header">
+      <h1 class="crd__heading">{{ 'account.customRequests.detailHeading' | translate }}</h1>
+      <span class="crd__number" dir="ltr">{{ r.requestNumber }}</span>
+      <div class="crd__pills">
+        <span class="status-pill status-pill--{{ tone(r.status) }}">
+          <span class="status-pill__dot" aria-hidden="true"></span>
+          {{ 'account.customRequests.status.' + r.status | translate }}
+        </span>
+        <span class="crd__type">{{ 'account.customRequests.types.' + r.type | translate }}</span>
+      </div>
+    </header>
+
+    <!-- Something the customer must read before deciding again. -->
+    <div class="crd__notice crd__notice--changed" role="alert" *ngIf="notice() === 'changed'">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>
+        {{ 'account.customRequests.notice.changed' | translate }}
+        <strong class="crd__notice-amount" *ngIf="amountText() as a"><bdi dir="ltr">{{ a }}</bdi> {{ 'account.customRequests.currency' | translate }}</strong>
+      </p>
+    </div>
+    <div class="crd__notice crd__notice--answered" role="status" *ngIf="notice() === 'answered'">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      <p>{{ 'account.customRequests.notice.answered' | translate }}</p>
+    </div>
+    <div class="crd__notice crd__notice--failed" role="alert" *ngIf="notice() === 'failed'">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <p>{{ 'account.customRequests.notice.failed' | translate }}</p>
+    </div>
+
+    <section class="crd__card crd__quote" *ngIf="r.quotedAmount != null">
+      <h2 class="crd__card-title">{{ 'account.customRequests.quote.title' | translate }}</h2>
+      <p class="crd__amount" *ngIf="amountText() as a"><bdi dir="ltr">{{ a }}</bdi> {{ 'account.customRequests.currency' | translate }}</p>
+      <p class="crd__muted">{{ 'account.customRequests.quote.forFullQuantity' | translate }}</p>
+      <p class="crd__muted" *ngIf="r.quotedAt">
+        {{ 'account.customRequests.quote.quotedOn' | translate: { date: formatDate(r.quotedAt) } }}
+      </p>
+
+      <div class="crd__actions" *ngIf="r.canAccept || r.canReject">
+        <button type="button" class="crd__btn crd__btn--primary" *ngIf="r.canAccept" [disabled]="busy()" (click)="accept()">
+          <i class="pi" [ngClass]="busy() ? 'pi-spin pi-spinner' : 'pi-check'" aria-hidden="true"></i>
+          {{ 'account.customRequests.actions.accept' | translate }}
+        </button>
+        <button type="button" class="crd__btn crd__btn--ghost" *ngIf="r.canReject" [disabled]="busy()" (click)="reject()">
+          {{ 'account.customRequests.actions.reject' | translate }}
+        </button>
+      </div>
+    </section>
+
+    <section class="crd__card">
+      <h2 class="crd__card-title">{{ 'account.customRequests.details.title' | translate }}</h2>
+      <dl class="crd__list">
+        <div class="crd__row">
+          <dt>{{ 'account.customRequests.details.submitted' | translate }}</dt>
+          <dd>{{ formatDate(r.submittedAt) }}</dd>
+        </div>
+        <div class="crd__row" *ngIf="r.product as p">
+          <dt>{{ 'account.customRequests.details.product' | translate }}</dt>
+          <dd><a [routerLink]="['/products', p.slug]" class="crd__link">{{ p.name }}</a></dd>
+        </div>
+        <div class="crd__row" *ngIf="r.quantity != null">
+          <dt>{{ 'account.customRequests.details.quantity' | translate }}</dt>
+          <dd>{{ r.quantity }}</dd>
+        </div>
+        <div class="crd__row" *ngIf="r.widthCm != null">
+          <dt>{{ 'account.customRequests.details.width' | translate }}</dt>
+          <dd><bdi dir="ltr">{{ r.widthCm }} {{ 'account.customRequests.details.cm' | translate }}</bdi></dd>
+        </div>
+        <div class="crd__row" *ngIf="r.heightCm != null">
+          <dt>{{ 'account.customRequests.details.height' | translate }}</dt>
+          <dd><bdi dir="ltr">{{ r.heightCm }} {{ 'account.customRequests.details.cm' | translate }}</bdi></dd>
+        </div>
+        <div class="crd__row" *ngIf="r.depthCm != null">
+          <dt>{{ 'account.customRequests.details.depth' | translate }}</dt>
+          <dd><bdi dir="ltr">{{ r.depthCm }} {{ 'account.customRequests.details.cm' | translate }}</bdi></dd>
+        </div>
+      </dl>
+
+      <div class="crd__description" *ngIf="r.description">
+        <h3 class="crd__sub">{{ 'account.customRequests.details.description' | translate }}</h3>
+        <p class="crd__text">{{ r.description }}</p>
+      </div>
+    </section>
+  </ng-container>
+</div>
