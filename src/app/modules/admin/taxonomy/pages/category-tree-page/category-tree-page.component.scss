@@ -211,3 +211,31 @@
     transition: none;
   }
 }
+
+.ctp__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-4);
+}
+
+.ctp__filter {
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--admin-surface-alt);
+  }
+
+  &--active {
+    border-color: var(--gold);
+    color: var(--gold-dp);
+  }
+}

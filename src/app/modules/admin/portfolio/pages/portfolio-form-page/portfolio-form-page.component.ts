@@ -83,7 +83,7 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
     // Month/day names for the date picker follow the app language.
     effect(() => this.primeConfig.setTranslation(primeDateTranslation(this.languageStore.lang()) as never));
 
-    this.taxonomyApi.listCategories().subscribe({
+    this.taxonomyApi.listCategories('PORTFOLIO').subscribe({
       next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
       error: () => {},
     });
@@ -193,7 +193,11 @@ export class PortfolioFormPageComponent implements CanComponentDeactivate {
       this.notFound.set(true);
       return;
     }
-    if (parsed.code === ErrorCode.CATEGORY_NOT_FOUND) {
+    if (parsed.code === ErrorCode.SLUG_RESERVED) {
+      this.serverErrors.set({ slug: errorMessageFor(parsed, this.languageStore.lang()) });
+      return;
+    }
+    if (parsed.code === ErrorCode.CATEGORY_NOT_FOUND || parsed.code === ErrorCode.CATEGORY_SCOPE_MISMATCH) {
       this.serverErrors.set({ categoryId: errorMessageFor(parsed, this.languageStore.lang()) });
       return;
     }

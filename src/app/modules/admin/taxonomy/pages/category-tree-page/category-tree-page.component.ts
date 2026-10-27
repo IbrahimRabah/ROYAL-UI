@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
-import { CategoryAdminResponse } from '../../../../../core/models';
+import { CategoryAdminResponse, CategoryScope } from '../../../../../core/models';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-taxonomy-api.service';
 import { categoryDisplayName } from '../../../../../shared/utils/flatten-category-tree.util';
+
+type ScopeFilter = 'ALL' | CategoryScope;
 
 interface DialogTarget {
   category: CategoryAdminResponse | null;
@@ -45,6 +47,19 @@ export class CategoryTreePageComponent {
 
   readonly flatRows = computed(() => flatten(this.tree()));
 
+  readonly scopeFilters: { value: ScopeFilter; labelKey: string }[] = [
+    { value: 'ALL', labelKey: 'admin.categories.scopeFilter.ALL' },
+    { value: 'PRODUCT', labelKey: 'admin.categories.scopeFilter.PRODUCT' },
+    { value: 'PORTFOLIO', labelKey: 'admin.categories.scopeFilter.PORTFOLIO' },
+  ];
+  readonly scopeFilter = signal<ScopeFilter>('ALL');
+
+  /** A tree never mixes scopes (parent and child match), so filtering the roots filters everything. */
+  readonly visibleTree = computed(() => {
+    const filter = this.scopeFilter();
+    return filter === 'ALL' ? this.tree() : this.tree().filter((root) => root.scope === filter);
+  });
+
   readonly dialogTarget = signal<DialogTarget | null>(null);
   readonly dialogOpen = computed(() => this.dialogTarget() !== null);
 
@@ -53,7 +68,7 @@ export class CategoryTreePageComponent {
     const excluded = target?.category ? collectIds(target.category) : new Set<number>();
     return this.flatRows()
       .filter((row) => !excluded.has(row.node.id))
-      .map((row) => ({ id: row.node.id, name: this.displayName(row.node), depth: row.depth }));
+      .map((row) => ({ id: row.node.id, name: this.displayName(row.node), depth: row.depth, scope: row.node.scope }));
   });
 
   constructor() {
@@ -62,6 +77,10 @@ export class CategoryTreePageComponent {
 
   displayName(node: CategoryAdminResponse): string {
     return categoryDisplayName(node, this.languageStore.lang());
+  }
+
+  setScopeFilter(value: ScopeFilter): void {
+    this.scopeFilter.set(value);
   }
 
   retry(): void {

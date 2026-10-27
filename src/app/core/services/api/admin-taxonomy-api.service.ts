@@ -10,6 +10,7 @@ import {
   BrandUpsertRequest,
   CategoryAdminResponse,
   CategoryImageType,
+  CategoryScope,
   CategoryUpsertRequest,
   IdResponse,
 } from '../../models';
@@ -24,8 +25,10 @@ const NO_TOAST = { context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) };
 export class AdminTaxonomyApiService {
   private readonly http = inject(HttpClient);
 
-  listCategories(): Observable<CategoryAdminResponse[]> {
-    return this.http.get<CategoryAdminResponse[]>(API_ROUTES.admin.categories.categories());
+  /** scope omitted = both sides (only the taxonomy screen wants that); pickers always pass one. */
+  listCategories(scope?: CategoryScope): Observable<CategoryAdminResponse[]> {
+    const params = buildHttpParams({ scope });
+    return this.http.get<CategoryAdminResponse[]>(API_ROUTES.admin.categories.categories(), { params });
   }
 
   createCategory(body: CategoryUpsertRequest): Observable<IdResponse> {

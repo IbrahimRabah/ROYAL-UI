@@ -83,7 +83,7 @@ export class PortfolioListPageComponent {
   readonly trulyEmpty = computed(() => !this.loading() && !this.error() && !this.items().length && this.stateFilter() === 'all' && this.categoryFilter() === null);
 
   constructor() {
-    this.taxonomyApi.listCategories().subscribe({
+    this.taxonomyApi.listCategories('PORTFOLIO').subscribe({
       next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
       error: () => {},
     });

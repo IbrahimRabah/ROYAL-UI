@@ -393,7 +393,12 @@
       "heading": "Have a project in mind?",
       "text": "Tell us what you need and we will come back to you with a quote.",
       "button": "Request a quote"
-    }
+    },
+    "filters": {
+      "all": "All",
+      "label": "Filter by category"
+    },
+    "emptyFiltered": "No projects in this category yet."
   },
   "customRequest": {
     "hero": {
@@ -1869,8 +1874,28 @@
         "descriptionLabel": "Description",
         "metaTitleLabel": "Meta title",
         "metaDescriptionLabel": "Meta description",
-        "save": "Save"
-      }
+        "save": "Save",
+        "scopeLabel": "Used for",
+        "scopeFollowsParent": "Follows the parent category and cannot be changed here.",
+        "scopeChangeHint": "Switching sides is only possible while the category has no sub-categories, products or portfolio items.",
+        "scopeUsage": {
+          "prefix": "Currently in use by:",
+          "join": " and ",
+          "children": "{{count}} sub-categories",
+          "products": "{{count}} products"
+        }
+      },
+      "scope": {
+        "PRODUCT": "Shop",
+        "PORTFOLIO": "Portfolio"
+      },
+      "scopeFilter": {
+        "label": "Show categories",
+        "ALL": "All",
+        "PRODUCT": "Shop categories",
+        "PORTFOLIO": "Portfolio categories"
+      },
+      "emptyFiltered": "No categories on this side yet."
     },
     "brands": {
       "title": "Brands",

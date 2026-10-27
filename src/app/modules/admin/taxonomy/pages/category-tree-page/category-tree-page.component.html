@@ -7,6 +7,17 @@
     </button>
   </header>
 
+  <div class="ctp__filters" role="group" [attr.aria-label]="'admin.categories.scopeFilter.label' | translate" *ngIf="!error() && tree().length">
+    <button
+      *ngFor="let f of scopeFilters"
+      type="button"
+      class="ctp__filter"
+      [class.ctp__filter--active]="scopeFilter() === f.value"
+      [attr.aria-pressed]="scopeFilter() === f.value"
+      (click)="setScopeFilter(f.value)"
+    >{{ f.labelKey | translate }}</button>
+  </div>
+
   <div class="ctp__error" *ngIf="error() && !loading()">
     <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
     <span>{{ 'admin.categories.errorMessage' | translate }}</span>
@@ -15,8 +26,10 @@
 
   <p class="admin-list-empty" *ngIf="!error() && !loading() && !tree().length">{{ 'admin.categories.empty' | translate }}</p>
 
-  <div class="ctp__tree" *ngIf="!error() && tree().length">
-    <ng-container *ngFor="let root of tree()">
+  <p class="admin-list-empty" *ngIf="!error() && !loading() && tree().length && !visibleTree().length">{{ 'admin.categories.emptyFiltered' | translate }}</p>
+
+  <div class="ctp__tree" *ngIf="!error() && visibleTree().length">
+    <ng-container *ngFor="let root of visibleTree()">
       <ng-container *ngTemplateOutlet="nodeTpl; context: { $implicit: root, depth: 0 }"></ng-container>
     </ng-container>
   </div>
@@ -33,6 +46,14 @@
       <span class="ctp__row-name">{{ displayName(node) }}</span>
       <span class="ctp__row-slug">{{ node.slug }}</span>
     </div>
+
+    <app-vl-status-badge
+      class="ctp__row-badge"
+      [label]="('admin.categories.scope.' + node.scope) | translate"
+      [tone]="node.scope === 'PORTFOLIO' ? 'violet' : 'blue'"
+      [outline]="true"
+      *ngIf="node.scope"
+    ></app-vl-status-badge>
 
     <span class="ctp__row-count" *ngIf="node.productCount != null">
       {{ 'admin.categories.products' | translate: { count: node.productCount } }}

@@ -24,6 +24,7 @@ export const API_ROUTES = {
   portfolio: {
     list: () => `${BASE}/portfolio`,
     bySlug: (slug: string) => `${BASE}/portfolio/${encodeURIComponent(slug)}`,
+    categories: () => `${BASE}/portfolio/categories`,
   },
 
   catalog: {

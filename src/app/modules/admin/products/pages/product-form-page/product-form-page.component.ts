@@ -103,7 +103,7 @@ export class ProductFormPageComponent implements CanComponentDeactivate {
     this.syncSizeRequirement(this.form.controls.fulfillmentType.value);
     this.form.controls.fulfillmentType.valueChanges.subscribe((type) => this.syncSizeRequirement(type));
 
-    this.taxonomyApi.listCategories().subscribe({ next: (c) => this.categories.set(c), error: () => this.categoriesError.set(true) });
+    this.taxonomyApi.listCategories('PRODUCT').subscribe({ next: (c) => this.categories.set(c), error: () => this.categoriesError.set(true) });
     this.taxonomyApi.listBrands().subscribe({ next: (b) => this.brands.set(b), error: () => this.brandsError.set(true) });
 
     const id = this.productId();

@@ -31,3 +31,14 @@ export interface PortfolioDetail {
   completedAt?: string | null;
   images?: PortfolioDetailImage[] | null;
 }
+
+/** GET /portfolio/categories — a plain array (not paged) of active PORTFOLIO categories. */
+export interface PortfolioCategory {
+  id: number;
+  slug: string;
+  /** One string, already in the language of the request (Accept-Language). */
+  name: string;
+  displayOrder: number;
+  /** Absent (not null) when the category has no image. */
+  imageUrl?: string;
+}

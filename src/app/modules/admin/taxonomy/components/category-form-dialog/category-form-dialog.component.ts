@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
-import { CategoryAdminResponse, CategoryImageType, CategoryUpsertRequest } from '../../../../../core/models';
+import { CategoryAdminResponse, CategoryImageType, CategoryScope, CategoryUpsertRequest } from '../../../../../core/models';
 import { Language } from '../../../../../core/enums/language';
 import { LanguageStoreService } from '../../../../../core/state/language-store.service';
 import { AdminTaxonomyApiService } from '../../../../../core/services/api/admin-taxonomy-api.service';
@@ -15,6 +15,7 @@ export interface ParentOption {
   id: number;
   name: string;
   depth: number;
+  scope: CategoryScope;
 }
 
 interface ImageSlotConfig {
@@ -65,6 +66,7 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
 
   readonly form = this.fb.nonNullable.group({
     parentId: this.fb.control<number | null>(null),
+    scope: this.fb.nonNullable.control<CategoryScope>('PRODUCT'),
     slug: [''],
     displayOrder: [0],
     active: [true],
@@ -83,6 +85,44 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
       }),
     }),
   });
+
+  private originalScope: CategoryScope = 'PRODUCT';
+
+  readonly scopeOptions: { value: CategoryScope; labelKey: string }[] = [
+    { value: 'PRODUCT', labelKey: 'admin.categories.scope.PRODUCT' },
+    { value: 'PORTFOLIO', labelKey: 'admin.categories.scope.PORTFOLIO' },
+  ];
+
+  constructor() {
+    super();
+    // Under a parent the scope is the parent's: show it, do not offer a choice the server would refuse.
+    this.form.controls.parentId.valueChanges.subscribe((parentId) => this.syncScopeToParent(parentId));
+  }
+
+  /** A category with a parent has no say over its scope. */
+  get scopeLocked(): boolean {
+    return this.form.controls.parentId.value !== null;
+  }
+
+  /** Parents offered in the picker: on edit only those on the category's current side (others are refused). */
+  get visibleParentOptions(): ParentOption[] {
+    if (!this.isEdit) {
+      return this.parentOptions;
+    }
+    const scope = this.form.controls.scope.value;
+    return this.parentOptions.filter((o) => o.scope === scope);
+  }
+
+  private syncScopeToParent(parentId: number | null): void {
+    const scope = this.form.controls.scope;
+    const parent = parentId === null ? null : this.parentOptions.find((o) => o.id === parentId);
+    if (parent) {
+      scope.setValue(parent.scope, { emitEvent: false });
+      scope.disable({ emitEvent: false });
+    } else {
+      scope.enable({ emitEvent: false });
+    }
+  }
 
   get isEdit(): boolean {
     return this.category !== null;
@@ -158,6 +198,11 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
       displayOrder: v.displayOrder,
       active: v.active,
     };
+    // Scope rules: under a parent it is inherited (send nothing); on update, omitted = "no change",
+    // so only send it when the admin actually changed it.
+    if (v.parentId === null && (!this.category || v.scope !== this.originalScope)) {
+      body.scope = v.scope;
+    }
 
     this.saving.set(true);
     this.slugFieldError.set(null);
@@ -178,7 +223,9 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
         this.saving.set(false);
         const result = handleTaxonomyMutationError(err, this.toast, lang);
         this.slugFieldError.set(result.fieldErrors.slug ?? null);
-        this.inlineError.set(result.inlineMessage);
+        this.inlineError.set(
+          result.code === 'CATEGORY_SCOPE_IN_USE' ? this.withScopeUsage(result.inlineMessage) : result.inlineMessage,
+        );
       },
     });
   }
@@ -273,8 +320,27 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
     });
   }
 
+  /** Adds what is known locally about what blocks the change (the server does not say which). */
+  private withScopeUsage(message: string | null): string | null {
+    const c = this.category;
+    if (!message || !c) {
+      return message;
+    }
+    const parts: string[] = [];
+    if (c.children.length > 0) {
+      parts.push(this.translate.instant('admin.categories.form.scopeUsage.children', { count: c.children.length }));
+    }
+    if ((c.productCount ?? 0) > 0) {
+      parts.push(this.translate.instant('admin.categories.form.scopeUsage.products', { count: c.productCount }));
+    }
+    return parts.length
+      ? `${message} ${this.translate.instant('admin.categories.form.scopeUsage.prefix')} ${parts.join(this.translate.instant('admin.categories.form.scopeUsage.join'))}.`
+      : message;
+  }
+
   private resetForm(): void {
     const c = this.category;
+    this.originalScope = c?.scope ?? 'PRODUCT';
     const ar = c?.translations.find((t) => t.locale === Language.AR);
     const en = c?.translations.find((t) => t.locale === Language.EN);
     this.originalSlug = c?.slug ?? '';
@@ -284,6 +350,7 @@ export class CategoryFormDialogComponent extends DialogPortalBase implements OnC
 
     this.form.reset({
       parentId: c ? c.parentId : this.initialParentId,
+      scope: c?.scope ?? 'PRODUCT',
       slug: this.originalSlug,
       displayOrder: c?.displayOrder ?? 0,
       active: c?.active ?? true,

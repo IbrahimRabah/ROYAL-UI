@@ -33,7 +33,7 @@
           <p-select
             inputId="cfd-parent"
             formControlName="parentId"
-            [options]="parentOptions"
+            [options]="visibleParentOptions"
             optionLabel="name"
             optionValue="id"
             [disabled]="parentSelectDisabled"
@@ -46,6 +46,24 @@
               <span [style.padding-inline-start.px]="option.depth * 16">{{ option.name }}</span>
             </ng-template>
           </p-select>
+        </div>
+
+        <div class="cfd__field">
+          <label class="admin-dialog__field-label" for="cfd-scope">{{ 'admin.categories.form.scopeLabel' | translate }}</label>
+          <p-select
+            inputId="cfd-scope"
+            formControlName="scope"
+            [options]="scopeOptions"
+            optionLabel="labelKey"
+            optionValue="value"
+            appendTo="self"
+            styleClass="admin-dialog__select"
+          >
+            <ng-template let-option pTemplate="selectedItem">{{ option.labelKey | translate }}</ng-template>
+            <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+          </p-select>
+          <p class="admin-dialog__helper" *ngIf="scopeLocked">{{ 'admin.categories.form.scopeFollowsParent' | translate }}</p>
+          <p class="admin-dialog__helper" *ngIf="!scopeLocked && isEdit">{{ 'admin.categories.form.scopeChangeHint' | translate }}</p>
         </div>
 
         <div class="cfd__field">

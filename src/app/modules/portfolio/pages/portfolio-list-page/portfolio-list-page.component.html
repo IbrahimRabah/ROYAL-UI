@@ -14,6 +14,23 @@
 
 <section class="pf-grid-section section">
   <div class="container-vl">
+    <nav class="pf-filters" *ngIf="categories().length" [attr.aria-label]="'portfolio.filters.label' | translate">
+      <a
+        class="pf-filter"
+        routerLink="/portfolio"
+        [class.pf-filter--active]="!activeSlug()"
+        [attr.aria-current]="!activeSlug() ? 'page' : null"
+      >{{ 'portfolio.filters.all' | translate }}</a>
+      <a
+        *ngFor="let category of categories(); trackBy: trackBySlug"
+        class="pf-filter"
+        routerLink="/portfolio"
+        [queryParams]="{ category: category.slug }"
+        [class.pf-filter--active]="activeSlug() === category.slug"
+        [attr.aria-current]="activeSlug() === category.slug ? 'page' : null"
+      >{{ category.name }}</a>
+    </nav>
+
     <div class="pf-grid" *ngIf="loading()" aria-busy="true">
       <div class="pf-skeleton" *ngFor="let s of skeletons">
         <div class="pf-skeleton__image"></div>
@@ -30,7 +47,7 @@
     </div>
 
     <p class="pf-state" *ngIf="!loading() && !failed() && items().length === 0">
-      {{ 'portfolio.empty' | translate }}
+      {{ (activeSlug() ? 'portfolio.emptyFiltered' : 'portfolio.empty') | translate }}
     </p>
 
     <div class="pf-grid" *ngIf="!loading() && items().length > 0">
@@ -51,7 +68,10 @@
         </div>
         <div class="pf-card__caption">
           <h2 class="pf-card__title">{{ item.title }}</h2>
-          <span class="pf-card__year" *ngIf="year(item) as y"><bdi dir="ltr">{{ y }}</bdi></span>
+          <p class="pf-card__meta" *ngIf="item.categoryName || year(item)">
+            <span class="pf-card__category" *ngIf="item.categoryName">{{ item.categoryName }}</span>
+            <span class="pf-card__year" *ngIf="year(item) as y"><bdi dir="ltr">{{ y }}</bdi></span>
+          </p>
         </div>
       </a>
     </div>

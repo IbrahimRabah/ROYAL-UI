@@ -393,7 +393,12 @@
       "heading": "عندك مشروع في بالك؟",
       "text": "قولنا محتاج إيه وهنرجعلك بعرض سعر.",
       "button": "اطلب عرض سعر"
-    }
+    },
+    "filters": {
+      "all": "الكل",
+      "label": "التصفية حسب التصنيف"
+    },
+    "emptyFiltered": "لا توجد مشاريع في هذا التصنيف بعد."
   },
   "customRequest": {
     "hero": {
@@ -1869,8 +1874,28 @@
         "descriptionLabel": "الوصف",
         "metaTitleLabel": "عنوان الميتا",
         "metaDescriptionLabel": "وصف الميتا",
-        "save": "حفظ"
-      }
+        "save": "حفظ",
+        "scopeLabel": "يُستخدم في",
+        "scopeFollowsParent": "يتبع التصنيف الأب ولا يمكن تغييره من هنا.",
+        "scopeChangeHint": "لا يمكن نقل التصنيف إلى القسم الآخر إلا إذا لم يكن يحتوي على تصنيفات فرعية أو منتجات أو أعمال.",
+        "scopeUsage": {
+          "prefix": "المستخدم حالياً في:",
+          "join": " و",
+          "children": "{{count}} تصنيفات فرعية",
+          "products": "{{count}} منتجات"
+        }
+      },
+      "scope": {
+        "PRODUCT": "المتجر",
+        "PORTFOLIO": "الأعمال"
+      },
+      "scopeFilter": {
+        "label": "عرض التصنيفات",
+        "ALL": "الكل",
+        "PRODUCT": "تصنيفات المتجر",
+        "PORTFOLIO": "تصنيفات الأعمال"
+      },
+      "emptyFiltered": "لا توجد تصنيفات في هذا القسم بعد."
     },
     "brands": {
       "title": "العلامات التجارية",

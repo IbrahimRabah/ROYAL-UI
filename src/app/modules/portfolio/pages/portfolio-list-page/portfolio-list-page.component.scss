@@ -98,12 +98,19 @@
   padding-block: clamp(var(--sp-8), 8vw, 96px);
 }
 
+// Width is capped by the surrounding .container-vl (var(--maxw)), like every other page.
 .pf-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(var(--sp-6), 4vw, 56px);
-  max-inline-size: 1200px;
-  margin-inline: auto;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .pf-card {
@@ -128,7 +135,7 @@
 }
 
 .pf-card__media {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--r-sm);
   background: var(--cream);
@@ -142,11 +149,15 @@
   object-fit: cover;
 }
 
+.pf-card {
+  min-inline-size: 0;
+}
+
 .pf-card__caption {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--sp-4);
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
   margin-block-start: var(--sp-4);
   padding-block-end: var(--sp-3);
   border-block-end: 1px solid var(--line);
@@ -158,11 +169,26 @@
   font-size: var(--fs-lg);
   line-height: 1.3;
   color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.pf-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.pf-card__category {
+  min-inline-size: 0;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
 }
 
 .pf-card__year {
   flex-shrink: 0;
-  font-size: var(--fs-sm);
   letter-spacing: 0.1em;
   color: var(--gold);
 }
@@ -196,7 +222,7 @@
 }
 
 .pf-skeleton__image {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   border-radius: var(--r-sm);
 }
 
@@ -291,5 +317,44 @@
   .pf-skeleton__image,
   .pf-skeleton__line {
     animation: none;
+  }
+}
+
+.pf-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-6);
+}
+
+.pf-filter {
+  max-inline-size: 100%;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--gold);
+  }
+
+  &--active {
+    border-color: var(--gold);
+    background: var(--cream);
+    color: var(--gold-dp);
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-filter {
+    transition: none;
   }
 }

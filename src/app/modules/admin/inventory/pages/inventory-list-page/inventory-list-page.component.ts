@@ -70,7 +70,7 @@ export class InventoryListPageComponent {
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((value) => this.updateQueryParams({ q: value || null, page: null }));
 
-    this.taxonomyApi.listCategories().subscribe({
+    this.taxonomyApi.listCategories('PRODUCT').subscribe({
       next: (tree) => this.categoryOptions.set(flattenCategoryTree(tree, this.languageStore.lang())),
       error: () => {},
     });
