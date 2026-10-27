@@ -1,24 +1,26 @@
-<nav class="main-nav" [attr.aria-label]="'common.menu' | translate">
+<nav class="main-nav" [attr.aria-label]="'common.menu' | translate" (focusout)="onFocusOut($event)">
   <a routerLink="/" routerLinkActive="main-nav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="main-nav__link">
     {{ 'common.home' | translate }}
   </a>
 
-  <div class="main-nav__shop" (mouseenter)="hoverOpen()" (mouseleave)="hoverClose()">
+  <!-- Products: the full catalogue mega-menu -->
+  <div class="main-nav__item" (mouseenter)="hoverOpen('products')" (mouseleave)="hoverClose('products')">
     <button
-      #shopBtn
+      #productsBtn
       type="button"
-      class="main-nav__link main-nav__shop-btn"
-      [class.main-nav__link--active]="open()"
-      [attr.aria-expanded]="open()"
+      class="main-nav__link main-nav__trigger"
+      [class.main-nav__link--active]="isOpen('products')"
+      [attr.aria-expanded]="isOpen('products')"
       aria-haspopup="true"
-      aria-controls="main-nav-mega"
-      (click)="toggle()"
+      aria-controls="main-nav-products"
+      (click)="toggle('products')"
+      (keydown.arrowdown)="openWithKeyboard($event, 'products')"
     >
-      <span>{{ 'common.shop' | translate }}</span>
+      <span>{{ 'header.nav.products' | translate }}</span>
       <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
     </button>
 
-    <div id="main-nav-mega" class="main-nav__mega" [class.main-nav__mega--open]="open()">
+    <div id="main-nav-products" class="main-nav__mega" [class.main-nav__mega--open]="isOpen('products')">
       <div class="container-vl main-nav__mega-inner">
         <div class="main-nav__mega-grid">
           <div class="main-nav__col" *ngFor="let category of categories">
@@ -47,13 +49,48 @@
     </div>
   </div>
 
-  <a routerLink="/portfolio" routerLinkActive="main-nav__link--active" class="main-nav__link">
-    {{ 'common.portfolio' | translate }}
-  </a>
-  <a routerLink="/about" routerLinkActive="main-nav__link--active" class="main-nav__link">
-    {{ 'common.about' | translate }}
-  </a>
-  <a routerLink="/contact" routerLinkActive="main-nav__link--active" class="main-nav__link">
-    {{ 'common.contact' | translate }}
-  </a>
+  <!-- Architectural Work: a short menu from /portfolio/categories. With no categories it is just a link. -->
+  <div
+    class="main-nav__item main-nav__item--work"
+    *ngIf="workCategories.length; else workLink"
+    (mouseenter)="hoverOpen('work')"
+    (mouseleave)="hoverClose('work')"
+  >
+    <button
+      #workBtn
+      type="button"
+      class="main-nav__link main-nav__trigger"
+      [class.main-nav__link--active]="isOpen('work')"
+      [attr.aria-expanded]="isOpen('work')"
+      aria-haspopup="true"
+      aria-controls="main-nav-work"
+      (click)="toggle('work')"
+      (keydown.arrowdown)="openWithKeyboard($event, 'work')"
+    >
+      <span>{{ 'header.nav.architecturalWork' | translate }}</span>
+      <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
+    </button>
+
+    <div id="main-nav-work" class="main-nav__menu" [class.main-nav__menu--open]="isOpen('work')">
+      <ul class="main-nav__menu-list">
+        <li *ngFor="let category of workCategories">
+          <a
+            class="main-nav__menu-link"
+            routerLink="/portfolio"
+            [queryParams]="{ category: category.slug }"
+            (click)="closeAll()"
+          >{{ category.name }}</a>
+        </li>
+      </ul>
+      <a class="main-nav__menu-all" routerLink="/portfolio" (click)="closeAll()">
+        {{ 'header.nav.allWork' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <ng-template #workLink>
+    <a routerLink="/portfolio" routerLinkActive="main-nav__link--active" class="main-nav__link">
+      {{ 'header.nav.architecturalWork' | translate }}
+    </a>
+  </ng-template>
 </nav>

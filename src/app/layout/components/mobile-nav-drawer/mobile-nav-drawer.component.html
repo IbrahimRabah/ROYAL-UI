@@ -6,13 +6,14 @@
 ></div>
 
 <div
+  #panel
   class="mobile-nav-drawer__panel"
   [class.mobile-nav-drawer__panel--open]="visible"
   [attr.inert]="visible ? null : ''"
   role="dialog"
   aria-modal="true"
   [attr.aria-label]="'common.menu' | translate"
-  (keydown.escape)="close()"
+  tabindex="-1"
 >
   <div class="mobile-nav-drawer__header">
     <span class="mobile-nav-drawer__title">{{ 'common.menu' | translate }}</span>
@@ -28,76 +29,109 @@
   </div>
 
   <nav class="mobile-nav-drawer__nav">
+    <form class="mobile-nav-drawer__search" role="search" (submit)="search($event, searchInput.value)">
+      <input
+        #searchInput
+        type="search"
+        class="mobile-nav-drawer__search-input"
+        enterkeyhint="search"
+        autocomplete="off"
+        [placeholder]="'header.searchPlaceholder' | translate"
+        [attr.aria-label]="'header.searchPlaceholder' | translate"
+      />
+      <button type="submit" class="mobile-nav-drawer__search-btn" [attr.aria-label]="'header.search' | translate">
+        <i class="pi pi-search" aria-hidden="true"></i>
+      </button>
+    </form>
+
     <a routerLink="/" class="mobile-nav-drawer__link" (click)="close()">
       {{ 'common.home' | translate }}
     </a>
 
-    <a routerLink="/products" class="mobile-nav-drawer__link" (click)="close()">
-      {{ 'common.shop' | translate }}
-    </a>
-
-    <div class="mobile-nav-drawer__categories">
-    <ng-container *ngFor="let category of categories">
-      <div class="mobile-nav-drawer__category">
-        <a
-          routerLink="/products"
-          [queryParams]="{ categoryId: category.id }"
-          class="mobile-nav-drawer__link"
-          (click)="close()"
-        >{{ category.name }}</a>
-
-        <button
-          *ngIf="category.children.length"
-          type="button"
-          class="mobile-nav-drawer__toggle"
-          [class.mobile-nav-drawer__toggle--open]="isCategoryOpen(category.id)"
-          [attr.aria-expanded]="isCategoryOpen(category.id)"
-          [attr.aria-controls]="'mobile-nav-children-' + category.id"
-          [attr.aria-label]="category.name"
-          (click)="toggleCategory(category.id)"
-        >
-          <i class="pi pi-angle-down" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <div
-        *ngIf="category.children.length"
-        [id]="'mobile-nav-children-' + category.id"
-        class="mobile-nav-drawer__children"
-        [class.mobile-nav-drawer__children--open]="isCategoryOpen(category.id)"
-      >
-        <div class="mobile-nav-drawer__children-inner">
+    <!-- Products -->
+    <button
+      type="button"
+      class="mobile-nav-drawer__section-btn"
+      [attr.aria-expanded]="isSectionOpen('products')"
+      aria-controls="mobile-nav-products"
+      (click)="toggleSection('products')"
+    >
+      <span>{{ 'header.nav.products' | translate }}</span>
+      <i class="pi pi-angle-down mobile-nav-drawer__chevron" aria-hidden="true"></i>
+    </button>
+    <div
+      id="mobile-nav-products"
+      class="mobile-nav-drawer__children"
+      [class.mobile-nav-drawer__children--open]="isSectionOpen('products')"
+      [attr.inert]="isSectionOpen('products') ? null : ''"
+    >
+      <div class="mobile-nav-drawer__children-inner">
+        <a routerLink="/products" class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--all" (click)="close()">
+          {{ 'common.allProducts' | translate }}
+        </a>
+        <ng-container *ngFor="let category of categories">
+          <a
+            routerLink="/products"
+            [queryParams]="{ categoryId: category.id }"
+            class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--parent"
+            (click)="close()"
+          >{{ category.name }}</a>
           <a
             *ngFor="let child of category.children"
             routerLink="/products"
             [queryParams]="{ categoryId: child.id }"
-            class="mobile-nav-drawer__child-link"
+            class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--child"
             (click)="close()"
           >{{ child.name }}</a>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Architectural Work: an expandable section when the portfolio has categories, otherwise a plain link -->
+    <ng-container *ngIf="workCategories.length; else workLink">
+      <button
+        type="button"
+        class="mobile-nav-drawer__section-btn"
+        [attr.aria-expanded]="isSectionOpen('work')"
+        aria-controls="mobile-nav-work"
+        (click)="toggleSection('work')"
+      >
+        <span>{{ 'header.nav.architecturalWork' | translate }}</span>
+        <i class="pi pi-angle-down mobile-nav-drawer__chevron" aria-hidden="true"></i>
+      </button>
+      <div
+        id="mobile-nav-work"
+        class="mobile-nav-drawer__children"
+        [class.mobile-nav-drawer__children--open]="isSectionOpen('work')"
+        [attr.inert]="isSectionOpen('work') ? null : ''"
+      >
+        <div class="mobile-nav-drawer__children-inner">
+          <a
+            *ngFor="let category of workCategories"
+            routerLink="/portfolio"
+            [queryParams]="{ category: category.slug }"
+            class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--parent"
+            (click)="close()"
+          >{{ category.name }}</a>
+          <a routerLink="/portfolio" class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--all" (click)="close()">
+            {{ 'header.nav.allWork' | translate }}
+          </a>
         </div>
       </div>
     </ng-container>
-    </div>
+    <ng-template #workLink>
+      <a routerLink="/portfolio" class="mobile-nav-drawer__link" (click)="close()">
+        {{ 'header.nav.architecturalWork' | translate }}
+      </a>
+    </ng-template>
 
-    <a routerLink="/portfolio" class="mobile-nav-drawer__link" (click)="close()">
-      {{ 'common.portfolio' | translate }}
-    </a>
+    <hr class="mobile-nav-drawer__divider" />
+
     <a routerLink="/about" class="mobile-nav-drawer__link" (click)="close()">
       {{ 'common.about' | translate }}
     </a>
     <a routerLink="/contact" class="mobile-nav-drawer__link" (click)="close()">
       {{ 'common.contact' | translate }}
-    </a>
-
-    <hr class="mobile-nav-drawer__divider" />
-
-    <a routerLink="/me/profile" class="mobile-nav-drawer__link" (click)="close()">
-      <i class="pi pi-user" aria-hidden="true"></i>
-      {{ 'header.account' | translate }}
-    </a>
-    <a routerLink="/me/orders" class="mobile-nav-drawer__link" (click)="close()">
-      <i class="pi pi-truck" aria-hidden="true"></i>
-      {{ 'topBar.myOrders' | translate }}
     </a>
 
     <hr class="mobile-nav-drawer__divider" />

@@ -25,7 +25,14 @@
   transform: translateX(-100%);
   transition: transform 280ms ease;
   z-index: var(--z-drawer);
+  // The panel scrolls inside itself; the page behind is locked and never scrolls sideways.
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+
+  &:focus {
+    outline: none;
+  }
 
   :host-context([dir='rtl']) & {
     transform: translateX(100%);
@@ -86,39 +93,6 @@
   border-radius: var(--r-sm);
 }
 
-.mobile-nav-drawer__categories {
-  padding-inline-start: var(--sp-3);
-  border-inline-start: 1px solid var(--border);
-  margin-inline-start: var(--sp-2);
-}
-
-.mobile-nav-drawer__category {
-  display: flex;
-  align-items: center;
-}
-
-.mobile-nav-drawer__toggle {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  border-radius: var(--r-full);
-  cursor: pointer;
-
-  i {
-    transition: transform 220ms ease;
-  }
-
-  &--open i {
-    transform: rotate(180deg);
-  }
-}
-
 .mobile-nav-drawer__children {
   display: grid;
   grid-template-rows: 0fr;
@@ -146,7 +120,7 @@
 
 .mobile-nav-drawer__close,
 .mobile-nav-drawer__link,
-.mobile-nav-drawer__toggle,
+.mobile-nav-drawer__section-btn,
 .mobile-nav-drawer__child-link {
   transition: background 220ms ease, color 220ms ease;
 
@@ -171,7 +145,83 @@
   .mobile-nav-drawer__backdrop,
   .mobile-nav-drawer__panel,
   .mobile-nav-drawer__children,
-  .mobile-nav-drawer__toggle i {
+  .mobile-nav-drawer__chevron {
     transition: none;
+  }
+}
+
+.mobile-nav-drawer__search {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-2);
+}
+
+.mobile-nav-drawer__search-input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-base);
+}
+
+.mobile-nav-drawer__search-btn {
+  flex: none;
+  inline-size: 2.75rem;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.mobile-nav-drawer__section-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  padding: var(--sp-3) var(--sp-2);
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-base);
+  text-align: start;
+  cursor: pointer;
+}
+
+.mobile-nav-drawer__chevron {
+  color: var(--text-muted);
+  transition: transform 220ms ease;
+}
+
+.mobile-nav-drawer__section-btn[aria-expanded='true'] .mobile-nav-drawer__chevron {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-drawer__child-link {
+  display: block;
+  overflow-wrap: anywhere;
+
+  &--all {
+    color: var(--brand);
+    font-weight: 600;
+  }
+
+  // Parent categories read as group labels; their children sit beneath, indented. All visible at once.
+  &--parent {
+    margin-block-start: var(--sp-1);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  &--child {
+    padding-inline-start: var(--sp-5);
   }
 }

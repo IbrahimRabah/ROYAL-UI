@@ -1,0 +1,4 @@
+// A real block box spanning the whole page: it is the containing block that lets the sticky header row stick.
+:host {
+  display: block;
+}

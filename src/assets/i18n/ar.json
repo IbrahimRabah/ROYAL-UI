@@ -41,6 +41,11 @@
       "categories": "التصنيفات",
       "categoryTag": "تصنيف",
       "available": "{{count}} اقتراحات متاحة"
+    },
+    "nav": {
+      "products": "المنتجات",
+      "architecturalWork": "الأعمال المعمارية",
+      "allWork": "كل الأعمال المعمارية"
     }
   },
   "topBar": {

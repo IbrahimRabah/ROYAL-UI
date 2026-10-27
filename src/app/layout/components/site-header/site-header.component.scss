@@ -1,10 +1,10 @@
 @use 'styles/breakpoints';
 
+// The host takes no box of its own, so the thin top strip scrolls away with the page while .site-header
+// (below) is the sticky element. position: sticky needs a tall containing block: with display: contents
+// that block becomes the whole page layout instead of this short component.
 :host {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: var(--z-header);
-  display: block;
+  display: contents;
 }
 
 
@@ -49,8 +49,13 @@
 }
 
 
+// Sticky, not fixed: the row stays in normal flow and keeps reserving its own height, so nothing below it
+// jumps when it "sticks" (no JS, no scroll listener, no spacer). It is still a positioned element, so the
+// mega-menu keeps anchoring to it.
 .site-header {
-  position: relative;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-header);
   background: var(--surface);
   border-block-end: 1px solid var(--border);
 }

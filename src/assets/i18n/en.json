@@ -41,6 +41,11 @@
       "categories": "Categories",
       "categoryTag": "Category",
       "available": "{{count}} suggestions available"
+    },
+    "nav": {
+      "products": "Products",
+      "architecturalWork": "Architectural Work",
+      "allWork": "View all architectural work"
     }
   },
   "topBar": {

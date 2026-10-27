@@ -26,7 +26,7 @@
       <img src="assets/images/shared/logo.png" [alt]="'header.logoAlt' | translate" />
     </a>
 
-    <app-main-nav class="site-header__nav" [categories]="categories()"></app-main-nav>
+    <app-main-nav class="site-header__nav" [categories]="categories()" [workCategories]="workCategories()"></app-main-nav>
 
     <app-search-bar class="site-header__search"></app-search-bar>
 
@@ -41,4 +41,5 @@
   [visible]="mobileNavOpen()"
   (visibleChange)="onMobileNavVisibleChange($event)"
   [categories]="categories()"
+  [workCategories]="workCategories()"
 ></app-mobile-nav-drawer>

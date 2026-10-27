@@ -38,7 +38,7 @@
   transition: transform 150ms ease;
 }
 
-.main-nav__shop-btn[aria-expanded='true'] .main-nav__chevron {
+.main-nav__trigger[aria-expanded='true'] .main-nav__chevron {
   transform: rotate(180deg);
 }
 
@@ -140,8 +140,81 @@
   }
 }
 
+// Architectural Work: a short menu hanging from its own trigger. The wrapper is the positioned ancestor,
+// and the menu aligns to the trigger's inline START edge, so it mirrors in Arabic by itself.
+.main-nav__item--work {
+  position: relative;
+}
+
+.main-nav__menu {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 100%;
+  z-index: var(--z-header);
+  min-inline-size: 14rem;
+  max-inline-size: min(22rem, calc(100vw - 2 * var(--pad)));
+  padding: var(--sp-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
+}
+
+.main-nav__menu--open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.main-nav__menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.main-nav__menu-link {
+  display: block;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: background 220ms ease, color 220ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--surface-alt);
+    color: var(--brand);
+  }
+}
+
+.main-nav__menu-all {
+  display: block;
+  margin-block-start: var(--sp-2);
+  padding: var(--sp-3) var(--sp-3) var(--sp-1);
+  border-block-start: 1px solid var(--border);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--brand);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .main-nav__chevron,
+  .main-nav__menu,
   .main-nav__mega {
     transition: none;
     transform: none;
