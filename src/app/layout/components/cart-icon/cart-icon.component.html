@@ -1,6 +1,7 @@
 <a
-  routerLink="/cart"
+  href="/cart"
   class="cart-icon"
+  (click)="onClick($event)"
   [attr.aria-label]="'header.cartItemsAria' | translate: { count: itemCount() }"
 >
   <i class="pi pi-shopping-bag cart-icon__glyph" aria-hidden="true"></i>

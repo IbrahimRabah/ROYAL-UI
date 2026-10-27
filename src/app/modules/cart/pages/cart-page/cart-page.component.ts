@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { CartWarningEntry } from '../../../../core/models';
 import { CartApiService } from '../../../../core/services/api/cart-api.service';
+import { CartActionsService } from '../../../../core/services/cart-actions.service';
 import { ConfirmDialogService } from '../../../../core/services/confirm-dialog.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { CartStoreService } from '../../../../core/state/cart-store.service';

@@ -1,0 +1,122 @@
+<ng-container *ngIf="open()">
+  <!-- The backdrop is the only "click outside" mechanism: no document click handler anywhere. -->
+  <div class="mini-cart__backdrop" (click)="close()" aria-hidden="true"></div>
+
+  <aside
+    #panel
+    class="mini-cart"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mini-cart-title"
+    tabindex="-1"
+  >
+    <header class="mini-cart__header">
+      <h2 id="mini-cart-title" class="mini-cart__title">{{ 'miniCart.title' | translate }}</h2>
+      <button type="button" class="mini-cart__close" (click)="close()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="mini-cart__body">
+      <ng-container *ngIf="items().length; else loading() ? loadingTpl : emptyTpl">
+        <p class="mini-cart__attention" role="alert" *ngIf="needsAttention()">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          {{ 'miniCart.needsAttention' | translate }}
+        </p>
+
+        <section class="mini-cart__added" *ngIf="addedItem() as added">
+          <p class="mini-cart__added-label" role="status">
+            <i class="pi pi-check-circle" aria-hidden="true"></i>
+            {{ 'miniCart.added' | translate }}
+          </p>
+          <ng-container *ngTemplateOutlet="rowTpl; context: { $implicit: added, featured: true }"></ng-container>
+        </section>
+
+        <section class="mini-cart__list" *ngIf="otherItems().length">
+          <h3 class="mini-cart__list-title" *ngIf="addedItem()">{{ 'miniCart.alsoInCart' | translate }}</h3>
+          <ng-container *ngFor="let item of otherItems(); trackBy: trackByItem">
+            <ng-container *ngTemplateOutlet="rowTpl; context: { $implicit: item, featured: false }"></ng-container>
+          </ng-container>
+        </section>
+
+        <!-- Room for cross-sell ("goes well with…") once product relations exist. Intentionally empty. -->
+      </ng-container>
+    </div>
+
+    <footer class="mini-cart__footer" *ngIf="items().length">
+      <div class="mini-cart__subtotal">
+        <span class="mini-cart__subtotal-label">{{ 'miniCart.subtotal' | translate }}</span>
+        <span class="mini-cart__subtotal-value"><app-vl-price [minPrice]="cart()?.subtotal ?? 0"></app-vl-price></span>
+      </div>
+      <p class="mini-cart__shipping-note">{{ 'miniCart.shippingNote' | translate }}</p>
+
+      <div class="mini-cart__actions">
+        <button type="button" class="mini-cart__btn mini-cart__btn--primary" [disabled]="!checkoutReady()" (click)="goToCheckout()">
+          <i class="pi pi-lock" aria-hidden="true"></i>
+          {{ 'miniCart.checkout' | translate }}
+        </button>
+        <button type="button" class="mini-cart__btn mini-cart__btn--ghost" (click)="close()">
+          {{ 'miniCart.continueShopping' | translate }}
+        </button>
+      </div>
+      <a routerLink="/cart" class="mini-cart__full-link" (click)="close()">{{ 'miniCart.viewCart' | translate }}</a>
+    </footer>
+  </aside>
+
+  <ng-template #rowTpl let-item let-featured="featured">
+    <article class="mini-cart-row" [class.mini-cart-row--featured]="featured" [class.mini-cart-row--pending]="isPending(item.itemId)">
+      <a class="mini-cart-row__image" [routerLink]="['/products', item.slug]" (click)="close()" tabindex="-1" aria-hidden="true">
+        <img appImgFallback [src]="item.imageUrl | imageUrl" alt="" loading="lazy" decoding="async" />
+      </a>
+
+      <div class="mini-cart-row__info">
+        <a class="mini-cart-row__name" [routerLink]="['/products', item.slug]" (click)="close()">{{ item.name }}</a>
+        <p class="mini-cart-row__variant" *ngIf="item.variantSummary">{{ item.variantSummary }}</p>
+        <p class="mini-cart-row__out" *ngIf="!item.inStock">{{ 'product.outOfStock' | translate }}</p>
+
+        <div class="mini-cart-row__line">
+          <span class="mini-cart-row__price">
+            <app-vl-price [minPrice]="item.unitPrice"></app-vl-price>
+            <span class="mini-cart-row__each">{{ 'miniCart.each' | translate }}</span>
+          </span>
+          <app-vl-quantity-stepper
+            [value]="item.quantity"
+            [min]="1"
+            [max]="maxQuantity(item)"
+            [disabled]="isPending(item.itemId)"
+            (decrease)="changeQuantity(item, -1)"
+            (increase)="changeQuantity(item, 1)"
+          ></app-vl-quantity-stepper>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="mini-cart-row__remove"
+        [disabled]="isPending(item.itemId)"
+        (click)="remove(item)"
+        [attr.aria-label]="'cart.removeItemAria' | translate: { name: item.name }"
+      >
+        <i class="pi pi-trash" aria-hidden="true"></i>
+      </button>
+    </article>
+  </ng-template>
+
+  <ng-template #loadingTpl>
+    <p class="mini-cart__loading" role="status">
+      <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+      {{ 'miniCart.loading' | translate }}
+    </p>
+  </ng-template>
+
+  <ng-template #emptyTpl>
+    <div class="mini-cart__empty">
+      <span class="mini-cart__empty-icon" aria-hidden="true"><i class="pi pi-shopping-bag"></i></span>
+      <h3 class="mini-cart__empty-title">{{ 'miniCart.emptyTitle' | translate }}</h3>
+      <p class="mini-cart__empty-message">{{ 'miniCart.emptyMessage' | translate }}</p>
+      <a routerLink="/products" class="mini-cart__btn mini-cart__btn--primary" (click)="close()">
+        {{ 'miniCart.browse' | translate }}
+      </a>
+    </div>
+  </ng-template>
+</ng-container>

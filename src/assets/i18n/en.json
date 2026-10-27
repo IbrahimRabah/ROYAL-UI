@@ -2329,5 +2329,21 @@
     "label": "Chat on WhatsApp",
     "greeting": "Hello, I have a question about your products.",
     "productMessage": "Hello, I would like to ask about: {{name}}"
+  },
+  "miniCart": {
+    "title": "Your cart",
+    "added": "Added to your cart",
+    "alsoInCart": "Also in your cart",
+    "subtotal": "Subtotal",
+    "shippingNote": "Shipping is added at checkout, once we know your governorate. This is not your final total.",
+    "checkout": "Checkout",
+    "continueShopping": "Continue shopping",
+    "viewCart": "View full cart",
+    "each": "each",
+    "emptyTitle": "Your cart is empty",
+    "emptyMessage": "Add something you like and it will show up here.",
+    "browse": "Browse products",
+    "needsAttention": "Some items need your attention before checkout. Review them in your full cart.",
+    "loading": "Loading your cart..."
   }
 }

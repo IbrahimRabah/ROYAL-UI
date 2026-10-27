@@ -13,10 +13,10 @@ import {
   ProductSummaryResponse,
   VariantResponse,
 } from '../../../../core/models';
-import { CartApiService } from '../../../../core/services/api/cart-api.service';
+import { CartActionsService } from '../../../../core/services/cart-actions.service';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
 import { ToastService } from '../../../../core/services/toast.service';
-import { CartStoreService } from '../../../../core/state/cart-store.service';
+import { MiniCartStateService } from '../../../../core/state/mini-cart-state.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
 import { UiStoreService } from '../../../../core/state/ui-store.service';
 
@@ -38,8 +38,8 @@ function dedupeById(images: ImageResponse[]): ImageResponse[] {
 export class ProductDetailsPageComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly catalogApi = inject(CatalogApiService);
-  private readonly cartApi = inject(CartApiService);
-  private readonly cartStore = inject(CartStoreService);
+  private readonly cartActions = inject(CartActionsService);
+  private readonly miniCart = inject(MiniCartStateService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
@@ -202,12 +202,13 @@ export class ProductDetailsPageComponent implements OnDestroy {
     if (!variant || !this.readyMade() || this.addingToCart()) return;
 
     this.addingToCart.set(true);
-    this.cartApi.addItem({ variantId: variant.id, quantity: 1 }).subscribe({
-      next: (cart) => {
-        this.cartStore.set(cart);
+    // The page's button and the sticky bar's button are the same template, so this is the only add path;
+    // the panel itself confirms the add, which is why there is no "added" toast any more.
+    this.cartActions.add(variant.id, 1).subscribe({
+      next: () => {
         this.addingToCart.set(false);
         this.justAddedToCart.set(true);
-        this.toast.success(this.translate.instant('toast.cart.itemAdded'));
+        this.miniCart.openAfterAdd(variant.id);
         setTimeout(() => this.justAddedToCart.set(false), 1500);
       },
       error: () => this.addingToCart.set(false),
