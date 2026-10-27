@@ -36,6 +36,7 @@
   inset-block-start: 100%;
   z-index: var(--z-header);
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
   gap: var(--sp-2);
   background: var(--surface);
@@ -93,7 +94,7 @@
   .search-bar__panel {
     inset-inline: auto 0;
     inset-block-start: calc(100% + var(--sp-2));
-    inline-size: min(320px, 60vw);
+    inline-size: min(420px, 60vw);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     transform-origin: top right;
@@ -108,4 +109,130 @@
   .search-bar__panel {
     transition: none;
   }
+}
+
+// ---- suggestions ----------------------------------------------------------------------------
+
+.search-bar__suggest {
+  flex: 1 1 100%;
+  min-inline-size: 0;
+  max-block-size: min(60vh, 440px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-block-start: 1px solid var(--border);
+  padding-block-start: var(--sp-2);
+}
+
+.search-bar__note {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+
+  &--error {
+    color: var(--stop);
+  }
+}
+
+.search-bar__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+}
+
+.search-bar__all {
+  margin-inline: var(--sp-3);
+  margin-block-end: var(--sp-2);
+  color: var(--brand);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.search-bar__heading {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-3) var(--sp-1);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.search-bar__option {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  color: var(--text);
+  cursor: pointer;
+
+  &--active {
+    background: var(--surface-alt);
+    outline: 2px solid var(--brand);
+    outline-offset: -2px;
+  }
+}
+
+.search-bar__thumb {
+  flex: none;
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--r-sm);
+  background: var(--surface-alt);
+  object-fit: cover;
+}
+
+.search-bar__name {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.search-bar__price {
+  flex: none;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+// Categories lead to a section, not an item: icon tile instead of a photo, a tag, and a tinted row.
+.search-bar__option--category {
+  border-inline-start: 3px solid var(--gold);
+  background: var(--surface-alt);
+
+  &.search-bar__option--active {
+    background: var(--surface);
+  }
+}
+
+.search-bar__cat-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--gold-dp, var(--brand));
+}
+
+.search-bar__tag {
+  flex: none;
+  padding: 2px var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
 }

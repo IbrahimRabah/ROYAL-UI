@@ -21,6 +21,9 @@ export const API_ROUTES = {
     attachments: (id: number) => `${BASE}/custom-requests/${id}/attachments`,
   },
 
+  search: {
+    suggestions: () => `${BASE}/search/suggestions`,
+  },
   portfolio: {
     list: () => `${BASE}/portfolio`,
     bySlug: (slug: string) => `${BASE}/portfolio/${encodeURIComponent(slug)}`,

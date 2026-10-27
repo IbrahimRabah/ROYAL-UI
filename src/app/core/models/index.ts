@@ -54,3 +54,4 @@ export * from './admin/export';
 
 export * from './system/ping';
 export * from './custom-request/custom-request-public';
+export * from './catalog/search';

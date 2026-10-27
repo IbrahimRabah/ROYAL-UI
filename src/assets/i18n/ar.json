@@ -30,7 +30,18 @@
     "search": "بحث",
     "account": "حسابي",
     "cart": "السلة",
-    "cartItemsAria": "عدد المنتجات في السلة: {{count}}"
+    "cartItemsAria": "عدد المنتجات في السلة: {{count}}",
+    "suggestions": {
+      "searching": "جارٍ البحث...",
+      "error": "تعذّر تحميل الاقتراحات. اضغط Enter للبحث على أي حال.",
+      "empty": "لا توجد نتائج مطابقة.",
+      "allProducts": "تصفح كل المنتجات",
+      "listLabel": "اقتراحات البحث",
+      "products": "المنتجات",
+      "categories": "التصنيفات",
+      "categoryTag": "تصنيف",
+      "available": "{{count}} اقتراحات متاحة"
+    }
   },
   "topBar": {
     "cod": "الدفع عند الاستلام",

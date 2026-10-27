@@ -11,6 +11,7 @@ import {
   CategoryNode,
   FilterFacetsResponse,
   PageResponse,
+  SearchSuggestionsResponse,
   ProductDetailResponse,
   ProductFilter,
   ProductSummaryResponse,
@@ -26,6 +27,14 @@ export class CatalogApiService {
   searchProducts(filter: ProductFilter): Observable<PageResponse<ProductSummaryResponse>> {
     return this.http.get<PageResponse<ProductSummaryResponse>>(API_ROUTES.catalog.products(), {
       params: this.buildProductParams(filter),
+    });
+  }
+
+  /** Suggestions never error for short or empty input, so a failure here is a real one; the box shows it inline (no toast). */
+  suggest(q: string): Observable<SearchSuggestionsResponse> {
+    return this.http.get<SearchSuggestionsResponse>(API_ROUTES.search.suggestions(), {
+      params: new HttpParams().set('q', q),
+      context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true),
     });
   }
 

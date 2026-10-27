@@ -30,7 +30,18 @@
     "search": "Search",
     "account": "My Account",
     "cart": "Cart",
-    "cartItemsAria": "Items in cart: {{count}}"
+    "cartItemsAria": "Items in cart: {{count}}",
+    "suggestions": {
+      "searching": "Searching...",
+      "error": "Could not load suggestions. Press Enter to search anyway.",
+      "empty": "No matches found.",
+      "allProducts": "Browse all products",
+      "listLabel": "Search suggestions",
+      "products": "Products",
+      "categories": "Categories",
+      "categoryTag": "Category",
+      "available": "{{count}} suggestions available"
+    }
   },
   "topBar": {
     "cod": "Cash on Delivery",

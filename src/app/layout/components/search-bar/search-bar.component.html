@@ -3,6 +3,7 @@
   [class.search-bar--open]="isOpen()"
   appClickOutside
   (appClickOutside)="closeSearch()"
+  (focusout)="onFocusOut($event)"
 >
   <button
     [hidden]="isOpen()"
@@ -27,9 +28,20 @@
       type="search"
       pInputText
       class="search-bar__input"
+      role="combobox"
+      aria-autocomplete="list"
+      autocomplete="off"
       [formControl]="query"
+      [attr.aria-expanded]="panelVisible()"
+      [attr.aria-controls]="listboxId"
+      [attr.aria-activedescendant]="panelVisible() && activeIndex() >= 0 ? optionId(activeIndex()) : null"
       [placeholder]="'header.searchPlaceholder' | translate"
       [attr.aria-label]="'header.searchPlaceholder' | translate"
+      (focus)="onFocus()"
+      (keydown.arrowdown)="onArrow($event, 1)"
+      (keydown.arrowup)="onArrow($event, -1)"
+      (keydown.enter)="onEnter($event)"
+      (keydown.escape)="onEscape($event)"
     />
     <button
       type="submit"
@@ -47,5 +59,80 @@
     >
       <i class="pi pi-times" aria-hidden="true"></i>
     </button>
+
+    <p class="visually-hidden" role="status" aria-live="polite">
+      <ng-container *ngIf="panelVisible()">
+        {{ statusKey() | translate: { count: items().length } }}
+      </ng-container>
+    </p>
+
+    <div class="search-bar__suggest" *ngIf="panelVisible()" (mousedown)="$event.preventDefault()">
+      <p class="search-bar__note" *ngIf="status() === 'loading'">
+        <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        {{ 'header.suggestions.searching' | translate }}
+      </p>
+
+      <p class="search-bar__note search-bar__note--error" *ngIf="status() === 'error'">
+        {{ 'header.suggestions.error' | translate }}
+      </p>
+
+      <div class="search-bar__empty" *ngIf="isEmpty()">
+        <p class="search-bar__note">{{ 'header.suggestions.empty' | translate }}</p>
+        <a routerLink="/products" class="search-bar__all" (click)="closeAfterNavigation()">
+          {{ 'header.suggestions.allProducts' | translate }}
+        </a>
+      </div>
+
+      <div
+        class="search-bar__list"
+        role="listbox"
+        [id]="listboxId"
+        [attr.aria-label]="'header.suggestions.listLabel' | translate"
+        [hidden]="status() !== 'ready' || !items().length"
+      >
+        <div role="group" class="search-bar__group" *ngIf="products().length" aria-labelledby="sb-products-heading">
+          <p class="search-bar__heading" id="sb-products-heading">{{ 'header.suggestions.products' | translate }}</p>
+          <a
+            *ngFor="let p of products(); let i = index"
+            class="search-bar__option search-bar__option--product"
+            role="option"
+            [id]="optionId(i)"
+            [class.search-bar__option--active]="activeIndex() === i"
+            [attr.aria-selected]="activeIndex() === i"
+            [routerLink]="productLink(p.slug)"
+            tabindex="-1"
+            (click)="onLinkClick($event)"
+            (mouseenter)="activeIndex.set(i)"
+          >
+            <img appImgFallback class="search-bar__thumb" [src]="p.imageUrl | imageUrl" alt="" width="48" height="48" />
+            <span class="search-bar__name">{{ p.name }}</span>
+            <span class="search-bar__price" *ngIf="p.price != null">
+              <app-vl-price [minPrice]="p.price"></app-vl-price>
+            </span>
+          </a>
+        </div>
+
+        <div role="group" class="search-bar__group" *ngIf="categoryRows().length" aria-labelledby="sb-categories-heading">
+          <p class="search-bar__heading" id="sb-categories-heading">{{ 'header.suggestions.categories' | translate }}</p>
+          <a
+            *ngFor="let c of categoryRows(); let j = index"
+            class="search-bar__option search-bar__option--category"
+            role="option"
+            [id]="optionId(products().length + j)"
+            [class.search-bar__option--active]="activeIndex() === products().length + j"
+            [attr.aria-selected]="activeIndex() === products().length + j"
+            routerLink="/products"
+            [queryParams]="categoryParams(c.id)"
+            tabindex="-1"
+            (click)="onLinkClick($event)"
+            (mouseenter)="activeIndex.set(products().length + j)"
+          >
+            <span class="search-bar__cat-icon" aria-hidden="true"><i class="pi pi-th-large"></i></span>
+            <span class="search-bar__name">{{ c.name }}</span>
+            <span class="search-bar__tag">{{ 'header.suggestions.categoryTag' | translate }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
