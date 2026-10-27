@@ -2324,5 +2324,10 @@
         "tooSmall": "Quantity too small"
       }
     }
+  },
+  "whatsapp": {
+    "label": "Chat on WhatsApp",
+    "greeting": "Hello, I have a question about your products.",
+    "productMessage": "Hello, I would like to ask about: {{name}}"
   }
 }

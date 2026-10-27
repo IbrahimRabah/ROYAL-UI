@@ -73,7 +73,7 @@ export class CatalogApiService {
       .pipe(
         map((res) => ({
           ...res,
-          brands: dedupeById(res.brands),
+          brands: APP_CONFIG.features.showBrand ? dedupeById(res.brands) : [],
           attributes: res.attributes.map((group) => ({ ...group, values: dedupeById(group.values) })),
         })),
       );

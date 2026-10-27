@@ -13,6 +13,7 @@ import { SiteFooterComponent } from './components/site-footer/site-footer.compon
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { MobileNavDrawerComponent } from './components/mobile-nav-drawer/mobile-nav-drawer.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { WhatsappFabComponent } from './components/whatsapp-fab/whatsapp-fab.component';
 import { CartIconComponent } from './components/cart-icon/cart-icon.component';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.component';
@@ -31,6 +32,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     MainNavComponent,
     MobileNavDrawerComponent,
     SearchBarComponent,
+    WhatsappFabComponent,
     CartIconComponent,
     UserMenuComponent,
     AdminSidebarComponent,

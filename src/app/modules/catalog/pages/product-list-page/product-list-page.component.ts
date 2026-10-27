@@ -89,7 +89,8 @@ export class ProductListPageComponent {
     return {
       q: params.get('q') ?? undefined,
       categoryId: parseNumber(params, 'categoryId'),
-      brandIds: parseNumberList(params, 'brandIds'),
+      // A stale ?brandIds= link must not filter silently while the brand UI is switched off.
+      brandIds: APP_CONFIG.features.showBrand ? parseNumberList(params, 'brandIds') : undefined,
       minPrice: parseNumber(params, 'minPrice'),
       maxPrice: parseNumber(params, 'maxPrice'),
       attributeValueIds: parseNumberList(params, 'attributeValueIds'),

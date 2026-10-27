@@ -34,15 +34,10 @@
             (selectedValueIdChange)="selectValue($event)"
           ></app-variant-selector>
 
-          <app-add-to-cart-box
-            [quoteProductId]="readyMade() ? null : p.id"
-            [quoteSlug]="p.slug"
-            [quoteLabelKey]="quoteLabelKey()"
-            [disabled]="!inStock()"
-            [loading]="addingToCart()"
-            [success]="justAddedToCart()"
-            (addToCart)="addToCart()"
-          ></app-add-to-cart-box>
+          <!-- The page's one primary action. The sticky bar renders this same template, so it can never drift. -->
+          <div #primaryActionAnchor class="pdp__primary-action">
+            <ng-container *ngTemplateOutlet="primaryAction"></ng-container>
+          </div>
           <a
             *ngIf="readyMade()"
             class="pdp__custom-link"
@@ -78,6 +73,41 @@
     </section>
 
     <app-related-products [products]="relatedProducts()"></app-related-products>
+
+    <ng-template #primaryAction>
+      <app-add-to-cart-box
+        [quoteProductId]="readyMade() ? null : p.id"
+        [quoteSlug]="p.slug"
+        [quoteLabelKey]="quoteLabelKey()"
+        [disabled]="!inStock()"
+        [loading]="addingToCart()"
+        [success]="justAddedToCart()"
+        (addToCart)="addToCart()"
+      ></app-add-to-cart-box>
+    </ng-template>
+
+    <div class="pdp-bar" *ngIf="barVisible()" role="region" [attr.aria-label]="p.name">
+      <div class="container-vl pdp-bar__inner">
+        <img
+          appImgFallback
+          class="pdp-bar__thumb"
+          [src]="barImageUrl() | imageUrl"
+          alt=""
+          width="48"
+          height="48"
+        />
+        <div class="pdp-bar__info">
+          <span class="pdp-bar__name">{{ p.name }}</span>
+          <app-vl-price *ngIf="readyMade(); else barOnRequest" class="pdp-bar__price" [minPrice]="displayPrice()"></app-vl-price>
+          <ng-template #barOnRequest>
+            <span class="pdp-bar__price">{{ 'product.priceOnRequest' | translate }}</span>
+          </ng-template>
+        </div>
+        <div class="pdp-bar__action">
+          <ng-container *ngTemplateOutlet="primaryAction"></ng-container>
+        </div>
+      </div>
+    </div>
   </ng-container>
 </ng-container>
 

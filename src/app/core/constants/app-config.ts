@@ -59,6 +59,12 @@ export const APP_CONFIG = {
     max: 50000,
   },
 
+  features: {
+    // The shop sells one maker's products, so brands add nothing to the storefront. Set to true to bring
+    // back the brand filter and the brand name on product cards. (Admin brand screens are unaffected.)
+    showBrand: false,
+  },
+
   contact: {
     whatsappUrl: 'https://wa.me/201033033636',
     phone: '01033033636',

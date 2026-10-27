@@ -1,0 +1,11 @@
+<a
+  *ngIf="href() as link"
+  class="whatsapp-fab"
+  [class.whatsapp-fab--raised]="raised()"
+  [href]="link"
+  target="_blank"
+  rel="noopener"
+  [attr.aria-label]="'whatsapp.label' | translate"
+>
+  <i class="pi pi-whatsapp" aria-hidden="true"></i>
+</a>

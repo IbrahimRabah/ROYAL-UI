@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, OnDestroy, PLATFORM_ID, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { FulfillmentType, isReadyMade } from '../../../../core/enums/fulfillment-type';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -17,6 +18,7 @@ import { CatalogApiService } from '../../../../core/services/api/catalog-api.ser
 import { ToastService } from '../../../../core/services/toast.service';
 import { CartStoreService } from '../../../../core/state/cart-store.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
+import { UiStoreService } from '../../../../core/state/ui-store.service';
 
 function findColorGroup(product: ProductDetailResponse): AttributeGroupResponse | null {
   return product.variantOptions.find((group) => group.values.some((value) => value.hexColor != null)) ?? null;
@@ -33,7 +35,7 @@ function dedupeById(images: ImageResponse[]): ImageResponse[] {
   styleUrl: './product-details-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductDetailsPageComponent {
+export class ProductDetailsPageComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly catalogApi = inject(CatalogApiService);
   private readonly cartApi = inject(CartApiService);
@@ -41,6 +43,35 @@ export class ProductDetailsPageComponent {
   private readonly languageStore = inject(LanguageStoreService);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
+  private readonly ui = inject(UiStoreService);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  /** True once the page's own primary button has scrolled out of view above the viewport. */
+  readonly barVisible = signal(false);
+  private observer: IntersectionObserver | null = null;
+
+  @HostBinding('class.pdp-host--bar') get hasBar(): boolean {
+    return this.barVisible();
+  }
+
+  /**
+   * The primary button's wrapper only exists once the product has loaded, hence a setter.
+   * We watch that wrapper with an IntersectionObserver: no scroll listener, no layout reads.
+   * The bar shows only when it left the viewport upwards (scrolled past) — not while it is still
+   * below the fold on first paint, where a bar would only duplicate a button the customer has yet to reach.
+   */
+  @ViewChild('primaryActionAnchor') set primaryActionAnchor(ref: ElementRef<HTMLElement> | undefined) {
+    this.observer?.disconnect();
+    this.observer = null;
+    if (!ref || !this.isBrowser || typeof IntersectionObserver === 'undefined') {
+      this.barVisible.set(false);
+      return;
+    }
+    this.observer = new IntersectionObserver(([entry]) => {
+      this.barVisible.set(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    });
+    this.observer.observe(ref.nativeElement);
+  }
 
   private readonly slug = toSignal(this.route.paramMap.pipe(map((params) => params.get('id'))), {
     initialValue: null,
@@ -77,6 +108,12 @@ export class ProductDetailsPageComponent {
     return dedupeById(poster ? [poster, ...variantImages] : variantImages);
   });
 
+  /** Thumbnail for the sticky bar: the first gallery image, or null (the imageUrl pipe then shows the placeholder). */
+  readonly barImageUrl = computed<string | null>(() => {
+    const first = this.galleryImages().at(0);
+    return first ? (first.thumbUrl || first.url) : null;
+  });
+
   readonly activeGalleryImageId = signal<number | null>(null);
 
   readonly displayedImageId = signal<number | null>(null);
@@ -109,6 +146,10 @@ export class ProductDetailsPageComponent {
   readonly inStock = computed(() => this.selectedVariant()?.inStock ?? this.product()?.inStock ?? false);
 
   constructor() {
+    // Keep the shared UI state in step with this page: the WhatsApp button lifts above the bar and names the product.
+    effect(() => this.ui.setStickyBarVisible(this.barVisible()), { allowSignalWrites: true });
+    effect(() => this.ui.setContactProduct(this.product()?.name ?? null), { allowSignalWrites: true });
+
     effect(() => {
       const slug = this.slug();
       this.languageStore.lang();
@@ -129,6 +170,12 @@ export class ProductDetailsPageComponent {
         },
       });
     }, { allowSignalWrites: true });
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+    this.ui.setStickyBarVisible(false);
+    this.ui.setContactProduct(null);
   }
 
   onDisplayedImageChange(imageId: number | null): void {

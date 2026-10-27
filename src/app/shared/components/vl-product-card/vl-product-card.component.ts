@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { APP_CONFIG } from '../../../core/constants/app-config';
 import { isReadyMade } from '../../../core/enums/fulfillment-type';
 import { ProductSummaryResponse } from '../../../core/models';
 
@@ -11,6 +12,9 @@ import { ProductSummaryResponse } from '../../../core/models';
 })
 export class VlProductCardComponent {
   @Input({ required: true }) product!: ProductSummaryResponse;
+
+  /** One switch for the whole storefront: APP_CONFIG.features.showBrand. */
+  readonly showBrand = APP_CONFIG.features.showBrand;
 
   get readyMade(): boolean {
     return isReadyMade(this.product);

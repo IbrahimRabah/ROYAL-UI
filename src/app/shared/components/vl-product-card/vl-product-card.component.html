@@ -45,7 +45,7 @@
   </span>
 
   <span class="vl-product-card__body">
-    <span class="vl-product-card__brand">{{ product.brandName }}</span>
+    <span class="vl-product-card__brand" *ngIf="showBrand">{{ product.brandName }}</span>
     <span class="vl-product-card__name">{{ product.name }}</span>
     <app-vl-price
       *ngIf="readyMade; else onRequest"

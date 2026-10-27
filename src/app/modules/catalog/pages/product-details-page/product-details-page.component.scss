@@ -162,3 +162,86 @@
     transition: none;
   }
 }
+
+// ---- primary action + sticky bar ------------------------------------------------------------
+
+.pdp__primary-action app-add-to-cart-box,
+.pdp-bar__action app-add-to-cart-box {
+  display: block;
+}
+
+// Room for the bar so it never hides the last lines of the page.
+:host(.pdp-host--bar) {
+  display: block;
+  padding-block-end: var(--sticky-bar-h);
+}
+
+@keyframes pdp-bar-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.pdp-bar {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: calc(var(--z-header) - 1);
+  background: var(--surface);
+  border-block-start: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding-block-end: env(safe-area-inset-bottom);
+  animation: pdp-bar-in 220ms ease both;
+}
+
+.pdp-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--sticky-bar-h);
+  padding-block: var(--sp-2);
+}
+
+.pdp-bar__thumb {
+  flex: none;
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--r-sm);
+  background: var(--surface-alt);
+  object-fit: cover;
+}
+
+.pdp-bar__info {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pdp-bar__name {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.3;
+  @include mixins.truncate(2);
+}
+
+.pdp-bar__price {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.pdp-bar__action {
+  flex: 0 1 auto;
+  inline-size: min(50%, 260px);
+  min-inline-size: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-bar {
+    animation: none;
+  }
+}

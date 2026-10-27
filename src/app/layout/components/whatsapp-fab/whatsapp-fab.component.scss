@@ -1,0 +1,35 @@
+.whatsapp-fab {
+  position: fixed;
+  inset-inline-end: var(--sp-4);
+  inset-block-end: calc(var(--sp-4) + env(safe-area-inset-bottom));
+  // Above the product bar (header - 1) but below the header, drawers, modals and toasts.
+  z-index: var(--z-header);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 3.25rem;
+  block-size: 3.25rem;
+  border-radius: var(--r-full);
+  background: #25d366;
+  color: #fff;
+  font-size: 1.6rem;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: inset-block-end 220ms ease, transform 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.06);
+  }
+
+  // The product page's sticky bar owns the bottom edge while it is showing: sit just above it.
+  &--raised {
+    inset-block-end: calc(var(--sticky-bar-h) + var(--sp-4) + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab {
+    transition: none;
+  }
+}
