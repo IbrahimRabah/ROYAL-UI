@@ -135,7 +135,6 @@
     "shipping": "Shipping",
     "shippingNote": "Calculated at checkout based on your governorate",
     "total": "Total",
-    "includingVat": "Including VAT",
     "orderSummary": "Order Summary",
     "codBadge": "Cash on Delivery",
     "clearCart": "Clear Cart",
@@ -184,7 +183,6 @@
       "arrivesIn": "Arrives in {{min}}–{{max}} days",
       "codFee": "COD Fee",
       "total": "Total",
-      "includingVat": "Including VAT",
       "placeOrder": "Place Order",
       "reassurance": {
         "cod": "Cash on Delivery",
@@ -703,7 +701,6 @@
       "shipping": "Shipping",
       "codFee": "COD Fee",
       "total": "Total",
-      "includingVat": "Including VAT",
       "shippingAddressHeading": "Shipping Address",
       "cancelButton": "Cancel Order",
       "errorTitle": "Something went wrong",
@@ -1330,7 +1327,7 @@
             "compareAtLabel": "Compare-at",
             "costLabel": "Cost",
             "taxRateLabel": "Tax rate",
-            "taxRateHint": "0.14 = 14%, extracted from the price, not added",
+            "taxRateHint": "Leave empty to use the default rate. 0.14 = 14%",
             "weightLabel": "Weight",
             "initialStockLabel": "Initial stock",
             "initialStockWarning": "A variant with 0 stock exists but can't be bought — the product will look broken to shoppers, not just unavailable.",
@@ -1421,7 +1418,7 @@
           "assembly": {
             "toggle": "Needs assembly",
             "fee": "Assembly fee per piece",
-            "helper": "Tax inclusive. Leave 0 for free assembly.",
+            "helper": "Leave 0 for free assembly.",
             "feeInvalid": "Enter 0 or more"
           }
         }
@@ -2142,7 +2139,7 @@
         "noImages": "The customer did not attach any photos.",
         "openImage": "Open photo",
         "quote": "Quote",
-        "quoteTotalNote": "Total including tax, for the full quantity.",
+        "quoteTotalNote": "Total for the full quantity.",
         "noQuote": "Not quoted yet.",
         "actions": "Actions",
         "closedNote": "This request is closed — no further changes.",
@@ -2179,7 +2176,7 @@
         "quote": {
           "title": "Send quote",
           "amount": "Quote amount (EGP)",
-          "helper": "Total price including tax, for the full quantity.",
+          "helper": "Total price for the full quantity.",
           "invalid": "Enter an amount greater than 0.",
           "submit": "Save quote"
         },

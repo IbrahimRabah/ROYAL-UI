@@ -35,7 +35,10 @@ export class StoreProfilePageComponent {
   readonly website = signal('');
   readonly invoiceFooterNote = signal('');
 
-  readonly missingFields = computed(() => this.profile()?.missingFields ?? []);
+  // Tax number and commercial register are optional while the store is not VAT-registered.
+  readonly missingFields = computed(() =>
+    (this.profile()?.missingFields ?? []).filter((f) => f !== 'taxNumber' && f !== 'commercialRegister'),
+  );
   readonly canSubmit = computed(() => !this.saving() && this.legalName().trim().length > 0);
 
   constructor() {

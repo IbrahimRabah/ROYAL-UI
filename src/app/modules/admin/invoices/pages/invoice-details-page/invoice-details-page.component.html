@@ -79,14 +79,16 @@
           </div>
           <h2 class="idp__card-title">{{ 'admin.invoices.detail.totals.heading' | translate }}</h2>
         </div>
-        <div class="idp__totals-row">
-          <span>{{ 'admin.invoices.detail.totals.net' | translate }}</span>
-          <span class="idp__ltr">{{ formatAmount(inv.netTotal) }} {{ inv.currency }}</span>
-        </div>
-        <div class="idp__totals-row">
-          <span>{{ 'admin.invoices.detail.totals.tax' | translate }}</span>
-          <span class="idp__ltr">+ {{ formatAmount(inv.taxTotal) }} {{ inv.currency }}</span>
-        </div>
+        <ng-container *ngIf="hasAmount(inv.taxTotal)">
+          <div class="idp__totals-row">
+            <span>{{ 'admin.invoices.detail.totals.net' | translate }}</span>
+            <span class="idp__ltr">{{ formatAmount(inv.netTotal) }} {{ inv.currency }}</span>
+          </div>
+          <div class="idp__totals-row">
+            <span>{{ 'admin.invoices.detail.totals.tax' | translate }}</span>
+            <span class="idp__ltr">+ {{ formatAmount(inv.taxTotal) }} {{ inv.currency }}</span>
+          </div>
+        </ng-container>
         <div class="idp__totals-row idp__totals-row--grand">
           <span>{{ 'admin.invoices.detail.totals.grand' | translate }}</span>
           <span class="idp__ltr">{{ formatAmount(inv.grandTotal) }} {{ inv.currency }}</span>

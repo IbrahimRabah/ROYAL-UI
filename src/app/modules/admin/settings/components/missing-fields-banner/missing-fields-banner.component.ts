@@ -5,8 +5,6 @@ const FIELD_LABEL_KEYS: Record<string, string> = {
   address: 'admin.settings.fields.address',
   phone: 'admin.settings.fields.phone',
   email: 'admin.settings.fields.email',
-  taxNumber: 'admin.settings.fields.taxNumber',
-  commercialRegister: 'admin.settings.fields.commercialRegister',
   website: 'admin.settings.fields.website',
   invoiceFooterNote: 'admin.settings.fields.invoiceFooterNote',
 };

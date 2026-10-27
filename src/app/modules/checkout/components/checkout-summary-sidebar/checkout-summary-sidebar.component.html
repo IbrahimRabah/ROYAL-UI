@@ -56,9 +56,7 @@
 
     <div class="checkout-summary__total-row">
       <div class="checkout-summary__total-label">
-        <span>{{ 'checkout.summary.total' | translate }}</span>
-        <small>{{ 'checkout.summary.includingVat' | translate }}</small>
-      </div>
+        <span>{{ 'checkout.summary.total' | translate }}</span>      </div>
       <span class="checkout-summary__total-value">
         <app-vl-price [minPrice]="shippingQuote?.estimatedTotal ?? cart.estimatedTotal"></app-vl-price>
       </span>

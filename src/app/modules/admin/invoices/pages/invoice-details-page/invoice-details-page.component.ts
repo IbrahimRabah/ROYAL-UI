@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 
-import { InvoiceResponse, Money, money } from '../../../../../core/models';
+import { InvoiceResponse, Money, hasAmount, money } from '../../../../../core/models';
 import { InvoiceStatus } from '../../../../../core/enums/invoice-status';
 import { Language } from '../../../../../core/enums/language';
 import { StatusTone } from '../../../../../core/constants/order-status.constants';
@@ -60,6 +60,8 @@ export class InvoiceDetailsPageComponent {
   statusTone(status: InvoiceStatus): StatusTone {
     return INVOICE_STATUS_TONE[status];
   }
+
+  readonly hasAmount = hasAmount;
 
   formatAmount(value: Money): string {
     return NUMBER_FORMATTER.format(money(value));

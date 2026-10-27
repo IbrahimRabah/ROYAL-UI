@@ -142,7 +142,7 @@
             <span>{{ 'admin.orders.detail.totals.codFee' | translate }}</span>
             <span>{{ formatMoney(o.codFee) }}</span>
           </div>
-          <div class="order-details-page__totals-row">
+          <div class="order-details-page__totals-row" *ngIf="hasAmount(o.taxTotal)">
             <span>{{ 'admin.orders.detail.totals.tax' | translate }}</span>
             <span>{{ formatMoney(o.taxTotal) }}</span>
           </div>

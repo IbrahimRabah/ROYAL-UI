@@ -7,7 +7,8 @@ interface RowDetailDraft {
   price: number | null;
   compareAtPrice: number | null;
   costPrice: number | null;
-  taxRate: number;
+  /** null = not set by the admin; omitted from the payload so the server default applies. */
+  taxRate: number | null;
   weightGrams: number | null;
   initialStock: number;
   minStockLevel: number;
@@ -17,7 +18,7 @@ const DEFAULT_ROW: RowDetailDraft = {
   price: null,
   compareAtPrice: null,
   costPrice: null,
-  taxRate: 0.14,
+  taxRate: null,
   weightGrams: null,
   initialStock: 0,
   minStockLevel: 0,
@@ -144,7 +145,7 @@ export class VariantPreviewDialogComponent extends DialogPortalBase implements O
         price: draft.price!,
         compareAtPrice: draft.compareAtPrice,
         costPrice: draft.costPrice,
-        taxRate: draft.taxRate,
+        ...(draft.taxRate !== null ? { taxRate: draft.taxRate } : {}),
         weightGrams: draft.weightGrams,
         attributeValueIds: combo.attributeValueIds,
         initialStock: draft.initialStock,

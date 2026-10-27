@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 
-import { InvoiceResponse, Money, OrderResponse, money } from '../../../../../core/models';
+import { InvoiceResponse, Money, OrderResponse, hasAmount, money } from '../../../../../core/models';
 import { FulfillmentStatus } from '../../../../../core/enums/fulfillment-status';
 import { InvoiceStatus } from '../../../../../core/enums/invoice-status';
 import { Language } from '../../../../../core/enums/language';
@@ -95,6 +95,8 @@ export class OrderDetailsPageComponent {
   paymentStatusTone(status: string): StatusTone {
     return (PAYMENT_STATUS_TONE as Record<string, StatusTone>)[status] ?? 'info';
   }
+
+  readonly hasAmount = hasAmount;
 
   formatMoney(value: Money): string {
     return MONEY_FORMATTER.format(money(value));
