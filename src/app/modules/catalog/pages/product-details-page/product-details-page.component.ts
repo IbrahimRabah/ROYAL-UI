@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
-import { FulfillmentType, customRequestTypeFor, isReadyMade } from '../../../../core/enums/fulfillment-type';
+import { FulfillmentType, isReadyMade } from '../../../../core/enums/fulfillment-type';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -145,7 +145,6 @@ export class ProductDetailsPageComponent {
   }
 
   readonly readyMade = computed(() => isReadyMade(this.product()));
-  readonly quoteType = computed(() => customRequestTypeFor(this.product()?.fulfillmentType));
   readonly quoteLabelKey = computed(() =>
     this.product()?.fulfillmentType === FulfillmentType.MADE_TO_ORDER ? 'product.orderMadeToMeasure' : 'product.requestQuote',
   );

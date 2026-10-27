@@ -2,7 +2,7 @@
   *ngIf="quoteProductId != null; else cartButton"
   class="add-to-cart-box"
   routerLink="/custom-request"
-  [queryParams]="{ productId: quoteProductId, type: quoteType }"
+  [queryParams]="{ product: quoteSlug }"
 >
   <i class="pi pi-comments" aria-hidden="true"></i>
   <span>{{ quoteLabelKey | translate }}</span>

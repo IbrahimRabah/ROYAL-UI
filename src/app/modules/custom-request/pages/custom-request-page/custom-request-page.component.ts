@@ -11,8 +11,12 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { CustomRequestCreateRequest, FieldError, GovernorateResponse } from '../../../../core/models';
+import { CustomRequestCreateRequest, FieldError, GovernorateResponse, ProductDetailResponse } from '../../../../core/models';
+import { customRequestTypeFor } from '../../../../core/enums/fulfillment-type';
+import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
 import { CustomRequestApiService } from '../../../../core/services/api/custom-request-api.service';
 import { GeoApiService } from '../../../../core/services/api/geo-api.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
@@ -21,7 +25,8 @@ import { egyptianPhoneValidator } from '../../../../shared/validators/egyptian-p
 
 type FieldName = 'contactName' | 'phone' | 'email' | 'governorateId' | 'area' | 'streetAddress'
   | 'widthCm' | 'heightCm' | 'depthCm' | 'quantity' | 'notes';
-type RequestType = 'CUSTOM_WORK' | 'MADE_TO_ORDER';
+type RequestType = 'CUSTOM_WORK' | 'MADE_TO_ORDER' | 'SIZE_VARIANT';
+type ProductState = 'none' | 'loading' | 'ready' | 'unavailable' | 'error';
 
 const DIMENSION_VALIDATORS = [Validators.min(0.01), Validators.max(10000)];
 
@@ -45,6 +50,8 @@ export class CustomRequestPageComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(CustomRequestApiService);
   private readonly geoApi = inject(GeoApiService);
+  private readonly catalogApi = inject(CatalogApiService);
+  private readonly route = inject(ActivatedRoute);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -55,6 +62,19 @@ export class CustomRequestPageComponent implements OnDestroy {
   readonly rateLimited = signal(false);
   readonly failed = signal(false);
   readonly copied = signal(false);
+
+  /** Set when the page was opened from a product (?product=<slug>). */
+  readonly productState = signal<ProductState>('none');
+  readonly product = signal<ProductDetailResponse | null>(null);
+  /** Server message about the product itself (productId / type rejected), shown on the product card. */
+  readonly productError = signal<string | null>(null);
+  private productSlug: string | null = null;
+
+  productImage(): { url: string; alt: string } | null {
+    const images = this.product()?.images ?? [];
+    const img = images.find((i) => i.main) ?? images[0];
+    return img ? { url: img.thumbUrl || img.url, alt: img.alt || this.product()!.name } : null;
+  }
 
   readonly photos = signal<PhotoItem[]>([]);
   /** Translation key + params for the latest rejected file(s). */
@@ -97,6 +117,33 @@ export class CustomRequestPageComponent implements OnDestroy {
         error: () => {},
       });
     }, { allowSignalWrites: true });
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      this.productSlug = params.get('product')?.trim() || null;
+      this.loadProduct();
+    });
+  }
+
+  loadProduct(): void {
+    this.productError.set(null);
+    if (!this.productSlug) {
+      this.product.set(null);
+      this.productState.set('none');
+      return;
+    }
+    this.productState.set('loading');
+    this.catalogApi.getProduct(this.productSlug, true).subscribe({
+      next: (product) => {
+        this.product.set(product);
+        // The request type follows the product's own fulfillmentType; the server still validates it.
+        this.form.controls.type.setValue(customRequestTypeFor(product.fulfillmentType));
+        this.productState.set('ready');
+      },
+      error: (err: unknown) => {
+        this.product.set(null);
+        this.productState.set(err instanceof HttpErrorResponse && err.status === 404 ? 'unavailable' : 'error');
+      },
+    });
   }
 
   ngOnDestroy(): void {
@@ -189,7 +236,10 @@ export class CustomRequestPageComponent implements OnDestroy {
       return;
     }
     if (this.submitting()) return;
+    // Opened from a product: never send until that product is loaded (the type depends on it).
+    if (this.productState() === 'loading') return;
 
+    this.productError.set(null);
     this.submitting.set(true);
     this.api.create(this.buildBody()).subscribe({
       next: (res) => {
@@ -279,8 +329,10 @@ export class CustomRequestPageComponent implements OnDestroy {
     const v = this.form.getRawValue();
     const text = (s: string | null): string | undefined => (s && s.trim() ? s.trim() : undefined);
     const num = (n: number | null): number | undefined => (n == null || (n as unknown) === '' ? undefined : Number(n));
+    const product = this.productState() === 'ready' ? this.product() : null;
     return {
       type: v.type,
+      productId: product?.id,
       contactName: v.contactName!.trim(),
       phone: v.phone!.trim(),
       governorateId: v.governorateId as number,
@@ -306,13 +358,25 @@ export class CustomRequestPageComponent implements OnDestroy {
       this.rateLimited.set(true);
       return;
     }
+    if (code === 'PRODUCT_NOT_FOUND') {
+      this.productState.set('unavailable');
+      if (this.isBrowser) window.scrollTo({ top: 0 });
+      return;
+    }
     if (code === 'INVALID_PHONE_FORMAT') {
       this.setServerError('phone', err.error?.detail ?? '');
       this.focusFirstInvalid();
       return;
     }
     if (code === 'VALIDATION_FAILED' && Array.isArray(err.error?.errors)) {
-      const unmatched = (err.error.errors as FieldError[]).filter((e) => !this.setServerError(e.field as FieldName, e.message));
+      const unmatched = (err.error.errors as FieldError[]).filter((e) => {
+        // productId / type belong to the product card, not to a form field.
+        if (e.field === 'productId' || e.field === 'type') {
+          this.productError.set(e.message);
+          return false;
+        }
+        return !this.setServerError(e.field as FieldName, e.message);
+      });
       if (unmatched.length) this.failed.set(true);
       this.focusFirstInvalid();
       return;

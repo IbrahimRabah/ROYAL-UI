@@ -124,7 +124,8 @@
     },
     "requestQuote": "Request a quote",
     "priceOnRequest": "Price on request",
-    "orderMadeToMeasure": "Order made to measure"
+    "orderMadeToMeasure": "Order made to measure",
+    "requestCustomSize": "Need a different size or change? Request it"
   },
   "cart": {
     "title": "Your Cart",
@@ -401,6 +402,16 @@
       "titleLine2": "for your project"
     },
     "intro": "Tell us what you have in mind and we'll get back to you with a price. Gates, railings, staircases, windows, or a piece of furniture made to your measurements.",
+    "product": {
+      "label": "Requesting a change to",
+      "back": "Back to the product",
+      "loading": "Loading the product...",
+      "browse": "Browse products",
+      "withoutProduct": "Send a general request",
+      "retry": "Try again",
+      "notesLabel": "What would you like changed?",
+      "notesPlaceholder": "For example: the same design, but 180 cm wide instead of 160 cm."
+    },
     "form": {
       "name": "Your name",
       "phone": "Mobile number",
@@ -430,7 +441,9 @@
     },
     "errors": {
       "dimension": "Enter a measurement between 0.01 and 10000 cm",
-      "rateLimited": "We've already received your earlier request. Please wait a while before sending another — what you typed is still here.",
+      "rateLimited": "You have sent several requests in a short time, so new ones are paused for a while. Please try again later — what you typed is still here.",
+      "productUnavailable": "This product cannot be customised right now.",
+      "productLoadFailed": "We could not load this product. Please try again.",
       "failed": "We couldn't send your request. Nothing you typed was lost — please try again.",
       "quantity": "Enter a whole number from 1 to 10000",
       "tooManyPhotos": "You can add up to {{max}} photos.",

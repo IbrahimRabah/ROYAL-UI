@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 import { API_ROUTES } from '../../constants/api-routes';
 import { APP_CONFIG } from '../../constants/app-config';
+import { SUPPRESS_ERROR_TOAST } from '../../interceptors/error.interceptor';
 import {
   BrandResponse,
   CategoryDetailResponse,
@@ -28,8 +29,10 @@ export class CatalogApiService {
     });
   }
 
-  getProduct(slug: string): Observable<ProductDetailResponse> {
-    return this.http.get<ProductDetailResponse>(API_ROUTES.catalog.productBySlug(slug));
+  /** quiet = the caller answers failures inline, so the global error toast is skipped. */
+  getProduct(slug: string, quiet = false): Observable<ProductDetailResponse> {
+    const context = quiet ? new HttpContext().set(SUPPRESS_ERROR_TOAST, true) : undefined;
+    return this.http.get<ProductDetailResponse>(API_ROUTES.catalog.productBySlug(slug), { context });
   }
 
   getRelated(productId: number): Observable<ProductSummaryResponse[]> {

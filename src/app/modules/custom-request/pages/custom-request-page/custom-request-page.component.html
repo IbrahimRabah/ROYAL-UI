@@ -16,8 +16,39 @@
     <ng-container *ngIf="!reference(); else done">
       <p class="cr-intro">{{ 'customRequest.intro' | translate }}</p>
 
-      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="cr-form">
-        <div class="cr-segmented" role="group" [attr.aria-label]="'customRequest.form.typeLabel' | translate">
+      <ng-container [ngSwitch]="productState()">
+        <a *ngSwitchCase="'ready'" class="cr-back" [routerLink]="['/products', product()!.slug]">
+          <i class="pi pi-arrow-left cr-back__icon" aria-hidden="true"></i>
+          {{ 'customRequest.product.back' | translate }}
+        </a>
+
+        <div *ngSwitchCase="'loading'" class="cr-product cr-product--loading" role="status">
+          {{ 'customRequest.product.loading' | translate }}
+        </div>
+
+        <div *ngSwitchCase="'unavailable'" class="cr-alert cr-alert--error" role="alert">
+          <p class="cr-alert__text">{{ 'customRequest.errors.productUnavailable' | translate }}</p>
+          <a class="cr-done__link" routerLink="/products">{{ 'customRequest.product.browse' | translate }}</a>
+          <a class="cr-done__link" routerLink="/custom-request">{{ 'customRequest.product.withoutProduct' | translate }}</a>
+        </div>
+
+        <div *ngSwitchCase="'error'" class="cr-alert cr-alert--error" role="alert">
+          <p class="cr-alert__text">{{ 'customRequest.errors.productLoadFailed' | translate }}</p>
+          <button type="button" class="cr-done__link" (click)="loadProduct()">{{ 'customRequest.product.retry' | translate }}</button>
+        </div>
+      </ng-container>
+
+      <div class="cr-product" *ngIf="productState() === 'ready' && product() as p">
+        <img *ngIf="productImage() as img" class="cr-product__image" [src]="img.url" [alt]="img.alt" width="72" height="72" />
+        <div class="cr-product__body">
+          <span class="cr-product__label">{{ 'customRequest.product.label' | translate }}</span>
+          <strong class="cr-product__name">{{ p.name }}</strong>
+          <p class="auth-field__error" role="alert" *ngIf="productError() as m">{{ m }}</p>
+        </div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="cr-form" *ngIf="productState() !== 'unavailable' && productState() !== 'error'">
+        <div class="cr-segmented" *ngIf="productState() === 'none'" role="group" [attr.aria-label]="'customRequest.form.typeLabel' | translate">
           <button
             *ngFor="let option of typeOptions"
             type="button"
@@ -101,9 +132,9 @@
         </div>
 
         <div class="auth-field">
-          <label class="auth-field__label" for="cr-notes">{{ 'customRequest.form.notes' | translate }}</label>
+          <label class="auth-field__label" for="cr-notes">{{ (productState() === 'ready' ? 'customRequest.product.notesLabel' : 'customRequest.form.notes') | translate }}</label>
           <textarea id="cr-notes" rows="6" maxlength="1000" class="auth-field__input cr-textarea" formControlName="notes"
-            [placeholder]="'customRequest.form.notesPlaceholder' | translate"></textarea>
+            [placeholder]="(productState() === 'ready' ? 'customRequest.product.notesPlaceholder' : 'customRequest.form.notesPlaceholder') | translate"></textarea>
           <p class="auth-field__error" *ngIf="serverError('notes') as m">{{ m }}</p>
         </div>
 
@@ -140,7 +171,7 @@
         <p class="cr-alert" role="alert" *ngIf="rateLimited()">{{ 'customRequest.errors.rateLimited' | translate }}</p>
         <p class="cr-alert cr-alert--error" role="alert" *ngIf="failed()">{{ 'customRequest.errors.failed' | translate }}</p>
 
-        <button type="submit" class="cr-submit" [disabled]="submitting()">
+        <button type="submit" class="cr-submit" [disabled]="submitting() || productState() === 'loading'">
           {{ (submitting() ? 'customRequest.form.submitting' : 'customRequest.form.submit') | translate }}
         </button>
       </form>
@@ -172,7 +203,8 @@
             </p>
           </ng-container>
         </div>
-        <a routerLink="/portfolio" class="cr-done__link">{{ 'customRequest.done.back' | translate }}</a>
+        <a *ngIf="productState() === 'ready'; else toPortfolio" [routerLink]="['/products', product()!.slug]" class="cr-done__link">{{ 'customRequest.product.back' | translate }}</a>
+        <ng-template #toPortfolio><a routerLink="/portfolio" class="cr-done__link">{{ 'customRequest.done.back' | translate }}</a></ng-template>
       </div>
     </ng-template>
 

@@ -1,9 +1,11 @@
 /**
- * Public POST /custom-requests. The storefront form offers CUSTOM_WORK and MADE_TO_ORDER only
- * (SIZE_VARIANT needs a productId and belongs on a product page). Optional fields are omitted when empty.
+ * Public POST /custom-requests. Without a product the form offers CUSTOM_WORK and MADE_TO_ORDER
+ * (SIZE_VARIANT needs a productId, so it is only sent from a product page). Optional fields are omitted when empty.
  */
 export interface CustomRequestCreateRequest {
-  type: 'CUSTOM_WORK' | 'MADE_TO_ORDER';
+  type: 'CUSTOM_WORK' | 'MADE_TO_ORDER' | 'SIZE_VARIANT';
+  /** A product id (not a variant). The server validates it; PRODUCT_NOT_FOUND if draft/archived/unknown. */
+  productId?: number;
   contactName: string;
   phone: string;
   governorateId: number;
