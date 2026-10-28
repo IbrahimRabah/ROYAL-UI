@@ -38,6 +38,7 @@
           <div #primaryActionAnchor class="pdp__primary-action">
             <ng-container *ngTemplateOutlet="primaryAction"></ng-container>
           </div>
+          <app-wishlist-heart class="pdp__wishlist" variant="labelled" [product]="{ id: p.id, slug: p.slug }"></app-wishlist-heart>
           <a
             *ngIf="readyMade()"
             class="pdp__custom-link"
@@ -73,6 +74,8 @@
     </section>
 
     <app-related-products [products]="relatedProducts()"></app-related-products>
+
+    <app-recently-viewed-strip [excludeProductId]="p.id"></app-recently-viewed-strip>
 
     <ng-template #primaryAction>
       <app-add-to-cart-box

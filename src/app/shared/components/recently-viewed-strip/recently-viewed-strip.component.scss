@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+// The slider (app-vl-carousel) owns all scrolling, arrows and sizing; this only styles the heading.
+.recently-viewed__title {
+  margin-block-end: var(--sp-6);
+  font-family: var(--display);
+  font-size: var(--fs-h3);
+}

@@ -15,6 +15,7 @@ import {
 } from '../../../../core/models';
 import { CartActionsService } from '../../../../core/services/cart-actions.service';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
+import { SavedProductsService } from '../../../../core/services/saved-products.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { MiniCartStateService } from '../../../../core/state/mini-cart-state.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
@@ -44,6 +45,7 @@ export class ProductDetailsPageComponent implements OnDestroy {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly ui = inject(UiStoreService);
+  private readonly saved = inject(SavedProductsService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   /** True once the page's own primary button has scrolled out of view above the viewport. */
@@ -162,6 +164,7 @@ export class ProductDetailsPageComponent implements OnDestroy {
           this.selectedValueId.set(this.defaultValueId(product));
           this.activeGalleryImageId.set(this.posterId(product));
           this.loading.set(false);
+          this.saved.recordView({ id: product.id, slug: product.slug });
           this.fetchRelated(product.id);
         },
         error: () => {

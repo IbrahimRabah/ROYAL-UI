@@ -245,3 +245,8 @@
     animation: none;
   }
 }
+
+.pdp__wishlist {
+  display: flex;
+  margin-block-start: var(--sp-3);
+}

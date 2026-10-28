@@ -52,6 +52,24 @@
     "cod": "Cash on Delivery",
     "myOrders": "My Orders"
   },
+  "wishlist": {
+    "title": "Wishlist",
+    "localNote": "Saved on this device and browser only — it won't appear if you sign in elsewhere.",
+    "add": "Add to wishlist",
+    "remove": "Remove from wishlist",
+    "save": "Save to wishlist",
+    "saved": "Saved to wishlist",
+    "removeButton": "Remove",
+    "full": "Your wishlist is full. Remove something to save another.",
+    "empty": {
+      "title": "Nothing saved yet",
+      "message": "Tap the heart on any product to keep it here for later.",
+      "browse": "Browse products"
+    }
+  },
+  "recentlyViewed": {
+    "title": "Recently viewed"
+  },
   "userMenu": {
     "login": "Login",
     "register": "Register",
@@ -60,7 +78,8 @@
     "addresses": "Addresses",
     "admin": "Admin Dashboard",
     "logout": "Logout",
-    "customRequests": "Custom requests"
+    "customRequests": "Custom requests",
+    "wishlist": "Wishlist"
   },
   "footer": {
     "hero": {
@@ -643,6 +662,7 @@
       "orders": "My Orders",
       "signOut": "Sign Out",
       "customRequests": "Custom requests",
+      "wishlist": "Wishlist",
       "awaitingAria": "{{count}} waiting for your answer"
     },
     "empty": {

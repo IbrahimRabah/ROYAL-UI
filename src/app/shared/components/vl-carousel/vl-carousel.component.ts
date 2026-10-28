@@ -6,8 +6,10 @@ import {
   ContentChild,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
   PLATFORM_ID,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   inject
@@ -21,7 +23,7 @@ import { LanguageStoreService } from '../../../core/state/language-store.service
   styleUrl: './vl-carousel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VlCarouselComponent<T> implements AfterViewInit, OnDestroy {
+export class VlCarouselComponent<T> implements AfterViewInit, OnChanges, OnDestroy {
   @Input({ required: true }) items: T[] = [];
   @Input() ariaLabel = '';
 
@@ -35,6 +37,7 @@ export class VlCarouselComponent<T> implements AfterViewInit, OnDestroy {
 
   private resizeObserver?: ResizeObserver;
   private prefersReducedMotion = false;
+  private pendingMeasure: number | null = null;
 
   atStart = true;
   atEnd = false;
@@ -55,8 +58,25 @@ export class VlCarouselComponent<T> implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(this.viewportRef.nativeElement);
   }
 
+  /**
+   * A new list means new content widths and a scroll offset that belonged to the old list. The viewport's size has not
+   * changed, so the ResizeObserver stays silent; once the new slides are in the DOM, return to the inline start and
+   * measure again, in one step so the two cannot disagree. The first binding is skipped (ngAfterViewInit measures), and a
+   * list that never changes never gets here again.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.isBrowser || !changes['items'] || changes['items'].firstChange) return;
+    if (this.pendingMeasure !== null) cancelAnimationFrame(this.pendingMeasure);
+    this.pendingMeasure = requestAnimationFrame(() => {
+      this.pendingMeasure = null;
+      this.scrollToInlineStart();
+      this.measure();
+    });
+  }
+
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
+    if (this.pendingMeasure !== null) cancelAnimationFrame(this.pendingMeasure);
   }
 
   onScroll(): void {
@@ -93,6 +113,15 @@ export class VlCarouselComponent<T> implements AfterViewInit, OnDestroy {
     const target = sign > 0 ? Math.min(raw, maxScroll) : Math.max(raw, -maxScroll);
     this.animateScrollTo(target);
   }
+  /**
+   * The inline start is the left edge in LTR and the right edge in RTL. Under the standard scroll model this component
+   * already relies on (scrollByPage, measure), that edge is scrollLeft 0 in both directions; RTL then scrolls toward
+   * negative values. Kept in one method so that assumption lives in one place. Instant, never animated.
+   */
+  private scrollToInlineStart(): void {
+    this.viewportRef.nativeElement.scrollTo({ left: 0, behavior: 'auto' });
+  }
+
   private animateScrollTo(target: number): void {
     const viewport = this.viewportRef.nativeElement;
     viewport.scrollTo({ left: target, behavior: this.prefersReducedMotion ? 'auto' : 'smooth' });

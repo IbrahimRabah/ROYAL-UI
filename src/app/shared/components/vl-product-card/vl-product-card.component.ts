@@ -12,6 +12,8 @@ import { ProductSummaryResponse } from '../../../core/models';
 })
 export class VlProductCardComponent {
   @Input({ required: true }) product!: ProductSummaryResponse;
+  /** The heart is on by default; a surface that supplies its own remove control can turn it off. */
+  @Input() wishlistEnabled = true;
 
   /** One switch for the whole storefront: APP_CONFIG.features.showBrand. */
   readonly showBrand = APP_CONFIG.features.showBrand;

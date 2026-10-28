@@ -1,0 +1,11 @@
+<section class="recently-viewed section" *ngIf="visible()">
+  <div class="container-vl">
+    <h2 class="recently-viewed__title">{{ 'recentlyViewed.title' | translate }}</h2>
+
+    <app-vl-carousel [items]="products()" [ariaLabel]="'recentlyViewed.title' | translate">
+      <ng-template let-product>
+        <app-vl-product-card [product]="product"></app-vl-product-card>
+      </ng-template>
+    </app-vl-carousel>
+  </div>
+</section>

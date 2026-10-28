@@ -59,6 +59,8 @@ import { HasRoleDirective } from './directives/has-role.directive';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { LazyImgDirective } from './directives/lazy-img.directive';
 import { ImgFallbackDirective } from './directives/img-fallback.directive';
+import { WishlistHeartComponent } from './components/wishlist-heart/wishlist-heart.component';
+import { RecentlyViewedStripComponent } from './components/recently-viewed-strip/recently-viewed-strip.component';
 import { ImageUrlPipe } from './pipes/image-url.pipe';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceInputDirective } from './directives/debounce-input.directive';
@@ -100,6 +102,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     VlStatusBadgeComponent,
     VlStockIndicatorComponent,
     VlProductCardComponent,
+    WishlistHeartComponent,
+    RecentlyViewedStripComponent,
     VlFeatureStripComponent,
     VlGovernorateSelectComponent,
     VlPhoneInputComponent,
@@ -172,6 +176,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     VlStatusBadgeComponent,
     VlStockIndicatorComponent,
     VlProductCardComponent,
+    WishlistHeartComponent,
+    RecentlyViewedStripComponent,
     VlFeatureStripComponent,
     VlGovernorateSelectComponent,
     VlPhoneInputComponent,

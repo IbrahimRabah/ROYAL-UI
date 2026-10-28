@@ -1,6 +1,19 @@
 @use 'styles/mixins';
 @use 'styles/breakpoints';
 
+:host {
+  position: relative;
+  display: block;
+  min-inline-size: 0;
+}
+
+.vl-product-card__heart {
+  position: absolute;
+  inset-block-start: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  z-index: 2;
+}
+
 .vl-product-card {
   display: flex;
   flex-direction: column;

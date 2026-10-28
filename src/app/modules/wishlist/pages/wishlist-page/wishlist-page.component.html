@@ -1,0 +1,31 @@
+<section class="wishlist section">
+  <div class="container-vl">
+    <h1 class="wishlist__title">{{ 'wishlist.title' | translate }}</h1>
+    <p class="wishlist__note">{{ 'wishlist.localNote' | translate }}</p>
+
+    <div class="wishlist__grid" *ngIf="loading(); else loaded">
+      <div class="wishlist__skeleton" *ngFor="let n of [1, 2, 3, 4]"></div>
+    </div>
+
+    <ng-template #loaded>
+      <div class="wishlist__grid" *ngIf="products().length; else empty">
+        <div class="wishlist__item" *ngFor="let product of products(); trackBy: trackById">
+          <app-vl-product-card [product]="product"></app-vl-product-card>
+          <button type="button" class="wishlist__remove" (click)="remove(product.id)">
+            <i class="pi pi-trash" aria-hidden="true"></i>
+            {{ 'wishlist.removeButton' | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #empty>
+      <div class="wishlist__empty">
+        <i class="pi pi-heart" aria-hidden="true"></i>
+        <p class="wishlist__empty-title">{{ 'wishlist.empty.title' | translate }}</p>
+        <p class="wishlist__empty-message">{{ 'wishlist.empty.message' | translate }}</p>
+        <a routerLink="/products" class="wishlist__browse">{{ 'wishlist.empty.browse' | translate }}</a>
+      </div>
+    </ng-template>
+  </div>
+</section>

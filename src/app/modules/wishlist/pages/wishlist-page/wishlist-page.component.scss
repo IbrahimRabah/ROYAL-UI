@@ -1,0 +1,99 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+.wishlist__title {
+  font-family: var(--display);
+  font-size: var(--fs-h3);
+  text-align: center;
+}
+
+.wishlist__note {
+  margin-block: var(--sp-2) var(--sp-6);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.wishlist__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+
+  @include breakpoints.lg {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+}
+
+.wishlist__item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-inline-size: 0;
+}
+
+.wishlist__remove {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text);
+    text-decoration: underline;
+  }
+}
+
+.wishlist__skeleton {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-md);
+  background: var(--surface-alt);
+}
+
+.wishlist__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-block: var(--sp-8);
+  text-align: center;
+
+  .pi {
+    font-size: 2rem;
+    color: var(--gold);
+  }
+}
+
+.wishlist__empty-title {
+  font-family: var(--display);
+  font-size: var(--fs-h5);
+}
+
+.wishlist__empty-message {
+  max-inline-size: 28rem;
+  color: var(--text-muted);
+}
+
+.wishlist__browse {
+  padding: var(--sp-3) var(--sp-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--gold);
+  }
+}

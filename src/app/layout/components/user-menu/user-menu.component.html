@@ -25,6 +25,10 @@
         <i class="pi pi-shopping-bag" aria-hidden="true"></i>
         {{ 'userMenu.orders' | translate }}
       </a>
+      <a routerLink="/wishlist" class="user-menu__link">
+        <i class="pi pi-heart" aria-hidden="true"></i>
+        {{ 'userMenu.wishlist' | translate }}
+      </a>
       <a routerLink="/me/custom-requests" class="user-menu__link">
         <i class="pi pi-comments" aria-hidden="true"></i>
         {{ 'userMenu.customRequests' | translate }}
@@ -54,6 +58,10 @@
     </ng-container>
 
     <ng-template #guestLinks>
+      <a routerLink="/wishlist" class="user-menu__link">
+        <i class="pi pi-heart" aria-hidden="true"></i>
+        {{ 'userMenu.wishlist' | translate }}
+      </a>
       <a routerLink="/auth/login" class="user-menu__link">
         <i class="pi pi-sign-in" aria-hidden="true"></i>
         {{ 'userMenu.login' | translate }}

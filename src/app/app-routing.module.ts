@@ -15,6 +15,7 @@ const routes: Routes = [
     children: [
       { path: '', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
       { path: 'products', loadChildren: () => import('./modules/catalog/catalog.module').then(m => m.CatalogModule) },
+      { path: 'wishlist', loadChildren: () => import('./modules/wishlist/wishlist.module').then(m => m.WishlistModule) },
       { path: 'cart', loadChildren: () => import('./modules/cart/cart.module').then(m => m.CartModule) },
       { path: 'checkout', loadChildren: () => import('./modules/checkout/checkout.module').then(m => m.CheckoutModule) },
       { path: 'about', loadChildren: () => import('./modules/about/about.module').then(m => m.AboutModule) },

@@ -1,0 +1,58 @@
+:host {
+  display: inline-flex;
+  min-inline-size: 0;
+}
+
+:host(.pdp__wishlist) {
+  display: flex;
+}
+
+.wishlist-heart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-inline-size: 2.5rem;
+  min-block-size: 2.5rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--gold);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+}
+
+.wishlist-heart--on {
+  color: #b3261e;
+
+  &:hover,
+  &:focus-visible {
+    color: #b3261e;
+  }
+}
+
+// Text beside the icon (product page): an outlined button rather than a floating disc.
+.wishlist-heart--labelled {
+  inline-size: 100%;
+  padding-inline: var(--sp-4);
+  border-color: var(--line);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wishlist-heart {
+    transition: none;
+  }
+}

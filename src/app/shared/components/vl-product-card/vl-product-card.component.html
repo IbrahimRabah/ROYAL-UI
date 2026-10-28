@@ -58,3 +58,10 @@
     </ng-template>
   </span>
 </a>
+
+<!-- A sibling of the card link, not a child: a button inside an anchor is invalid and would also navigate. -->
+<app-wishlist-heart
+  *ngIf="wishlistEnabled"
+  class="vl-product-card__heart"
+  [product]="{ id: product.id, slug: product.slug }"
+></app-wishlist-heart>

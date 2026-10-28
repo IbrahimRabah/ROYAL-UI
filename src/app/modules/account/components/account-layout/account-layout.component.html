@@ -49,6 +49,10 @@
           [attr.aria-label]="'account.nav.awaitingAria' | translate: { count: awaitingResponse() }"
         >{{ awaitingResponse() }}</span>
       </a>
+      <a routerLink="/wishlist" class="account-sidebar__link">
+        <i class="pi pi-heart" aria-hidden="true"></i>
+        <span>{{ 'account.nav.wishlist' | translate }}</span>
+      </a>
       <button type="button" class="account-sidebar__link account-sidebar__link--button" (click)="signOut()">
         <i class="pi pi-sign-out" aria-hidden="true"></i>
         <span>{{ 'account.nav.signOut' | translate }}</span>

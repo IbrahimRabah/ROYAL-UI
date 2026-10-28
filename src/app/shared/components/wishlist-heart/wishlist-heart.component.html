@@ -1,0 +1,12 @@
+<button
+  type="button"
+  class="wishlist-heart"
+  [class.wishlist-heart--labelled]="variant === 'labelled'"
+  [class.wishlist-heart--on]="isWished()"
+  [attr.aria-pressed]="isWished()"
+  [attr.aria-label]="(isWished() ? 'wishlist.remove' : 'wishlist.add') | translate"
+  (click)="toggle($event)"
+>
+  <i class="pi" [ngClass]="isWished() ? 'pi-heart-fill' : 'pi-heart'" aria-hidden="true"></i>
+  <span *ngIf="variant === 'labelled'">{{ (isWished() ? 'wishlist.saved' : 'wishlist.save') | translate }}</span>
+</button>
