@@ -1,8 +1,6 @@
-<table class="specs-table">
-  <tbody>
-    <tr class="specs-table__row" *ngFor="let spec of specifications; trackBy: trackByCode">
-      <th class="specs-table__name" scope="row">{{ spec.name }}</th>
-      <td class="specs-table__value">{{ spec.value }}</td>
-    </tr>
-  </tbody>
-</table>
+<dl class="specs" *ngIf="specifications.length">
+  <div class="specs__item" *ngFor="let spec of specifications; trackBy: trackByCode">
+    <dt class="specs__name">{{ spec.name }}</dt>
+    <dd class="specs__value">{{ spec.value }}</dd>
+  </div>
+</dl>

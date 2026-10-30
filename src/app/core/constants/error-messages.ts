@@ -76,6 +76,17 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.NEGATIVE_STOCK]: 'هذا التعديل سيجعل الكمية بالسالب',
   [ErrorCode.MOVEMENT_TYPE_NOT_MANUAL]: 'نوع الحركة هذا لا يمكن إدخاله يدوياً',
   [ErrorCode.STOCK_BELOW_RESERVED]: 'هذا التعديل سيجعل الكمية المتاحة أقل من المحجوز',
+
+  [ErrorCode.FILE_REQUIRED]: 'يجب اختيار ملف',
+  [ErrorCode.UNSUPPORTED_FILE_TYPE]: 'نوع الملف غير مقبول. ارفع ملف Excel (.xlsx) فقط',
+  [ErrorCode.IMPORT_TEMPLATE_MISMATCH]: 'الملف ليس قالب رفع المنتجات. حمّل القالب من جديد واملأه',
+  [ErrorCode.IMPORT_EMPTY]: 'الملف لا يحتوي على أي منتج',
+  [ErrorCode.IMPORT_TOO_MANY_ROWS]: 'عدد المنتجات في الملف أكبر من الحد المسموح في الرفعة الواحدة',
+  [ErrorCode.IMPORT_BATCH_NOT_FOUND]: 'عملية الرفع غير موجودة',
+  [ErrorCode.IMPORT_ROW_NOT_FOUND]: 'هذا الصف غير موجود في عملية الرفع',
+  [ErrorCode.IMPORT_BATCH_NOT_PENDING]: 'تم اعتماد هذا الرفع أو إلغاؤه من قبل',
+  [ErrorCode.IMPORT_BATCH_EXPIRED]: 'انتهت صلاحية المعاينة. ارفع الملف من جديد',
+  [ErrorCode.IMPORT_HAS_ERRORS]: 'في الملف صفوف بها أخطاء. صحّحها في المعاينة أو صحّح الملف وارفعه من جديد، ولم يتم حفظ أي شيء',
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
@@ -154,4 +165,15 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.NEGATIVE_STOCK]: 'This change would make the stock quantity negative',
   [ErrorCode.MOVEMENT_TYPE_NOT_MANUAL]: 'This movement type cannot be entered manually',
   [ErrorCode.STOCK_BELOW_RESERVED]: 'This change would drop available stock below what is reserved',
+
+  [ErrorCode.FILE_REQUIRED]: 'Choose a file',
+  [ErrorCode.UNSUPPORTED_FILE_TYPE]: 'This file type is not accepted. Upload an Excel (.xlsx) file only',
+  [ErrorCode.IMPORT_TEMPLATE_MISMATCH]: 'This file is not the product import template. Download the template again and fill that in',
+  [ErrorCode.IMPORT_EMPTY]: 'The file has no products',
+  [ErrorCode.IMPORT_TOO_MANY_ROWS]: 'The file has more products than one import accepts',
+  [ErrorCode.IMPORT_BATCH_NOT_FOUND]: 'Import not found',
+  [ErrorCode.IMPORT_ROW_NOT_FOUND]: 'This import has no such row',
+  [ErrorCode.IMPORT_BATCH_NOT_PENDING]: 'This import was already submitted or discarded',
+  [ErrorCode.IMPORT_BATCH_EXPIRED]: 'This preview has expired. Upload the file again',
+  [ErrorCode.IMPORT_HAS_ERRORS]: 'The file has rows with errors. Fix them in the preview, or fix the file and upload again; nothing was saved',
 };

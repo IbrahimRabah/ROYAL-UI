@@ -72,7 +72,15 @@
   }
 }
 
+.pdp__description-inner--single {
+  grid-template-columns: 1fr;
+}
+
 .pdp__description-copy {
+  min-inline-size: 0;
+}
+
+.pdp__description-inner:not(.pdp__description-inner--single) .pdp__description-copy {
   max-inline-size: 65ch;
 }
 

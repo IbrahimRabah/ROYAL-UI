@@ -1369,6 +1369,39 @@
           "READY_MADE": "Ready",
           "MADE_TO_ORDER": "To order",
           "CUSTOM_WORK": "Custom"
+        },
+        "importProducts": "Import from Excel",
+        "bulk": {
+          "hint": "Tick products to publish or unpublish several at once.",
+          "selected": "{{count}} selected",
+          "selectAll": "Select every product in this view",
+          "selectRow": "Select {{name}}",
+          "publishSelected": "Publish selected ({{count}})",
+          "unpublishSelected": "Unpublish selected ({{count}})",
+          "publishAllDrafts": "Publish all drafts ({{count}})",
+          "clear": "Clear selection",
+          "publishConfirm": {
+            "title": "Publish these products?",
+            "message": "{{count}} draft product(s) will go live in the store. A product that cannot (no variant, no Arabic name) is left as a draft and reported.",
+            "confirm": "Publish"
+          },
+          "unpublishConfirm": {
+            "title": "Unpublish these products?",
+            "message": "{{count}} live product(s) will return to draft and disappear from the store.",
+            "confirm": "Unpublish"
+          },
+          "toast": {
+            "published": "{{count}} product(s) published",
+            "unpublished": "{{count}} product(s) returned to draft",
+            "skipped": "{{count}} left unchanged"
+          },
+          "reasons": {
+            "NOT_DRAFT": "not a draft",
+            "NOT_ACTIVE": "not published",
+            "PRODUCT_NOT_FOUND": "not found",
+            "PRODUCT_HAS_NO_VARIANTS": "no variant yet",
+            "PRODUCT_MISSING_ARABIC_NAME": "no Arabic name"
+          }
         }
       },
       "form": {
@@ -1551,6 +1584,157 @@
             "helper": "Leave 0 for free assembly.",
             "feeInvalid": "Enter 0 or more"
           }
+        }
+      },
+      "import": {
+        "title": "Import products from Excel",
+        "step1": {
+          "title": "1. Download the template",
+          "hint": "Download the template: your furniture workbook, headers only. Fill the «كرسي البار» sheet (one row per product) and the «SEO» sheet (category, slug, meta) for the same SKUs. Only a file with the same sheets and column headers is accepted: do not rename, move or delete columns.",
+          "download": "Download the template"
+        },
+        "step2": {
+          "title": "2. Upload the filled template",
+          "hint": "Nothing is saved yet. You review every product first, then submit them all together.",
+          "choose": "Choose the .xlsx file",
+          "upload": "Upload and check",
+          "checking": "Checking the file…"
+        },
+        "review": {
+          "title": "Review before saving",
+          "total": "Rows",
+          "create": "New products",
+          "update": "Updates",
+          "errors": "Errors",
+          "warnings": "Warnings",
+          "blocked": "{{count}} row(s) are invalid, so nothing can be submitted yet. Fix them below (each problem names its column and cell), or fix the Excel file and upload it again.",
+          "ready": "Every row is valid (green). Submitting saves all of them together, as drafts.",
+          "allRows": "All rows",
+          "errorRows": "Rows with errors",
+          "submit": "Submit all",
+          "saving": "Saving…",
+          "discard": "Discard",
+          "details": "Row details",
+          "empty": "No rows to show",
+          "prev": "Previous",
+          "next": "Next",
+          "pagination": "Pages",
+          "notPending": "This import was already submitted or discarded.",
+          "moreProblems": "+{{count}} more problems",
+          "cell": "cell",
+          "fixHere": "Fix it here",
+          "editRow": "Edit this row",
+          "valid": "Valid",
+          "invalid": "Invalid",
+          "validRows": "Valid rows",
+          "invalidRows": "Invalid rows",
+          "resort": "Re-sort: invalid rows first",
+          "fixedBadge": "Fixed",
+          "rowOk": "This row is valid.",
+          "submitBlocked": "{{count}} row(s) are still invalid. Every row must be valid (green) before you can submit."
+        },
+        "columns": {
+          "row": "Row",
+          "sku": "SKU",
+          "name": "Name",
+          "category": "Category",
+          "price": "Price",
+          "action": "Action",
+          "status": "Result"
+        },
+        "action": {
+          "CREATE": "New",
+          "UPDATE": "Update",
+          "NONE": "Unreadable"
+        },
+        "detail": {
+          "nameEn": "English name",
+          "slug": "Slug",
+          "slugAuto": "Generated on save",
+          "compareAt": "Price before discount",
+          "stock": "Opening stock",
+          "fulfillment": "Fulfilment",
+          "size": "Shipping size"
+        },
+        "commitConfirm": {
+          "title": "Submit the whole sheet?",
+          "message": "{{count}} new product(s) will be created as drafts. All or nothing. Publish them afterwards from the product list.",
+          "confirm": "Submit all"
+        },
+        "done": {
+          "title": "Products saved",
+          "summary": "{{created}} product(s) created as drafts.",
+          "openProducts": "Open the drafts",
+          "another": "Import another file",
+          "draftNote": "Publish them from the product list: open the drafts, tick the ones you want and choose \"Publish selected\"."
+        },
+        "toast": {
+          "committed": "The products were saved",
+          "discarded": "The preview was discarded",
+          "rowFixed": "Row {{row}} is fixed"
+        },
+        "messages": {
+          "REQUIRED": "This value is required",
+          "INVALID_CELL": "The cell holds an Excel error",
+          "INVALID_NUMBER": "Not a valid number",
+          "NEGATIVE": "Cannot be negative",
+          "TOO_LONG": "The text is too long",
+          "TOO_MANY_DECIMALS": "At most 4 decimal places",
+          "NOT_WHOLE": "Must be a whole number",
+          "TOO_LARGE": "The number is too large",
+          "INVALID_VALUE": "Pick a value from the list",
+          "OUT_OF_RANGE": "Outside the allowed range",
+          "INVALID_SKU": "The SKU may hold only letters, digits, dot, underscore and hyphen",
+          "INVALID_SLUG": "The slug may hold only lowercase English letters, digits and hyphens",
+          "ENGLISH_NAME_REQUIRED": "An English name is required when any other English field is filled",
+          "PRICE_ZERO": "The price must be above zero",
+          "COMPARE_AT_BELOW_PRICE": "The price before discount cannot be lower than the current price",
+          "UNKNOWN_CATEGORY": "No product category has this name. Pick one from the list",
+          "AMBIGUOUS_CATEGORY": "More than one category has this name",
+          "SIZE_REQUIRED": "A ready-to-ship product needs a shipping size",
+          "SLUG_TAKEN": "Another product already uses this slug",
+          "SKU_ARCHIVED": "This SKU belongs to an archived variant and is never reused",
+          "PRODUCT_ARCHIVED": "The product with this SKU is archived",
+          "DUPLICATE_SKU": "This SKU appears more than once in the file",
+          "DUPLICATE_SLUG": "This slug appears more than once in the file",
+          "ATTRIBUTE_SETUP": "A specification attribute is missing in the database. Ask the developer to apply V23",
+          "NO_DESCRIPTION": "No Arabic description: the product page will have none",
+          "STOCK_NOT_CHANGED": "Stock of an existing product is not changed by an import. Use the stock screen",
+          "SLUG_NOT_CHANGED": "The slug of an existing product is kept",
+          "SEO_ROW_MISSING": "This SKU has no row in the SEO sheet. Set the category and slug here",
+          "SKU_EXISTS": "This SKU is already used by another product. A SKU is never reused: give this row a new one"
+        },
+        "wholeRow": "The whole row",
+        "editor": {
+          "title": "Edit row {{row}}",
+          "specifications": "Specifications",
+          "save": "Save and check again",
+          "saving": "Checking…",
+          "cancel": "Cancel",
+          "problemsLeft": "{{count}} problem(s) left",
+          "allGood": "Everything checks out"
+        },
+        "fields": {
+          "sku": "SKU",
+          "category": "Category",
+          "name_ar": "Arabic name",
+          "name_en": "English name",
+          "price": "Price (EGP, tax-inclusive)",
+          "compare_at": "Price before discount",
+          "stock": "Opening stock",
+          "slug": "Slug",
+          "short_ar": "Short description (Arabic)",
+          "desc_ar": "Full description (Arabic)",
+          "desc_en": "Full description (English)",
+          "meta_title_ar": "SEO title (Arabic)",
+          "meta_title_en": "SEO title (English)",
+          "meta_desc_ar": "SEO description (Arabic)",
+          "meta_desc_en": "SEO description (English)"
+        },
+        "sku": {
+          "unique": "This SKU is unique",
+          "duplicate": "Another row of this sheet already has this SKU (row {{rows}})",
+          "inCatalog": "This SKU is already used by the product «{{name}}». A SKU is never reused: give this row a new one"
         }
       }
     },

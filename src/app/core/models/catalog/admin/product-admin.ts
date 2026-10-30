@@ -55,3 +55,21 @@ export interface ProductUpsertRequest {
   assemblyFee: number;
   specifications?: ProductSpecificationInput[];
 }
+
+export type ProductBulkAction = 'PUBLISH' | 'UNPUBLISH';
+
+/** A product a bulk publish or unpublish left as it was, with the reason. */
+export interface ProductBulkSkipped {
+  id: number;
+  /** The product's Arabic name; null when it was not found. */
+  name: string | null;
+  /** NOT_DRAFT, NOT_ACTIVE, PRODUCT_NOT_FOUND, PRODUCT_HAS_NO_VARIANTS or PRODUCT_MISSING_ARABIC_NAME. */
+  reason: string;
+}
+
+export interface ProductBulkStatusResponse {
+  action: ProductBulkAction;
+  requested: number;
+  succeeded: number[];
+  skipped: ProductBulkSkipped[];
+}

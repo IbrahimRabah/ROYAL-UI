@@ -87,8 +87,19 @@ export const API_ROUTES = {
       unpublish: (productId: number) => `${BASE}/admin/products/${productId}/unpublish`,
       archive: (productId: number) => `${BASE}/admin/products/${productId}/archive`,
       duplicate: (productId: number) => `${BASE}/admin/products/${productId}/duplicate`,
+      bulkStatus: () => `${BASE}/admin/products/bulk-status`,
       images: (productId: number) => `${BASE}/admin/products/${productId}/images`,
       image: (productId: number, imageId: number) => `${BASE}/admin/products/${productId}/images/${imageId}`,
+    },
+
+    productImports: {
+      imports: () => `${BASE}/admin/product-imports`,
+      template: () => `${BASE}/admin/product-imports/template`,
+      batch: (batchId: number) => `${BASE}/admin/product-imports/${batchId}`,
+      rows: (batchId: number) => `${BASE}/admin/product-imports/${batchId}/rows`,
+      row: (batchId: number, rowNo: number) => `${BASE}/admin/product-imports/${batchId}/rows/${rowNo}`,
+      commit: (batchId: number) => `${BASE}/admin/product-imports/${batchId}/commit`,
+      skuCheck: (batchId: number) => `${BASE}/admin/product-imports/${batchId}/sku-check`,
     },
 
     variants: {

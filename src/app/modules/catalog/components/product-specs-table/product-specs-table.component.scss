@@ -2,35 +2,33 @@
   display: block;
 }
 
-.specs-table {
-  inline-size: 100%;
-  max-inline-size: 65ch;
-  border-collapse: collapse;
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  gap: 0 var(--sp-6);
+  margin: 0;
 }
 
-.specs-table__row {
-  border-block-end: 1px solid var(--border);
-
-  &:last-child {
-    border-block-end: none;
-  }
-}
-
-.specs-table__name,
-.specs-table__value {
+.specs__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
   padding: var(--sp-3) 0;
-  text-align: start;
-  font-weight: 400;
-  font-size: var(--fs-sm);
-  vertical-align: top;
+  border-block-end: 1px solid var(--border);
 }
 
-.specs-table__name {
-  inline-size: 40%;
-  padding-inline-end: var(--sp-4);
+.specs__name {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-muted);
 }
 
-.specs-table__value {
+.specs__value {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 500;
   color: var(--text);
+  overflow-wrap: anywhere;
 }

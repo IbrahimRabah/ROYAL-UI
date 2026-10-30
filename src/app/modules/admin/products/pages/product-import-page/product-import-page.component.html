@@ -1,0 +1,567 @@
+<div class="product-import-page">
+  <app-admin-back-link parentPath="/admin/products" labelKey="admin.products.backToList"></app-admin-back-link>
+
+  <header class="product-import-page__header">
+    <h1 class="product-import-page__title">{{ 'admin.products.import.title' | translate }}</h1>
+  </header>
+
+  <!-- A server problem: a wrong file, a changed template, or a catalogue that moved since the preview. -->
+  <div *ngIf="problem() as p" class="product-import-page__problem" role="alert">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <div>
+      <strong>{{ p.title }}</strong>
+      <p *ngIf="p.detail" class="product-import-page__problem-detail" dir="auto">{{ p.detail }}</p>
+    </div>
+  </div>
+
+  <!-- Done -->
+  <section *ngIf="result() as done" class="product-import-page__card product-import-page__done">
+    <i class="pi pi-check-circle product-import-page__done-icon" aria-hidden="true"></i>
+    <h2 class="product-import-page__card-title">{{ 'admin.products.import.done.title' | translate }}</h2>
+    <p class="product-import-page__hint">
+      {{ 'admin.products.import.done.summary' | translate: { created: done.created } }}
+    </p>
+    <div class="product-import-page__actions">
+      <button type="button" class="product-import-page__btn product-import-page__btn--primary" (click)="openProducts()">
+        {{ 'admin.products.import.done.openProducts' | translate }}
+      </button>
+      <button type="button" class="product-import-page__btn" (click)="reset()">
+        {{ 'admin.products.import.done.another' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Step 1: template and upload -->
+  <section *ngIf="!batch() && !result()" class="product-import-page__card">
+    <ol class="product-import-page__steps">
+      <li>
+        <h2 class="product-import-page__card-title">{{ 'admin.products.import.step1.title' | translate }}</h2>
+        <p class="product-import-page__hint">{{ 'admin.products.import.step1.hint' | translate }}</p>
+        <button
+          type="button"
+          class="product-import-page__btn"
+          [disabled]="downloading()"
+          (click)="downloadTemplate()"
+        >
+          <i class="pi pi-download" aria-hidden="true"></i>
+          {{ 'admin.products.import.step1.download' | translate }}
+        </button>
+      </li>
+
+      <li>
+        <h2 class="product-import-page__card-title">{{ 'admin.products.import.step2.title' | translate }}</h2>
+        <p class="product-import-page__hint">{{ 'admin.products.import.step2.hint' | translate }}</p>
+
+        <label class="product-import-page__drop">
+          <i class="pi pi-file-excel" aria-hidden="true"></i>
+          <span class="product-import-page__drop-name" dir="auto">
+            {{ selectedFile()?.name || ('admin.products.import.step2.choose' | translate) }}
+          </span>
+          <input
+            type="file"
+            class="product-import-page__file"
+            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            (change)="onFileChosen($event)"
+          />
+        </label>
+
+        <button
+          type="button"
+          class="product-import-page__btn product-import-page__btn--primary"
+          [disabled]="!selectedFile() || busy()"
+          (click)="upload()"
+        >
+          <i class="pi pi-upload" aria-hidden="true"></i>
+          {{ (uploading() ? 'admin.products.import.step2.checking' : 'admin.products.import.step2.upload') | translate }}
+        </button>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Step 3: review, fix, submit -->
+  <ng-container *ngIf="batch() as b">
+    <ng-container *ngIf="inPreview()">
+      <section class="product-import-page__card">
+        <div class="product-import-page__summary-head">
+          <div>
+            <h2 class="product-import-page__card-title">{{ 'admin.products.import.review.title' | translate }}</h2>
+            <p class="product-import-page__hint" dir="auto">{{ b.fileName }}</p>
+          </div>
+          <div class="product-import-page__actions">
+            <button type="button" class="product-import-page__btn" [disabled]="busy()" (click)="discard()">
+              {{ 'admin.products.import.review.discard' | translate }}
+            </button>
+            <button
+              type="button"
+              class="product-import-page__btn product-import-page__btn--primary"
+              [disabled]="!b.canSubmit || busy()"
+              [attr.title]="submitBlockedBy() ? ('admin.products.import.review.submitBlocked' | translate: { count: submitBlockedBy() }) : null"
+              (click)="commit()"
+            >
+              <i class="pi pi-check" aria-hidden="true"></i>
+              {{ (committing() ? 'admin.products.import.review.saving' : 'admin.products.import.review.submit') | translate }}
+            </button>
+          </div>
+        </div>
+
+        <!-- One set of numbers: valid + invalid = rows. Both come from the server after every edit. -->
+        <dl class="product-import-page__stats">
+          <div class="product-import-page__stat">
+            <dt>{{ 'admin.products.import.review.total' | translate }}</dt>
+            <dd>{{ b.totalRows }}</dd>
+          </div>
+          <div class="product-import-page__stat product-import-page__stat--ok">
+            <dt>{{ 'admin.products.import.review.valid' | translate }}</dt>
+            <dd>{{ b.validRows }}</dd>
+          </div>
+          <div class="product-import-page__stat" [class.product-import-page__stat--stop]="b.errorRows > 0">
+            <dt>{{ 'admin.products.import.review.invalid' | translate }}</dt>
+            <dd>{{ b.errorRows }}</dd>
+          </div>
+          <div class="product-import-page__stat" [class.product-import-page__stat--warn]="b.warningRows > 0">
+            <dt>{{ 'admin.products.import.review.warnings' | translate }}</dt>
+            <dd>{{ b.warningRows }}</dd>
+          </div>
+        </dl>
+
+
+        <p *ngIf="b.errorRows > 0" class="product-import-page__verdict product-import-page__verdict--stop">
+          <i class="pi pi-times-circle" aria-hidden="true"></i>
+          {{ 'admin.products.import.review.blocked' | translate: { count: b.errorRows } }}
+        </p>
+        <p *ngIf="b.errorRows === 0" class="product-import-page__verdict product-import-page__verdict--ok">
+          <i class="pi pi-check-circle" aria-hidden="true"></i>
+          {{ 'admin.products.import.review.ready' | translate }}
+        </p>
+      </section>
+
+
+      <div class="product-import-page__tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="product-import-page__tab"
+          [class.product-import-page__tab--active]="filter() === 'ALL'"
+          [attr.aria-selected]="filter() === 'ALL'"
+          (click)="setFilter('ALL')"
+        >
+          {{ 'admin.products.import.review.allRows' | translate }}
+          <span class="product-import-page__tab-count">{{ b.totalRows }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="product-import-page__tab"
+          [class.product-import-page__tab--active]="filter() === 'ERROR'"
+          [attr.aria-selected]="filter() === 'ERROR'"
+          (click)="setFilter('ERROR')"
+        >
+          {{ 'admin.products.import.review.invalidRows' | translate }}
+          <span class="product-import-page__tab-count product-import-page__tab-count--stop">{{ b.errorRows }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="product-import-page__tab"
+          [class.product-import-page__tab--active]="filter() === 'VALID'"
+          [attr.aria-selected]="filter() === 'VALID'"
+          (click)="setFilter('VALID')"
+        >
+          {{ 'admin.products.import.review.validRows' | translate }}
+          <span class="product-import-page__tab-count product-import-page__tab-count--ok">{{ b.validRows }}</span>
+        </button>
+
+        <button
+          *ngIf="orderStale()"
+          type="button"
+          class="product-import-page__resort"
+          [disabled]="loadingRows()"
+          (click)="reorder()"
+        >
+          <i class="pi pi-sort-amount-down" aria-hidden="true"></i>
+          {{ 'admin.products.import.review.resort' | translate }}
+        </button>
+      </div>
+
+      <div class="product-import-page__table-wrap" [class.product-import-page__table-wrap--loading]="loadingRows()">
+        <table class="product-import-page__table">
+          <thead>
+            <tr>
+              <th>{{ 'admin.products.import.columns.row' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.sku' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.name' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.category' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.price' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.action' | translate }}</th>
+              <th>{{ 'admin.products.import.columns.status' | translate }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let row of rows().content">
+              <tr
+                class="product-import-page__row"
+                [ngClass]="'product-import-page__row--' + rowTone(row)"
+                (click)="toggleRow(row.rowNo)"
+              >
+                <td>{{ row.rowNo }}</td>
+                <td class="product-import-page__sku" dir="ltr">{{ row.sku || '—' }}</td>
+                <td dir="auto">
+                  {{ rowName(row) }}
+                  <!-- The problems at a glance: which column and which cell, without opening the row. -->
+                  <ul *ngIf="errorsOf(row).length" class="product-import-page__glance">
+                    <li *ngFor="let m of errorsOf(row) | slice: 0 : 3">
+                      <strong dir="auto">{{ messageSubject(m) }}</strong>
+                      <span *ngIf="m.cell" class="product-import-page__cell" dir="ltr">{{ m.cell }}</span>
+                      <span dir="auto">{{ messageText(m) }}</span>
+                    </li>
+                    <li *ngIf="errorsOf(row).length > 3" class="product-import-page__more">
+                      {{ 'admin.products.import.review.moreProblems' | translate: { count: errorsOf(row).length - 3 } }}
+                    </li>
+                  </ul>
+                </td>
+                <td dir="auto">{{ row.data.categoryName || '—' }}</td>
+                <td class="product-import-page__price">{{ formatPrice(row.data.price) }}</td>
+                <td>
+                  <app-vl-status-badge [label]="actionKey(row.action) | translate" [tone]="actionTone(row.action)"></app-vl-status-badge>
+                </td>
+                <td>
+                  <span *ngIf="row.status === 'ERROR'" class="product-import-page__flag product-import-page__flag--stop">
+                    <i class="pi pi-times-circle" aria-hidden="true"></i>
+                    {{ errorsOf(row).length }}
+                  </span>
+                  <span *ngIf="row.status === 'VALID'" class="product-import-page__flag product-import-page__flag--ok">
+                    <i class="pi pi-check-circle" aria-hidden="true"></i>
+                    <ng-container *ngIf="rowTone(row) === 'fixed'">{{ 'admin.products.import.review.fixedBadge' | translate }}</ng-container>
+                  </span>
+                  <span
+                    *ngIf="warningsOf(row).length > 0"
+                    class="product-import-page__flag product-import-page__flag--warn"
+                  >
+                    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+                    {{ warningsOf(row).length }}
+                  </span>
+                </td>
+                <td class="product-import-page__chevron">
+                  <button
+                    type="button"
+                    class="product-import-page__expand"
+                    [attr.aria-expanded]="isExpanded(row.rowNo)"
+                    [attr.aria-label]="'admin.products.import.review.details' | translate"
+                    (click)="toggleRow(row.rowNo); $event.stopPropagation()"
+                  >
+                    <i class="pi" [ngClass]="isExpanded(row.rowNo) ? 'pi-chevron-up' : 'pi-chevron-down'" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="isExpanded(row.rowNo)" class="product-import-page__detail-row">
+                <td colspan="8">
+                  <div class="product-import-page__detail">
+                    <!-- Every finding: the column, the cell of the uploaded file, what is wrong, and a way to fix it. -->
+                    <ul *ngIf="row.messages.length" class="product-import-page__messages">
+                      <li
+                        *ngFor="let m of row.messages"
+                        class="product-import-page__message"
+                        [class.product-import-page__message--error]="m.severity === 'ERROR'"
+                        [class.product-import-page__message--warning]="m.severity === 'WARNING'"
+                      >
+                        <i
+                          class="pi"
+                          [ngClass]="m.severity === 'ERROR' ? 'pi-times-circle' : 'pi-exclamation-triangle'"
+                          aria-hidden="true"
+                        ></i>
+                        <span class="product-import-page__message-body">
+                          <strong dir="auto">{{ messageSubject(m) }}</strong>
+                          <span *ngIf="m.cell" class="product-import-page__cell" dir="ltr">
+                            {{ 'admin.products.import.review.cell' | translate }} {{ m.cell }}
+                          </span>
+                          <span dir="auto">{{ messageText(m) }}</span>
+                        </span>
+                        <button
+                          *ngIf="m.field && !isEditing(row)"
+                          type="button"
+                          class="product-import-page__link"
+                          [disabled]="busy()"
+                          (click)="startEdit(row, m.field)"
+                        >
+                          {{ 'admin.products.import.review.fixHere' | translate }}
+                        </button>
+                      </li>
+                    </ul>
+
+                    <p *ngIf="!row.messages.length && !isEditing(row)" class="product-import-page__allgood">
+                      <i class="pi pi-check-circle" aria-hidden="true"></i>
+                      {{ 'admin.products.import.review.rowOk' | translate }}
+                    </p>
+
+                    <!-- Read-only view -->
+                    <ng-container *ngIf="!isEditing(row)">
+                      <dl class="product-import-page__facts">
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.nameEn' | translate }}</dt>
+                          <dd dir="auto">{{ row.data.nameEn || '—' }}</dd>
+                        </div>
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.slug' | translate }}</dt>
+                          <dd dir="ltr">{{ row.data.slug || ('admin.products.import.detail.slugAuto' | translate) }}</dd>
+                        </div>
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.compareAt' | translate }}</dt>
+                          <dd>{{ formatPrice(row.data.compareAtPrice) }}</dd>
+                        </div>
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.stock' | translate }}</dt>
+                          <dd>{{ row.data.stock ?? '—' }}</dd>
+                        </div>
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.fulfillment' | translate }}</dt>
+                          <dd>
+                            {{ row.data.fulfillmentType ? ('admin.products.list.fulfillment.' + row.data.fulfillmentType | translate) : '—' }}
+                          </dd>
+                        </div>
+                      </dl>
+
+                      <p *ngIf="row.data.descAr" class="product-import-page__desc" dir="auto">{{ row.data.descAr }}</p>
+
+                      <dl class="product-import-page__specs">
+                        <ng-container *ngFor="let s of row.specifications">
+                          <div *ngIf="s.value">
+                            <dt dir="auto">{{ s.label }}</dt>
+                            <dd dir="auto">{{ s.value }}</dd>
+                          </div>
+                        </ng-container>
+                      </dl>
+
+                      <div class="product-import-page__actions">
+                        <button
+                          type="button"
+                          class="product-import-page__btn"
+                          [disabled]="busy()"
+                          (click)="startEdit(row)"
+                        >
+                          <i class="pi pi-pencil" aria-hidden="true"></i>
+                          {{ 'admin.products.import.review.editRow' | translate }}
+                        </button>
+                      </div>
+                    </ng-container>
+
+                    <!-- Editor: checked while typing; the server checks again when saved -->
+                    <form *ngIf="isEditing(row)" class="product-import-page__editor" (ngSubmit)="saveEdit(row)">
+                      <div class="product-import-page__editor-head">
+                        <h3 class="product-import-page__editor-title">
+                          {{ 'admin.products.import.editor.title' | translate: { row: row.rowNo } }}
+                        </h3>
+                        <span
+                          class="product-import-page__editor-state"
+                          [class.product-import-page__editor-state--stop]="problemsLeft(row) > 0"
+                          [class.product-import-page__editor-state--ok]="problemsLeft(row) === 0"
+                        >
+                          <i class="pi" [ngClass]="problemsLeft(row) > 0 ? 'pi-times-circle' : 'pi-check-circle'" aria-hidden="true"></i>
+                          {{
+                            problemsLeft(row) > 0
+                              ? ('admin.products.import.editor.problemsLeft' | translate: { count: problemsLeft(row) })
+                              : ('admin.products.import.editor.allGood' | translate)
+                          }}
+                        </span>
+                      </div>
+
+                      <div class="product-import-page__fields">
+                        <div
+                          *ngFor="let f of basicFields"
+                          class="product-import-page__field"
+                          [ngClass]="'product-import-page__field--' + fieldState(row, f.key)"
+                        >
+                          <label [for]="inputId(row.rowNo, f.key)">
+                            {{ 'admin.products.import.fields.' + f.key | translate }}
+                            <i *ngIf="fieldState(row, f.key) === 'ok'" class="pi pi-check-circle product-import-page__tick" aria-hidden="true"></i>
+                          </label>
+
+                          <select
+                            *ngIf="f.type === 'category'"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          >
+                            <option value="">—</option>
+                            <option *ngFor="let name of categoryOptions()" [value]="name">{{ name }}</option>
+                          </select>
+
+                          <input
+                            *ngIf="f.type !== 'category'"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            type="text"
+                            [attr.inputmode]="f.type === 'number' ? 'decimal' : null"
+                            [dir]="f.key === 'sku' || f.key === 'slug' ? 'ltr' : 'auto'"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          />
+
+                          <small *ngIf="fieldIssue(row, f.key) as issue" class="product-import-page__field-note" dir="auto">
+                            {{ issue.text }}
+                          </small>
+                          <small
+                            *ngIf="f.key === 'sku' && skuIsUnique(row) && !fieldIssue(row, f.key)"
+                            class="product-import-page__field-note"
+                            dir="auto"
+                          >
+                            {{ 'admin.products.import.sku.unique' | translate }}
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="product-import-page__fields">
+                        <div
+                          *ngFor="let f of textFields"
+                          class="product-import-page__field"
+                          [class.product-import-page__field--wide]="f.type === 'textarea'"
+                          [ngClass]="'product-import-page__field--' + fieldState(row, f.key)"
+                        >
+                          <label [for]="inputId(row.rowNo, f.key)">
+                            {{ 'admin.products.import.fields.' + f.key | translate }}
+                            <i *ngIf="fieldState(row, f.key) === 'ok'" class="pi pi-check-circle product-import-page__tick" aria-hidden="true"></i>
+                          </label>
+                          <textarea
+                            *ngIf="f.type === 'textarea'"
+                            rows="3"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            dir="auto"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          ></textarea>
+                          <input
+                            *ngIf="f.type !== 'textarea'"
+                            type="text"
+                            dir="auto"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          />
+                          <small *ngIf="fieldIssue(row, f.key) as issue" class="product-import-page__field-note" dir="auto">
+                            {{ issue.text }}
+                          </small>
+                        </div>
+                      </div>
+
+                      <h4 class="product-import-page__editor-subtitle">
+                        {{ 'admin.products.import.editor.specifications' | translate }}
+                      </h4>
+                      <div class="product-import-page__fields product-import-page__fields--specs">
+                        <div
+                          *ngFor="let s of row.specifications"
+                          class="product-import-page__field"
+                          [ngClass]="'product-import-page__field--' + fieldState(row, s.key)"
+                        >
+                          <label [for]="inputId(row.rowNo, s.key)" dir="auto">
+                            {{ s.label }}
+                            <i *ngIf="fieldState(row, s.key) === 'ok'" class="pi pi-check-circle product-import-page__tick" aria-hidden="true"></i>
+                          </label>
+
+                          <select
+                            *ngIf="s.kind === 'BOOLEAN'"
+                            [id]="inputId(row.rowNo, s.key)"
+                            name="{{ s.key }}"
+                            [ngModel]="specValue(s)"
+                            (ngModelChange)="setDraft(row, s.key, $event)"
+                          >
+                            <option value="">—</option>
+                            <option [value]="yes">{{ yes }}</option>
+                            <option [value]="no">{{ no }}</option>
+                          </select>
+
+                          <input
+                            *ngIf="s.kind !== 'BOOLEAN'"
+                            type="text"
+                            dir="auto"
+                            [attr.inputmode]="s.kind === 'NUMBER' ? 'decimal' : null"
+                            [id]="inputId(row.rowNo, s.key)"
+                            name="{{ s.key }}"
+                            [ngModel]="specValue(s)"
+                            (ngModelChange)="setDraft(row, s.key, $event)"
+                          />
+                          <small *ngIf="fieldIssue(row, s.key) as issue" class="product-import-page__field-note" dir="auto">
+                            {{ issue.text }}
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="product-import-page__actions">
+                        <button
+                          type="submit"
+                          class="product-import-page__btn product-import-page__btn--primary"
+                          [disabled]="!canSave(row)"
+                        >
+                          <i class="pi pi-save" aria-hidden="true"></i>
+                          {{ (saving() ? 'admin.products.import.editor.saving' : 'admin.products.import.editor.save') | translate }}
+                        </button>
+                        <button type="button" class="product-import-page__btn" [disabled]="saving()" (click)="cancelEdit()">
+                          {{ 'admin.products.import.editor.cancel' | translate }}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!rows().content.length && !loadingRows()">
+              <td colspan="8" class="product-import-page__empty">{{ 'admin.products.import.review.empty' | translate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav *ngIf="rows().totalPages > 1" class="product-import-page__pager" [attr.aria-label]="'admin.products.import.review.pagination' | translate">
+        <button
+          type="button"
+          class="product-import-page__btn"
+          [disabled]="rows().first || loadingRows()"
+          (click)="goToPage(rows().page - 1)"
+        >
+          {{ 'admin.products.import.review.prev' | translate }}
+        </button>
+        <span class="product-import-page__page-label">{{ rows().page + 1 }} / {{ rows().totalPages }}</span>
+        <button
+          type="button"
+          class="product-import-page__btn"
+          [disabled]="rows().last || loadingRows()"
+          (click)="goToPage(rows().page + 1)"
+        >
+          {{ 'admin.products.import.review.next' | translate }}
+        </button>
+      </nav>
+
+      <!-- The submit is repeated under the list, with the reason when it is off -->
+      <section class="product-import-page__submit-bar">
+        <p
+          *ngIf="submitBlockedBy() as left"
+          class="product-import-page__verdict product-import-page__verdict--stop"
+        >
+          <i class="pi pi-lock" aria-hidden="true"></i>
+          {{ 'admin.products.import.review.submitBlocked' | translate: { count: left } }}
+        </p>
+        <button
+          type="button"
+          class="product-import-page__btn product-import-page__btn--primary"
+          [disabled]="!b.canSubmit || busy()"
+          (click)="commit()"
+        >
+          <i class="pi pi-check" aria-hidden="true"></i>
+          {{ (committing() ? 'admin.products.import.review.saving' : 'admin.products.import.review.submit') | translate }}
+        </button>
+      </section>
+    </ng-container>
+
+    <!-- A batch that is no longer a preview (opened after it was submitted or discarded elsewhere) -->
+    <section *ngIf="!inPreview() && !result()" class="product-import-page__card">
+      <p class="product-import-page__hint">{{ 'admin.products.import.review.notPending' | translate }}</p>
+      <button type="button" class="product-import-page__btn" (click)="reset()">
+        {{ 'admin.products.import.done.another' | translate }}
+      </button>
+    </section>
+  </ng-container>
+</div>

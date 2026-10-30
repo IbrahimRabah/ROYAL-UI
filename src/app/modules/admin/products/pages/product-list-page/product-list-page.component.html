@@ -1,10 +1,16 @@
 <div class="product-list-page">
   <header class="product-list-page__header">
     <h1 class="product-list-page__title">{{ 'admin.products.list.title' | translate }}</h1>
-    <a routerLink="new" class="product-list-page__new-btn">
-      <i class="pi pi-plus" aria-hidden="true"></i>
-      {{ 'admin.products.list.newProduct' | translate }}
-    </a>
+    <div class="product-list-page__header-actions">
+      <a routerLink="import" class="product-list-page__import-btn">
+        <i class="pi pi-file-excel" aria-hidden="true"></i>
+        {{ 'admin.products.list.importProducts' | translate }}
+      </a>
+      <a routerLink="new" class="product-list-page__new-btn">
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        {{ 'admin.products.list.newProduct' | translate }}
+      </a>
+    </div>
   </header>
 
   <div class="product-list-page__tabs" role="tablist">
@@ -96,6 +102,52 @@
     <button type="button" class="product-list-page__retry" (click)="retry()">{{ 'common.retry' | translate }}</button>
   </div>
 
+  <!-- Publish and unpublish many at once: tick products, or publish every draft in view -->
+  <div *ngIf="!loading() && !error()" class="product-list-page__bulk">
+    <ng-container *ngIf="selected().size > 0; else bulkIdle">
+      <span class="product-list-page__bulk-count">
+        <i class="pi pi-check-square" aria-hidden="true"></i>
+        {{ 'admin.products.list.bulk.selected' | translate: { count: selected().size } }}
+      </span>
+      <div class="product-list-page__bulk-actions">
+        <button
+          type="button"
+          class="product-list-page__bulk-btn product-list-page__bulk-btn--primary"
+          [disabled]="bulkBusy() || publishableSelected().length === 0"
+          (click)="publishSelected()"
+        >
+          <i class="pi pi-globe" aria-hidden="true"></i>
+          {{ 'admin.products.list.bulk.publishSelected' | translate: { count: publishableSelected().length } }}
+        </button>
+        <button
+          type="button"
+          class="product-list-page__bulk-btn"
+          [disabled]="bulkBusy() || unpublishableSelected().length === 0"
+          (click)="unpublishSelected()"
+        >
+          <i class="pi pi-eye-slash" aria-hidden="true"></i>
+          {{ 'admin.products.list.bulk.unpublishSelected' | translate: { count: unpublishableSelected().length } }}
+        </button>
+        <button type="button" class="product-list-page__bulk-link" [disabled]="bulkBusy()" (click)="clearSelection()">
+          {{ 'admin.products.list.bulk.clear' | translate }}
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #bulkIdle>
+      <span class="product-list-page__bulk-hint">{{ 'admin.products.list.bulk.hint' | translate }}</span>
+      <button
+        *ngIf="draftsInView().length"
+        type="button"
+        class="product-list-page__bulk-btn product-list-page__bulk-btn--primary"
+        [disabled]="bulkBusy()"
+        (click)="publishAllDrafts()"
+      >
+        <i class="pi pi-globe" aria-hidden="true"></i>
+        {{ 'admin.products.list.bulk.publishAllDrafts' | translate: { count: draftsInView().length } }}
+      </button>
+    </ng-template>
+  </div>
+
   <ng-container *ngIf="!error()">
     <!-- Desktop / tablet table -->
     <div class="product-list-page__table-wrap">
@@ -111,6 +163,17 @@
       >
         <ng-template pTemplate="header">
           <tr>
+            <th class="product-list-page__col-check">
+              <input
+                type="checkbox"
+                class="product-list-page__check"
+                [checked]="allInViewSelected()"
+                [indeterminate]="someInViewSelected()"
+                [disabled]="bulkBusy() || !filteredRows().length"
+                [attr.aria-label]="'admin.products.list.bulk.selectAll' | translate"
+                (change)="toggleSelectAll()"
+              />
+            </th>
             <th class="product-list-page__col-image"></th>
             <th>{{ 'admin.products.list.columns.name' | translate }}</th>
             <th>{{ 'admin.products.list.columns.category' | translate }}</th>
@@ -126,6 +189,16 @@
 
         <ng-template pTemplate="body" let-row>
           <tr>
+            <td class="product-list-page__col-check">
+              <input
+                type="checkbox"
+                class="product-list-page__check"
+                [checked]="isSelected(row)"
+                [disabled]="bulkBusy()"
+                [attr.aria-label]="'admin.products.list.bulk.selectRow' | translate: { name: displayName(row) }"
+                (change)="toggleSelect(row)"
+              />
+            </td>
             <td class="product-list-page__col-image">
               <!-- TODO: not in contract — ProductAdminResponse has no image/thumbUrl field
                    (only imageCount), so a real thumbnail can't be rendered here. -->
@@ -223,7 +296,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="10" class="admin-list-empty">{{ 'admin.products.list.empty' | translate }}</td>
+            <td colspan="11" class="admin-list-empty">{{ 'admin.products.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -233,6 +306,14 @@
     <div class="product-list-page__cards">
       <div *ngFor="let row of filteredRows()" class="admin-card">
         <div class="admin-card__row1">
+          <input
+            type="checkbox"
+            class="product-list-page__check"
+            [checked]="isSelected(row)"
+            [disabled]="bulkBusy()"
+            [attr.aria-label]="'admin.products.list.bulk.selectRow' | translate: { name: displayName(row) }"
+            (change)="toggleSelect(row)"
+          />
           <div class="product-list-page__card-identity">
             <div class="product-list-page__thumb product-list-page__thumb--card">
               <i class="pi pi-image" aria-hidden="true"></i>

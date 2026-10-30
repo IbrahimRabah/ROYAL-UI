@@ -2,10 +2,17 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, switchMap } from 'rxjs';
+import { Subject, concatMap, from, switchMap, toArray } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { BrandAdminResponse, Money, ProductAdminResponse, money } from '../../../../../core/models';
+import {
+  BrandAdminResponse,
+  Money,
+  ProductAdminResponse,
+  ProductBulkAction,
+  ProductBulkSkipped,
+  money,
+} from '../../../../../core/models';
 import { ProductStatus } from '../../../../../core/enums/product-status';
 import { Language } from '../../../../../core/enums/language';
 import { FulfillmentType, isReadyMade } from '../../../../../core/enums/fulfillment-type';
@@ -31,6 +38,9 @@ const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
+
+/** The most products the server accepts in one bulk request. */
+const BULK_CHUNK = 500;
 
 interface StatusTab {
   key: string;
@@ -86,6 +96,10 @@ export class ProductListPageComponent {
   readonly searchDraft = signal('');
   readonly filtersOpen = signal(false);
   readonly allProducts = signal<ProductAdminResponse[]>([]);
+
+  /** Ticked products, kept by id so a refresh of the list does not lose them. */
+  readonly selected = signal<ReadonlySet<number>>(new Set<number>());
+  readonly bulkBusy = signal(false);
   readonly loading = signal(true);
   readonly error = signal(false);
 
@@ -106,6 +120,11 @@ export class ProductListPageComponent {
     return counts;
   });
 
+  readonly selectedRows = computed(() => this.allProducts().filter((p) => this.selected().has(p.id)));
+  /** Only a draft can be published and only a live product unpublished; the buttons count exactly those. */
+  readonly publishableSelected = computed(() => this.selectedRows().filter((p) => p.status === ProductStatus.DRAFT));
+  readonly unpublishableSelected = computed(() => this.selectedRows().filter((p) => p.status === ProductStatus.ACTIVE));
+
   readonly filteredRows = computed<ProductAdminResponse[]>(() => {
     const status = this.activeStatus();
     const q = this.searchText().trim().toLowerCase();
@@ -121,6 +140,17 @@ export class ProductListPageComponent {
       if (q && !(p.nameAr ?? '').toLowerCase().includes(q) && !(p.nameEn ?? '').toLowerCase().includes(q)) return false;
       return true;
     });
+  });
+
+  /** Every draft the current tab, search and filters show, on all pages. */
+  readonly draftsInView = computed(() => this.filteredRows().filter((p) => p.status === ProductStatus.DRAFT));
+  readonly allInViewSelected = computed(() => {
+    const rows = this.filteredRows();
+    return rows.length > 0 && rows.every((p) => this.selected().has(p.id));
+  });
+  readonly someInViewSelected = computed(() => {
+    const rows = this.filteredRows();
+    return !this.allInViewSelected() && rows.some((p) => this.selected().has(p.id));
   });
 
   constructor() {
@@ -231,6 +261,117 @@ export class ProductListPageComponent {
     this.fetchAll();
   }
 
+  // --------------------------------------------------------------- bulk publish
+
+  isSelected(row: ProductAdminResponse): boolean {
+    return this.selected().has(row.id);
+  }
+
+  toggleSelect(row: ProductAdminResponse): void {
+    const next = new Set(this.selected());
+    if (next.has(row.id)) {
+      next.delete(row.id);
+    } else {
+      next.add(row.id);
+    }
+    this.selected.set(next);
+  }
+
+  /** Ticks every product in the current view, on all pages; unticks them when they are all ticked. */
+  toggleSelectAll(): void {
+    const next = new Set(this.selected());
+    const rows = this.filteredRows();
+    if (this.allInViewSelected()) {
+      rows.forEach((p) => next.delete(p.id));
+    } else {
+      rows.forEach((p) => next.add(p.id));
+    }
+    this.selected.set(next);
+  }
+
+  clearSelection(): void {
+    this.selected.set(new Set<number>());
+  }
+
+  publishSelected(): void {
+    this.confirmBulk('PUBLISH', this.publishableSelected().map((p) => p.id));
+  }
+
+  unpublishSelected(): void {
+    this.confirmBulk('UNPUBLISH', this.unpublishableSelected().map((p) => p.id));
+  }
+
+  publishAllDrafts(): void {
+    this.confirmBulk('PUBLISH', this.draftsInView().map((p) => p.id));
+  }
+
+  private confirmBulk(action: ProductBulkAction, ids: number[]): void {
+    if (ids.length === 0 || this.bulkBusy()) {
+      return;
+    }
+    const key = action === 'PUBLISH' ? 'publish' : 'unpublish';
+    this.confirmDialog
+      .confirm({
+        title: this.translate.instant(`admin.products.list.bulk.${key}Confirm.title`),
+        message: this.translate.instant(`admin.products.list.bulk.${key}Confirm.message`, { count: ids.length }),
+        confirmLabel: this.translate.instant(`admin.products.list.bulk.${key}Confirm.confirm`),
+        cancelLabel: this.translate.instant('common.cancel'),
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.runBulk(action, ids);
+        }
+      });
+  }
+
+  /** The server takes 500 ids at a time; a longer list goes in turns and the answers are added up. */
+  private runBulk(action: ProductBulkAction, ids: number[]): void {
+    const chunks: number[][] = [];
+    for (let i = 0; i < ids.length; i += BULK_CHUNK) {
+      chunks.push(ids.slice(i, i + BULK_CHUNK));
+    }
+    this.bulkBusy.set(true);
+    from(chunks)
+      .pipe(
+        concatMap((chunk) => this.productApi.bulkStatus(chunk, action)),
+        toArray(),
+      )
+      .subscribe({
+        next: (answers) => {
+          this.bulkBusy.set(false);
+          const succeeded = answers.flatMap((a) => a.succeeded);
+          const skipped = answers.flatMap((a) => a.skipped);
+
+          if (succeeded.length > 0) {
+            const key = action === 'PUBLISH' ? 'published' : 'unpublished';
+            this.toast.success(this.translate.instant(`admin.products.list.bulk.toast.${key}`, { count: succeeded.length }));
+          }
+          if (skipped.length > 0) {
+            this.toast.warning(this.skippedMessage(skipped));
+          }
+
+          const left = new Set(this.selected());
+          succeeded.forEach((id) => left.delete(id));
+          this.selected.set(left);
+          this.fetchAll();
+        },
+        error: () => {
+          this.bulkBusy.set(false);
+          this.fetchAll();
+        },
+      });
+  }
+
+  /** "3 left unchanged: <name> (<reason>), …": the first few by name, so the person knows which to look at. */
+  private skippedMessage(skipped: ProductBulkSkipped[]): string {
+    const shown = skipped.slice(0, 3).map((s) => {
+      const reason = this.translate.instant(`admin.products.list.bulk.reasons.${s.reason}`);
+      return `${s.name ?? '#' + s.id} (${reason})`;
+    });
+    const more = skipped.length > shown.length ? ' …' : '';
+    return this.translate.instant('admin.products.list.bulk.toast.skipped', { count: skipped.length }) + ': ' + shown.join('، ') + more;
+  }
+
   publishRow(row: ProductAdminResponse): void {
     if (!this.canPublish(row)) return;
     this.productApi.publish(row.id).subscribe({
@@ -293,6 +434,9 @@ export class ProductListPageComponent {
       .subscribe({
         next: (res) => {
           this.allProducts.set(res.content);
+          // Forget ticked products that are no longer in the list.
+          const present = new Set(res.content.map((p) => p.id));
+          this.selected.set(new Set([...this.selected()].filter((id) => present.has(id))));
           this.loading.set(false);
         },
         error: () => {

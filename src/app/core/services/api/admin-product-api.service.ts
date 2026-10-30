@@ -4,7 +4,15 @@ import { Observable } from 'rxjs';
 
 import { API_ROUTES } from '../../constants/api-routes';
 import { APP_CONFIG } from '../../constants/app-config';
-import { AdminImageResponse, ImageUpdateRequest, PageResponse, ProductAdminResponse, ProductUpsertRequest } from '../../models';
+import {
+  AdminImageResponse,
+  ImageUpdateRequest,
+  PageResponse,
+  ProductAdminResponse,
+  ProductBulkAction,
+  ProductBulkStatusResponse,
+  ProductUpsertRequest,
+} from '../../models';
 import { buildHttpParams } from './http-params.util';
 
 @Injectable({
@@ -44,6 +52,15 @@ export class AdminProductApiService {
 
   duplicate(productId: number): Observable<ProductAdminResponse> {
     return this.http.post<ProductAdminResponse>(API_ROUTES.admin.products.duplicate(productId), null);
+  }
+
+  /**
+   * Publishes the given DRAFT products or returns the given ACTIVE ones to draft, in one request. A product
+   * that cannot change (no variant, no Arabic name, wrong status) is reported in `skipped` while the others
+   * still change. At most 500 ids per request.
+   */
+  bulkStatus(ids: number[], action: ProductBulkAction): Observable<ProductBulkStatusResponse> {
+    return this.http.post<ProductBulkStatusResponse>(API_ROUTES.admin.products.bulkStatus(), { ids, action });
   }
 
   listImages(productId: number): Observable<AdminImageResponse[]> {

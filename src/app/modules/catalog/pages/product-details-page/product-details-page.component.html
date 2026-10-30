@@ -55,7 +55,7 @@
     </section>
 
     <section class="pdp__description section">
-      <div class="container-vl pdp__description-inner">
+      <div class="container-vl pdp__description-inner" [class.pdp__description-inner--single]="!descriptionImage()">
         <app-product-tabs
           class="pdp__description-copy"
           [description]="p.description"
