@@ -2,25 +2,34 @@
   <div class="container-vl">
     <h2 class="category-showcase__title">{{ 'home.categories.title' | translate }}</h2>
 
-    <div class="category-showcase__grid">
+    <div
+      class="category-showcase__grid"
+      [class.category-showcase__grid--bento]="bento"
+      [style.--cols]="columns"
+      [style.--rows]="rows"
+      (mouseleave)="reset()"
+      (focusout)="reset()"
+    >
       <a
-        *ngFor="let tile of tiles; trackBy: trackByIndex"
+        *ngFor="let tile of tiles; let i = index; trackBy: trackByIndex"
         class="category-showcase__tile"
-        [class.category-showcase__tile--plain]="!tile.isAll && !hasImage(tile)"
+        [class.category-showcase__tile--hero]="bento && i === activeIndex"
         [class.category-showcase__tile--all]="tile.isAll"
+        [ngStyle]="slotStyle(i)"
         routerLink="/products"
         [queryParams]="tile.id !== null ? { categoryId: tile.id } : null"
+        (mouseenter)="activate(i)"
+        (focus)="activate(i)"
       >
         <img
-          *ngIf="hasImage(tile)"
+          *ngIf="!tile.isAll"
+          appImgFallback
           class="category-showcase__image"
-          [src]="tile.imageUrl"
+          [src]="tile.imageUrl | imageUrl"
           alt=""
           loading="lazy"
           decoding="async"
-          (error)="markBroken(tile)"
         />
-        <span class="category-showcase__initial" *ngIf="!tile.isAll && !hasImage(tile)" aria-hidden="true">{{ initial(tile) }}</span>
         <span class="category-showcase__scrim" *ngIf="!tile.isAll" aria-hidden="true"></span>
 
         <span class="category-showcase__content">

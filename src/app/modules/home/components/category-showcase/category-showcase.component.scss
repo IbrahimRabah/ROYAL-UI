@@ -1,5 +1,6 @@
 @use 'styles/breakpoints';
 
+$grid-height: 34rem;
 $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 :host {
@@ -14,8 +15,8 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   margin-block-end: var(--sp-6);
 }
 
-// Two across on phones and tablets, three across from desktop. minmax(0, 1fr) lets the tracks shrink,
-// so nothing can push the page sideways at 375px.
+// ───────── Mobile / tablet: plain two-column grid of square tiles ─────────
+
 .category-showcase__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -32,15 +33,10 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   color: #fff;
   text-decoration: none;
 
-  // An odd last tile spans both columns so the two-column grid has no hole.
+  // An odd last tile spans both columns so the grid has no hole.
   &:last-child:nth-child(odd) {
     grid-column: span 2;
     aspect-ratio: 2 / 1;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--gold-lt);
-    outline-offset: 2px;
   }
 }
 
@@ -52,31 +48,6 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   object-fit: cover;
   object-position: center 35%;
   filter: brightness(0.8);
-  transform: scale(1);
-  transition: transform 700ms $ease, filter 700ms $ease;
-}
-
-// A category with no usable image: a deliberate dark tile with a faint initial, not a "missing picture" icon.
-.category-showcase__tile--plain {
-  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.category-showcase__initial {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -62%);
-  font-family: var(--display);
-  font-size: clamp(4rem, 14vw, 7rem);
-  line-height: 1;
-  color: var(--gold);
-  opacity: 0.18;
-  pointer-events: none;
-
-  :host-context([dir='rtl']) & {
-    transform: translate(50%, -62%);
-  }
 }
 
 .category-showcase__scrim {
@@ -113,7 +84,7 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   overflow: hidden;
 }
 
-// Secondary details stay out of the compact mobile tiles.
+// Hero-only details stay hidden in the plain mobile grid and in non-hero tiles.
 .category-showcase__rule,
 .category-showcase__description,
 .category-showcase__browse {
@@ -141,27 +112,47 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 }
 
-// ───────── Desktop: three across, a little taller than wide ─────────
+.category-showcase__tile:focus-visible {
+  outline: 2px solid var(--gold-lt);
+  outline-offset: 2px;
+}
+
+// ───────── Desktop: bento that reflows around the hovered tile ─────────
 
 @include breakpoints.lg {
   .category-showcase__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--sp-4);
+    gap: var(--sp-3);
+    block-size: $grid-height;
+    grid-template-columns: var(--cols);
+    grid-template-rows: var(--rows);
+    transition: grid-template-columns 500ms $ease, grid-template-rows 500ms $ease;
   }
 
   .category-showcase__tile {
-    aspect-ratio: 5 / 4;
+    aspect-ratio: auto;
+    min-inline-size: 0;
+    min-block-size: 0;
 
     &:last-child:nth-child(odd) {
       grid-column: auto;
-      aspect-ratio: 5 / 4;
+      aspect-ratio: auto;
     }
+  }
 
-    &:hover .category-showcase__image,
-    &:focus-visible .category-showcase__image {
-      transform: scale(1.05);
-      filter: brightness(0.92);
-    }
+  .category-showcase__grid--bento .category-showcase__tile {
+    grid-column: var(--col);
+    grid-row: var(--row);
+  }
+
+  .category-showcase__image {
+    filter: brightness(0.7);
+    transform: scale(1);
+    transition: transform 700ms $ease, filter 700ms $ease;
+  }
+
+  .category-showcase__tile--hero .category-showcase__image {
+    filter: brightness(0.9);
+    transform: scale(1.04);
   }
 
   .category-showcase__content {
@@ -169,22 +160,31 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
     inset-block-end: var(--sp-4);
   }
 
-  .category-showcase__name {
-    font-size: var(--fs-h5);
+  .category-showcase__tile--hero .category-showcase__name {
+    font-size: var(--fs-h4);
+  }
+
+  .category-showcase__grid--bento .category-showcase__tile--hero {
+    .category-showcase__rule,
+    .category-showcase__browse {
+      display: block;
+    }
+
+    .category-showcase__description {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 
   .category-showcase__rule {
-    display: block;
     inline-size: 2.5rem;
     block-size: 1px;
     background: var(--gold);
   }
 
   .category-showcase__description {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
     font-family: var(--body);
     font-size: var(--fs-sm);
     line-height: 1.5;
@@ -193,28 +193,17 @@ $ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   .category-showcase__browse {
-    display: block;
     font-family: var(--body);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--gold-lt);
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 300ms $ease, transform 300ms $ease;
-  }
-
-  .category-showcase__tile:hover .category-showcase__browse,
-  .category-showcase__tile:focus-visible .category-showcase__browse {
-    opacity: 1;
-    transform: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .category-showcase__image,
-  .category-showcase__browse {
+  .category-showcase__grid,
+  .category-showcase__image {
     transition: none !important;
-    transform: none !important;
   }
 }
