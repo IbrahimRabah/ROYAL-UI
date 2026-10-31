@@ -1393,7 +1393,9 @@
           "toast": {
             "published": "{{count}} product(s) published",
             "unpublished": "{{count}} product(s) returned to draft",
-            "skipped": "{{count}} left unchanged"
+            "skipped": "{{count}} left unchanged",
+            "noImage": "{{count}} published without an image",
+            "noImageOne": "Published without an image. Add one when you have it"
           },
           "reasons": {
             "NOT_DRAFT": "not a draft",
@@ -1402,6 +1404,13 @@
             "PRODUCT_HAS_NO_VARIANTS": "no variant yet",
             "PRODUCT_MISSING_ARABIC_NAME": "no Arabic name"
           }
+        },
+        "importImages": "Import images",
+        "allImages": "All products",
+        "noImage": "No image",
+        "images": {
+          "NONE": "Without images",
+          "HAS": "With images"
         }
       },
       "form": {
@@ -1666,7 +1675,8 @@
           "summary": "{{created}} product(s) created as drafts.",
           "openProducts": "Open the drafts",
           "another": "Import another file",
-          "draftNote": "Publish them from the product list: open the drafts, tick the ones you want and choose \"Publish selected\"."
+          "draftNote": "Publish them from the product list: open the drafts, tick the ones you want and choose \"Publish selected\".",
+          "addImages": "Add images to these products"
         },
         "toast": {
           "committed": "The products were saved",
@@ -1735,6 +1745,124 @@
           "unique": "This SKU is unique",
           "duplicate": "Another row of this sheet already has this SKU (row {{rows}})",
           "inCatalog": "This SKU is already used by the product «{{name}}». A SKU is never reused: give this row a new one"
+        }
+      },
+      "imageImport": {
+        "title": "Import images",
+        "tooManyFiles": "Too many files. Pick at most {{max}} at a time",
+        "checking": "Matching {{count}} files to products…",
+        "main": "Main",
+        "showMore": "Show more",
+        "hasImages": "Already has {{count}} image(s)",
+        "suggestion": "Did you mean {{sku}}? Rename the file to {{sku}}{{position}}",
+        "conflictHint": "Each product place takes one file. Rename or remove the duplicates in the folder, then pick the folder again. None of these files will be uploaded.",
+        "withoutMore": "Showing {{shown}} of {{total}} products without an image",
+        "rules": {
+          "title": "How to name the files",
+          "main": "the product's main image (the SKU, then any extension)",
+          "extra": "extra images, in that order, up to 20 per product",
+          "loose": "Upper or lower case, the extension and the folder do not matter: only the file name does. Pictures are made smaller in your browser before they are sent; the originals stay where they are."
+        },
+        "mode": {
+          "title": "If a product already has images",
+          "SKIP": {
+            "label": "Skip it",
+            "hint": "Leave products that already have images alone (safe to run again)"
+          },
+          "ADD": {
+            "label": "Add to it",
+            "hint": "Put the new images after the ones it has"
+          },
+          "REPLACE": {
+            "label": "Replace them",
+            "hint": "Remove the images it had and use the new ones"
+          }
+        },
+        "pick": {
+          "folder": "Choose a folder",
+          "files": "Choose files",
+          "hint": "Download the Drive folder first and choose it here, subfolders included. HEIC photos are not supported."
+        },
+        "report": {
+          "title": "What will happen",
+          "nothing": "Nothing to upload with this choice. Check the other tabs to see why.",
+          "replaceWarning": "Replace will remove the current images of {{count}} product(s)."
+        },
+        "summary": {
+          "files": "Files",
+          "toUpload": "To upload",
+          "skipped": "Products skipped",
+          "conflicts": "Clashing",
+          "unmatched": "No product",
+          "without": "Still without image"
+        },
+        "sections": {
+          "matched": "Matched",
+          "conflicts": "Clashing names",
+          "unmatched": "Not matched",
+          "without": "Products without image"
+        },
+        "empty": {
+          "matched": "No file matches a product SKU.",
+          "conflicts": "No clashing names.",
+          "unmatched": "Every file matched a product.",
+          "without": "Every product has an image."
+        },
+        "action": {
+          "ATTACH": "Will upload",
+          "SKIP_HAS_IMAGES": "Skipped: has images",
+          "BLOCKED": "Blocked"
+        },
+        "upload": {
+          "start": "Upload {{count}} images",
+          "running": "Uploading…",
+          "finished": "Finished",
+          "progress": "{{done}} of {{total}} files",
+          "stop": "Stop",
+          "stopping": "Stopping…",
+          "retry": "Send {{count}} again",
+          "openProducts": "Open products",
+          "another": "Import another folder"
+        },
+        "result": {
+          "attached": "Added",
+          "skipped": "Skipped",
+          "rejected": "Rejected",
+          "failed": "Failed, can retry",
+          "details": "Files that were not added"
+        },
+        "replaceConfirm": {
+          "title": "Replace existing images?",
+          "message": "The current images of {{count}} product(s) will be removed and replaced. This cannot be undone.",
+          "confirm": "Replace"
+        },
+        "codes": {
+          "NO_PRODUCT": "No product has this SKU",
+          "NO_MATCH": "No product has this SKU",
+          "NOT_AN_IMAGE": "Not a picture",
+          "UNSUPPORTED_FORMAT": "Unsupported format (HEIC and similar). Save it as JPG or PNG",
+          "AMBIGUOUS_NAME": "The name fits two SKUs. Rename it",
+          "DUPLICATE_POSITION": "Another file has the same place",
+          "TOO_MANY_IMAGES": "More than 20 images",
+          "LIMIT_REACHED": "The product already has 20 images",
+          "HAS_IMAGES": "The product already has images",
+          "DUPLICATE_IMAGE": "This picture is already on the product",
+          "TOO_LARGE": "Still over 5 MB after resizing",
+          "EMPTY_FILE": "The file is empty",
+          "UNREADABLE": "The browser could not read this picture",
+          "PRODUCT_ARCHIVED": "The product is archived",
+          "SERVER_ERROR": "The server could not save it",
+          "NETWORK": "No answer from the server"
+        },
+        "rename": {
+          "label": "The SKU this file belongs to",
+          "apply": "Rename and match"
+        },
+        "toast": {
+          "attached": "{{count}} images added to products",
+          "stopped": "Stopped. {{count}} images were added before that",
+          "failed": "{{count}} files could not be saved. Use \"Send again\"",
+          "rejected": "{{count}} files were not added. See the list below"
         }
       }
     },

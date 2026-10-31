@@ -6,6 +6,10 @@
         <i class="pi pi-file-excel" aria-hidden="true"></i>
         {{ 'admin.products.list.importProducts' | translate }}
       </a>
+      <a routerLink="import-images" class="product-list-page__import-btn">
+        <i class="pi pi-images" aria-hidden="true"></i>
+        {{ 'admin.products.list.importImages' | translate }}
+      </a>
       <a routerLink="new" class="product-list-page__new-btn">
         <i class="pi pi-plus" aria-hidden="true"></i>
         {{ 'admin.products.list.newProduct' | translate }}
@@ -79,6 +83,19 @@
         >
           <ng-template let-code pTemplate="selectedItem">{{ fulfillmentLabelKey(code) | translate }}</ng-template>
           <ng-template let-code pTemplate="item">{{ fulfillmentLabelKey(code) | translate }}</ng-template>
+        </p-select>
+
+        <p-select
+          [ngModel]="imageFilter()"
+          (ngModelChange)="onImageFilterChange($event)"
+          [options]="imageOptions"
+          [showClear]="true"
+          appendTo="self"
+          [placeholder]="'admin.products.list.allImages' | translate"
+          styleClass="admin-toolbar__filter-field"
+        >
+          <ng-template let-code pTemplate="selectedItem">{{ 'admin.products.list.images.' + code | translate }}</ng-template>
+          <ng-template let-code pTemplate="item">{{ 'admin.products.list.images.' + code | translate }}</ng-template>
         </p-select>
 
         <p-select
@@ -210,6 +227,7 @@
               <a [routerLink]="[row.id]" class="product-list-page__name-link">{{ displayName(row) }}</a>
               <div class="product-list-page__type-row">
                 <app-vl-status-badge [label]="fulfillmentLabelKey(row.fulfillmentType) | translate" [tone]="fulfillmentTone(row.fulfillmentType)"></app-vl-status-badge>
+                <app-vl-status-badge *ngIf="row.imageCount === 0" [label]="'admin.products.list.noImage' | translate" tone="warn"></app-vl-status-badge>
                 <i
                   *ngIf="missingSize(row)"
                   class="pi pi-exclamation-circle product-list-page__no-size"
@@ -319,6 +337,7 @@
               <i class="pi pi-image" aria-hidden="true"></i>
             </div>
             <a [routerLink]="[row.id]" class="admin-card__primary product-list-page__name-link">{{ displayName(row) }}</a>
+            <app-vl-status-badge *ngIf="row.imageCount === 0" [label]="'admin.products.list.noImage' | translate" tone="warn"></app-vl-status-badge>
           </div>
 
           <button

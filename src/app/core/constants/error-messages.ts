@@ -87,6 +87,7 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.IMPORT_BATCH_NOT_PENDING]: 'تم اعتماد هذا الرفع أو إلغاؤه من قبل',
   [ErrorCode.IMPORT_BATCH_EXPIRED]: 'انتهت صلاحية المعاينة. ارفع الملف من جديد',
   [ErrorCode.IMPORT_HAS_ERRORS]: 'في الملف صفوف بها أخطاء. صحّحها في المعاينة أو صحّح الملف وارفعه من جديد، ولم يتم حفظ أي شيء',
+  [ErrorCode.IMAGE_IMPORT_TOO_MANY_FILES]: 'عدد الملفات في الطلب الواحد أكبر من المسموح. أرسل عددًا أقل',
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
@@ -176,4 +177,5 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.IMPORT_BATCH_NOT_PENDING]: 'This import was already submitted or discarded',
   [ErrorCode.IMPORT_BATCH_EXPIRED]: 'This preview has expired. Upload the file again',
   [ErrorCode.IMPORT_HAS_ERRORS]: 'The file has rows with errors. Fix them in the preview, or fix the file and upload again; nothing was saved',
+  [ErrorCode.IMAGE_IMPORT_TOO_MANY_FILES]: 'Too many files in one request. Send fewer at a time',
 };

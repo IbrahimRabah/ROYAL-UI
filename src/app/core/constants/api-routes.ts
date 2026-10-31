@@ -102,6 +102,11 @@ export const API_ROUTES = {
       skuCheck: (batchId: number) => `${BASE}/admin/product-imports/${batchId}/sku-check`,
     },
 
+    productImageImport: {
+      match: () => `${BASE}/admin/product-images/match`,
+      bulk: () => `${BASE}/admin/product-images/bulk`,
+    },
+
     variants: {
       byProduct: (productId: number) => `${BASE}/admin/products/${productId}/variants`,
       preview: (productId: number) => `${BASE}/admin/products/${productId}/variants/preview`,

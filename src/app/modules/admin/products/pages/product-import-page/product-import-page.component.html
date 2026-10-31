@@ -25,6 +25,10 @@
       <button type="button" class="product-import-page__btn product-import-page__btn--primary" (click)="openProducts()">
         {{ 'admin.products.import.done.openProducts' | translate }}
       </button>
+      <a routerLink="/admin/products/import-images" class="product-import-page__btn">
+        <i class="pi pi-images" aria-hidden="true"></i>
+        {{ 'admin.products.import.done.addImages' | translate }}
+      </a>
       <button type="button" class="product-import-page__btn" (click)="reset()">
         {{ 'admin.products.import.done.another' | translate }}
       </button>

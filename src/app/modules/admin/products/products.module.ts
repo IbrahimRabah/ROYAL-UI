@@ -14,6 +14,7 @@ import { ProductsRoutingModule } from './products-routing.module';
 import { ProductListPageComponent } from './pages/product-list-page/product-list-page.component';
 import { ProductFormPageComponent } from './pages/product-form-page/product-form-page.component';
 import { ProductImportPageComponent } from './pages/product-import-page/product-import-page.component';
+import { ProductImageImportPageComponent } from './pages/product-image-import-page/product-image-import-page.component';
 import { ProductTranslationsTabComponent } from './components/product-translations-tab/product-translations-tab.component';
 import { ProductImagesTabComponent } from './components/product-images-tab/product-images-tab.component';
 import { ProductVariantsTabComponent } from './components/product-variants-tab/product-variants-tab.component';
@@ -29,6 +30,7 @@ import { ImageEditDialogComponent } from './components/image-edit-dialog/image-e
     ProductListPageComponent,
     ProductFormPageComponent,
     ProductImportPageComponent,
+    ProductImageImportPageComponent,
     ProductTranslationsTabComponent,
     ProductImagesTabComponent,
     ProductVariantsTabComponent,

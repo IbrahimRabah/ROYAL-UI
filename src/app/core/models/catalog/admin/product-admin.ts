@@ -72,4 +72,13 @@ export interface ProductBulkStatusResponse {
   requested: number;
   succeeded: number[];
   skipped: ProductBulkSkipped[];
+  /** Products that DID go live but have something worth knowing. A warning, never a refusal. */
+  warnings?: ProductBulkWarning[];
+}
+
+/** A product that changed, with a note: NO_IMAGE means it is live without a picture. */
+export interface ProductBulkWarning {
+  id: number;
+  name: string | null;
+  code: 'NO_IMAGE' | string;
 }

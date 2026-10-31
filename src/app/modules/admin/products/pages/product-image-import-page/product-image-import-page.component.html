@@ -1,0 +1,357 @@
+<div class="image-import">
+  <app-admin-back-link parentPath="/admin/products" labelKey="admin.products.backToList"></app-admin-back-link>
+
+  <header class="image-import__header">
+    <h1 class="image-import__title">{{ 'admin.products.imageImport.title' | translate }}</h1>
+  </header>
+
+  <div *ngIf="problem() as p" class="image-import__problem" role="alert">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <div>
+      <strong>{{ p.title }}</strong>
+      <p *ngIf="p.detail" class="image-import__problem-detail" dir="auto">{{ p.detail }}</p>
+    </div>
+  </div>
+
+  <!-- Naming rule, mode and picking: shown until the upload starts -->
+  <section *ngIf="phase() === 'pick' || phase() === 'checking' || phase() === 'report'" class="image-import__card">
+    <h2 class="image-import__card-title">{{ 'admin.products.imageImport.rules.title' | translate }}</h2>
+    <ul class="image-import__rules">
+      <li>
+        <code dir="ltr">CH101.jpg</code>
+        <span>{{ 'admin.products.imageImport.rules.main' | translate }}</span>
+      </li>
+      <li>
+        <code dir="ltr">CH101_2.jpg</code>, <code dir="ltr">CH101_3.png</code>
+        <span>{{ 'admin.products.imageImport.rules.extra' | translate }}</span>
+      </li>
+      <li>
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        <span>{{ 'admin.products.imageImport.rules.loose' | translate }}</span>
+      </li>
+    </ul>
+
+    <fieldset class="image-import__modes" [disabled]="phase() === 'checking'">
+      <legend class="image-import__legend">{{ 'admin.products.imageImport.mode.title' | translate }}</legend>
+      <label *ngFor="let m of modes" class="image-import__mode" [class.image-import__mode--on]="mode() === m">
+        <input type="radio" name="mode" [value]="m" [checked]="mode() === m" (change)="setMode(m)" />
+        <span>
+          <strong>{{ 'admin.products.imageImport.mode.' + m + '.label' | translate }}</strong>
+          <small>{{ 'admin.products.imageImport.mode.' + m + '.hint' | translate }}</small>
+        </span>
+      </label>
+    </fieldset>
+
+    <div class="image-import__pickers">
+      <label class="image-import__btn image-import__btn--primary">
+        <i class="pi pi-folder-open" aria-hidden="true"></i>
+        {{ 'admin.products.imageImport.pick.folder' | translate }}
+        <input
+          type="file"
+          class="image-import__file"
+          webkitdirectory
+          multiple
+          [disabled]="phase() === 'checking'"
+          (change)="onFolderChosen($event)"
+        />
+      </label>
+      <label class="image-import__btn">
+        <i class="pi pi-images" aria-hidden="true"></i>
+        {{ 'admin.products.imageImport.pick.files' | translate }}
+        <input
+          type="file"
+          class="image-import__file"
+          multiple
+          accept="image/*,.heic,.heif"
+          [disabled]="phase() === 'checking'"
+          (change)="onFilesChosen($event)"
+        />
+      </label>
+    </div>
+    <p class="image-import__hint">{{ 'admin.products.imageImport.pick.hint' | translate }}</p>
+  </section>
+
+  <section *ngIf="phase() === 'checking'" class="image-import__card image-import__busy" role="status">
+    <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+    {{ 'admin.products.imageImport.checking' | translate: { count: pickedCount() } }}
+  </section>
+
+  <!-- Report -->
+  <ng-container *ngIf="match() as m">
+    <ng-container *ngIf="phase() === 'report'">
+      <section class="image-import__card">
+        <div class="image-import__summary-head">
+          <h2 class="image-import__card-title">{{ 'admin.products.imageImport.report.title' | translate }}</h2>
+          <button
+            type="button"
+            class="image-import__btn image-import__btn--primary"
+            [disabled]="!canUpload()"
+            (click)="start()"
+          >
+            <i class="pi pi-upload" aria-hidden="true"></i>
+            {{ 'admin.products.imageImport.upload.start' | translate: { count: m.summary.toUpload } }}
+          </button>
+        </div>
+
+        <dl class="image-import__stats">
+          <div class="image-import__stat">
+            <dt>{{ 'admin.products.imageImport.summary.files' | translate }}</dt>
+            <dd>{{ m.summary.files }}</dd>
+          </div>
+          <div class="image-import__stat image-import__stat--ok">
+            <dt>{{ 'admin.products.imageImport.summary.toUpload' | translate }}</dt>
+            <dd>{{ m.summary.toUpload }}</dd>
+          </div>
+          <div class="image-import__stat" *ngIf="m.summary.productsSkipped > 0">
+            <dt>{{ 'admin.products.imageImport.summary.skipped' | translate }}</dt>
+            <dd>{{ m.summary.productsSkipped }}</dd>
+          </div>
+          <div class="image-import__stat" [class.image-import__stat--stop]="m.summary.conflicts > 0">
+            <dt>{{ 'admin.products.imageImport.summary.conflicts' | translate }}</dt>
+            <dd>{{ m.summary.conflicts }}</dd>
+          </div>
+          <div class="image-import__stat" [class.image-import__stat--warn]="m.summary.unmatched > 0">
+            <dt>{{ 'admin.products.imageImport.summary.unmatched' | translate }}</dt>
+            <dd>{{ m.summary.unmatched }}</dd>
+          </div>
+          <div class="image-import__stat" [class.image-import__stat--warn]="m.summary.productsWithoutImage > 0">
+            <dt>{{ 'admin.products.imageImport.summary.without' | translate }}</dt>
+            <dd>{{ m.summary.productsWithoutImage }}</dd>
+          </div>
+        </dl>
+
+        <p *ngIf="m.summary.toUpload === 0" class="image-import__hint">
+          {{ 'admin.products.imageImport.report.nothing' | translate }}
+        </p>
+        <p *ngIf="mode() === 'REPLACE' && productsToReplace() > 0" class="image-import__warn">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          {{ 'admin.products.imageImport.report.replaceWarning' | translate: { count: productsToReplace() } }}
+        </p>
+      </section>
+
+      <div class="image-import__tabs" role="tablist">
+        <button
+          *ngFor="let s of sections"
+          type="button"
+          role="tab"
+          class="image-import__tab"
+          [class.image-import__tab--active]="section() === s"
+          [attr.aria-selected]="section() === s"
+          (click)="setSection(s)"
+        >
+          {{ 'admin.products.imageImport.sections.' + s | translate }}
+          <span class="image-import__tab-count">
+            {{
+              s === 'matched'
+                ? m.summary.products
+                : s === 'conflicts'
+                  ? m.conflicts.length
+                  : s === 'unmatched'
+                    ? m.unmatched.length
+                    : m.productsWithoutImage.total
+            }}
+          </span>
+        </button>
+      </div>
+
+      <!-- Matched: the thumbnail next to the product is how a picture under the wrong SKU gets noticed -->
+      <section *ngIf="section() === 'matched'" class="image-import__section">
+        <p *ngIf="m.products.length === 0" class="image-import__empty">
+          {{ 'admin.products.imageImport.empty.matched' | translate }}
+        </p>
+        <ul class="image-import__cards">
+          <li *ngFor="let p of cards()" class="image-import__product" [class.image-import__product--off]="p.action !== 'ATTACH'">
+            <div class="image-import__thumbs">
+              <ng-container *ngFor="let f of p.files">
+                <figure class="image-import__thumb" [class.image-import__thumb--off]="!f.upload">
+                  <img
+                    *ngIf="preview(f.name, f.folder) as src"
+                    [src]="src"
+                    [alt]="f.name"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption dir="ltr">{{ f.name }}</figcaption>
+                  <span class="image-import__badge" *ngIf="f.position === 1 && f.upload">{{ 'admin.products.imageImport.main' | translate }}</span>
+                  <span class="image-import__badge image-import__badge--stop" *ngIf="f.problem">{{ reason(f.problem) }}</span>
+                </figure>
+              </ng-container>
+            </div>
+            <div class="image-import__product-body">
+              <div class="image-import__product-line">
+                <strong class="image-import__sku" dir="ltr">{{ p.sku }}</strong>
+                <span class="image-import__tone" [ngClass]="'image-import__tone--' + actionTone(p)">
+                  {{ 'admin.products.imageImport.action.' + p.action | translate }}
+                </span>
+              </div>
+              <a class="image-import__name" dir="auto" (click)="openProduct(p.productId)" (keyup.enter)="openProduct(p.productId)" tabindex="0">
+                {{ productName(p) }}
+              </a>
+              <span class="image-import__meta" dir="auto" *ngIf="p.categoryName">{{ p.categoryName }}</span>
+              <span class="image-import__meta" *ngIf="p.existingImageCount > 0">
+                {{ 'admin.products.imageImport.hasImages' | translate: { count: p.existingImageCount } }}
+              </span>
+              <span class="image-import__meta image-import__meta--stop" *ngIf="p.blockedReason">{{ reason(p.blockedReason) }}</span>
+            </div>
+          </li>
+        </ul>
+        <button *ngIf="hasMoreCards()" type="button" class="image-import__btn image-import__more" (click)="showMore()">
+          {{ 'admin.products.imageImport.showMore' | translate }}
+        </button>
+      </section>
+
+      <section *ngIf="section() === 'conflicts'" class="image-import__section">
+        <p *ngIf="m.conflicts.length === 0" class="image-import__empty">
+          {{ 'admin.products.imageImport.empty.conflicts' | translate }}
+        </p>
+        <p *ngIf="m.conflicts.length > 0" class="image-import__hint">{{ 'admin.products.imageImport.conflictHint' | translate }}</p>
+        <ul class="image-import__list">
+          <li *ngFor="let c of m.conflicts" class="image-import__row">
+            <strong dir="ltr">{{ c.sku }}</strong>
+            <span class="image-import__meta">{{ reason(c.reason) }}</span>
+            <ul class="image-import__files">
+              <li *ngFor="let f of c.files" dir="ltr">
+                <span>{{ f.folder ? f.folder + '/' : '' }}{{ f.name }}</span>
+                <small>{{ megabytes(f.sizeBytes) }} MB</small>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section *ngIf="section() === 'unmatched'" class="image-import__section">
+        <p *ngIf="m.unmatched.length === 0" class="image-import__empty">
+          {{ 'admin.products.imageImport.empty.unmatched' | translate }}
+        </p>
+        <ul class="image-import__list">
+          <li *ngFor="let u of m.unmatched" class="image-import__row">
+            <span class="image-import__file-name" dir="ltr">{{ u.folder ? u.folder + '/' : '' }}{{ u.name }}</span>
+            <span class="image-import__tone image-import__tone--stop">{{ reason(u.reason) }}</span>
+            <span *ngIf="u.sku" class="image-import__meta" dir="ltr">{{ u.sku }}</span>
+            <!-- A file that could be fixed by its name: type the right SKU (add _2 for an extra image) -->
+            <form
+              *ngIf="u.reason === 'NO_PRODUCT' || u.reason === 'AMBIGUOUS_NAME'"
+              class="image-import__rename"
+              (submit)="$event.preventDefault(); rename(u, nm.value)"
+            >
+              <input
+                #nm
+                type="text"
+                class="image-import__rename-input"
+                dir="ltr"
+                autocomplete="off"
+                [value]="renameStart(u)"
+                [attr.aria-label]="'admin.products.imageImport.rename.label' | translate"
+              />
+              <button type="submit" class="image-import__btn image-import__btn--small">
+                <i class="pi pi-pencil" aria-hidden="true"></i>
+                {{ 'admin.products.imageImport.rename.apply' | translate }}
+              </button>
+            </form>
+            <span *ngIf="u.suggestionSku" class="image-import__suggest">
+              <i class="pi pi-lightbulb" aria-hidden="true"></i>
+              {{ 'admin.products.imageImport.suggestion' | translate: { sku: u.suggestionSku, position: u.suggestionPosition || 1 } }}
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <section *ngIf="section() === 'without'" class="image-import__section">
+        <p *ngIf="m.productsWithoutImage.total === 0" class="image-import__empty">
+          {{ 'admin.products.imageImport.empty.without' | translate }}
+        </p>
+        <ul class="image-import__list">
+          <li *ngFor="let i of m.productsWithoutImage.items" class="image-import__row">
+            <strong dir="ltr">{{ i.sku }}</strong>
+            <a class="image-import__name" dir="auto" (click)="openProduct(i.productId)" (keyup.enter)="openProduct(i.productId)" tabindex="0">
+              {{ productName(i) }}
+            </a>
+          </li>
+        </ul>
+        <p *ngIf="m.productsWithoutImage.total > m.productsWithoutImage.items.length" class="image-import__hint">
+          {{ 'admin.products.imageImport.withoutMore' | translate: { shown: m.productsWithoutImage.items.length, total: m.productsWithoutImage.total } }}
+        </p>
+      </section>
+    </ng-container>
+  </ng-container>
+
+  <!-- Uploading and done -->
+  <section *ngIf="phase() === 'uploading' || phase() === 'done'" class="image-import__card">
+    <h2 class="image-import__card-title">
+      {{ (phase() === 'uploading' ? 'admin.products.imageImport.upload.running' : 'admin.products.imageImport.upload.finished') | translate }}
+    </h2>
+
+    <div
+      class="image-import__progress"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="percent()"
+    >
+      <span class="image-import__progress-bar" [style.inline-size.%]="percent()"></span>
+    </div>
+    <p class="image-import__hint" role="status">
+      {{ 'admin.products.imageImport.upload.progress' | translate: { done: finished(), total: total() } }}
+    </p>
+
+    <dl class="image-import__stats">
+      <div class="image-import__stat image-import__stat--ok">
+        <dt>{{ 'admin.products.imageImport.result.attached' | translate }}</dt>
+        <dd>{{ counts().attached }}</dd>
+      </div>
+      <div class="image-import__stat">
+        <dt>{{ 'admin.products.imageImport.result.skipped' | translate }}</dt>
+        <dd>{{ counts().skipped }}</dd>
+      </div>
+      <div class="image-import__stat" [class.image-import__stat--warn]="counts().rejected > 0">
+        <dt>{{ 'admin.products.imageImport.result.rejected' | translate }}</dt>
+        <dd>{{ counts().rejected }}</dd>
+      </div>
+      <div class="image-import__stat" [class.image-import__stat--stop]="counts().failed > 0">
+        <dt>{{ 'admin.products.imageImport.result.failed' | translate }}</dt>
+        <dd>{{ counts().failed }}</dd>
+      </div>
+    </dl>
+
+    <div class="image-import__actions">
+      <button *ngIf="phase() === 'uploading'" type="button" class="image-import__btn" [disabled]="stopping()" (click)="stop()">
+        <i class="pi pi-stop-circle" aria-hidden="true"></i>
+        {{ (stopping() ? 'admin.products.imageImport.upload.stopping' : 'admin.products.imageImport.upload.stop') | translate }}
+      </button>
+      <ng-container *ngIf="phase() === 'done'">
+        <button
+          *ngIf="retryable().length > 0"
+          type="button"
+          class="image-import__btn image-import__btn--primary"
+          (click)="retryRemaining()"
+        >
+          <i class="pi pi-refresh" aria-hidden="true"></i>
+          {{ 'admin.products.imageImport.upload.retry' | translate: { count: retryable().length } }}
+        </button>
+        <button type="button" class="image-import__btn" [class.image-import__btn--primary]="retryable().length === 0" (click)="openProducts()">
+          {{ 'admin.products.imageImport.upload.openProducts' | translate }}
+        </button>
+        <button type="button" class="image-import__btn" (click)="again()">
+          {{ 'admin.products.imageImport.upload.another' | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </section>
+
+  <section *ngIf="(phase() === 'uploading' || phase() === 'done') && notAttached().length > 0" class="image-import__card">
+    <h2 class="image-import__card-title">{{ 'admin.products.imageImport.result.details' | translate }}</h2>
+    <ul class="image-import__list">
+      <li *ngFor="let i of notAttached()" class="image-import__row">
+        <span class="image-import__file-name" dir="ltr">{{ i.name }}</span>
+        <span
+          class="image-import__tone"
+          [class.image-import__tone--stop]="i.state === 'FAILED' || i.state === 'REJECTED'"
+          [class.image-import__tone--info]="i.state === 'SKIPPED'"
+        >
+          {{ reason(i.code) }}
+        </span>
+        <span class="image-import__meta" dir="ltr">{{ i.sku }}</span>
+      </li>
+    </ul>
+  </section>
+</div>

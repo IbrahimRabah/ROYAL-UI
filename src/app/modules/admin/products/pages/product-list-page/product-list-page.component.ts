@@ -42,6 +42,8 @@ const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
 /** The most products the server accepts in one bulk request. */
 const BULK_CHUNK = 500;
 
+type ImageFilter = 'NONE' | 'HAS';
+
 interface StatusTab {
   key: string;
   status: ProductStatus | null;
@@ -93,6 +95,13 @@ export class ProductListPageComponent {
   });
   readonly fulfillmentOptions = Object.values(FulfillmentType);
 
+  /** «Without images» finds what still needs a photo after an import; «With images» is its opposite. */
+  readonly imageOptions: ImageFilter[] = ['NONE', 'HAS'];
+  readonly imageFilter = computed<ImageFilter | null>(() => {
+    const raw = this.queryParamMap().get('images');
+    return raw === 'NONE' || raw === 'HAS' ? raw : null;
+  });
+
   readonly searchDraft = signal('');
   readonly filtersOpen = signal(false);
   readonly allProducts = signal<ProductAdminResponse[]>([]);
@@ -131,8 +140,11 @@ export class ProductListPageComponent {
     const categoryId = this.categoryFilter();
     const brandId = this.brandFilter();
     const fulfillment = this.fulfillmentFilter();
+    const images = this.imageFilter();
 
     return this.allProducts().filter((p) => {
+      if (images === 'NONE' && p.imageCount > 0) return false;
+      if (images === 'HAS' && p.imageCount === 0) return false;
       if (fulfillment && (p.fulfillmentType ?? FulfillmentType.READY_MADE) !== fulfillment) return false;
       if (status && p.status !== status) return false;
       if (categoryId && p.categoryId !== categoryId) return false;
@@ -206,6 +218,10 @@ export class ProductListPageComponent {
   /** A ready-made product with no size class looks published but fails at checkout. */
   missingSize(row: ProductAdminResponse): boolean {
     return isReadyMade(row) && !row.shippingSizeClass;
+  }
+
+  onImageFilterChange(filter: ImageFilter | null): void {
+    this.updateQueryParams({ images: filter, page: null });
   }
 
   onFulfillmentFilterChange(type: FulfillmentType | null): void {
@@ -349,6 +365,11 @@ export class ProductListPageComponent {
           if (skipped.length > 0) {
             this.toast.warning(this.skippedMessage(skipped));
           }
+          // Live without a picture is allowed (a made-to-order piece may not have one yet), but worth a line.
+          const withoutImage = answers.flatMap((a) => a.warnings ?? []).filter((w) => w.code === 'NO_IMAGE');
+          if (withoutImage.length > 0) {
+            this.toast.warning(this.translate.instant('admin.products.list.bulk.toast.noImage', { count: withoutImage.length }));
+          }
 
           const left = new Set(this.selected());
           succeeded.forEach((id) => left.delete(id));
@@ -377,6 +398,9 @@ export class ProductListPageComponent {
     this.productApi.publish(row.id).subscribe({
       next: () => {
         this.toast.success(this.translate.instant('toast.products.published'));
+        if (row.imageCount === 0) {
+          this.toast.warning(this.translate.instant('admin.products.list.bulk.toast.noImageOne'));
+        }
         this.fetchAll();
       },
       error: () => {},
