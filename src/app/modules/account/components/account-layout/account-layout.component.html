@@ -37,6 +37,14 @@
         <span>{{ 'account.nav.orders' | translate }}</span>
       </a>
       <a
+        routerLink="/me/reviews"
+        routerLinkActive="account-sidebar__link--active"
+        class="account-sidebar__link"
+      >
+        <i class="pi pi-star" aria-hidden="true"></i>
+        <span>{{ 'account.nav.reviews' | translate }}</span>
+      </a>
+      <a
         routerLink="/me/custom-requests"
         routerLinkActive="account-sidebar__link--active"
         class="account-sidebar__link"

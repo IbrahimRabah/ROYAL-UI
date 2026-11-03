@@ -88,6 +88,10 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.IMPORT_BATCH_EXPIRED]: 'انتهت صلاحية المعاينة. ارفع الملف من جديد',
   [ErrorCode.IMPORT_HAS_ERRORS]: 'في الملف صفوف بها أخطاء. صحّحها في المعاينة أو صحّح الملف وارفعه من جديد، ولم يتم حفظ أي شيء',
   [ErrorCode.IMAGE_IMPORT_TOO_MANY_FILES]: 'عدد الملفات في الطلب الواحد أكبر من المسموح. أرسل عددًا أقل',
+  [ErrorCode.REVIEW_NOT_FOUND]: 'التقييم غير موجود',
+  [ErrorCode.REVIEW_NOT_ELIGIBLE]: 'يمكنك تقييم المنتج بعد توصيله إليك',
+  [ErrorCode.REVIEW_ALREADY_EXISTS]: 'قيّمت هذا المنتج من قبل. عدّل تقييمك بدلًا من ذلك',
+  [ErrorCode.REVIEW_ALREADY_DECIDED]: 'التقييم في هذه الحالة بالفعل',
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
@@ -178,4 +182,8 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.IMPORT_BATCH_EXPIRED]: 'This preview has expired. Upload the file again',
   [ErrorCode.IMPORT_HAS_ERRORS]: 'The file has rows with errors. Fix them in the preview, or fix the file and upload again; nothing was saved',
   [ErrorCode.IMAGE_IMPORT_TOO_MANY_FILES]: 'Too many files in one request. Send fewer at a time',
+  [ErrorCode.REVIEW_NOT_FOUND]: 'Review not found',
+  [ErrorCode.REVIEW_NOT_ELIGIBLE]: 'You can review a product after it has been delivered to you',
+  [ErrorCode.REVIEW_ALREADY_EXISTS]: 'You have already reviewed this product. Edit your review instead',
+  [ErrorCode.REVIEW_ALREADY_DECIDED]: 'This review is already in that state',
 };

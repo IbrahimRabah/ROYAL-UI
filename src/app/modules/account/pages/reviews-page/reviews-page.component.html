@@ -1,0 +1,77 @@
+<div class="reviews-page">
+  <h1 class="reviews-page__title">{{ 'reviews.account.title' | translate }}</h1>
+
+  <p *ngIf="failed()" class="reviews-page__error" role="alert">
+    {{ 'reviews.account.failed' | translate }}
+    <button type="button" class="reviews-page__link" (click)="reload()">{{ 'common.retry' | translate }}</button>
+  </p>
+
+  <section class="reviews-page__section" *ngIf="!loading()">
+    <h2 class="reviews-page__heading">{{ 'reviews.account.waiting' | translate }}</h2>
+    <p class="reviews-page__hint" *ngIf="eligible().length === 0">{{ 'reviews.account.nothingWaiting' | translate }}</p>
+
+    <ul class="reviews-page__list">
+      <li *ngFor="let item of eligible()" class="reviews-page__card">
+        <img
+          *ngIf="item.imageUrl"
+          class="reviews-page__thumb"
+          [src]="item.imageUrl"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="reviews-page__info">
+          <a class="reviews-page__name" dir="auto" [routerLink]="['/products', item.slug]">{{ item.name }}</a>
+          <span class="reviews-page__meta">{{ 'reviews.account.fromOrder' | translate: { number: item.orderNumber } }}</span>
+        </div>
+        <button type="button" class="reviews-page__btn reviews-page__btn--primary" (click)="write(item)">
+          <i class="pi pi-star" aria-hidden="true"></i>
+          {{ 'reviews.account.write' | translate }}
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <section class="reviews-page__section" *ngIf="!loading()">
+    <h2 class="reviews-page__heading">{{ 'reviews.account.mine' | translate }}</h2>
+    <p class="reviews-page__hint" *ngIf="reviews().length === 0">{{ 'reviews.account.noneYet' | translate }}</p>
+
+    <ul class="reviews-page__list">
+      <li *ngFor="let r of reviews()" class="reviews-page__card reviews-page__card--column">
+        <div class="reviews-page__row">
+          <a class="reviews-page__name" dir="auto" [routerLink]="['/products', r.productSlug]">{{ r.productName }}</a>
+          <span class="reviews-page__chip reviews-page__chip--{{ statusTone(r.status) }}">
+            {{ 'reviews.status.' + r.status | translate }}
+          </span>
+        </div>
+        <app-vl-stars [value]="r.rating" size="sm"></app-vl-stars>
+        <p *ngIf="r.comment" class="reviews-page__comment" dir="auto">{{ r.comment }}</p>
+        <p *ngIf="r.status === 'PENDING'" class="reviews-page__meta">{{ 'reviews.account.pendingHint' | translate }}</p>
+        <p *ngIf="r.status === 'REJECTED' && r.moderationNote" class="reviews-page__note" dir="auto">
+          {{ 'reviews.account.rejectedNote' | translate }} {{ r.moderationNote }}
+        </p>
+        <div class="reviews-page__row">
+          <time class="reviews-page__meta" [attr.datetime]="r.createdAt">{{ r.createdAt | date: 'mediumDate' }}</time>
+          <button type="button" class="reviews-page__btn" (click)="edit(r)">
+            <i class="pi pi-pencil" aria-hidden="true"></i>
+            {{ 'reviews.account.edit' | translate }}
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <button *ngIf="hasMore()" type="button" class="reviews-page__btn reviews-page__more" (click)="loadMore()">
+      {{ 'reviews.showMore' | translate }}
+    </button>
+  </section>
+
+  <app-review-dialog
+    *ngIf="target() as t"
+    [open]="true"
+    [productId]="t.productId"
+    [productName]="t.productName"
+    [existing]="t.existing"
+    (closed)="closeDialog()"
+    (saved)="onSaved($event)"
+  ></app-review-dialog>
+</div>

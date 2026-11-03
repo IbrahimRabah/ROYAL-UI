@@ -663,7 +663,8 @@
       "signOut": "Sign Out",
       "customRequests": "Custom requests",
       "wishlist": "Wishlist",
-      "awaitingAria": "{{count}} waiting for your answer"
+      "awaitingAria": "{{count}} waiting for your answer",
+      "reviews": "My reviews"
     },
     "empty": {
       "heading": "My Account",
@@ -1006,7 +1007,8 @@
       },
       "governorates": "Governorates",
       "portfolio": "Portfolio",
-      "customRequests": "Custom requests"
+      "customRequests": "Custom requests",
+      "reviews": "Reviews"
     },
     "sidebar": {
       "logoAlt": "ROYAL IRON"
@@ -2683,5 +2685,98 @@
     "browse": "Browse products",
     "needsAttention": "Some items need your attention before checkout. Review them in your full cart.",
     "loading": "Loading your cart..."
+  },
+  "reviews": {
+    "title": "Customer reviews",
+    "loading": "Loading…",
+    "empty": "No reviews yet. Customers who received this product can review it.",
+    "count": "{{count}} reviews",
+    "showMore": "Show more",
+    "starsOutOfFive": "{{value}} out of 5 stars",
+    "status": {
+      "PENDING": "Waiting for approval",
+      "APPROVED": "Published",
+      "REJECTED": "Not published"
+    },
+    "toast": {
+      "sent": "Thank you! Your review will appear after we approve it",
+      "edited": "Your review was updated and will appear again after we approve it"
+    },
+    "dialog": {
+      "title": "Review this product",
+      "editTitle": "Edit your review",
+      "rating": "Your rating",
+      "starLabel": "{{value}} of 5 stars",
+      "comment": "Your comment (optional)",
+      "commentPlaceholder": "What did you like or not like?",
+      "note": "Your review is shown on the product page after we approve it.",
+      "editNote": "After you edit it, the review waits for approval again.",
+      "submit": "Send review",
+      "saveEdit": "Save changes",
+      "saving": "Saving…"
+    },
+    "account": {
+      "title": "My reviews",
+      "failed": "Could not load your reviews.",
+      "waiting": "Waiting for your review",
+      "nothingWaiting": "Nothing to review right now. Products you receive will appear here.",
+      "fromOrder": "From order {{number}}",
+      "write": "Write a review",
+      "mine": "Reviews I wrote",
+      "noneYet": "You have not written a review yet.",
+      "pendingHint": "It will appear on the product page after we approve it.",
+      "rejectedNote": "Note from us:",
+      "edit": "Edit",
+      "reviewItems": "Review the products you received"
+    },
+    "admin": {
+      "title": "Reviews",
+      "subtitle": "Decide which customer reviews appear on the product pages. Only approved reviews are shown.",
+      "tabs": {
+        "PENDING": "Waiting",
+        "APPROVED": "Published",
+        "REJECTED": "Rejected",
+        "ALL": "All"
+      },
+      "search": "Search comment, name or order number",
+      "allStars": "All stars",
+      "selected": "{{count}} selected",
+      "selectAll": "Select all on this page",
+      "select": "Select the review of {{name}}",
+      "approveSelected": "Approve selected",
+      "rejectSelected": "Reject selected",
+      "approve": "Approve",
+      "reject": "Reject",
+      "hide": "Hide",
+      "delete": "Delete",
+      "shownAs": "shown as",
+      "noComment": "Stars only, no comment.",
+      "note": "Note:",
+      "noteLabel": "Note to the customer (optional)",
+      "failed": "Could not load the reviews.",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "empty": {
+        "PENDING": "No reviews are waiting for approval.",
+        "APPROVED": "No published reviews yet.",
+        "REJECTED": "No rejected reviews.",
+        "ALL": "No reviews yet."
+      },
+      "deleteConfirm": {
+        "title": "Delete this review?",
+        "message": "It is removed for good. Reject it instead if you want to keep a record.",
+        "confirm": "Delete"
+      },
+      "toast": {
+        "approved": "Approved. It now appears on the product page",
+        "rejected": "Rejected",
+        "hidden": "Hidden from the product page",
+        "deleted": "Deleted",
+        "bulkApproved": "{{count}} reviews approved",
+        "bulkRejected": "{{count}} reviews rejected",
+        "bulkSkipped": "{{count}} were already in that state or no longer exist"
+      }
+    }
   }
 }

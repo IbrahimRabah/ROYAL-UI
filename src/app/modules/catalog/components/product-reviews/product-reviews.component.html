@@ -1,0 +1,43 @@
+<section class="reviews section" *ngIf="!failed()" [attr.aria-label]="'reviews.title' | translate">
+  <div class="container-vl reviews__inner">
+    <h2 class="reviews__title">{{ 'reviews.title' | translate }}</h2>
+
+    <div *ngIf="loading()" class="reviews__loading" role="status">{{ 'reviews.loading' | translate }}</div>
+
+    <ng-container *ngIf="summary() as s">
+      <p *ngIf="s.count === 0" class="reviews__empty">{{ 'reviews.empty' | translate }}</p>
+
+      <div *ngIf="s.count > 0" class="reviews__layout">
+        <div class="reviews__summary">
+          <span class="reviews__average">{{ s.average | number: '1.1-1' : 'en-US' }}</span>
+          <app-vl-stars [value]="s.average" size="lg"></app-vl-stars>
+          <span class="reviews__count">{{ 'reviews.count' | translate: { count: s.count } }}</span>
+
+          <ul class="reviews__bars">
+            <li *ngFor="let star of stars" class="reviews__bar-row">
+              <span class="reviews__bar-label">{{ star }} ★</span>
+              <span class="reviews__bar"><span class="reviews__bar-fill" [style.inline-size.%]="percent(star)"></span></span>
+              <span class="reviews__bar-count">{{ s.breakdown[star] || 0 }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="reviews__list">
+          <li *ngFor="let r of reviews()" class="reviews__item">
+            <div class="reviews__item-head">
+              <app-vl-stars [value]="r.rating" size="sm"></app-vl-stars>
+              <strong class="reviews__name" dir="auto">{{ r.reviewerName }}</strong>
+              <time class="reviews__date" [attr.datetime]="r.createdAt">{{ r.createdAt | date: 'mediumDate' }}</time>
+            </div>
+            <p *ngIf="r.comment" class="reviews__comment" dir="auto">{{ r.comment }}</p>
+          </li>
+          <li *ngIf="hasMore" class="reviews__more">
+            <button type="button" class="reviews__more-btn" [disabled]="loadingMore()" (click)="loadMore()">
+              {{ 'reviews.showMore' | translate }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+</section>

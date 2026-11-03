@@ -10,6 +10,8 @@ import { OrdersPageComponent } from './pages/orders-page/orders-page.component';
 import { OrderDetailsPageComponent } from './pages/order-details-page/order-details-page.component';
 import { CustomRequestsPageComponent } from './pages/custom-requests-page/custom-requests-page.component';
 import { CustomRequestDetailsPageComponent } from './pages/custom-request-details-page/custom-request-details-page.component';
+import { ReviewsPageComponent } from './pages/reviews-page/reviews-page.component';
+import { ReviewDialogComponent } from './components/review-dialog/review-dialog.component';
 import { AddressCardComponent } from './components/address-card/address-card.component';
 import { AddressFormDialogComponent } from './components/address-form-dialog/address-form-dialog.component';
 import { OrderTimelineComponent } from './components/order-timeline/order-timeline.component';
@@ -21,6 +23,8 @@ import { SessionsPanelComponent } from './components/sessions-panel/sessions-pan
 
 @NgModule({
   declarations: [
+    ReviewsPageComponent,
+    ReviewDialogComponent,
     AccountLayoutComponent,
     ProfilePageComponent,
     AddressesPageComponent,

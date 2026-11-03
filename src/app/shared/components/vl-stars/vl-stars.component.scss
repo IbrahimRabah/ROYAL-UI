@@ -1,0 +1,35 @@
+:host {
+  display: inline-flex;
+  line-height: 1;
+}
+
+.vl-stars {
+  position: relative;
+  display: inline-block;
+  font-size: 1.125rem;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  /* Stars read left to right even in an Arabic page: the fill grows from the start of the row. */
+  direction: ltr;
+}
+
+.vl-stars--sm {
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+}
+
+.vl-stars--lg {
+  font-size: 1.5rem;
+}
+
+.vl-stars__base {
+  color: var(--border, #d9d4cc);
+}
+
+.vl-stars__fill {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  color: var(--gold, #b8863b);
+}

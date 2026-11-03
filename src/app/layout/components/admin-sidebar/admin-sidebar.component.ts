@@ -1,5 +1,6 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { AdminCustomRequestApiService } from '../../../core/services/api/admin-custom-request-api.service';
+import { AdminReviewApiService } from '../../../core/services/api/admin-review-api.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,7 +30,7 @@ interface AdminNavItem {
   labelKey: string;
   icon: string;
   route: string;
-  badge?: 'orders' | 'requests';
+  badge?: 'orders' | 'requests' | 'reviews';
   children?: AdminNavChild[];
 }
 
@@ -45,6 +46,7 @@ const NAV_GROUPS: AdminNavGroup[] = [
       { labelKey: 'admin.nav.dashboard', icon: 'pi-home', route: '/admin/dashboard' },
       { labelKey: 'admin.nav.orders', icon: 'pi-shopping-cart', route: '/admin/orders', badge: 'orders' },
       { labelKey: 'admin.nav.customRequests', icon: 'pi-comments', route: '/admin/custom-requests', badge: 'requests' },
+      { labelKey: 'admin.nav.reviews', icon: 'pi-star', route: '/admin/reviews', badge: 'reviews' },
       { labelKey: 'admin.nav.customers', icon: 'pi-users', route: '/admin/customers' },
     ],
   },
@@ -113,6 +115,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly dashboardApi = inject(AdminDashboardApiService);
   private readonly customRequestApi = inject(AdminCustomRequestApiService);
+  private readonly reviewApi = inject(AdminReviewApiService);
 
   @Input() mobileOpen = false;
   @Output() readonly mobileOpenChange = new EventEmitter<boolean>();
@@ -125,9 +128,12 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
   readonly navGroups = NAV_GROUPS;
   readonly pendingOrderCount = signal(0);
   readonly newRequestCount = signal(0);
+  readonly pendingReviewCount = signal(0);
 
   badgeCount(item: AdminNavItem): number {
-    return item.badge === 'orders' ? this.pendingOrderCount() : item.badge === 'requests' ? this.newRequestCount() : 0;
+    if (item.badge === 'orders') return this.pendingOrderCount();
+    if (item.badge === 'requests') return this.newRequestCount();
+    return item.badge === 'reviews' ? this.pendingReviewCount() : 0;
   }
 
   ngOnInit(): void {
@@ -139,6 +145,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
       error: () => {},
     });
     this.customRequestApi.countNew().subscribe({ next: (count) => this.newRequestCount.set(count), error: () => {} });
+    this.reviewApi.counts().subscribe({ next: (c) => this.pendingReviewCount.set(c.pending), error: () => {} });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -6,6 +6,7 @@ import { SliderModule } from 'primeng/slider';
 import { CheckboxModule } from 'primeng/checkbox';
 
 import { CatalogRoutingModule } from './catalog-routing.module';
+import { ProductReviewsComponent } from './components/product-reviews/product-reviews.component';
 import { ProductListPageComponent } from './pages/product-list-page/product-list-page.component';
 import { ProductDetailsPageComponent } from './pages/product-details-page/product-details-page.component';
 import { FilterSidebarComponent } from './components/filter-sidebar/filter-sidebar.component';
@@ -30,6 +31,7 @@ import { CategoryCardGridComponent } from './components/category-card-grid/categ
 
 @NgModule({
   declarations: [
+    ProductReviewsComponent,
     ProductListPageComponent,
     ProductDetailsPageComponent,
     FilterSidebarComponent,

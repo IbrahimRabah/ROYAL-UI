@@ -35,6 +35,11 @@ export class OrderDetailsPageComponent {
   readonly error = signal(false);
   readonly cancelDialogOpen = signal(false);
 
+  /** A delivered order can be reviewed item by item from «My reviews». */
+  isDelivered(o: OrderResponse): boolean {
+    return o.fulfillmentStatus === FulfillmentStatus.DELIVERED;
+  }
+
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
       this.loading.set(false);

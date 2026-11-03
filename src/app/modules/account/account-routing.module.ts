@@ -5,6 +5,7 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
 import { AddressesPageComponent } from './pages/addresses-page/addresses-page.component';
 import { OrdersPageComponent } from './pages/orders-page/orders-page.component';
 import { OrderDetailsPageComponent } from './pages/order-details-page/order-details-page.component';
+import { ReviewsPageComponent } from './pages/reviews-page/reviews-page.component';
 import { CustomRequestsPageComponent } from './pages/custom-requests-page/custom-requests-page.component';
 import { CustomRequestDetailsPageComponent } from './pages/custom-request-details-page/custom-request-details-page.component';
 
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'addresses', component: AddressesPageComponent },
       { path: 'orders', component: OrdersPageComponent },
       { path: 'orders/:id', component: OrderDetailsPageComponent },
+      { path: 'reviews', component: ReviewsPageComponent },
       { path: 'custom-requests', component: CustomRequestsPageComponent },
       { path: 'custom-requests/:number', component: CustomRequestDetailsPageComponent }
     ]

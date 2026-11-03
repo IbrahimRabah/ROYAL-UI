@@ -1,0 +1,10 @@
+<span
+  class="vl-stars"
+  [class.vl-stars--sm]="size === 'sm'"
+  [class.vl-stars--lg]="size === 'lg'"
+  role="img"
+  [attr.aria-label]="'reviews.starsOutOfFive' | translate: { value: rounded }"
+>
+  <span class="vl-stars__base" aria-hidden="true">★★★★★</span>
+  <span class="vl-stars__fill" aria-hidden="true" [style.inline-size.%]="percent">★★★★★</span>
+</span>

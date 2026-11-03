@@ -28,6 +28,9 @@ export interface ProductSummaryResponse {
   shippingSizeClass: ShippingSizeClass | null;
   requiresAssembly: boolean;
   assemblyFee: Money | null;
+  /** Average stars of the approved reviews; absent when there are none. */
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
 }
 
 export interface ProductDetailResponse {
@@ -50,6 +53,8 @@ export interface ProductDetailResponse {
   shippingSizeClass: ShippingSizeClass | null;
   requiresAssembly: boolean;
   assemblyFee: Money | null;
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
   seo: ProductSeo;
 }
 

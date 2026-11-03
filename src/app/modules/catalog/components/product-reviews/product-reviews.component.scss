@@ -1,0 +1,144 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.reviews__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.reviews__title {
+  margin: 0;
+  font-size: var(--fs-h3, 1.5rem);
+}
+
+.reviews__loading,
+.reviews__empty {
+  margin: 0;
+  color: var(--text-muted, #6b6b6b);
+}
+
+.reviews__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6, var(--sp-5));
+
+  @include breakpoints.md {
+    grid-template-columns: minmax(220px, 300px) 1fr;
+    align-items: start;
+  }
+}
+
+.reviews__summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.reviews__average {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.reviews__count {
+  color: var(--text-muted, #6b6b6b);
+  font-size: var(--fs-sm);
+}
+
+.reviews__bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  inline-size: 100%;
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reviews__bar-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 2rem;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  direction: ltr;
+}
+
+.reviews__bar {
+  block-size: 8px;
+  border-radius: 999px;
+  background: var(--border, #e3dfd8);
+  overflow: hidden;
+}
+
+.reviews__bar-fill {
+  display: block;
+  block-size: 100%;
+  background: var(--gold, #b8863b);
+}
+
+.reviews__bar-count {
+  text-align: end;
+  color: var(--text-muted, #6b6b6b);
+}
+
+.reviews__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reviews__item {
+  padding-block: var(--sp-4);
+  border-block-end: 1px solid var(--border, #e3dfd8);
+
+  &:first-child {
+    padding-block-start: 0;
+  }
+}
+
+.reviews__item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.reviews__date {
+  margin-inline-start: auto;
+  color: var(--text-muted, #6b6b6b);
+  font-size: var(--fs-xs);
+}
+
+.reviews__comment {
+  margin: var(--sp-2) 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.reviews__more {
+  padding-block-start: var(--sp-4);
+}
+
+.reviews__more-btn {
+  min-block-size: 44px;
+  padding: var(--sp-2) var(--sp-5);
+  border: 1px solid var(--border, #d9d4cc);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -66,6 +66,10 @@
     <section class="order-details-page__section">
       <h2 class="order-details-page__section-heading">{{ 'account.orderDetails.itemsHeading' | translate }}</h2>
       <app-order-items-list [items]="o.items"></app-order-items-list>
+      <a *ngIf="isDelivered(o)" routerLink="/me/reviews" class="order-details-page__review-link">
+        <i class="pi pi-star" aria-hidden="true"></i>
+        {{ 'reviews.account.reviewItems' | translate }}
+      </a>
     </section>
 
     <section class="order-details-page__totals">

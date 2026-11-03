@@ -198,12 +198,28 @@ export const API_ROUTES = {
       storeProfile: () => `${BASE}/admin/settings/store-profile`,
     },
 
+    reviews: {
+      list: () => `${BASE}/admin/reviews`,
+      counts: () => `${BASE}/admin/reviews/counts`,
+      approve: (id: number) => `${BASE}/admin/reviews/${id}/approve`,
+      reject: (id: number) => `${BASE}/admin/reviews/${id}/reject`,
+      bulk: () => `${BASE}/admin/reviews/bulk`,
+      one: (id: number) => `${BASE}/admin/reviews/${id}`,
+    },
+
     remittances: {
       outstanding: () => `${BASE}/admin/remittances/outstanding`,
       remittances: () => `${BASE}/admin/remittances`,
       remittance: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}`,
       cancel: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}/cancel`,
     },
+  },
+
+  reviews: {
+    forProduct: (slug: string) => `${BASE}/products/${encodeURIComponent(slug)}/reviews`,
+    mine: () => `${BASE}/me/reviews`,
+    eligible: () => `${BASE}/me/reviews/eligible`,
+    one: (reviewId: number) => `${BASE}/me/reviews/${reviewId}`,
   },
 
   system: {

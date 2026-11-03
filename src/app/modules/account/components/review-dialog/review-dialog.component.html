@@ -1,0 +1,71 @@
+<div class="review-dialog" *ngIf="open">
+  <div class="review-dialog__backdrop" (click)="cancel()"></div>
+
+  <div
+    #panel
+    class="review-dialog__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="review-dialog-title"
+    tabindex="-1"
+    (keydown.escape)="cancel()"
+  >
+    <header class="review-dialog__header">
+      <div>
+        <h2 id="review-dialog-title" class="review-dialog__title">
+          {{ (existing ? 'reviews.dialog.editTitle' : 'reviews.dialog.title') | translate }}
+        </h2>
+        <p class="review-dialog__product" dir="auto">{{ productName }}</p>
+      </div>
+      <button type="button" class="review-dialog__close" (click)="cancel()" [attr.aria-label]="'common.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="review-dialog__body">
+      <div class="review-dialog__label" id="review-stars-label">{{ 'reviews.dialog.rating' | translate }}</div>
+      <div class="review-dialog__stars" role="radiogroup" aria-labelledby="review-stars-label" (mouseleave)="hover.set(0)">
+        <button
+          *ngFor="let v of values"
+          type="button"
+          role="radio"
+          class="review-dialog__star"
+          [class.review-dialog__star--on]="(hover() || rating()) >= v"
+          [attr.aria-checked]="rating() === v"
+          [attr.aria-label]="'reviews.dialog.starLabel' | translate: { value: v }"
+          [tabindex]="rating() === v || (rating() === 0 && v === 1) ? 0 : -1"
+          (click)="rating.set(v)"
+          (mouseenter)="hover.set(v)"
+          (keydown)="onStarKey($event, v)"
+        >★</button>
+      </div>
+
+      <label class="review-dialog__label" for="review-comment">{{ 'reviews.dialog.comment' | translate }}</label>
+      <textarea
+        id="review-comment"
+        class="review-dialog__textarea"
+        rows="5"
+        dir="auto"
+        [attr.maxlength]="maxLength"
+        [value]="comment()"
+        [placeholder]="'reviews.dialog.commentPlaceholder' | translate"
+        (input)="setComment($any($event.target).value)"
+      ></textarea>
+      <span class="review-dialog__counter">{{ comment().length }}/{{ maxLength }}</span>
+
+      <p class="review-dialog__note">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        {{ (existing ? 'reviews.dialog.editNote' : 'reviews.dialog.note') | translate }}
+      </p>
+    </div>
+
+    <footer class="review-dialog__footer">
+      <button type="button" class="review-dialog__btn" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="review-dialog__btn review-dialog__btn--primary" [disabled]="!canSubmit" (click)="submit()">
+        {{ (saving() ? 'reviews.dialog.saving' : existing ? 'reviews.dialog.saveEdit' : 'reviews.dialog.submit') | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

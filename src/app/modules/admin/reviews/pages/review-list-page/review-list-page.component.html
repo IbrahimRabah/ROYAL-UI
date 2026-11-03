@@ -1,0 +1,136 @@
+<div class="review-list">
+  <header class="review-list__header">
+    <h1 class="review-list__title">{{ 'reviews.admin.title' | translate }}</h1>
+    <p class="review-list__sub">{{ 'reviews.admin.subtitle' | translate }}</p>
+  </header>
+
+  <div class="review-list__tabs" role="tablist">
+    <button
+      *ngFor="let t of tabs"
+      type="button"
+      role="tab"
+      class="review-list__tab"
+      [class.review-list__tab--active]="tab() === t"
+      [attr.aria-selected]="tab() === t"
+      (click)="selectTab(t)"
+    >
+      {{ 'reviews.admin.tabs.' + t | translate }}
+      <span class="review-list__tab-count" [class.review-list__tab-count--alert]="t === 'PENDING' && countFor(t) > 0">{{ countFor(t) }}</span>
+    </button>
+  </div>
+
+  <div class="review-list__filters">
+    <input
+      type="search"
+      class="review-list__input"
+      dir="auto"
+      [value]="query()"
+      [placeholder]="'reviews.admin.search' | translate"
+      [attr.aria-label]="'reviews.admin.search' | translate"
+      (input)="onSearch($any($event.target).value)"
+    />
+    <select class="review-list__select" [attr.aria-label]="'reviews.admin.allStars' | translate" (change)="onRating($any($event.target).value)">
+      <option value="">{{ 'reviews.admin.allStars' | translate }}</option>
+      <option *ngFor="let s of starOptions" [value]="s" [selected]="rating() === s">{{ s }} ★</option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedCount() > 0" class="review-list__bulk" role="region">
+    <span class="review-list__bulk-count">{{ 'reviews.admin.selected' | translate: { count: selectedCount() } }}</span>
+    <div class="review-list__bulk-actions">
+      <button type="button" class="review-list__btn review-list__btn--primary" [disabled]="busy()" (click)="bulk('APPROVE')">
+        <i class="pi pi-check" aria-hidden="true"></i> {{ 'reviews.admin.approveSelected' | translate }}
+      </button>
+      <button type="button" class="review-list__btn" [disabled]="busy()" (click)="bulk('REJECT')">
+        <i class="pi pi-eye-slash" aria-hidden="true"></i> {{ 'reviews.admin.rejectSelected' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="error()" class="review-list__error" role="alert">
+    {{ 'reviews.admin.failed' | translate }}
+    <button type="button" class="review-list__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+
+  <div *ngIf="loading()" class="review-list__empty" role="status">{{ 'reviews.loading' | translate }}</div>
+
+  <div *ngIf="!loading() && !error() && rows().length === 0" class="review-list__empty">
+    {{ 'reviews.admin.empty.' + tab() | translate }}
+  </div>
+
+  <label *ngIf="rows().length > 0" class="review-list__all">
+    <input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" />
+    {{ 'reviews.admin.selectAll' | translate }}
+  </label>
+
+  <ul class="review-list__items">
+    <li *ngFor="let r of rows()" class="review-list__item" [class.review-list__item--selected]="isSelected(r)">
+      <div class="review-list__item-top">
+        <input
+          type="checkbox"
+          class="review-list__check"
+          [checked]="isSelected(r)"
+          [attr.aria-label]="'reviews.admin.select' | translate: { name: r.reviewerName }"
+          (change)="toggle(r)"
+        />
+        <app-vl-stars [value]="r.rating" size="sm"></app-vl-stars>
+        <span class="review-list__chip review-list__chip--{{ statusTone(r.status) }}">{{ 'reviews.status.' + r.status | translate }}</span>
+        <time class="review-list__date" [attr.datetime]="r.createdAt">{{ r.createdAt | date: 'medium' }}</time>
+      </div>
+
+      <a class="review-list__product" dir="auto" [routerLink]="['/admin/products', r.productId]">{{ r.productName }}</a>
+      <p class="review-list__who" dir="auto">
+        {{ r.customerName || r.reviewerName }}
+        <span class="review-list__muted">· {{ 'reviews.admin.shownAs' | translate }} {{ r.reviewerName }} · {{ r.orderNumber }}</span>
+      </p>
+
+      <p *ngIf="r.comment" class="review-list__comment" dir="auto">{{ r.comment }}</p>
+      <p *ngIf="!r.comment" class="review-list__muted">{{ 'reviews.admin.noComment' | translate }}</p>
+      <p *ngIf="r.moderationNote" class="review-list__note" dir="auto">{{ 'reviews.admin.note' | translate }} {{ r.moderationNote }}</p>
+
+      <div *ngIf="rejecting() === r.id" class="review-list__reject">
+        <label class="review-list__muted" [attr.for]="'note-' + r.id">{{ 'reviews.admin.noteLabel' | translate }}</label>
+        <textarea
+          [id]="'note-' + r.id"
+          class="review-list__textarea"
+          rows="2"
+          dir="auto"
+          maxlength="500"
+          [value]="rejectNote()"
+          (input)="rejectNote.set($any($event.target).value)"
+        ></textarea>
+        <div class="review-list__actions">
+          <button type="button" class="review-list__btn review-list__btn--danger" [disabled]="busy()" (click)="confirmReject(r)">
+            {{ (r.status === 'APPROVED' ? 'reviews.admin.hide' : 'reviews.admin.reject') | translate }}
+          </button>
+          <button type="button" class="review-list__btn" (click)="cancelReject()">{{ 'common.cancel' | translate }}</button>
+        </div>
+      </div>
+
+      <div *ngIf="rejecting() !== r.id" class="review-list__actions">
+        <button *ngIf="r.status !== 'APPROVED'" type="button" class="review-list__btn review-list__btn--primary" [disabled]="busy()" (click)="approve(r)">
+          <i class="pi pi-check" aria-hidden="true"></i> {{ 'reviews.admin.approve' | translate }}
+        </button>
+        <button *ngIf="r.status === 'PENDING'" type="button" class="review-list__btn" [disabled]="busy()" (click)="startReject(r)">
+          <i class="pi pi-times" aria-hidden="true"></i> {{ 'reviews.admin.reject' | translate }}
+        </button>
+        <button *ngIf="r.status === 'APPROVED'" type="button" class="review-list__btn" [disabled]="busy()" (click)="startReject(r)">
+          <i class="pi pi-eye-slash" aria-hidden="true"></i> {{ 'reviews.admin.hide' | translate }}
+        </button>
+        <button type="button" class="review-list__btn review-list__btn--ghost" [disabled]="busy()" (click)="remove(r)">
+          <i class="pi pi-trash" aria-hidden="true"></i> {{ 'reviews.admin.delete' | translate }}
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <nav *ngIf="totalPages() > 1" class="review-list__pager" [attr.aria-label]="'reviews.admin.pagination' | translate">
+    <button type="button" class="review-list__btn" [disabled]="page() === 0" (click)="goTo(page() - 1)">
+      <i class="pi pi-chevron-left" aria-hidden="true"></i> {{ 'reviews.admin.previous' | translate }}
+    </button>
+    <span class="review-list__muted">{{ page() + 1 }} / {{ totalPages() }}</span>
+    <button type="button" class="review-list__btn" [disabled]="page() + 1 >= totalPages()" (click)="goTo(page() + 1)">
+      {{ 'reviews.admin.next' | translate }} <i class="pi pi-chevron-right" aria-hidden="true"></i>
+    </button>
+  </nav>
+</div>

@@ -208,3 +208,18 @@
     background: var(--stop-bg);
   }
 }
+
+.order-details-page__review-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+  color: var(--gold);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}

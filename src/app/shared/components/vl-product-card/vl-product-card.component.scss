@@ -155,3 +155,11 @@
     transform: none;
   }
 }
+
+.vl-product-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--text-muted, #6b6b6b);
+  font-size: var(--fs-xs);
+}
