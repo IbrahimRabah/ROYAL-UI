@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+.faq__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.faq__title {
+  margin: 0;
+  font-size: var(--fs-h3, 1.5rem);
+}
+
+.faq__list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border, #e3dfd8);
+  border-radius: var(--r-lg);
+  background: var(--surface, #fff);
+  overflow: hidden;
+}
+
+.faq__item {
+  border-block-end: 1px solid var(--border, #e3dfd8);
+
+  &:last-child {
+    border-block-end: none;
+  }
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-block-size: 52px;
+  padding: var(--sp-3) var(--sp-4);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  overflow-wrap: anywhere;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  /* A plus that turns into a minus: the open state is visible without colour. */
+  &::after {
+    content: '+';
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--gold, #b8863b);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold, #b8863b);
+    outline-offset: -2px;
+  }
+}
+
+.faq__item[open] > .faq__question::after {
+  content: '−';
+}
+
+.faq__answer {
+  margin: 0;
+  padding: 0 var(--sp-4) var(--sp-4);
+  color: var(--text-muted, #555);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

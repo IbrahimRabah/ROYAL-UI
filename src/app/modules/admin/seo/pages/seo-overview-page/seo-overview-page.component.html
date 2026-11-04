@@ -1,0 +1,81 @@
+<div class="sa">
+  <header>
+    <h1 class="sa__title">{{ 'seo.overview.title' | translate }}</h1>
+    <p class="sa__sub">{{ 'seo.overview.subtitle' | translate }}</p>
+  </header>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+
+  <ng-container *ngIf="data() as d">
+    <section class="sa__card">
+      <h2 class="sa__heading">{{ 'seo.overview.products' | translate }}</h2>
+      <dl class="sa__tiles">
+        <ng-container *ngFor="let t of productTiles(d)">
+          <a *ngIf="t.query; else plainTile" class="sa__tile" [ngClass]="'sa__tile--' + t.tone"
+             routerLink="/admin/seo/meta" [queryParams]="t.query">
+            <dt>{{ t.labelKey | translate }}</dt>
+            <dd>{{ t.value }}</dd>
+          </a>
+          <ng-template #plainTile>
+            <div class="sa__tile" [ngClass]="'sa__tile--' + t.tone">
+              <dt>{{ t.labelKey | translate }}</dt>
+              <dd>{{ t.value }}</dd>
+            </div>
+          </ng-template>
+        </ng-container>
+      </dl>
+    </section>
+
+    <section class="sa__card">
+      <h2 class="sa__heading">{{ 'seo.overview.categories' | translate }}</h2>
+      <dl class="sa__tiles">
+        <ng-container *ngFor="let t of categoryTiles(d)">
+          <a *ngIf="t.query; else plainTile" class="sa__tile" [ngClass]="'sa__tile--' + t.tone"
+             routerLink="/admin/seo/meta" [queryParams]="t.query">
+            <dt>{{ t.labelKey | translate }}</dt>
+            <dd>{{ t.value }}</dd>
+          </a>
+          <ng-template #plainTile>
+            <div class="sa__tile" [ngClass]="'sa__tile--' + t.tone">
+              <dt>{{ t.labelKey | translate }}</dt>
+              <dd>{{ t.value }}</dd>
+            </div>
+          </ng-template>
+        </ng-container>
+      </dl>
+    </section>
+
+    <div class="sa__grid">
+      <section class="sa__card">
+        <h2 class="sa__heading">{{ 'seo.overview.pages' | translate }}</h2>
+        <dl class="sa__tiles">
+          <div class="sa__tile"><dt>{{ 'seo.overview.total' | translate }}</dt><dd>{{ d.pages.total }}</dd></div>
+          <a class="sa__tile" [ngClass]="d.pages.missingTitle === 0 ? 'sa__tile--ok' : 'sa__tile--stop'" routerLink="/admin/seo/pages">
+            <dt>{{ 'seo.overview.missingTitle' | translate }}</dt><dd>{{ d.pages.missingTitle }}</dd>
+          </a>
+          <a class="sa__tile" [ngClass]="d.pages.missingDescription === 0 ? 'sa__tile--ok' : 'sa__tile--stop'" routerLink="/admin/seo/pages">
+            <dt>{{ 'seo.overview.missingDescription' | translate }}</dt><dd>{{ d.pages.missingDescription }}</dd>
+          </a>
+        </dl>
+      </section>
+
+      <section class="sa__card">
+        <h2 class="sa__heading">{{ 'seo.overview.faqs' | translate }}</h2>
+        <dl class="sa__tiles">
+          <a class="sa__tile sa__tile--ok" routerLink="/admin/seo/faqs">
+            <dt>{{ 'seo.overview.published' | translate }}</dt><dd>{{ d.faqs.published }}</dd>
+          </a>
+          <a class="sa__tile" [ngClass]="d.faqs.drafts > 0 ? 'sa__tile--warn' : ''" routerLink="/admin/seo/faqs">
+            <dt>{{ 'seo.overview.drafts' | translate }}</dt><dd>{{ d.faqs.drafts }}</dd>
+          </a>
+        </dl>
+      </section>
+    </div>
+
+    <p class="sa__muted">{{ 'seo.overview.note' | translate }}</p>
+  </ng-container>
+</div>

@@ -12,9 +12,11 @@ import {
   ProductDetailResponse,
   ProductSummaryResponse,
   VariantResponse,
+  money,
 } from '../../../../core/models';
 import { CartActionsService } from '../../../../core/services/cart-actions.service';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
+import { SeoService } from '../../../../core/services/seo.service';
 import { SavedProductsService } from '../../../../core/services/saved-products.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { MiniCartStateService } from '../../../../core/state/mini-cart-state.service';
@@ -39,6 +41,7 @@ function dedupeById(images: ImageResponse[]): ImageResponse[] {
 export class ProductDetailsPageComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly catalogApi = inject(CatalogApiService);
+  private readonly seo = inject(SeoService);
   private readonly cartActions = inject(CartActionsService);
   private readonly miniCart = inject(MiniCartStateService);
   private readonly languageStore = inject(LanguageStoreService);
@@ -161,6 +164,7 @@ export class ProductDetailsPageComponent implements OnDestroy {
       this.catalogApi.getProduct(slug).subscribe({
         next: (product) => {
           this.product.set(product);
+          this.applySeo(product);
           this.selectedValueId.set(this.defaultValueId(product));
           this.activeGalleryImageId.set(this.posterId(product));
           this.loading.set(false);
@@ -176,9 +180,54 @@ export class ProductDetailsPageComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.seo.setJsonLd('product', null);
+    this.seo.setJsonLd('breadcrumb', null);
     this.observer?.disconnect();
     this.ui.setStickyBarVisible(false);
     this.ui.setContactProduct(null);
+  }
+
+  /**
+   * The head of the page and its structured data: the SEO team's meta text (the name when there is none), the
+   * canonical URL, a product with its price, stock and star rating, and the breadcrumb.
+   */
+  private applySeo(p: ProductDetailResponse): void {
+    const image = p.images[0]?.url ?? null;
+    this.seo.applyPage({
+      title: p.seo?.metaTitle || p.name,
+      description: p.seo?.metaDescription || p.shortDescription,
+      canonicalPath: '/products/' + p.slug,
+      image,
+      type: 'product',
+    });
+    const offers = p.priceRange?.min == null ? undefined : {
+      '@type': 'Offer',
+      priceCurrency: 'EGP',
+      price: money(p.priceRange.min),
+      availability: p.inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: this.seo.absolute('/products/' + p.slug),
+    };
+    this.seo.setJsonLd('product', {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: p.name,
+      description: p.shortDescription || undefined,
+      image: p.images.map((i) => this.seo.absolute(i.url)),
+      sku: p.variants[0]?.sku,
+      brand: p.brand?.name ? { '@type': 'Brand', name: p.brand.name } : undefined,
+      offers,
+      aggregateRating: p.ratingCount ? { '@type': 'AggregateRating', ratingValue: p.ratingAvg, reviewCount: p.ratingCount } : undefined,
+    });
+    this.seo.setJsonLd('breadcrumb', p.categoryPath?.length ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: p.categoryPath.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: this.seo.absolute('/products?categoryId=' + c.id),
+      })),
+    } : null);
   }
 
   onDisplayedImageChange(imageId: number | null): void {

@@ -1,0 +1,67 @@
+<div class="sa">
+  <header>
+    <h1 class="sa__title">{{ 'team.title' | translate }}</h1>
+    <p class="sa__sub">{{ 'team.subtitle' | translate }}</p>
+  </header>
+
+  <section class="sa__card" aria-labelledby="team-add">
+    <h2 class="sa__heading" id="team-add">{{ 'team.add' | translate }}</h2>
+    <p class="sa__muted">{{ 'team.addHint' | translate }}</p>
+    <form class="sa__filters" (submit)="$event.preventDefault(); lookup(email.value)">
+      <input #email type="email" class="sa__input" dir="ltr" autocomplete="off"
+             [placeholder]="'team.emailPlaceholder' | translate" [attr.aria-label]="'team.emailPlaceholder' | translate" />
+      <button type="submit" class="sa__btn" [disabled]="looking()">
+        <i class="pi pi-search" aria-hidden="true"></i> {{ 'team.find' | translate }}
+      </button>
+    </form>
+    <p *ngIf="lookupError()" class="sa__error" role="alert">{{ 'team.notFound' | translate }}</p>
+
+    <div *ngIf="found() as m" class="sa__card sa__card--selected">
+      <div class="sa__row-head">
+        <span class="sa__name" dir="auto">{{ m.name }}</span>
+        <span class="sa__muted" dir="ltr">{{ m.email }}</span>
+      </div>
+      <div class="sa__actions">
+        <label *ngFor="let r of roles" class="sa__check">
+          <input type="checkbox" [checked]="has(m, r)" [disabled]="isMe(m)" (change)="toggle(m, r)" />
+          {{ 'team.roles.' + r | translate }}
+        </label>
+      </div>
+      <p *ngIf="isMe(m)" class="sa__muted">{{ 'team.self' | translate }}</p>
+      <div class="sa__actions">
+        <button type="button" class="sa__btn sa__btn--primary" [disabled]="!dirty(m) || saving() !== null || isMe(m)" (click)="save(m)">
+          <i class="pi pi-check" aria-hidden="true"></i> {{ (saving() === m.id ? 'seo.saving' : 'seo.save') | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+
+  <section *ngIf="!loading()" aria-labelledby="team-list">
+    <h2 class="sa__heading" id="team-list">{{ 'team.current' | translate }}</h2>
+    <ul class="sa__list">
+      <li *ngFor="let m of members()" class="sa__card" [class.sa__card--selected]="dirty(m)">
+        <div class="sa__row-head">
+          <span class="sa__name" dir="auto">{{ m.name }}</span>
+          <span class="sa__muted" dir="ltr">{{ m.email }}</span>
+          <span *ngIf="isMe(m)" class="sa__chip sa__chip--ok">{{ 'team.you' | translate }}</span>
+        </div>
+        <div class="sa__actions">
+          <label *ngFor="let r of roles" class="sa__check">
+            <input type="checkbox" [checked]="has(m, r)" [disabled]="isMe(m)" (change)="toggle(m, r)" />
+            {{ 'team.roles.' + r | translate }}
+          </label>
+          <button type="button" class="sa__btn sa__btn--primary" [disabled]="!dirty(m) || saving() !== null || isMe(m)" (click)="save(m)">
+            {{ (saving() === m.id ? 'seo.saving' : 'seo.save') | translate }}
+          </button>
+        </div>
+      </li>
+    </ul>
+    <p class="sa__muted">{{ 'team.sessionNote' | translate }}</p>
+  </section>
+</div>

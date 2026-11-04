@@ -87,6 +87,9 @@
   </div>
 
   <app-vl-feature-strip class="plp__feature-strip"></app-vl-feature-strip>
+<div class="container-vl section" *ngIf="categoryId() !== null">
+    <app-faq-section scope="category" [key]="categoryId()"></app-faq-section>
+  </div>
 </div>
 
 <app-mobile-filter-drawer [visible]="mobileFiltersOpen()" (visibleChange)="mobileFiltersOpen.set($event)">

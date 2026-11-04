@@ -11,6 +11,11 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
+  // The SEO team has its own corner of the admin; anywhere else is sent back to it.
+  if (authStore.isSeoEditor()) {
+    return state.url.startsWith('/admin/seo') ? true : router.createUrlTree(['/admin/seo']);
+  }
+
   if (!authStore.isLoggedIn()) {
     return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } });
   }

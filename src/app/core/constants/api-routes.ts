@@ -198,6 +198,29 @@ export const API_ROUTES = {
       storeProfile: () => `${BASE}/admin/settings/store-profile`,
     },
 
+    seo: {
+      overview: () => `${BASE}/admin/seo/overview`,
+      products: () => `${BASE}/admin/seo/products`,
+      product: (id: number) => `${BASE}/admin/seo/products/${id}`,
+      categories: () => `${BASE}/admin/seo/categories`,
+      category: (id: number) => `${BASE}/admin/seo/categories/${id}`,
+      pages: () => `${BASE}/admin/seo/pages`,
+      page: (key: string) => `${BASE}/admin/seo/pages/${encodeURIComponent(key)}`,
+    },
+
+    faqs: {
+      list: () => `${BASE}/admin/faqs`,
+      one: (id: number) => `${BASE}/admin/faqs/${id}`,
+      reorder: () => `${BASE}/admin/faqs/reorder`,
+      bulkStatus: () => `${BASE}/admin/faqs/bulk-status`,
+    },
+
+    team: {
+      list: () => `${BASE}/admin/team`,
+      lookup: () => `${BASE}/admin/team/lookup`,
+      roles: (userId: number) => `${BASE}/admin/team/${userId}/roles`,
+    },
+
     reviews: {
       list: () => `${BASE}/admin/reviews`,
       counts: () => `${BASE}/admin/reviews/counts`,
@@ -213,6 +236,13 @@ export const API_ROUTES = {
       remittance: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}`,
       cancel: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}/cancel`,
     },
+  },
+
+  faq: {
+    product: (slug: string) => `${BASE}/products/${encodeURIComponent(slug)}/faqs`,
+    category: (categoryId: number) => `${BASE}/categories/${categoryId}/faqs`,
+    general: () => `${BASE}/faqs`,
+    seoPage: (key: string) => `${BASE}/seo/pages/${encodeURIComponent(key)}`,
   },
 
   reviews: {

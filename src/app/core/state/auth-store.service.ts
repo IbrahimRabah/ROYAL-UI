@@ -18,6 +18,10 @@ export class AuthStoreService {
 
   readonly isLoggedIn = computed(() => this._user() !== null);
   readonly isAdmin = computed(() => this._user()?.roles.includes('ADMIN') ?? false);
+  /** May open the SEO and FAQ screens of the admin and nothing else. */
+  readonly isSeoEditor = computed(() => this._user()?.roles.includes('SEO_EDITOR') ?? false);
+  /** An administrator, or an SEO editor confined to their part. */
+  readonly isStaff = computed(() => this.isAdmin() || this.isSeoEditor());
 
   setSession(auth: AuthResponse): void {
     this.tokenStorage.setSession(auth);

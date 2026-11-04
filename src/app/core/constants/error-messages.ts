@@ -92,6 +92,11 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.REVIEW_NOT_ELIGIBLE]: 'يمكنك تقييم المنتج بعد توصيله إليك',
   [ErrorCode.REVIEW_ALREADY_EXISTS]: 'قيّمت هذا المنتج من قبل. عدّل تقييمك بدلًا من ذلك',
   [ErrorCode.REVIEW_ALREADY_DECIDED]: 'التقييم في هذه الحالة بالفعل',
+  [ErrorCode.FAQ_NOT_FOUND]: 'السؤال غير موجود',
+  [ErrorCode.SEO_PAGE_NOT_FOUND]: 'الصفحة غير موجودة',
+  [ErrorCode.TEAM_USER_NOT_FOUND]: 'لا يوجد حساب بهذا البريد',
+  [ErrorCode.TEAM_LAST_ADMIN]: 'لا بد من وجود مدير واحد على الأقل',
+  [ErrorCode.TEAM_SELF_CHANGE]: 'لا يمكنك تغيير صلاحياتك بنفسك',
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
@@ -186,4 +191,9 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.REVIEW_NOT_ELIGIBLE]: 'You can review a product after it has been delivered to you',
   [ErrorCode.REVIEW_ALREADY_EXISTS]: 'You have already reviewed this product. Edit your review instead',
   [ErrorCode.REVIEW_ALREADY_DECIDED]: 'This review is already in that state',
+  [ErrorCode.FAQ_NOT_FOUND]: 'FAQ not found',
+  [ErrorCode.SEO_PAGE_NOT_FOUND]: 'Page not found',
+  [ErrorCode.TEAM_USER_NOT_FOUND]: 'No account has this email',
+  [ErrorCode.TEAM_LAST_ADMIN]: 'There must always be at least one administrator',
+  [ErrorCode.TEAM_SELF_CHANGE]: 'You cannot change your own roles',
 };

@@ -1,0 +1,10 @@
+<section class="faq-page section">
+  <div class="container-vl faq-page__inner">
+    <h1 class="faq-page__title">{{ 'faq.pageTitle' | translate }}</h1>
+    <p class="faq-page__intro">{{ 'faq.intro' | translate }}</p>
+
+    <app-faq-section scope="general" [heading]="false" (loaded)="count.set($event)"></app-faq-section>
+
+    <p *ngIf="count() === 0" class="faq-page__empty">{{ 'faq.empty' | translate }}</p>
+  </div>
+</section>

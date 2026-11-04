@@ -1,0 +1,106 @@
+<div class="sa">
+  <header>
+    <h1 class="sa__title">{{ 'seo.meta.title' | translate }}</h1>
+    <p class="sa__sub">{{ 'seo.meta.subtitle' | translate }}</p>
+  </header>
+
+  <div class="sa__tabs" role="tablist">
+    <button type="button" role="tab" class="sa__tab" [class.sa__tab--active]="tab() === 'products'"
+            [attr.aria-selected]="tab() === 'products'" (click)="selectTab('products')">
+      {{ 'seo.meta.tabs.products' | translate }}
+    </button>
+    <button type="button" role="tab" class="sa__tab" [class.sa__tab--active]="tab() === 'categories'"
+            [attr.aria-selected]="tab() === 'categories'" (click)="selectTab('categories')">
+      {{ 'seo.meta.tabs.categories' | translate }}
+    </button>
+  </div>
+
+  <div class="sa__filters">
+    <input type="search" class="sa__input" dir="auto" [value]="query()"
+           [placeholder]="'seo.meta.search' | translate" [attr.aria-label]="'seo.meta.search' | translate"
+           (input)="onSearch($any($event.target).value)" />
+    <select class="sa__select" [attr.aria-label]="'seo.meta.filterLabel' | translate" (change)="setFilter($any($event.target).value)">
+      <option *ngFor="let f of filters" [value]="f" [selected]="filter() === f">{{ 'seo.filters.' + f | translate }}</option>
+    </select>
+  </div>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+  <div *ngIf="!loading() && !failed() && rows().length === 0" class="sa__empty">{{ 'seo.meta.empty' | translate }}</div>
+
+  <ul class="sa__list" *ngIf="!loading()">
+    <li *ngFor="let r of rows()" class="sa__card" [class.sa__card--selected]="dirty(r)">
+      <div class="sa__row-head">
+        <span class="sa__name" dir="auto">{{ r.name }}</span>
+        <span class="sa__chip" [class.sa__chip--ok]="r.status === 'ACTIVE'" [class.sa__chip--warn]="r.status !== 'ACTIVE'">{{ r.status }}</span>
+        <span *ngIf="r.duplicateTitle" class="sa__chip sa__chip--stop">{{ 'seo.meta.duplicate' | translate }}</span>
+        <span class="sa__chip">{{ 'seo.meta.faqCount' | translate: { count: r.faqCount } }}</span>
+        <span class="sa__muted" dir="ltr">{{ r.slug }}</span>
+      </div>
+
+      <div class="sa__grid">
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.titleAr' | translate }}</span>
+            <span [class.sa__count--over]="overTitle(draft(r).metaTitleAr)">{{ (draft(r).metaTitleAr || '').length }}/{{ titleLimit }}</span>
+          </span>
+          <input type="text" class="sa__input" dir="rtl" maxlength="255" [value]="draft(r).metaTitleAr"
+                 (input)="edit(r, 'metaTitleAr', $any($event.target).value)" />
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.titleEn' | translate }}</span>
+            <span [class.sa__count--over]="overTitle(draft(r).metaTitleEn)">{{ (draft(r).metaTitleEn || '').length }}/{{ titleLimit }}</span>
+          </span>
+          <input type="text" class="sa__input" dir="ltr" maxlength="255" [value]="draft(r).metaTitleEn"
+                 (input)="edit(r, 'metaTitleEn', $any($event.target).value)" />
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.descriptionAr' | translate }}</span>
+            <span [class.sa__count--over]="overDescription(draft(r).metaDescriptionAr)">{{ (draft(r).metaDescriptionAr || '').length }}/{{ descriptionLimit }}</span>
+          </span>
+          <textarea class="sa__textarea" rows="3" dir="rtl" maxlength="500" [value]="draft(r).metaDescriptionAr"
+                    (input)="edit(r, 'metaDescriptionAr', $any($event.target).value)"></textarea>
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.descriptionEn' | translate }}</span>
+            <span [class.sa__count--over]="overDescription(draft(r).metaDescriptionEn)">{{ (draft(r).metaDescriptionEn || '').length }}/{{ descriptionLimit }}</span>
+          </span>
+          <textarea class="sa__textarea" rows="3" dir="ltr" maxlength="500" [value]="draft(r).metaDescriptionEn"
+                    (input)="edit(r, 'metaDescriptionEn', $any($event.target).value)"></textarea>
+        </label>
+      </div>
+
+      <div class="sa__serp" aria-hidden="true">
+        <div class="sa__serp-title">{{ draft(r).metaTitleAr || r.name }}</div>
+        <div class="sa__serp-url" dir="ltr">{{ tab() === 'products' ? '/products/' + r.slug : '/products?categoryId=' + r.id }}</div>
+        <div class="sa__serp-desc">{{ draft(r).metaDescriptionAr || ('seo.meta.noDescription' | translate) }}</div>
+      </div>
+
+      <div class="sa__actions">
+        <button type="button" class="sa__btn sa__btn--primary" [disabled]="!dirty(r) || saving() !== null" (click)="save(r)">
+          <i class="pi pi-check" aria-hidden="true"></i>
+          {{ (saving() === r.id ? 'seo.saving' : 'seo.save') | translate }}
+        </button>
+        <button type="button" class="sa__btn" [disabled]="!dirty(r) || saving() !== null" (click)="revert(r)">
+          {{ 'seo.revert' | translate }}
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <nav *ngIf="totalPages() > 1" class="sa__pager" [attr.aria-label]="'seo.pagination' | translate">
+    <button type="button" class="sa__btn" [disabled]="page() === 0" (click)="goTo(page() - 1)">
+      <i class="pi pi-chevron-left" aria-hidden="true"></i> {{ 'seo.previous' | translate }}
+    </button>
+    <span class="sa__muted">{{ page() + 1 }} / {{ totalPages() }} · {{ totalElements() }}</span>
+    <button type="button" class="sa__btn" [disabled]="page() + 1 >= totalPages()" (click)="goTo(page() + 1)">
+      {{ 'seo.next' | translate }} <i class="pi pi-chevron-right" aria-hidden="true"></i>
+    </button>
+  </nav>
+</div>

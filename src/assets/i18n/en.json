@@ -1003,12 +1003,18 @@
         "operations": "Operations",
         "catalog": "Catalog",
         "finance": "Finance",
-        "system": "System"
+        "system": "System",
+        "seo": "SEO"
       },
       "governorates": "Governorates",
       "portfolio": "Portfolio",
       "customRequests": "Custom requests",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "seoOverview": "SEO overview",
+      "seoMeta": "Meta texts",
+      "seoPages": "Page texts",
+      "faqs": "FAQs",
+      "team": "Team"
     },
     "sidebar": {
       "logoAlt": "ROYAL IRON"
@@ -2778,5 +2784,191 @@
         "bulkSkipped": "{{count}} were already in that state or no longer exist"
       }
     }
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "pageTitle": "Frequently asked questions",
+    "intro": "Quick answers about orders, delivery, payment and custom work.",
+    "empty": "There are no questions here yet."
+  },
+  "seo": {
+    "loading": "Loading…",
+    "failed": "Could not load this page.",
+    "save": "Save",
+    "saving": "Saving…",
+    "revert": "Undo changes",
+    "pagination": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "defaults": {
+      "HOME": {
+        "title": "ROYAL IRON | Furniture and wrought ironwork",
+        "description": "Furniture in wood and forged iron, plus custom gates, staircases and railings. Delivery across Egypt."
+      },
+      "PRODUCTS": {
+        "title": "Furniture and ironwork | ROYAL IRON",
+        "description": "Browse tables, beds, chairs, consoles, shelving and desks in wood and forged iron."
+      },
+      "ABOUT": {
+        "title": "About us | ROYAL IRON",
+        "description": "Who we are and how we make furniture and wrought ironwork."
+      },
+      "CONTACT": {
+        "title": "Contact us | ROYAL IRON",
+        "description": "Talk to us about an order, delivery or a custom piece."
+      },
+      "PORTFOLIO": {
+        "title": "Our work | ROYAL IRON",
+        "description": "Gates, staircases, railings and furniture we have made."
+      },
+      "CUSTOM_REQUEST": {
+        "title": "Custom work request | ROYAL IRON",
+        "description": "Tell us what you need and get a quote for a custom piece."
+      },
+      "FAQ": {
+        "title": "Frequently asked questions | ROYAL IRON",
+        "description": "Answers about orders, delivery, payment and custom work."
+      }
+    },
+    "filters": {
+      "ALL": "All",
+      "MISSING_TITLE": "No meta title",
+      "MISSING_DESCRIPTION": "No meta description",
+      "TOO_LONG": "Too long",
+      "DUPLICATE": "Duplicate title",
+      "NO_FAQ": "No FAQ"
+    },
+    "overview": {
+      "title": "SEO overview",
+      "subtitle": "What search engines read from your pages. Click a number to fix those items.",
+      "products": "Products on sale",
+      "categories": "Categories",
+      "pages": "Static pages",
+      "faqs": "FAQs",
+      "total": "Total",
+      "missingTitle": "No meta title",
+      "missingDescription": "No meta description",
+      "tooLong": "Too long (cut by Google)",
+      "duplicate": "Same title as another",
+      "noFaq": "Without a FAQ",
+      "published": "Published",
+      "drafts": "Drafts",
+      "note": "Measured on the Arabic text, the language the shop is indexed in. A title should stay near 60 characters and a description near 155."
+    },
+    "meta": {
+      "title": "Meta texts",
+      "subtitle": "The title and description search engines show for each product and category. Only these texts change here.",
+      "tabs": {
+        "products": "Products",
+        "categories": "Categories"
+      },
+      "search": "Search by name or link",
+      "filterLabel": "Show",
+      "empty": "Nothing matches.",
+      "titleAr": "Title (Arabic)",
+      "titleEn": "Title (English)",
+      "descriptionAr": "Description (Arabic)",
+      "descriptionEn": "Description (English)",
+      "noDescription": "No description: Google will pick a piece of the page.",
+      "duplicate": "Duplicate title",
+      "faqCount": "{{count}} FAQs",
+      "saved": "Saved"
+    },
+    "pages": {
+      "title": "Page texts",
+      "subtitle": "The title and description of the pages that are not a product or category.",
+      "noindex": "Hide this page from search engines",
+      "hidden": "Hidden from search",
+      "names": {
+        "HOME": "Home",
+        "PRODUCTS": "All products",
+        "ABOUT": "About us",
+        "CONTACT": "Contact",
+        "PORTFOLIO": "Portfolio",
+        "CUSTOM_REQUEST": "Custom request",
+        "FAQ": "FAQ page"
+      }
+    },
+    "faq": {
+      "title": "FAQs",
+      "subtitle": "Questions and answers on product pages, category pages, the FAQ page and checkout. Only published ones are shown.",
+      "new": "New question",
+      "edit": "Edit question",
+      "editBtn": "Edit",
+      "scope": "Where it appears",
+      "scopes": {
+        "PRODUCT": "A product",
+        "CATEGORY": "A category",
+        "GENERAL": "The shop"
+      },
+      "topic": "Topic",
+      "topics": {
+        "GENERAL": "General",
+        "ORDERS": "Orders",
+        "SHIPPING": "Shipping",
+        "PAYMENT": "Payment",
+        "RETURNS": "Returns",
+        "CUSTOM_WORK": "Custom work",
+        "CHECKOUT": "Checkout page"
+      },
+      "category": "Category",
+      "pickCategory": "Choose a category",
+      "product": "Product",
+      "searchProduct": "Search for the product",
+      "questionAr": "Question (Arabic)",
+      "questionEn": "Question (English, optional)",
+      "answerAr": "Answer (Arabic)",
+      "answerEn": "Answer (English, optional)",
+      "plainText": "Plain text only. An English question needs its English answer too, or neither is kept.",
+      "publishNow": "Published (visible on the website)",
+      "search": "Search questions",
+      "allScopes": "Everywhere",
+      "allTopics": "Every topic",
+      "allStatuses": "Every state",
+      "status": "State",
+      "statuses": {
+        "PUBLISHED": "Published",
+        "DRAFT": "Draft"
+      },
+      "selected": "{{count}} selected",
+      "selectAll": "Select all",
+      "select": "Select this question",
+      "publishSelected": "Publish selected",
+      "unpublishSelected": "Unpublish selected",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "delete": "Delete",
+      "empty": "No questions yet.",
+      "deleteConfirm": {
+        "title": "Delete this question?",
+        "message": "It is removed from the website for good.",
+        "confirm": "Delete"
+      },
+      "toast": {
+        "saved": "Saved",
+        "deleted": "Deleted",
+        "bulk": "{{count}} questions updated"
+      }
+    }
+  },
+  "team": {
+    "title": "Team",
+    "subtitle": "Who may use the admin. Give each person their own account a role instead of sharing a login, so every change shows who made it.",
+    "add": "Give a person access",
+    "addHint": "They need an account already. Type the email they signed up with.",
+    "emailPlaceholder": "name@example.com",
+    "find": "Find",
+    "notFound": "No account has this email. Ask them to sign up first.",
+    "current": "People with access",
+    "you": "You",
+    "self": "You cannot change your own roles.",
+    "roles": {
+      "ADMIN": "Administrator (everything)",
+      "SEO_EDITOR": "SEO editor (SEO and FAQs only)"
+    },
+    "saved": "Saved",
+    "sessionNote": "A change reaches the person at their next sign-in. The last administrator cannot be removed."
   }
 }

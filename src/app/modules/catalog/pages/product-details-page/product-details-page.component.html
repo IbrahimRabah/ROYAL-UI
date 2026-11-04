@@ -73,6 +73,12 @@
       </div>
     </section>
 
+    <section class="section" *ngIf="p.slug">
+      <div class="container-vl">
+        <app-faq-section scope="product" [key]="p.slug"></app-faq-section>
+      </div>
+    </section>
+
     <app-product-reviews [slug]="p.slug"></app-product-reviews>
 
     <app-related-products [products]="relatedProducts()"></app-related-products>

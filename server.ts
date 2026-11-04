@@ -15,6 +15,22 @@ export function app(): express.Express {
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
+  // The sitemap and robots.txt are built by the API from what is really on sale.
+  const apiUrl = (process.env['API_URL'] || 'http://localhost:8081').replace(/\/$/, '');
+  for (const [path, upstream, type] of [
+    ['/sitemap.xml', '/api/v1/seo/sitemap.xml', 'application/xml'],
+    ['/robots.txt', '/api/v1/seo/robots.txt', 'text/plain'],
+  ] as const) {
+    server.get(path, async (_req, res) => {
+      try {
+        const upstreamResponse = await fetch(apiUrl + upstream);
+        res.status(upstreamResponse.status).type(type).send(await upstreamResponse.text());
+      } catch {
+        res.status(502).type('text/plain').send('Unavailable');
+      }
+    });
+  }
+
   server.get('*.*', express.static(browserDistFolder, {
     maxAge: '1y'
   }));

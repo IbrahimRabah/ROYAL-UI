@@ -1,0 +1,407 @@
+@use 'styles/breakpoints';
+
+/// The look shared by the SEO, FAQ and Team admin screens: one place, so the three read as one tool.
+/// Logical properties only, so the screens mirror correctly in Arabic.
+@mixin base {
+  :host {
+    display: block;
+  }
+
+  .sa {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    min-inline-size: 0;
+  }
+
+  .sa__title {
+    margin: 0;
+    font-family: var(--body);
+    font-size: var(--fs-h2);
+    font-weight: 800;
+    color: var(--admin-text);
+  }
+
+  .sa__sub {
+    margin: var(--sp-1) 0 0;
+    color: var(--admin-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .sa__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-lg);
+    background: var(--admin-surface);
+    min-inline-size: 0;
+  }
+
+  .sa__card--selected {
+    border-color: var(--gold);
+    background: color-mix(in srgb, var(--gold) 6%, var(--admin-surface));
+  }
+
+  .sa__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+
+    @include breakpoints.md {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .sa__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+
+    @include breakpoints.md {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+
+  .sa__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-md);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text);
+    text-decoration: none;
+
+    dt {
+      color: var(--admin-text-muted);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+  }
+
+  a.sa__tile:hover,
+  a.sa__tile:focus-visible {
+    border-color: var(--gold);
+  }
+
+  .sa__tile--ok dd {
+    color: var(--ok);
+  }
+
+  .sa__tile--warn dd {
+    color: var(--warn);
+  }
+
+  .sa__tile--stop dd {
+    color: var(--stop);
+  }
+
+  .sa__heading {
+    margin: 0;
+    font-size: var(--fs-md, 1.0625rem);
+    font-weight: 800;
+    color: var(--admin-text);
+  }
+
+  .sa__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    border-block-end: 1px solid var(--admin-border);
+  }
+
+  .sa__tab {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-1);
+    margin-inline-end: var(--sp-4);
+    border: none;
+    border-block-end: 2px solid transparent;
+    background: transparent;
+    color: var(--admin-text-muted);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--admin-text);
+    }
+  }
+
+  .sa__tab--active {
+    color: var(--admin-text);
+    border-block-end-color: var(--gold);
+  }
+
+  .sa__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+
+  .sa__input,
+  .sa__select,
+  .sa__textarea {
+    inline-size: 100%;
+    min-block-size: 44px;
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-md);
+    background: var(--admin-surface);
+    color: var(--admin-text);
+    font: inherit;
+    font-size: var(--fs-sm);
+
+    &:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 1px;
+    }
+  }
+
+  .sa__filters .sa__input,
+  .sa__filters .sa__select {
+    inline-size: auto;
+    flex: 1 1 200px;
+    min-inline-size: 0;
+  }
+
+  .sa__textarea {
+    resize: vertical;
+  }
+
+  .sa__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+    min-inline-size: 0;
+  }
+
+  .sa__label {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+  }
+
+  .sa__count--over {
+    color: var(--stop);
+  }
+
+  .sa__serp {
+    padding: var(--sp-3);
+    border: 1px dashed var(--admin-border);
+    border-radius: var(--r-md);
+    background: var(--admin-surface-alt);
+    direction: rtl;
+    text-align: start;
+    overflow-wrap: anywhere;
+  }
+
+  .sa__serp-title {
+    color: #1a0dab;
+    font-size: 1.0625rem;
+  }
+
+  .sa__serp-url {
+    color: #006621;
+    font-size: var(--fs-xs);
+  }
+
+  .sa__serp-desc {
+    color: var(--admin-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .sa__row-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+  }
+
+  .sa__name {
+    color: var(--admin-text);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
+  .sa__muted {
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .sa__chip {
+    padding: 1px var(--sp-3);
+    border-radius: var(--r-full);
+    background: var(--admin-surface-alt);
+    color: var(--admin-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .sa__chip--ok {
+    background: color-mix(in srgb, var(--ok) 14%, transparent);
+    color: var(--ok);
+  }
+
+  .sa__chip--warn {
+    background: color-mix(in srgb, var(--warn) 14%, transparent);
+    color: var(--warn);
+  }
+
+  .sa__chip--stop {
+    background: var(--stop-bg);
+    color: var(--stop);
+  }
+
+  .sa__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  .sa__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    min-block-size: 44px;
+    padding: var(--sp-2) var(--sp-4);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-md);
+    background: var(--admin-surface);
+    color: var(--admin-text);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--admin-surface-alt);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .sa__btn--primary {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: var(--gold);
+      opacity: 0.9;
+    }
+  }
+
+  .sa__btn--danger {
+    border-color: var(--stop);
+    color: var(--stop);
+  }
+
+  .sa__btn--icon {
+    min-inline-size: 44px;
+    padding-inline: var(--sp-2);
+  }
+
+  .sa__empty {
+    padding: var(--sp-5);
+    text-align: center;
+    color: var(--admin-text-muted);
+    border: 1px dashed var(--admin-border);
+    border-radius: var(--r-lg);
+  }
+
+  .sa__error {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin: 0;
+    color: var(--stop);
+  }
+
+  .sa__link {
+    border: none;
+    background: transparent;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .sa__pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-4);
+  }
+
+  .sa__check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+
+    input {
+      inline-size: 18px;
+      block-size: 18px;
+      accent-color: var(--gold);
+    }
+  }
+
+  .sa__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sa__picks {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+
+  .sa__pick {
+    display: block;
+    inline-size: 100%;
+    padding: var(--sp-2) var(--sp-3);
+    border: none;
+    border-block-end: 1px solid var(--admin-border);
+    background: var(--admin-surface);
+    color: var(--admin-text);
+    text-align: start;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--admin-surface-alt);
+    }
+  }
+}

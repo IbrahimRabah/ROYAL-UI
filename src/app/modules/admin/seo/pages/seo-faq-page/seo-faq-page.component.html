@@ -1,0 +1,149 @@
+<div class="sa">
+  <header class="sa__row-head">
+    <div>
+      <h1 class="sa__title">{{ 'seo.faq.title' | translate }}</h1>
+      <p class="sa__sub">{{ 'seo.faq.subtitle' | translate }}</p>
+    </div>
+    <button type="button" class="sa__btn sa__btn--primary" (click)="startNew()">
+      <i class="pi pi-plus" aria-hidden="true"></i> {{ 'seo.faq.new' | translate }}
+    </button>
+  </header>
+
+  <!-- The editor -->
+  <section *ngIf="form() as f" class="sa__card sa__card--selected" aria-labelledby="faq-form-title">
+    <h2 class="sa__heading" id="faq-form-title">{{ (f.id ? 'seo.faq.edit' : 'seo.faq.new') | translate }}</h2>
+
+    <div class="sa__grid">
+      <label class="sa__field">
+        <span class="sa__label">{{ 'seo.faq.scope' | translate }}</span>
+        <select class="sa__select" [disabled]="f.id !== null" (change)="setFormScope($any($event.target).value)">
+          <option *ngFor="let s of scopes" [value]="s" [selected]="f.scope === s">{{ 'seo.faq.scopes.' + s | translate }}</option>
+        </select>
+      </label>
+
+      <label class="sa__field" *ngIf="f.scope === 'GENERAL'">
+        <span class="sa__label">{{ 'seo.faq.topic' | translate }}</span>
+        <select class="sa__select" (change)="patch('topic', $any($event.target).value)">
+          <option *ngFor="let t of topics" [value]="t" [selected]="f.topic === t">{{ 'seo.faq.topics.' + t | translate }}</option>
+        </select>
+      </label>
+
+      <label class="sa__field" *ngIf="f.scope === 'CATEGORY'">
+        <span class="sa__label">{{ 'seo.faq.category' | translate }}</span>
+        <select class="sa__select" [disabled]="f.id !== null" (change)="pickCategory($any($event.target).value)">
+          <option value="">{{ 'seo.faq.pickCategory' | translate }}</option>
+          <option *ngFor="let c of categories()" [value]="c.id" [selected]="f.targetId === c.id">{{ c.name }}</option>
+        </select>
+      </label>
+
+      <div class="sa__field" *ngIf="f.scope === 'PRODUCT'">
+        <span class="sa__label">{{ 'seo.faq.product' | translate }}</span>
+        <input *ngIf="f.id === null" type="search" class="sa__input" dir="auto" autocomplete="off"
+               [placeholder]="'seo.faq.searchProduct' | translate" (input)="searchProduct($any($event.target).value)" />
+        <ul class="sa__picks" *ngIf="productResults().length > 0">
+          <li *ngFor="let p of productResults()">
+            <button type="button" class="sa__pick" dir="auto" (click)="pickTarget(p)">{{ p.name }} <span class="sa__muted" dir="ltr">{{ p.slug }}</span></button>
+          </li>
+        </ul>
+        <span *ngIf="f.targetId" class="sa__chip sa__chip--ok" dir="auto">{{ f.targetName }}</span>
+      </div>
+    </div>
+
+    <div class="sa__grid">
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'seo.faq.questionAr' | translate }}</span><span>{{ f.questionAr.length }}/500</span></span>
+        <input type="text" class="sa__input" dir="rtl" maxlength="500" [value]="f.questionAr" (input)="patch('questionAr', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'seo.faq.questionEn' | translate }}</span><span>{{ f.questionEn.length }}/500</span></span>
+        <input type="text" class="sa__input" dir="ltr" maxlength="500" [value]="f.questionEn" (input)="patch('questionEn', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'seo.faq.answerAr' | translate }}</span><span>{{ f.answerAr.length }}/2000</span></span>
+        <textarea class="sa__textarea" rows="5" dir="rtl" maxlength="2000" [value]="f.answerAr" (input)="patch('answerAr', $any($event.target).value)"></textarea>
+      </label>
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'seo.faq.answerEn' | translate }}</span><span>{{ f.answerEn.length }}/2000</span></span>
+        <textarea class="sa__textarea" rows="5" dir="ltr" maxlength="2000" [value]="f.answerEn" (input)="patch('answerEn', $any($event.target).value)"></textarea>
+      </label>
+    </div>
+    <p class="sa__muted">{{ 'seo.faq.plainText' | translate }}</p>
+
+    <label class="sa__check">
+      <input type="checkbox" [checked]="f.status === 'PUBLISHED'" (change)="patch('status', $any($event.target).checked ? 'PUBLISHED' : 'DRAFT')" />
+      {{ 'seo.faq.publishNow' | translate }}
+    </label>
+
+    <div class="sa__actions">
+      <button type="button" class="sa__btn sa__btn--primary" [disabled]="!canSave()" (click)="submit()">
+        <i class="pi pi-check" aria-hidden="true"></i> {{ (busy() ? 'seo.saving' : 'seo.save') | translate }}
+      </button>
+      <button type="button" class="sa__btn" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <div class="sa__filters">
+    <input type="search" class="sa__input" dir="auto" [placeholder]="'seo.faq.search' | translate"
+           [attr.aria-label]="'seo.faq.search' | translate" (input)="onSearch($any($event.target).value)" />
+    <select class="sa__select" [attr.aria-label]="'seo.faq.scope' | translate" (change)="setScope($any($event.target).value)">
+      <option value="">{{ 'seo.faq.allScopes' | translate }}</option>
+      <option *ngFor="let s of scopes" [value]="s" [selected]="scope() === s">{{ 'seo.faq.scopes.' + s | translate }}</option>
+    </select>
+    <select class="sa__select" [attr.aria-label]="'seo.faq.topic' | translate" (change)="setTopic($any($event.target).value)">
+      <option value="">{{ 'seo.faq.allTopics' | translate }}</option>
+      <option *ngFor="let t of topics" [value]="t" [selected]="topic() === t">{{ 'seo.faq.topics.' + t | translate }}</option>
+    </select>
+    <select class="sa__select" [attr.aria-label]="'seo.faq.status' | translate" (change)="setStatus($any($event.target).value)">
+      <option value="">{{ 'seo.faq.allStatuses' | translate }}</option>
+      <option value="PUBLISHED" [selected]="status() === 'PUBLISHED'">{{ 'seo.faq.statuses.PUBLISHED' | translate }}</option>
+      <option value="DRAFT" [selected]="status() === 'DRAFT'">{{ 'seo.faq.statuses.DRAFT' | translate }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="selected().size > 0" class="sa__card">
+    <span class="sa__name">{{ 'seo.faq.selected' | translate: { count: selected().size } }}</span>
+    <div class="sa__actions">
+      <button type="button" class="sa__btn sa__btn--primary" [disabled]="busy()" (click)="bulk('PUBLISHED')">{{ 'seo.faq.publishSelected' | translate }}</button>
+      <button type="button" class="sa__btn" [disabled]="busy()" (click)="bulk('DRAFT')">{{ 'seo.faq.unpublishSelected' | translate }}</button>
+    </div>
+  </div>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+  <div *ngIf="!loading() && !failed() && items().length === 0" class="sa__empty">{{ 'seo.faq.empty' | translate }}</div>
+
+  <label *ngIf="items().length > 0" class="sa__check">
+    <input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" /> {{ 'seo.faq.selectAll' | translate }}
+  </label>
+
+  <ul class="sa__list" *ngIf="!loading()">
+    <li *ngFor="let i of items()" class="sa__card" [class.sa__card--selected]="isSelected(i)">
+      <div class="sa__row-head">
+        <input type="checkbox" [checked]="isSelected(i)" [attr.aria-label]="'seo.faq.select' | translate" (change)="toggle(i)" />
+        <span class="sa__chip" [class.sa__chip--ok]="i.status === 'PUBLISHED'" [class.sa__chip--warn]="i.status === 'DRAFT'">{{ 'seo.faq.statuses.' + i.status | translate }}</span>
+        <span class="sa__chip">{{ 'seo.faq.scopes.' + i.scope | translate }}</span>
+        <span *ngIf="i.topic" class="sa__chip">{{ 'seo.faq.topics.' + i.topic | translate }}</span>
+        <span *ngIf="i.targetName" class="sa__muted" dir="auto">{{ i.targetName }}</span>
+      </div>
+      <div class="sa__name" dir="auto">{{ i.questionAr }}</div>
+      <p class="sa__muted" dir="auto">{{ i.answerAr }}</p>
+      <div class="sa__actions">
+        <button type="button" class="sa__btn" (click)="startEdit(i)"><i class="pi pi-pencil" aria-hidden="true"></i> {{ 'seo.faq.editBtn' | translate }}</button>
+        <button type="button" class="sa__btn" [disabled]="busy()" (click)="togglePublished(i)">
+          {{ (i.status === 'PUBLISHED' ? 'seo.faq.unpublish' : 'seo.faq.publish') | translate }}
+        </button>
+        <button type="button" class="sa__btn sa__btn--icon" [disabled]="busy() || !neighbour(i, -1)" [attr.aria-label]="'seo.faq.moveUp' | translate" (click)="move(i, -1)">
+          <i class="pi pi-arrow-up" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="sa__btn sa__btn--icon" [disabled]="busy() || !neighbour(i, 1)" [attr.aria-label]="'seo.faq.moveDown' | translate" (click)="move(i, 1)">
+          <i class="pi pi-arrow-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="sa__btn sa__btn--danger" (click)="remove(i)"><i class="pi pi-trash" aria-hidden="true"></i> {{ 'seo.faq.delete' | translate }}</button>
+      </div>
+    </li>
+  </ul>
+</div>

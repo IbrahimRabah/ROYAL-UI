@@ -9,6 +9,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { FaqSectionComponent } from './components/faq-section/faq-section.component';
 import { VlStarsComponent } from './components/vl-stars/vl-stars.component';
 import { LanguageToggleComponent } from './components/language-toggle/language-toggle.component';
 import { CardComponent } from './components/card/card.component';
@@ -74,6 +75,7 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     FooterComponent,
     NotfoundComponent,
     SpinnerComponent,
+    FaqSectionComponent,
     VlStarsComponent,
     LanguageToggleComponent,
     CardComponent,
@@ -146,6 +148,7 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    FaqSectionComponent,
     VlStarsComponent,
     LanguageToggleComponent,
     TranslateModule,

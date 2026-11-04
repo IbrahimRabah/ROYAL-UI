@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from './core/services/theme.service';
+import { RouteSeoService } from './core/services/route-seo.service';
 import { ScrollRestorationService } from './core/services/scroll-restoration.service';
 
 interface TableItem {
@@ -17,6 +18,7 @@ interface TableItem {
 export class AppComponent {
   constructor() {
     inject(ScrollRestorationService).init();
+    inject(RouteSeoService).init();
   }
 
 }

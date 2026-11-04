@@ -20,6 +20,7 @@ import {
   ProductSummaryResponse,
 } from '../../../../core/models';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
+import { SeoService } from '../../../../core/services/seo.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
 
 interface ResolvedCategory {
@@ -72,6 +73,7 @@ export class ProductListPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly catalogApi = inject(CatalogApiService);
+  private readonly seo = inject(SeoService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly translate = inject(TranslateService);
   private readonly platformId = inject(PLATFORM_ID);
@@ -295,7 +297,15 @@ export class ProductListPageComponent {
         return;
       }
       this.catalogApi.getCategory(slug).subscribe({
-        next: (detail) => this.categoryDetail.set(detail),
+        next: (detail) => {
+          this.categoryDetail.set(detail);
+          this.seo.applyPage({
+            title: detail.metaTitle || detail.name,
+            description: detail.metaDescription || detail.description,
+            canonicalPath: '/products?categoryId=' + detail.id,
+            image: detail.bannerUrl || detail.imageUrl,
+          });
+        },
         error: () => this.categoryDetail.set(null),
       });
     }, { allowSignalWrites: true });

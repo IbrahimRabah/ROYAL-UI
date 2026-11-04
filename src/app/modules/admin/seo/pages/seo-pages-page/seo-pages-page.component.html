@@ -1,0 +1,68 @@
+<div class="sa">
+  <header>
+    <h1 class="sa__title">{{ 'seo.pages.title' | translate }}</h1>
+    <p class="sa__sub">{{ 'seo.pages.subtitle' | translate }}</p>
+  </header>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+
+  <ul class="sa__list" *ngIf="!loading()">
+    <li *ngFor="let p of pages()" class="sa__card" [class.sa__card--selected]="dirty(p)">
+      <div class="sa__row-head">
+        <span class="sa__name">{{ 'seo.pages.names.' + p.pageKey | translate }}</span>
+        <span *ngIf="draft(p).noindex" class="sa__chip sa__chip--stop">{{ 'seo.pages.hidden' | translate }}</span>
+      </div>
+
+      <div class="sa__grid">
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.titleAr' | translate }}</span>
+            <span [class.sa__count--over]="(draft(p).titleAr || '').length > titleLimit">{{ (draft(p).titleAr || '').length }}/{{ titleLimit }}</span>
+          </span>
+          <input type="text" class="sa__input" dir="rtl" maxlength="255" [value]="draft(p).titleAr"
+                 (input)="edit(p, 'titleAr', $any($event.target).value)" />
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.titleEn' | translate }}</span>
+            <span [class.sa__count--over]="(draft(p).titleEn || '').length > titleLimit">{{ (draft(p).titleEn || '').length }}/{{ titleLimit }}</span>
+          </span>
+          <input type="text" class="sa__input" dir="ltr" maxlength="255" [value]="draft(p).titleEn"
+                 (input)="edit(p, 'titleEn', $any($event.target).value)" />
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.descriptionAr' | translate }}</span>
+            <span [class.sa__count--over]="(draft(p).descriptionAr || '').length > descriptionLimit">{{ (draft(p).descriptionAr || '').length }}/{{ descriptionLimit }}</span>
+          </span>
+          <textarea class="sa__textarea" rows="3" dir="rtl" maxlength="500" [value]="draft(p).descriptionAr"
+                    (input)="edit(p, 'descriptionAr', $any($event.target).value)"></textarea>
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">
+            <span>{{ 'seo.meta.descriptionEn' | translate }}</span>
+            <span [class.sa__count--over]="(draft(p).descriptionEn || '').length > descriptionLimit">{{ (draft(p).descriptionEn || '').length }}/{{ descriptionLimit }}</span>
+          </span>
+          <textarea class="sa__textarea" rows="3" dir="ltr" maxlength="500" [value]="draft(p).descriptionEn"
+                    (input)="edit(p, 'descriptionEn', $any($event.target).value)"></textarea>
+        </label>
+      </div>
+
+      <label class="sa__check">
+        <input type="checkbox" [checked]="draft(p).noindex" (change)="edit(p, 'noindex', $any($event.target).checked)" />
+        {{ 'seo.pages.noindex' | translate }}
+      </label>
+
+      <div class="sa__actions">
+        <button type="button" class="sa__btn sa__btn--primary" [disabled]="!dirty(p) || saving() !== null" (click)="save(p)">
+          <i class="pi pi-check" aria-hidden="true"></i>
+          {{ (saving() === p.pageKey ? 'seo.saving' : 'seo.save') | translate }}
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>

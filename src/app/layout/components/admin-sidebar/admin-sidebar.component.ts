@@ -1,5 +1,6 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { AdminCustomRequestApiService } from '../../../core/services/api/admin-custom-request-api.service';
+import { AuthStoreService } from '../../../core/state/auth-store.service';
 import { AdminReviewApiService } from '../../../core/services/api/admin-review-api.service';
 import {
   ChangeDetectionStrategy,
@@ -36,6 +37,8 @@ interface AdminNavItem {
 
 interface AdminNavGroup {
   labelKey: string;
+  /** Shown to the SEO editor too; every other group is for administrators only. */
+  seoEditorVisible?: boolean;
   items: AdminNavItem[];
 }
 
@@ -70,6 +73,16 @@ const NAV_GROUPS: AdminNavGroup[] = [
     ],
   },
   {
+    labelKey: 'admin.nav.groups.seo',
+    seoEditorVisible: true,
+    items: [
+      { labelKey: 'admin.nav.seoOverview', icon: 'pi-chart-line', route: '/admin/seo' },
+      { labelKey: 'admin.nav.seoMeta', icon: 'pi-pencil', route: '/admin/seo/meta' },
+      { labelKey: 'admin.nav.seoPages', icon: 'pi-file', route: '/admin/seo/pages' },
+      { labelKey: 'admin.nav.faqs', icon: 'pi-question-circle', route: '/admin/seo/faqs' },
+    ],
+  },
+  {
     labelKey: 'admin.nav.groups.finance',
     items: [
       {
@@ -98,6 +111,7 @@ const NAV_GROUPS: AdminNavGroup[] = [
       { labelKey: 'admin.nav.shipping', icon: 'pi-truck', route: '/admin/shipping' },
       { labelKey: 'admin.nav.governorates', icon: 'pi-map', route: '/admin/shipping/governorates' },
       { labelKey: 'admin.nav.exports', icon: 'pi-download', route: '/admin/exports' },
+      { labelKey: 'admin.nav.team', icon: 'pi-user-edit', route: '/admin/team' },
       { labelKey: 'admin.nav.audit', icon: 'pi-shield', route: '/admin/audit' },
       { labelKey: 'admin.nav.settings', icon: 'pi-cog', route: '/admin/settings' },
     ],
@@ -125,7 +139,10 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('mobileCloseBtn') private readonly mobileCloseBtn?: ElementRef<HTMLButtonElement>;
 
-  readonly navGroups = NAV_GROUPS;
+  private readonly auth = inject(AuthStoreService);
+
+  /** An SEO editor sees only the SEO group; an administrator sees everything. */
+  readonly navGroups = this.auth.isAdmin() ? NAV_GROUPS : NAV_GROUPS.filter((g) => g.seoEditorVisible);
   readonly pendingOrderCount = signal(0);
   readonly newRequestCount = signal(0);
   readonly pendingReviewCount = signal(0);
@@ -137,6 +154,10 @@ export class AdminSidebarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    // The counters below are administrator data: an SEO editor would only get refusals.
+    if (!this.auth.isAdmin()) {
+      return;
+    }
     this.dashboardApi.get().subscribe({
       next: (dashboard) => {
         const total = dashboard.actionQueues.reduce((sum, queue) => sum + queue.count, 0);

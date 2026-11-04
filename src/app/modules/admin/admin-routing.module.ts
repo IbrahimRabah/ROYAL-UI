@@ -19,6 +19,8 @@ const routes: Routes = [
       { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
       { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule) },
       { path: 'remittances', loadChildren: () => import('./remittances/remittances.module').then(m => m.RemittancesModule) },
+      { path: 'seo', loadChildren: () => import('./seo/seo.module').then(m => m.SeoModule) },
+      { path: 'team', loadChildren: () => import('./team/team.module').then(m => m.TeamModule) },
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule) },
       { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) },
       { path: 'shipping', loadChildren: () => import('./shipping/shipping.module').then(m => m.ShippingModule) },

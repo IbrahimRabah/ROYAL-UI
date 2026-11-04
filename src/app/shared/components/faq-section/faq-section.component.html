@@ -1,0 +1,12 @@
+<section class="faq" *ngIf="items().length > 0" [attr.aria-labelledby]="heading ? uid + '-title' : null">
+  <div class="faq__inner">
+    <h2 *ngIf="heading" class="faq__title" [id]="uid + '-title'">{{ 'faq.title' | translate }}</h2>
+
+    <div class="faq__list">
+      <details *ngFor="let f of items()" class="faq__item">
+        <summary class="faq__question" dir="auto">{{ f.question }}</summary>
+        <p class="faq__answer" dir="auto">{{ f.answer }}</p>
+      </details>
+    </div>
+  </div>
+</section>

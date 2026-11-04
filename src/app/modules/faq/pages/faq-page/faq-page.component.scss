@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.faq-page__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-inline-size: 820px;
+}
+
+.faq-page__title {
+  margin: 0;
+  font-size: var(--fs-h2);
+}
+
+.faq-page__intro,
+.faq-page__empty {
+  margin: 0;
+  color: var(--text-muted, #6b6b6b);
+}
