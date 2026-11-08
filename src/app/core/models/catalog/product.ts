@@ -31,6 +31,8 @@ export interface ProductSummaryResponse {
   /** Average stars of the approved reviews; absent when there are none. */
   ratingAvg?: number | null;
   ratingCount?: number | null;
+  /** When the running discount that lowers this price ends; absent when none applies. */
+  saleEndsAt?: string | null;
 }
 
 export interface ProductDetailResponse {
@@ -55,6 +57,8 @@ export interface ProductDetailResponse {
   assemblyFee: Money | null;
   ratingAvg?: number | null;
   ratingCount?: number | null;
+  /** The running discount that lowers a price of this product: the badge and the countdown. */
+  sale?: { promotionId: number; name: string; percent: number; endsAt: string } | null;
   seo: ProductSeo;
 }
 
@@ -80,6 +84,8 @@ export interface ProductFilter {
   inStockOnly?: boolean;
   featured?: boolean;
   newArrival?: boolean;
+  /** Only products that are cheaper right now because of a running discount. */
+  onSale?: boolean;
   sort?: SortOption;
   page?: number;
   size?: number;

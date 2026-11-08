@@ -1,0 +1,24 @@
+<a
+  class="sale-banner"
+  [class.sale-banner--plain]="!mainImage"
+  [class.sale-banner--has-mobile]="!!promotion.bannerMobileUrl && !!promotion.bannerUrl"
+  [routerLink]="route.path"
+  [queryParams]="route.query"
+  [attr.aria-label]="title"
+>
+  <picture *ngIf="mainImage as image" class="sale-banner__picture">
+    <source *ngIf="promotion.bannerMobileUrl && promotion.bannerUrl" media="(max-width: 640px)" [srcset]="promotion.bannerMobileUrl" />
+    <img class="sale-banner__image" [src]="image" [alt]="promotion.name" loading="lazy" decoding="async" />
+  </picture>
+
+  <span class="sale-banner__scrim" aria-hidden="true"></span>
+
+  <span class="sale-banner__content">
+    <span class="sale-banner__badge">{{ 'sale.percentOff' | translate: { percent: (promotion.percent | number: '1.0-2') } }}</span>
+    <span class="sale-banner__title" dir="auto">{{ title }}</span>
+    <span class="sale-banner__meta">
+      <app-vl-countdown [endsAt]="promotion.endsAt"></app-vl-countdown>
+      <span class="sale-banner__cta">{{ 'sale.shopNow' | translate }}</span>
+    </span>
+  </span>
+</a>

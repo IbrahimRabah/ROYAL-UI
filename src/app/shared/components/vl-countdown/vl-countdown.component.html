@@ -1,0 +1,9 @@
+<span *ngIf="parts() as p" class="cd" role="timer" [class.cd--done]="p.done">
+  <ng-container *ngIf="!p.done; else over">
+    <span class="cd__unit" *ngIf="p.days > 0"><b>{{ p.days }}</b><small>{{ 'sale.countdown.d' | translate }}</small></span>
+    <span class="cd__unit"><b>{{ pad(p.hours) }}</b><small>{{ 'sale.countdown.h' | translate }}</small></span>
+    <span class="cd__unit"><b>{{ pad(p.minutes) }}</b><small>{{ 'sale.countdown.m' | translate }}</small></span>
+    <span class="cd__unit"><b>{{ pad(p.seconds) }}</b><small>{{ 'sale.countdown.s' | translate }}</small></span>
+  </ng-container>
+  <ng-template #over>{{ 'sale.countdown.over' | translate }}</ng-template>
+</span>

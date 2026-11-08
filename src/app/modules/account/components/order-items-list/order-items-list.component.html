@@ -7,6 +7,10 @@
       <a class="order-items-list__name" [routerLink]="['/products', item.productSlug]">{{ item.name }}</a>
       <span class="order-items-list__variant">{{ item.variantSummary }}</span>
       <span class="order-items-list__qty">{{ 'checkout.summary.qty' | translate: { count: item.quantity } }}</span>
+      <span class="order-items-list__sale" *ngIf="item.promotionName">
+        {{ 'sale.appliedOnOrder' | translate: { name: item.promotionName } }}
+        <s *ngIf="item.listUnitPrice"><app-vl-price [minPrice]="item.listUnitPrice"></app-vl-price></s>
+      </span>
     </div>
     <div class="order-items-list__total"><app-vl-price [minPrice]="item.lineTotal"></app-vl-price></div>
   </div>

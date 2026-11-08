@@ -73,6 +73,13 @@ const NAV_GROUPS: AdminNavGroup[] = [
     ],
   },
   {
+    labelKey: 'admin.nav.groups.marketing',
+    items: [
+      { labelKey: 'admin.nav.discounts', icon: 'pi-percentage', route: '/admin/marketing/discounts' },
+      { labelKey: 'admin.nav.announcements', icon: 'pi-megaphone', route: '/admin/marketing/announcements' },
+    ],
+  },
+  {
     labelKey: 'admin.nav.groups.seo',
     seoEditorVisible: true,
     items: [

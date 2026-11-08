@@ -1,0 +1,5 @@
+<section *ngIf="shown().length > 0" class="sale-banners section" [attr.aria-label]="'sale.sectionLabel' | translate">
+  <div class="container-vl sale-banners__grid" [class.sale-banners__grid--many]="shown().length > 1">
+    <app-sale-banner *ngFor="let p of shown(); trackBy: trackById" [promotion]="p"></app-sale-banner>
+  </div>
+</section>

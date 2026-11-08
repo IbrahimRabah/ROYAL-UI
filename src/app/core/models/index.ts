@@ -20,6 +20,7 @@ export * from './catalog/admin/product-admin';
 export * from './catalog/admin/product-import';
 export * from './catalog/review';
 export * from './catalog/seo-faq';
+export * from './marketing';
 export * from './catalog/admin/product-image-import';
 export * from './catalog/admin/image-admin';
 export * from './catalog/admin/variant-admin';

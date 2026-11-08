@@ -98,6 +98,7 @@ export class CatalogApiService {
     params = this.appendBoolean(params, 'inStockOnly', filter.inStockOnly);
     params = this.appendBoolean(params, 'featured', filter.featured);
     params = this.appendBoolean(params, 'newArrival', filter.newArrival);
+    params = this.appendBoolean(params, 'onSale', filter.onSale);
     params = this.appendString(params, 'sort', filter.sort);
     params = this.appendNumber(params, 'page', filter.page);
     params = this.appendNumber(params, 'size', filter.size ?? APP_CONFIG.pagination.products.size);

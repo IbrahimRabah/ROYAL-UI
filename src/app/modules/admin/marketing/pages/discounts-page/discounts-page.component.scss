@@ -1,0 +1,32 @@
+@use '../../../seo/seo-admin' as s;
+
+@include s.base;
+
+.disc__banner {
+  inline-size: 100%;
+  max-block-size: 160px;
+  object-fit: cover;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--r-md);
+  background: var(--admin-surface-alt);
+}
+
+.disc__banner--square {
+  inline-size: 160px;
+  block-size: 160px;
+}
+
+/* The native input stays in the label (keyboard and screen readers) but is invisible. */
+.disc__file {
+  position: relative;
+  cursor: pointer;
+}
+
+.disc__input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  cursor: pointer;
+}

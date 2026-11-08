@@ -61,3 +61,12 @@
   font-weight: 600;
   color: var(--ink);
 }
+
+.order-items-list__sale {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--gold);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}

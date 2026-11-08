@@ -1,0 +1,225 @@
+<div class="sa">
+  <header class="sa__row-head">
+    <div>
+      <h1 class="sa__title">{{ 'marketing.discounts.title' | translate }}</h1>
+      <p class="sa__sub">{{ 'marketing.discounts.subtitle' | translate }}</p>
+    </div>
+    <button type="button" class="sa__btn sa__btn--primary" (click)="startNew()">
+      <i class="pi pi-plus" aria-hidden="true"></i> {{ 'marketing.discounts.new' | translate }}
+    </button>
+  </header>
+
+  <!-- The editor -->
+  <section *ngIf="form() as f" class="sa__card sa__card--selected" aria-labelledby="disc-form-title">
+    <h2 class="sa__heading" id="disc-form-title">{{ (f.id ? 'marketing.discounts.edit' : 'marketing.discounts.new') | translate }}</h2>
+
+    <div class="sa__grid">
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.nameAr' | translate }}</span>
+        <input type="text" class="sa__input" dir="rtl" maxlength="150" [value]="f.nameAr" (input)="patch('nameAr', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.nameEn' | translate }}</span>
+        <input type="text" class="sa__input" dir="ltr" maxlength="150" [value]="f.nameEn" (input)="patch('nameEn', $any($event.target).value)" />
+      </label>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.scope' | translate }}</span>
+        <select class="sa__select" (change)="setScope($any($event.target).value)">
+          <option *ngFor="let s of scopes" [value]="s" [selected]="f.scope === s">{{ 'marketing.discounts.scopes.' + s | translate }}</option>
+        </select>
+      </label>
+
+      <label class="sa__field" *ngIf="f.scope === 'CATEGORY'">
+        <span class="sa__label">{{ 'marketing.discounts.category' | translate }}</span>
+        <select class="sa__select" (change)="pickCategory($any($event.target).value)">
+          <option value="">{{ 'marketing.discounts.pickCategory' | translate }}</option>
+          <option *ngFor="let c of categories()" [value]="c.id" [selected]="f.targetId === c.id">{{ c.name }}</option>
+        </select>
+        <span class="sa__muted">{{ 'marketing.discounts.categoryHint' | translate }}</span>
+      </label>
+
+      <div class="sa__field" *ngIf="f.scope === 'PRODUCT'">
+        <span class="sa__label">{{ 'marketing.discounts.product' | translate }}</span>
+        <input type="search" class="sa__input" dir="auto" autocomplete="off" [placeholder]="'marketing.discounts.searchProduct' | translate"
+               (input)="searchProduct($any($event.target).value)" />
+        <ul class="sa__picks" *ngIf="productResults().length > 0">
+          <li *ngFor="let p of productResults()">
+            <button type="button" class="sa__pick" dir="auto" (click)="pickProduct(p)">{{ p.name }} <span class="sa__muted" dir="ltr">{{ p.slug }}</span></button>
+          </li>
+        </ul>
+        <span *ngIf="f.targetId" class="sa__chip sa__chip--ok" dir="auto">{{ f.targetName }}</span>
+      </div>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.percent' | translate }}</span>
+        <input type="number" class="sa__input" dir="ltr" min="0.01" max="95" step="0.01" [value]="f.percent"
+               (input)="patch('percent', $any($event.target).value)" />
+      </label>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.startsAt' | translate }}</span>
+        <input type="datetime-local" class="sa__input" dir="ltr" [value]="f.startsAt" (input)="patch('startsAt', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.endsAt' | translate }}</span>
+        <input type="datetime-local" class="sa__input" dir="ltr" [value]="f.endsAt" (input)="patch('endsAt', $any($event.target).value)" />
+      </label>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.headlineAr' | translate }}</span>
+        <input type="text" class="sa__input" dir="rtl" maxlength="200" [value]="f.headlineAr" (input)="patch('headlineAr', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.headlineEn' | translate }}</span>
+        <input type="text" class="sa__input" dir="ltr" maxlength="200" [value]="f.headlineEn" (input)="patch('headlineEn', $any($event.target).value)" />
+      </label>
+    </div>
+
+    <p *ngIf="needsConfirm()" class="sa__error" role="alert">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      {{ 'marketing.discounts.highWarning' | translate: { percent: percentNumber() } }}
+    </p>
+    <label *ngIf="needsConfirm()" class="sa__check">
+      <input type="checkbox" [checked]="f.confirmHigh" (change)="patch('confirmHigh', $any($event.target).checked)" />
+      {{ 'marketing.discounts.confirmHigh' | translate }}
+    </label>
+
+    <p class="sa__muted">{{ 'marketing.discounts.priceNote' | translate }}</p>
+
+    <div class="sa__actions">
+      <button type="button" class="sa__btn sa__btn--primary" [disabled]="!canSave()" (click)="save()">
+        <i class="pi pi-check" aria-hidden="true"></i> {{ (busy() ? 'seo.saving' : 'seo.save') | translate }}
+      </button>
+      <button type="button" class="sa__btn" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+      <button *ngIf="f.id" type="button" class="sa__btn" (click)="checkImpact(f.id)">
+        <i class="pi pi-search" aria-hidden="true"></i> {{ 'marketing.discounts.checkImpact' | translate }}
+      </button>
+    </div>
+
+    <!-- What it would do -->
+    <div *ngIf="impact() as i" class="sa__card" role="status">
+      <h3 class="sa__heading">{{ 'marketing.discounts.impact.title' | translate }}</h3>
+      <dl class="sa__tiles">
+        <div class="sa__tile"><dt>{{ 'marketing.discounts.impact.products' | translate }}</dt><dd>{{ i.affectedProducts }}</dd></div>
+        <div class="sa__tile"><dt>{{ 'marketing.discounts.impact.variants' | translate }}</dt><dd>{{ i.affectedVariants }}</dd></div>
+        <div class="sa__tile" [ngClass]="i.belowCost > 0 ? 'sa__tile--stop' : 'sa__tile--ok'">
+          <dt>{{ 'marketing.discounts.impact.belowCost' | translate }}</dt><dd>{{ i.belowCost }}</dd>
+        </div>
+      </dl>
+
+      <p *ngIf="i.belowCost > 0" class="sa__error" role="alert">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        {{ 'marketing.discounts.impact.belowCostWarning' | translate }}
+      </p>
+      <ul class="sa__list" *ngIf="i.belowCostExamples.length > 0">
+        <li *ngFor="let e of i.belowCostExamples" class="sa__row-head">
+          <span class="sa__chip sa__chip--stop" dir="ltr">{{ e.sku }}</span>
+          <span dir="auto">{{ e.productName }}</span>
+          <span class="sa__muted" dir="ltr">{{ e.salePrice }} &lt; {{ 'marketing.discounts.impact.cost' | translate }} {{ e.costPrice }}</span>
+        </li>
+      </ul>
+
+      <h4 class="sa__heading" *ngIf="i.examples.length > 0">{{ 'marketing.discounts.impact.examples' | translate }}</h4>
+      <ul class="sa__list">
+        <li *ngFor="let e of i.examples" class="sa__row-head">
+          <span class="sa__chip" dir="ltr">{{ e.sku }}</span>
+          <span dir="auto">{{ e.productName }}</span>
+          <span dir="ltr"><s>{{ e.listPrice }}</s> → <b>{{ e.salePrice }}</b></span>
+        </li>
+      </ul>
+
+      <ng-container *ngIf="i.overlaps.length > 0">
+        <h4 class="sa__heading">{{ 'marketing.discounts.impact.overlaps' | translate }}</h4>
+        <p class="sa__muted">{{ 'marketing.discounts.impact.overlapsHint' | translate }}</p>
+        <ul class="sa__list">
+          <li *ngFor="let o of i.overlaps" class="sa__row-head">
+            <span class="sa__name" dir="auto">{{ o.nameAr }}</span>
+            <span class="sa__chip">{{ o.percent }}%</span>
+            <span class="sa__chip">{{ 'marketing.discounts.scopes.' + o.scope | translate }}</span>
+            <span class="sa__chip" [ngClass]="'sa__chip--' + (tone(o.state) || 'x')">{{ 'marketing.discounts.states.' + o.state | translate }}</span>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+
+    <!-- The banner -->
+    <div *ngIf="f.id; else saveFirst" class="sa__grid">
+      <div class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.bannerDesktop' | translate }}</span>
+        <img *ngIf="f.bannerUrl" class="disc__banner" [src]="f.bannerUrl" alt="" />
+        <div class="sa__actions">
+          <label class="sa__btn disc__file">
+            <i class="pi pi-upload" aria-hidden="true"></i> {{ 'marketing.discounts.upload' | translate }}
+            <input type="file" accept="image/*" class="disc__input" [disabled]="busy()" (change)="chooseBanner($event, 'DESKTOP')" />
+          </label>
+          <button *ngIf="f.bannerUrl" type="button" class="sa__btn sa__btn--danger" [disabled]="busy()" (click)="removeBanner('DESKTOP')">
+            <i class="pi pi-trash" aria-hidden="true"></i> {{ 'marketing.discounts.removeBanner' | translate }}
+          </button>
+        </div>
+        <span class="sa__muted">{{ 'marketing.discounts.bannerHintDesktop' | translate }}</span>
+      </div>
+      <div class="sa__field">
+        <span class="sa__label">{{ 'marketing.discounts.bannerMobile' | translate }}</span>
+        <img *ngIf="f.bannerMobileUrl" class="disc__banner disc__banner--square" [src]="f.bannerMobileUrl" alt="" />
+        <div class="sa__actions">
+          <label class="sa__btn disc__file">
+            <i class="pi pi-upload" aria-hidden="true"></i> {{ 'marketing.discounts.upload' | translate }}
+            <input type="file" accept="image/*" class="disc__input" [disabled]="busy()" (change)="chooseBanner($event, 'MOBILE')" />
+          </label>
+          <button *ngIf="f.bannerMobileUrl" type="button" class="sa__btn sa__btn--danger" [disabled]="busy()" (click)="removeBanner('MOBILE')">
+            <i class="pi pi-trash" aria-hidden="true"></i> {{ 'marketing.discounts.removeBanner' | translate }}
+          </button>
+        </div>
+        <span class="sa__muted">{{ 'marketing.discounts.bannerHintMobile' | translate }}</span>
+      </div>
+    </div>
+    <ng-template #saveFirst><p class="sa__muted">{{ 'marketing.discounts.saveFirst' | translate }}</p></ng-template>
+  </section>
+
+  <!-- The list -->
+  <div class="sa__filters">
+    <select class="sa__select" [attr.aria-label]="'marketing.discounts.stateFilter' | translate" (change)="setState($any($event.target).value)">
+      <option value="">{{ 'marketing.discounts.allStates' | translate }}</option>
+      <option *ngFor="let s of states" [value]="s" [selected]="stateFilter() === s">{{ 'marketing.discounts.states.' + s | translate }}</option>
+    </select>
+  </div>
+
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+  <div *ngIf="!loading() && !failed() && items().length === 0" class="sa__empty">{{ 'marketing.discounts.empty' | translate }}</div>
+
+  <ul class="sa__list" *ngIf="!loading()">
+    <li *ngFor="let p of items()" class="sa__card" [class.sa__card--selected]="form()?.id === p.id">
+      <div class="sa__row-head">
+        <span class="sa__chip" [ngClass]="'sa__chip--' + (tone(p.state) || 'x')">{{ 'marketing.discounts.states.' + p.state | translate }}</span>
+        <span class="sa__name" dir="auto">{{ p.nameAr }}</span>
+        <span class="sa__chip sa__chip--warn">{{ p.percent }}%</span>
+        <span class="sa__chip">{{ 'marketing.discounts.scopes.' + p.scope | translate }}</span>
+        <span *ngIf="p.targetName" class="sa__muted" dir="auto">{{ p.targetName }}</span>
+      </div>
+      <div class="sa__muted">
+        {{ p.startsAt | date: 'medium' }} → {{ p.endsAt | date: 'medium' }}
+        <span *ngIf="p.bannerUrl || p.bannerMobileUrl"> · <i class="pi pi-image" aria-hidden="true"></i> {{ 'marketing.discounts.hasBanner' | translate }}</span>
+      </div>
+      <div class="sa__actions">
+        <button type="button" class="sa__btn" (click)="edit(p)"><i class="pi pi-pencil" aria-hidden="true"></i> {{ 'seo.faq.editBtn' | translate }}</button>
+        <button *ngIf="p.status !== 'ACTIVE'" type="button" class="sa__btn sa__btn--primary" [disabled]="busy() || p.state === 'ENDED'" (click)="activate(p)">
+          <i class="pi pi-play" aria-hidden="true"></i> {{ (p.status === 'PAUSED' ? 'marketing.discounts.resume' : 'marketing.discounts.activate') | translate }}
+        </button>
+        <button *ngIf="p.status === 'ACTIVE' && p.state !== 'ENDED'" type="button" class="sa__btn" [disabled]="busy()" (click)="pause(p)">
+          <i class="pi pi-pause" aria-hidden="true"></i> {{ 'marketing.discounts.pause' | translate }}
+        </button>
+        <button *ngIf="p.state === 'RUNNING' || p.state === 'SCHEDULED'" type="button" class="sa__btn" [disabled]="busy()" (click)="end(p)">
+          <i class="pi pi-stop-circle" aria-hidden="true"></i> {{ 'marketing.discounts.end' | translate }}
+        </button>
+        <button type="button" class="sa__btn sa__btn--danger" [disabled]="busy() || p.usedByOrders" [attr.title]="p.usedByOrders ? ('marketing.discounts.usedByOrders' | translate) : null" (click)="remove(p)">
+          <i class="pi pi-trash" aria-hidden="true"></i> {{ 'seo.faq.delete' | translate }}
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -25,6 +25,13 @@
             <p class="pdp__price-on-request">{{ 'product.priceOnRequest' | translate }}</p>
           </ng-template>
 
+          <div class="pdp__sale" *ngIf="readyMade() && p.sale as sale">
+            <span class="pdp__sale-badge">{{ 'sale.percentOff' | translate: { percent: (sale.percent | number: '1.0-2') } }}</span>
+            <span class="pdp__sale-name" dir="auto">{{ sale.name }}</span>
+            <span class="pdp__sale-ends">{{ 'sale.endsIn' | translate }}</span>
+            <app-vl-countdown [endsAt]="sale.endsAt"></app-vl-countdown>
+          </div>
+
           <p class="pdp__short-desc">{{ p.shortDescription }}</p>
 
           <app-variant-selector

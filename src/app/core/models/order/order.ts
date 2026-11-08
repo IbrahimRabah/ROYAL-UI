@@ -20,6 +20,10 @@ export interface OrderItemResponse {
   taxAmount: Money;
   quantityReturned: number;
   returnableQuantity: number;
+  /** The regular price per piece when a discount lowered it at purchase. */
+  listUnitPrice?: Money | null;
+  /** The discount that lowered the price at purchase. */
+  promotionName?: string | null;
 }
 
 export interface OrderTimelineEntry {

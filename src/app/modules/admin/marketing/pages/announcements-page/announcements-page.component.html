@@ -1,0 +1,144 @@
+<div class="sa">
+  <header class="sa__row-head">
+    <div>
+      <h1 class="sa__title">{{ 'marketing.announcements.title' | translate }}</h1>
+      <p class="sa__sub">{{ 'marketing.announcements.subtitle' | translate }}</p>
+    </div>
+    <button type="button" class="sa__btn sa__btn--primary" (click)="startNew()">
+      <i class="pi pi-plus" aria-hidden="true"></i> {{ 'marketing.announcements.new' | translate }}
+    </button>
+  </header>
+
+  <!-- The editor, with the real component as its preview -->
+  <section *ngIf="form() as f" class="sa__card sa__card--selected" aria-labelledby="ann-form-title">
+    <h2 class="sa__heading" id="ann-form-title">{{ (f.id ? 'marketing.announcements.edit' : 'marketing.announcements.new') | translate }}</h2>
+
+    <div class="ann-preview" aria-live="off">
+      <span class="sa__label">{{ 'marketing.announcements.preview' | translate }}</span>
+      <div class="ann-preview__frame">
+        <app-announcement-item
+          *ngIf="previewText() as text; else nothing"
+          [text]="text"
+          [animation]="f.animation"
+          [theme]="f.theme"
+          [linkUrl]="f.linkUrl || (linked() ? '/products' : null)"
+          [linkLabel]="f.linkLabelAr"
+          [countdownEndsAt]="previewEnds()"
+          [dismissible]="f.dismissible"
+        ></app-announcement-item>
+        <ng-template #nothing><p class="sa__muted ann-preview__empty">{{ 'marketing.announcements.previewEmpty' | translate }}</p></ng-template>
+      </div>
+    </div>
+
+    <div class="sa__grid">
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'marketing.announcements.textAr' | translate }}</span><span>{{ f.textAr.length }}/300</span></span>
+        <input type="text" class="sa__input" dir="rtl" maxlength="300" [value]="f.textAr" [placeholder]="'marketing.announcements.textPlaceholder' | translate"
+               (input)="patch('textAr', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label"><span>{{ 'marketing.announcements.textEn' | translate }}</span><span>{{ f.textEn.length }}/300</span></span>
+        <input type="text" class="sa__input" dir="ltr" maxlength="300" [value]="f.textEn" (input)="patch('textEn', $any($event.target).value)" />
+      </label>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.announcements.link' | translate }}</span>
+        <input type="text" class="sa__input" dir="ltr" maxlength="500" placeholder="/products?onSale=true" [value]="f.linkUrl" (input)="patch('linkUrl', $any($event.target).value)" />
+        <span class="sa__muted">{{ 'marketing.announcements.linkHint' | translate }}</span>
+      </label>
+      <div class="sa__grid">
+        <label class="sa__field">
+          <span class="sa__label">{{ 'marketing.announcements.linkLabelAr' | translate }}</span>
+          <input type="text" class="sa__input" dir="rtl" maxlength="60" [value]="f.linkLabelAr" (input)="patch('linkLabelAr', $any($event.target).value)" />
+        </label>
+        <label class="sa__field">
+          <span class="sa__label">{{ 'marketing.announcements.linkLabelEn' | translate }}</span>
+          <input type="text" class="sa__input" dir="ltr" maxlength="60" [value]="f.linkLabelEn" (input)="patch('linkLabelEn', $any($event.target).value)" />
+        </label>
+      </div>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.announcements.animation' | translate }}</span>
+        <select class="sa__select" (change)="patch('animation', $any($event.target).value)">
+          <option *ngFor="let a of animations" [value]="a" [selected]="f.animation === a">{{ 'marketing.announcements.animations.' + a | translate }}</option>
+        </select>
+      </label>
+
+      <div class="sa__field" role="radiogroup" [attr.aria-label]="'marketing.announcements.theme' | translate">
+        <span class="sa__label">{{ 'marketing.announcements.theme' | translate }}</span>
+        <div class="sa__actions">
+          <button *ngFor="let t of themes" type="button" role="radio" class="ann-swatch" [ngClass]="'ann-swatch--' + t.toLowerCase()"
+                  [class.ann-swatch--on]="f.theme === t" [attr.aria-checked]="f.theme === t"
+                  [attr.aria-label]="'marketing.announcements.themes.' + t | translate" (click)="patch('theme', t)"></button>
+        </div>
+      </div>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.announcements.startsAt' | translate }}</span>
+        <input type="datetime-local" class="sa__input" dir="ltr" [value]="f.startsAt" (input)="patch('startsAt', $any($event.target).value)" />
+      </label>
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.announcements.endsAt' | translate }}</span>
+        <input type="datetime-local" class="sa__input" dir="ltr" [value]="f.endsAt" (input)="patch('endsAt', $any($event.target).value)" />
+      </label>
+
+      <label class="sa__field">
+        <span class="sa__label">{{ 'marketing.announcements.promotion' | translate }}</span>
+        <select class="sa__select" (change)="pickPromotion($any($event.target).value)">
+          <option value="">{{ 'marketing.announcements.noPromotion' | translate }}</option>
+          <option *ngFor="let p of promotions()" [value]="p.id" [selected]="f.promotionId === p.id">{{ p.nameAr }} ({{ p.percent }}%)</option>
+        </select>
+        <span class="sa__muted">{{ 'marketing.announcements.promotionHint' | translate }}</span>
+      </label>
+    </div>
+
+    <div class="sa__actions">
+      <label class="sa__check"><input type="checkbox" [checked]="f.active" (change)="patch('active', $any($event.target).checked)" /> {{ 'marketing.announcements.active' | translate }}</label>
+      <label class="sa__check"><input type="checkbox" [checked]="f.dismissible" (change)="patch('dismissible', $any($event.target).checked)" /> {{ 'marketing.announcements.dismissible' | translate }}</label>
+      <label class="sa__check"><input type="checkbox" [checked]="f.showCountdown" (change)="patch('showCountdown', $any($event.target).checked)" /> {{ 'marketing.announcements.countdown' | translate }}</label>
+    </div>
+
+    <div class="sa__actions">
+      <button type="button" class="sa__btn sa__btn--primary" [disabled]="!canSave()" (click)="save()">
+        <i class="pi pi-check" aria-hidden="true"></i> {{ (busy() ? 'seo.saving' : 'seo.save') | translate }}
+      </button>
+      <button type="button" class="sa__btn" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    </div>
+  </section>
+
+  <!-- The list -->
+  <p *ngIf="failed()" class="sa__error" role="alert">
+    {{ 'seo.failed' | translate }}
+    <button type="button" class="sa__link" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </p>
+  <div *ngIf="loading()" class="sa__empty" role="status">{{ 'seo.loading' | translate }}</div>
+  <div *ngIf="!loading() && !failed() && items().length === 0" class="sa__empty">{{ 'marketing.announcements.empty' | translate }}</div>
+
+  <ul class="sa__list" *ngIf="!loading()">
+    <li *ngFor="let a of items()" class="sa__card" [class.sa__card--selected]="form()?.id === a.id">
+      <div class="sa__row-head">
+        <span class="sa__chip" [class.sa__chip--ok]="a.showingNow" [class.sa__chip--warn]="a.active && !a.showingNow">
+          {{ (a.showingNow ? 'marketing.announcements.showingNow' : a.active ? 'marketing.announcements.waiting' : 'marketing.announcements.off') | translate }}
+        </span>
+        <span class="sa__chip">{{ 'marketing.announcements.animations.' + a.animation | translate }}</span>
+        <span *ngIf="a.promotionId" class="sa__chip sa__chip--warn">{{ a.promotionName }}</span>
+        <span *ngIf="a.showCountdown" class="sa__chip"><i class="pi pi-clock" aria-hidden="true"></i></span>
+      </div>
+      <div class="sa__name" dir="auto">{{ displayText(a) }}</div>
+      <div class="sa__muted" *ngIf="a.startsAt || a.endsAt">{{ a.startsAt | date: 'medium' }} → {{ a.endsAt | date: 'medium' }}</div>
+      <div class="sa__actions">
+        <button type="button" class="sa__btn" (click)="edit(a)"><i class="pi pi-pencil" aria-hidden="true"></i> {{ 'seo.faq.editBtn' | translate }}</button>
+        <button type="button" class="sa__btn" [disabled]="busy()" (click)="toggle(a)">
+          {{ (a.active ? 'marketing.announcements.switchOff' : 'marketing.announcements.switchOn') | translate }}
+        </button>
+        <button type="button" class="sa__btn sa__btn--icon" [disabled]="busy() || a.id === items()[0].id" [attr.aria-label]="'seo.faq.moveUp' | translate" (click)="move(a, -1)">
+          <i class="pi pi-arrow-up" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="sa__btn sa__btn--icon" [disabled]="busy() || a.id === items()[items().length - 1].id" [attr.aria-label]="'seo.faq.moveDown' | translate" (click)="move(a, 1)">
+          <i class="pi pi-arrow-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="sa__btn sa__btn--danger" (click)="remove(a)"><i class="pi pi-trash" aria-hidden="true"></i> {{ 'seo.faq.delete' | translate }}</button>
+      </div>
+    </li>
+  </ul>
+</div>

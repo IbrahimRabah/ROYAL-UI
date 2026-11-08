@@ -1004,7 +1004,8 @@
         "catalog": "Catalog",
         "finance": "Finance",
         "system": "System",
-        "seo": "SEO"
+        "seo": "SEO",
+        "marketing": "Marketing"
       },
       "governorates": "Governorates",
       "portfolio": "Portfolio",
@@ -1014,7 +1015,9 @@
       "seoMeta": "Meta texts",
       "seoPages": "Page texts",
       "faqs": "FAQs",
-      "team": "Team"
+      "team": "Team",
+      "discounts": "Discounts",
+      "announcements": "Announcement bar"
     },
     "sidebar": {
       "logoAlt": "ROYAL IRON"
@@ -2970,5 +2973,166 @@
     },
     "saved": "Saved",
     "sessionNote": "A change reaches the person at their next sign-in. The last administrator cannot be removed."
+  },
+  "announcement": {
+    "label": "Announcement",
+    "close": "Close the announcement",
+    "shopNow": "Shop now"
+  },
+  "sale": {
+    "percentOff": "{{percent}}% off",
+    "shopNow": "Shop the sale",
+    "endsIn": "Ends in",
+    "sectionLabel": "Sales",
+    "appliedOnOrder": "Discount: {{name}}",
+    "countdown": {
+      "d": "d",
+      "h": "h",
+      "m": "m",
+      "s": "s",
+      "over": "Ended"
+    }
+  },
+  "marketing": {
+    "discounts": {
+      "title": "Discounts",
+      "subtitle": "A percentage off everything, one category or one product, between two dates, with a banner. Prices change by themselves when it starts and ends.",
+      "new": "New discount",
+      "edit": "Edit discount",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "scope": "Applies to",
+      "scopes": {
+        "ALL": "All products",
+        "CATEGORY": "A category",
+        "PRODUCT": "One product"
+      },
+      "category": "Category",
+      "pickCategory": "Choose a category",
+      "categoryHint": "It includes everything inside that category.",
+      "product": "Product",
+      "searchProduct": "Search for the product",
+      "percent": "Percentage off",
+      "startsAt": "Starts",
+      "endsAt": "Ends",
+      "headlineAr": "Banner headline (Arabic)",
+      "headlineEn": "Banner headline (English)",
+      "highWarning": "{{percent}}% is a very large discount. Is that what you meant?",
+      "confirmHigh": "Yes, I mean this percentage",
+      "priceNote": "Where discounts overlap the customer gets the biggest one, never both. The regular price is never changed.",
+      "checkImpact": "Check impact",
+      "impact": {
+        "title": "What this discount would do",
+        "products": "Products",
+        "variants": "Variants",
+        "belowCost": "Below cost",
+        "belowCostWarning": "Some variants would sell below their cost price. It cannot be activated until you lower the percentage.",
+        "cost": "cost",
+        "examples": "Example prices",
+        "overlaps": "Overlapping discounts",
+        "overlapsHint": "In these dates and products another discount also applies. The customer gets the biggest."
+      },
+      "states": {
+        "DRAFT": "Draft",
+        "PAUSED": "Paused",
+        "SCHEDULED": "Scheduled",
+        "RUNNING": "Running",
+        "ENDED": "Ended"
+      },
+      "stateFilter": "Filter by state",
+      "allStates": "Every state",
+      "bannerDesktop": "Banner image (wide)",
+      "bannerMobile": "Banner image for phones (optional)",
+      "bannerHintDesktop": "About 1600 x 600. It is made smaller in your browser before it is sent.",
+      "bannerHintMobile": "About 800 x 800. Without it the wide image is used on phones.",
+      "upload": "Upload image",
+      "removeBanner": "Remove",
+      "bannerUnreadable": "The browser could not read this image.",
+      "saveFirst": "Save the discount first, then you can add its banner.",
+      "hasBanner": "banner",
+      "empty": "No discounts yet.",
+      "activate": "Activate",
+      "resume": "Resume",
+      "pause": "Pause",
+      "end": "End now",
+      "usedByOrders": "Orders were placed under it. End it instead of deleting it.",
+      "toast": {
+        "saved": "Saved",
+        "activated": "Activated. Prices change from its start time",
+        "paused": "Paused. Prices are back to normal",
+        "ended": "Ended",
+        "deleted": "Deleted",
+        "banner": "Banner updated"
+      },
+      "confirm": {
+        "end": {
+          "title": "End this discount now?",
+          "message": "Prices go back to normal immediately.",
+          "confirm": "End now"
+        },
+        "delete": {
+          "title": "Delete this discount?",
+          "message": "It is removed for good, with its banner.",
+          "confirm": "Delete"
+        }
+      }
+    },
+    "announcements": {
+      "title": "Announcement bar",
+      "subtitle": "The message strip above the website, for example \"Hurry up, grab the discount!\". It can scroll, fade in or pulse.",
+      "new": "New announcement",
+      "edit": "Edit announcement",
+      "preview": "Preview (this is what visitors see)",
+      "previewEmpty": "Type the text to see it here.",
+      "textAr": "Text (Arabic)",
+      "textEn": "Text (English)",
+      "textPlaceholder": "Leave empty if you link a discount: it writes the text",
+      "link": "Link (optional)",
+      "linkHint": "A page of this site such as /products?onSale=true, or an https address.",
+      "linkLabelAr": "Link text (Arabic)",
+      "linkLabelEn": "Link text (English)",
+      "animation": "Movement",
+      "animations": {
+        "MARQUEE": "Scrolling text",
+        "FADE": "Fade in",
+        "PULSE": "Pulse",
+        "STATIC": "Still"
+      },
+      "theme": "Colour",
+      "themes": {
+        "GOLD": "Gold",
+        "DARK": "Dark",
+        "RED": "Red",
+        "GREEN": "Green",
+        "LIGHT": "Light"
+      },
+      "startsAt": "Show from (optional)",
+      "endsAt": "Show until (optional)",
+      "promotion": "Linked discount (optional)",
+      "noPromotion": "None",
+      "promotionHint": "Shows only while that discount is running, writes its own text and can count down to its end.",
+      "active": "Switched on",
+      "dismissible": "Visitors can close it",
+      "countdown": "Show a countdown",
+      "empty": "No announcements yet.",
+      "showingNow": "Showing now",
+      "waiting": "Waiting for its time",
+      "off": "Off",
+      "switchOn": "Switch on",
+      "switchOff": "Switch off",
+      "autoText": "Hurry up! {{percent}}% off - {{name}}",
+      "fromDiscount": "Written by the discount: {{name}}",
+      "deleteConfirm": {
+        "title": "Delete this announcement?",
+        "message": "It disappears from the website.",
+        "confirm": "Delete"
+      },
+      "toast": {
+        "saved": "Saved",
+        "on": "Switched on",
+        "off": "Switched off",
+        "deleted": "Deleted"
+      }
+    }
   }
 }

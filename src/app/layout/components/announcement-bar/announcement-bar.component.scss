@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.announcement-bar {
+  position: relative;
+}
+
+.announcement-bar__dots {
+  position: absolute;
+  inset-inline-start: var(--sp-3, 0.75rem);
+  inset-block-start: 50%;
+  display: inline-flex;
+  gap: 4px;
+  transform: translateY(-50%);
+}
+
+.announcement-bar__dot {
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background: currentcolor;
+  opacity: 0.45;
+}
+
+.announcement-bar__dot--on {
+  opacity: 1;
+}

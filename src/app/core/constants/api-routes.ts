@@ -198,6 +198,21 @@ export const API_ROUTES = {
       storeProfile: () => `${BASE}/admin/settings/store-profile`,
     },
 
+    promotions: {
+      list: () => `${BASE}/admin/promotions`,
+      one: (id: number) => `${BASE}/admin/promotions/${id}`,
+      impact: (id: number) => `${BASE}/admin/promotions/${id}/impact`,
+      action: (id: number, action: 'activate' | 'pause' | 'end') => `${BASE}/admin/promotions/${id}/${action}`,
+      banner: (id: number) => `${BASE}/admin/promotions/${id}/banner`,
+    },
+
+    announcements: {
+      list: () => `${BASE}/admin/announcements`,
+      one: (id: number) => `${BASE}/admin/announcements/${id}`,
+      toggle: (id: number, on: boolean) => `${BASE}/admin/announcements/${id}/${on ? 'on' : 'off'}`,
+      reorder: () => `${BASE}/admin/announcements/reorder`,
+    },
+
     seo: {
       overview: () => `${BASE}/admin/seo/overview`,
       products: () => `${BASE}/admin/seo/products`,
@@ -236,6 +251,11 @@ export const API_ROUTES = {
       remittance: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}`,
       cancel: (remittanceId: number) => `${BASE}/admin/remittances/${remittanceId}/cancel`,
     },
+  },
+
+  marketing: {
+    announcements: () => `${BASE}/announcements/active`,
+    promotions: () => `${BASE}/promotions/active`,
   },
 
   faq: {

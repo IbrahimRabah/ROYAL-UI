@@ -190,3 +190,20 @@
     transition: none;
   }
 }
+
+.cart-item-row__list {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-muted, #6b6b6b);
+  font-size: var(--fs-sm);
+}
+
+.cart-item-row__off {
+  padding: 0 var(--sp-2);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: #1b1b1b;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+}

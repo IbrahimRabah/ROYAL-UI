@@ -9,6 +9,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { VlCountdownComponent } from './components/vl-countdown/vl-countdown.component';
+import { AnnouncementItemComponent } from './components/announcement-item/announcement-item.component';
+import { SaleBannerComponent } from './components/sale-banner/sale-banner.component';
+import { SaleBannersComponent } from './components/sale-banners/sale-banners.component';
 import { FaqSectionComponent } from './components/faq-section/faq-section.component';
 import { VlStarsComponent } from './components/vl-stars/vl-stars.component';
 import { LanguageToggleComponent } from './components/language-toggle/language-toggle.component';
@@ -75,6 +79,10 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     FooterComponent,
     NotfoundComponent,
     SpinnerComponent,
+    VlCountdownComponent,
+    AnnouncementItemComponent,
+    SaleBannerComponent,
+    SaleBannersComponent,
     FaqSectionComponent,
     VlStarsComponent,
     LanguageToggleComponent,
@@ -148,6 +156,10 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    VlCountdownComponent,
+    AnnouncementItemComponent,
+    SaleBannerComponent,
+    SaleBannersComponent,
     FaqSectionComponent,
     VlStarsComponent,
     LanguageToggleComponent,

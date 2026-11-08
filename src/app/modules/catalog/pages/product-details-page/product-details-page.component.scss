@@ -258,3 +258,33 @@
   display: flex;
   margin-block-start: var(--sp-3);
 }
+
+.pdp__sale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  margin-block: var(--sp-3);
+  border: 1px solid var(--gold);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
+  font-size: var(--fs-sm);
+}
+
+.pdp__sale-badge {
+  padding: 1px var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: #1b1b1b;
+  font-weight: 800;
+}
+
+.pdp__sale-name {
+  font-weight: 700;
+}
+
+.pdp__sale-ends {
+  margin-inline-start: auto;
+  color: var(--text-muted, #6b6b6b);
+}

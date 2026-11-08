@@ -8,6 +8,7 @@ import { PopoverModule } from 'primeng/popover';
 import { SharedModule } from '../shared/shared.module';
 import { CustomerLayoutComponent } from './customer-layout/customer-layout.component';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { AnnouncementBarComponent } from './components/announcement-bar/announcement-bar.component';
 import { SiteHeaderComponent } from './components/site-header/site-header.component';
 import { SiteFooterComponent } from './components/site-footer/site-footer.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
@@ -28,6 +29,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
   declarations: [
     CustomerLayoutComponent,
     AdminLayoutComponent,
+    AnnouncementBarComponent,
     SiteHeaderComponent,
     SiteFooterComponent,
     MainNavComponent,

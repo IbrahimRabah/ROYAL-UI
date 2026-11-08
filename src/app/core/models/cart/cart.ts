@@ -24,6 +24,10 @@ export interface CartItemResponse {
   qtyAvailable: number;
   inStock: boolean;
   lineTotal: Money;
+  /** The regular price per piece when a discount lowers it. */
+  listPrice?: Money | null;
+  /** Whole-number percentage off the regular price. */
+  salePercent?: number | null;
 }
 
 export interface CartResponse {

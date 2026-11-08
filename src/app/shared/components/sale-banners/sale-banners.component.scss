@@ -1,0 +1,17 @@
+@use 'styles/breakpoints';
+
+:host {
+  display: block;
+}
+
+.sale-banners__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4, 1rem);
+}
+
+@include breakpoints.md {
+  .sale-banners__grid--many {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

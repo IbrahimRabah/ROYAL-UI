@@ -18,9 +18,11 @@ import {
   PageResponse,
   ProductFilter,
   ProductSummaryResponse,
+  PublicPromotion,
 } from '../../../../core/models';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
 import { SeoService } from '../../../../core/services/seo.service';
+import { MarketingApiService } from '../../../../core/services/api/marketing-api.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
 
 interface ResolvedCategory {
@@ -74,6 +76,7 @@ export class ProductListPageComponent {
   private readonly router = inject(Router);
   private readonly catalogApi = inject(CatalogApiService);
   private readonly seo = inject(SeoService);
+  private readonly marketingApi = inject(MarketingApiService);
   private readonly languageStore = inject(LanguageStoreService);
   private readonly translate = inject(TranslateService);
   private readonly platformId = inject(PLATFORM_ID);
@@ -99,6 +102,7 @@ export class ProductListPageComponent {
       inStockOnly: parseBoolean(params, 'inStockOnly'),
       featured: parseBoolean(params, 'featured'),
       newArrival: parseBoolean(params, 'newArrival'),
+      onSale: parseBoolean(params, 'onSale'),
       sort,
       page: Math.max(0, uiPage - 1),
       uiPage,
@@ -110,6 +114,17 @@ export class ProductListPageComponent {
 
   readonly categoryTree = signal<CategoryNode[]>([]);
   readonly categoryDetail = signal<CategoryDetailResponse | null>(null);
+
+  /** The discounts running now; a category page shows the one that covers it. */
+  readonly sales = signal<PublicPromotion[]>([]);
+  readonly onSaleOnly = computed(() => this.queryFilter().onSale === true);
+  readonly categorySale = computed<PublicPromotion | null>(() => {
+    const resolved = this.resolved();
+    if (!resolved) return null;
+    const ids = new Set<number>([resolved.node.id]);
+    if (resolved.parent) ids.add(resolved.parent.id);
+    return this.sales().filter((p) => p.scope === 'CATEGORY' && p.targetId != null && ids.has(p.targetId) && (p.bannerUrl || p.bannerMobileUrl))[0] ?? null;
+  });
   readonly facets = signal<FilterFacetsResponse | null>(null);
 
   readonly productsPage = signal<PageResponse<ProductSummaryResponse>>(
@@ -281,6 +296,7 @@ export class ProductListPageComponent {
   });
 
   constructor() {
+    this.marketingApi.promotions().subscribe({ next: (list) => this.sales.set(list), error: () => {} });
     effect(() => {
       this.languageStore.lang();
       this.catalogApi.getCategoryTree().subscribe({

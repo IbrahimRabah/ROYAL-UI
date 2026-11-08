@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+}
+
+.cd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  /* Digits read left to right in any language. */
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cd__unit {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 18%);
+
+  b {
+    font-weight: 800;
+  }
+
+  small {
+    font-size: 0.7em;
+    opacity: 0.85;
+  }
+}

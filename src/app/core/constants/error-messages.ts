@@ -97,6 +97,12 @@ export const ERROR_MESSAGES_AR: Record<ErrorCode, string> = {
   [ErrorCode.TEAM_USER_NOT_FOUND]: 'لا يوجد حساب بهذا البريد',
   [ErrorCode.TEAM_LAST_ADMIN]: 'لا بد من وجود مدير واحد على الأقل',
   [ErrorCode.TEAM_SELF_CHANGE]: 'لا يمكنك تغيير صلاحياتك بنفسك',
+  [ErrorCode.PROMOTION_NOT_FOUND]: 'الخصم غير موجود',
+  [ErrorCode.PROMOTION_BELOW_COST]: 'هذا الخصم سيبيع بعض الخيارات بأقل من سعر التكلفة. خفّض النسبة أو راجع معاينة التأثير',
+  [ErrorCode.PROMOTION_HIGH_DISCOUNT_UNCONFIRMED]: 'الخصم الأعلى من 70% يحتاج تأكيدًا',
+  [ErrorCode.PROMOTION_IN_USE]: 'هذا الخصم مرتبط بطلبات أو بإعلان. أنهِه بدل حذفه',
+  [ErrorCode.PROMOTION_ALREADY_ENDED]: 'انتهى هذا الخصم. غيّر تاريخ الانتهاء أولًا',
+  [ErrorCode.ANNOUNCEMENT_NOT_FOUND]: 'الإعلان غير موجود',
 };
 
 export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
@@ -196,4 +202,10 @@ export const ERROR_MESSAGES_EN: Record<ErrorCode, string> = {
   [ErrorCode.TEAM_USER_NOT_FOUND]: 'No account has this email',
   [ErrorCode.TEAM_LAST_ADMIN]: 'There must always be at least one administrator',
   [ErrorCode.TEAM_SELF_CHANGE]: 'You cannot change your own roles',
+  [ErrorCode.PROMOTION_NOT_FOUND]: 'Discount not found',
+  [ErrorCode.PROMOTION_BELOW_COST]: 'This discount would sell some variants below their cost price. Lower the percentage or check the impact preview',
+  [ErrorCode.PROMOTION_HIGH_DISCOUNT_UNCONFIRMED]: 'A discount above 70 percent needs to be confirmed',
+  [ErrorCode.PROMOTION_IN_USE]: 'This discount is used by orders or an announcement. End it instead of deleting it',
+  [ErrorCode.PROMOTION_ALREADY_ENDED]: 'This discount has already ended. Change its dates first',
+  [ErrorCode.ANNOUNCEMENT_NOT_FOUND]: 'Announcement not found',
 };

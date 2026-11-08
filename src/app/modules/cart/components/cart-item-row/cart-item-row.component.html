@@ -37,6 +37,10 @@
     <span class="cart-item-row__price-old" *ngIf="priceWarning">
       <app-vl-price [minPrice]="item.priceAtAdd"></app-vl-price>
     </span>
+    <span class="cart-item-row__list" *ngIf="item.listPrice">
+      <s><app-vl-price [minPrice]="item.listPrice"></app-vl-price></s>
+      <span class="cart-item-row__off" *ngIf="item.salePercent">{{ 'sale.percentOff' | translate: { percent: item.salePercent } }}</span>
+    </span>
     <app-vl-price [minPrice]="item.unitPrice"></app-vl-price>
   </div>
 

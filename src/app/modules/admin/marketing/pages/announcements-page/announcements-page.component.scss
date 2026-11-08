@@ -1,0 +1,59 @@
+@use '../../../seo/seo-admin' as s;
+
+@include s.base;
+
+.ann-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.ann-preview__frame {
+  border: 1px dashed var(--admin-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.ann-preview__empty {
+  margin: 0;
+  padding: var(--sp-4);
+}
+
+/* A colour the person can pick, with the checked state visible without colour (a ring). */
+.ann-swatch {
+  inline-size: 36px;
+  block-size: 36px;
+  border: 2px solid var(--admin-border);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+}
+
+.ann-swatch--on {
+  border-color: var(--admin-text);
+  box-shadow: 0 0 0 3px var(--admin-surface), 0 0 0 5px var(--admin-text);
+}
+
+.ann-swatch--gold {
+  background: #b8863b;
+}
+
+.ann-swatch--dark {
+  background: #1b1b1b;
+}
+
+.ann-swatch--red {
+  background: #b3261e;
+}
+
+.ann-swatch--green {
+  background: #1f6b3a;
+}
+
+.ann-swatch--light {
+  background: #f4efe6;
+}

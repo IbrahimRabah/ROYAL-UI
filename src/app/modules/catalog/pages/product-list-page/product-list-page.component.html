@@ -72,6 +72,9 @@
         </div>
       </a>
 
+      <app-sale-banner *ngIf="categorySale() as sale" class="plp-sale-banner" [promotion]="sale"></app-sale-banner>
+      <app-sale-banners *ngIf="onSaleOnly() && !categorySale()" [max]="3"></app-sale-banners>
+
       <app-product-grid
         [products]="productsPage().content"
         [loading]="productsLoading()"

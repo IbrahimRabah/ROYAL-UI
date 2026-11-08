@@ -1,0 +1,27 @@
+<section
+  *ngIf="current() as a"
+  class="announcement-bar"
+  [attr.aria-label]="'announcement.label' | translate"
+  (mouseenter)="hold(true)"
+  (mouseleave)="hold(false)"
+  (focusin)="hold(true)"
+  (focusout)="hold(false)"
+>
+  <!-- A new message replaces the old one: the key makes its animation start again each time. -->
+  <ng-container *ngFor="let item of [a]; trackBy: trackById">
+    <app-announcement-item
+      [text]="item.text"
+      [linkUrl]="item.linkUrl"
+      [linkLabel]="item.linkLabel"
+      [animation]="item.animation"
+      [theme]="item.theme"
+      [countdownEndsAt]="item.countdownEndsAt"
+      [dismissible]="item.dismissible"
+      (dismissed)="dismiss(item)"
+    ></app-announcement-item>
+  </ng-container>
+
+  <span *ngIf="count() > 1" class="announcement-bar__dots" aria-hidden="true">
+    <i *ngFor="let d of dots()" class="announcement-bar__dot" [class.announcement-bar__dot--on]="d === activeDot()"></i>
+  </span>
+</section>

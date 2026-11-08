@@ -1,0 +1,23 @@
+<div class="ann" [ngClass]="'ann--' + theme.toLowerCase()">
+  <div class="ann__stage">
+    <div class="ann__inner" [ngClass]="'ann__inner--' + animation.toLowerCase()">
+      <span class="ann__text" dir="auto">{{ text }}</span>
+      <app-vl-countdown *ngIf="countdownEndsAt" class="ann__countdown" [endsAt]="countdownEndsAt"></app-vl-countdown>
+      <ng-container *ngIf="linkUrl">
+        <a *ngIf="isInternal; else external" class="ann__link" [routerLink]="route.path" [queryParams]="route.query">
+          {{ linkLabel || ('announcement.shopNow' | translate) }}
+        </a>
+        <ng-template #external>
+          <a class="ann__link" [href]="linkUrl" target="_blank" rel="noopener noreferrer">
+            {{ linkLabel || ('announcement.shopNow' | translate) }}
+          </a>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+
+  <button *ngIf="dismissible" type="button" class="ann__close" (click)="dismissed.emit()"
+          [attr.aria-label]="'announcement.close' | translate">
+    <i class="pi pi-times" aria-hidden="true"></i>
+  </button>
+</div>
