@@ -123,7 +123,11 @@
 
 // Desktop: a grid with an explicit icon track. The nav gets whatever is left (minmax(0,1fr)),
 // the logo and the icon cluster are content-sized and can never be overlapped by the links.
-@include breakpoints.lg {
+//
+// The whole menu has to fit between the logo and the search icon, and the English labels are wider than the
+// Arabic ones, so the full desktop layout starts later in English (1280px) than in Arabic (1200px). Below that
+// the header keeps the compact layout with the burger menu, instead of letting the links run over the logo.
+@mixin desktop-header {
   .site-header__row {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto auto;
@@ -152,5 +156,17 @@
 
   .site-header__actions {
     order: 4;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host-context(html:not([lang='en'])) {
+    @include desktop-header;
+  }
+}
+
+@media (min-width: 1280px) {
+  :host-context(html[lang='en']) {
+    @include desktop-header;
   }
 }

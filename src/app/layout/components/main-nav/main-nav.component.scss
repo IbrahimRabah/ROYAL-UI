@@ -2,7 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-6);
+  // Scales with the screen instead of a fixed 32px: the English labels are long, and a fixed gap pushed the row
+  // over the logo and the search icon.
+  gap: clamp(0.75rem, 1.15vw, 1.25rem);
 }
 
 .main-nav__link {
