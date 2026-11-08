@@ -3,27 +3,108 @@
     {{ 'common.home' | translate }}
   </a>
 
-  <!-- Products: the full catalogue mega-menu -->
-  <div class="main-nav__item" (mouseenter)="hoverOpen('products')" (mouseleave)="hoverClose('products')">
+  <!-- Top categories live in the bar itself; hovering one opens its subcategories + image. -->
+  <ng-container *ngFor="let category of visibleCategories">
+    <div
+      class="main-nav__item"
+      *ngIf="category.children.length; else plainCategory"
+      (mouseenter)="hoverOpen(catId(category))"
+      (mouseleave)="hoverClose(catId(category))"
+    >
+      <a
+        class="main-nav__link main-nav__trigger"
+        [class.main-nav__link--active]="isOpen(catId(category))"
+        [attr.data-menu]="catId(category)"
+        [attr.aria-expanded]="isOpen(catId(category))"
+        aria-haspopup="true"
+        [attr.aria-controls]="'main-nav-' + catId(category)"
+        routerLink="/products"
+        [queryParams]="{ categoryId: category.id }"
+        (keydown.arrowdown)="openWithKeyboard($event, catId(category))"
+      >
+        <span>{{ category.name }}</span>
+        <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
+      </a>
+
+      <div [id]="'main-nav-' + catId(category)" class="main-nav__mega" [class.main-nav__mega--open]="isOpen(catId(category))">
+        <div class="container-vl main-nav__mega-inner main-nav__feature">
+          <div class="main-nav__feature-body">
+            <a
+              class="main-nav__feature-title"
+              routerLink="/products"
+              [queryParams]="{ categoryId: category.id }"
+              (click)="closeAll()"
+            >{{ category.name }}</a>
+            <ul class="main-nav__feature-list">
+              <li *ngFor="let child of category.children">
+                <a
+                  class="main-nav__child"
+                  routerLink="/products"
+                  [queryParams]="{ categoryId: child.id }"
+                  (click)="closeAll()"
+                >
+                  <span>{{ child.name }}</span>
+                  <small class="main-nav__count" *ngIf="child.productCount != null">{{ child.productCount }}</small>
+                </a>
+              </li>
+            </ul>
+            <a
+              class="main-nav__all"
+              routerLink="/products"
+              [queryParams]="{ categoryId: category.id }"
+              (click)="closeAll()"
+            >
+              {{ 'header.nav.shopAll' | translate: { name: category.name } }}
+              <i class="pi pi-arrow-right main-nav__all-arrow" aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <a
+            *ngIf="category.bannerUrl || category.imageUrl"
+            class="main-nav__feature-media"
+            routerLink="/products"
+            [queryParams]="{ categoryId: category.id }"
+            (click)="closeAll()"
+            tabindex="-1"
+            aria-hidden="true"
+          >
+            <img [src]="category.bannerUrl || category.imageUrl" alt="" loading="lazy" />
+            <span class="main-nav__feature-caption">{{ category.name }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #plainCategory>
+      <a
+        class="main-nav__link"
+        routerLink="/products"
+        [queryParams]="{ categoryId: category.id }"
+      >{{ category.name }}</a>
+    </ng-template>
+  </ng-container>
+
+  <!-- Overflow: remaining categories as columns -->
+  <div class="main-nav__item" *ngIf="overflowCategories.length" (mouseenter)="hoverOpen('more')" (mouseleave)="hoverClose('more')">
     <button
-      #productsBtn
       type="button"
       class="main-nav__link main-nav__trigger"
-      [class.main-nav__link--active]="isOpen('products')"
-      [attr.aria-expanded]="isOpen('products')"
+      data-menu="more"
+      [class.main-nav__link--active]="isOpen('more')"
+      [attr.aria-expanded]="isOpen('more')"
       aria-haspopup="true"
-      aria-controls="main-nav-products"
-      (click)="toggle('products')"
-      (keydown.arrowdown)="openWithKeyboard($event, 'products')"
+      aria-controls="main-nav-more"
+      (click)="toggle('more')"
+      (keydown.arrowdown)="openWithKeyboard($event, 'more')"
     >
-      <span>{{ 'header.nav.products' | translate }}</span>
+      <span>{{ 'header.nav.more' | translate }}</span>
       <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
     </button>
 
-    <div id="main-nav-products" class="main-nav__mega" [class.main-nav__mega--open]="isOpen('products')">
+    <div id="main-nav-more" class="main-nav__mega" [class.main-nav__mega--open]="isOpen('more')">
       <div class="container-vl main-nav__mega-inner">
         <div class="main-nav__mega-grid">
-          <div class="main-nav__col" *ngFor="let category of categories">
+          <div class="main-nav__col" *ngFor="let category of overflowCategories">
             <a
               class="main-nav__col-title"
               routerLink="/products"
@@ -37,17 +118,18 @@
                   routerLink="/products"
                   [queryParams]="{ categoryId: child.id }"
                   (click)="closeAll()"
-                >{{ child.name }}</a>
+                ><span>{{ child.name }}</span></a>
               </li>
             </ul>
           </div>
         </div>
-        <a class="main-nav__all" routerLink="/products" (click)="closeAll()">
-          {{ 'common.allProducts' | translate }}
-        </a>
       </div>
     </div>
   </div>
+
+  <a routerLink="/products" routerLinkActive="main-nav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="main-nav__link main-nav__link--all">
+    {{ 'common.allProducts' | translate }}
+  </a>
 
   <!-- Architectural Work: a short menu from /portfolio/categories. With no categories it is just a link. -->
   <div
@@ -57,9 +139,9 @@
     (mouseleave)="hoverClose('work')"
   >
     <button
-      #workBtn
       type="button"
       class="main-nav__link main-nav__trigger"
+      data-menu="work"
       [class.main-nav__link--active]="isOpen('work')"
       [attr.aria-expanded]="isOpen('work')"
       aria-haspopup="true"

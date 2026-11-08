@@ -5,7 +5,6 @@ import {
   HostListener,
   Input,
   OnDestroy,
-  ViewChild,
   inject,
   signal,
 } from '@angular/core';
@@ -18,7 +17,9 @@ const HOVER_CLOSE_DELAY_MS = 150;
 /** The panels fade in via a visibility transition; focus has to wait until they are actually visible. */
 const FOCUS_AFTER_OPEN_MS = 60;
 
-type MenuId = 'products' | 'work';
+/** How many top categories sit directly in the bar; the rest go under "More". */
+const MAX_VISIBLE_CATEGORIES = 4;
+
 
 /**
  * Desktop top-level navigation: Home | Products ▾ | Architectural Work ▾.
@@ -42,8 +43,17 @@ export class MainNavComponent implements OnDestroy {
   /** Public portfolio categories. Empty = the menu collapses to a single plain link. */
   @Input() workCategories: PortfolioCategory[] = [];
 
-  @ViewChild('productsBtn') private readonly productsBtn?: ElementRef<HTMLButtonElement>;
-  @ViewChild('workBtn') private readonly workBtn?: ElementRef<HTMLButtonElement>;
+  get visibleCategories(): CategoryNode[] {
+    return this.categories.slice(0, MAX_VISIBLE_CATEGORIES);
+  }
+
+  get overflowCategories(): CategoryNode[] {
+    return this.categories.slice(MAX_VISIBLE_CATEGORIES);
+  }
+
+  catId(category: CategoryNode): string {
+    return `cat-${category.id}`;
+  }
 
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly navSub: Subscription;
@@ -52,7 +62,7 @@ export class MainNavComponent implements OnDestroy {
   private hoverOpened = false;
 
   /** At most one menu is open at a time. */
-  readonly openMenu = signal<MenuId | null>(null);
+  readonly openMenu = signal<string | null>(null);
 
   constructor() {
     this.navSub = inject(Router).events
@@ -65,11 +75,11 @@ export class MainNavComponent implements OnDestroy {
     this.navSub.unsubscribe();
   }
 
-  isOpen(id: MenuId): boolean {
+  isOpen(id: string): boolean {
     return this.openMenu() === id;
   }
 
-  hoverOpen(id: MenuId): void {
+  hoverOpen(id: string): void {
     this.clearTimer();
     if (this.openMenu() !== id) {
       this.hoverOpened = true;
@@ -77,13 +87,13 @@ export class MainNavComponent implements OnDestroy {
     }
   }
 
-  hoverClose(id: MenuId): void {
+  hoverClose(id: string): void {
     if (!this.hoverOpened || this.openMenu() !== id) return;
     this.clearTimer();
     this.closeTimer = setTimeout(() => this.closeAll(), HOVER_CLOSE_DELAY_MS);
   }
 
-  toggle(id: MenuId): void {
+  toggle(id: string): void {
     this.clearTimer();
     if (this.isOpen(id) && this.hoverOpened) {
       // A click on a hover-opened panel pins it open instead of closing it.
@@ -95,7 +105,7 @@ export class MainNavComponent implements OnDestroy {
   }
 
   /** ArrowDown on a trigger opens its menu and moves into it, so the menu is fully usable without a mouse. */
-  openWithKeyboard(event: Event, id: MenuId): void {
+  openWithKeyboard(event: Event, id: string): void {
     event.preventDefault();
     this.clearTimer();
     this.hoverOpened = false;
@@ -124,7 +134,7 @@ export class MainNavComponent implements OnDestroy {
     const open = this.openMenu();
     if (!open) return;
     this.closeAll();
-    (open === 'products' ? this.productsBtn : this.workBtn)?.nativeElement.focus();
+    this.elementRef.nativeElement.querySelector<HTMLElement>(`[data-menu="${open}"]`)?.focus();
   }
 
   @HostListener('window:scroll')

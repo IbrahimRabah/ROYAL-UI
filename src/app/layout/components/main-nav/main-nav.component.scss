@@ -122,6 +122,102 @@
   }
 }
 
+// Featured category panel: subcategories on the start side, image on the end side (mirrors in RTL).
+.main-nav__feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 340px);
+  gap: var(--sp-6);
+  align-items: stretch;
+}
+
+.main-nav__feature-body {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.main-nav__feature-title {
+  font-family: var(--display);
+  font-size: var(--fs-lg, 1.25rem);
+  color: var(--text);
+  text-decoration: none;
+  padding-block-end: var(--sp-3);
+  margin-block-end: var(--sp-3);
+  border-block-end: 1px solid var(--border);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--brand);
+  }
+}
+
+.main-nav__feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--sp-1) var(--sp-5);
+}
+
+.main-nav__child {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.main-nav__count {
+  color: var(--text-muted);
+  font-size: var(--fs-xs, 0.75rem);
+  opacity: 0.7;
+}
+
+.main-nav__feature-media {
+  position: relative;
+  display: block;
+  min-block-size: 200px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface-alt);
+
+  img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+
+  &:hover img {
+    transform: scale(1.04);
+  }
+}
+
+.main-nav__feature-caption {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: var(--sp-4) var(--sp-3) var(--sp-3);
+  color: #fff;
+  font-family: var(--display);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
+}
+
+.main-nav__all-arrow {
+  font-size: 0.7rem;
+  margin-inline-start: var(--sp-2);
+}
+
+[dir='rtl'] .main-nav__all-arrow {
+  transform: scaleX(-1);
+}
+
+.main-nav__link--all {
+  color: var(--brand);
+}
+
 .main-nav__all {
   display: inline-block;
   margin-block-start: var(--sp-6);

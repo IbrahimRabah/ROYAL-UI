@@ -45,7 +45,9 @@
     "nav": {
       "products": "Products",
       "architecturalWork": "Architectural Work",
-      "allWork": "View all architectural work"
+      "allWork": "View all architectural work",
+      "more": "More",
+      "shopAll": "Shop all {{name}}"
     }
   },
   "topBar": {

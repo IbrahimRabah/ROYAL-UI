@@ -45,7 +45,9 @@
     "nav": {
       "products": "المنتجات",
       "architecturalWork": "الأعمال المعمارية",
-      "allWork": "كل الأعمال المعمارية"
+      "allWork": "كل الأعمال المعمارية",
+      "more": "المزيد",
+      "shopAll": "تسوّق كل {{name}}"
     }
   },
   "topBar": {
