@@ -5,6 +5,18 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
 
+// Angular's server render only finishes once every pending task is done. Node's built-in fetch (which the app's
+// HttpClient uses, via withFetch()) keeps each connection open for 4 seconds after a response, and that idle timer
+// counts as a pending task: every page took 4 extra seconds to render even though its data arrived in milliseconds.
+// Asking for the connection to be closed after each call removes the wait. This runs only in this Node process;
+// the browser and the API are untouched.
+const nativeFetch = globalThis.fetch.bind(globalThis);
+globalThis.fetch = (input: Parameters<typeof fetch>[0], init: RequestInit = {}) => {
+  const headers = new Headers(init.headers ?? (input instanceof Request ? input.headers : undefined));
+  headers.set('connection', 'close');
+  return nativeFetch(input, { ...init, headers });
+};
+
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -36,7 +48,11 @@ export function app(): express.Express {
   }));
 
   server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
+    const { originalUrl, baseUrl, headers } = req;
+    // Behind nginx the browser's scheme arrives in X-Forwarded-Proto. Without it the render would call the API over
+    // plain http, and nginx would answer every one of those calls with a redirect to https.
+    const forwarded = String(headers['x-forwarded-proto'] ?? '').split(',')[0].trim();
+    const protocol = forwarded === 'https' || forwarded === 'http' ? forwarded : req.protocol;
 
     commonEngine
       .render({
