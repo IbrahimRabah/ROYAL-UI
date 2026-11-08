@@ -18,6 +18,13 @@ const PRICE_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
 })
 export class ProductPriceBlockComponent {
   @Input({ required: true }) price!: Money;
+  /** The regular price while a discount runs. */
+  @Input() compareAt: Money | null | undefined = null;
+  @Input() percent: number | null | undefined = null;
+
+  get wasFormatted(): string | null {
+    return this.compareAt != null && money(this.compareAt) > money(this.price) ? PRICE_FORMATTER.format(money(this.compareAt)) : null;
+  }
 
   get formatted(): string {
     return PRICE_FORMATTER.format(money(this.price));

@@ -3,4 +3,5 @@
     {{ 'product.priceFrom' | translate: { price: formatted } }}
   </ng-container>
   <ng-template #singlePrice>{{ formatted }}</ng-template>
+  <del *ngIf="wasFormatted as was" class="vl-price__was"><span class="vl-price__sr">{{ 'sale.was' | translate }}</span> {{ was }}</del>
 </span>

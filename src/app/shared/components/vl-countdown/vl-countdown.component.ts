@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   Output,
@@ -26,6 +27,7 @@ import {
 })
 export class VlCountdownComponent implements OnChanges, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly zone = inject(NgZone);
 
   @Input() endsAt: string | null | undefined = null;
   /** Fires once, when the time runs out. */
@@ -73,14 +75,20 @@ export class VlCountdownComponent implements OnChanges, OnDestroy {
     if (!isPlatformBrowser(this.platformId) || this.end() === null) {
       return;
     }
-    this.timer = setInterval(() => {
-      this.now.set(Date.now());
-      if (this.parts()?.done && !this.announced) {
-        this.announced = true;
-        this.ended.emit();
-        this.stop();
-      }
-    }, 1000);
+    // Outside Angular's zone, so this repeating timer never keeps the app from becoming stable (which would leave
+    // the server-rendered markup in the page, duplicated). It steps back in to change the clock.
+    this.zone.runOutsideAngular(() => {
+      this.timer = setInterval(() => {
+        this.zone.run(() => {
+          this.now.set(Date.now());
+          if (this.parts()?.done && !this.announced) {
+            this.announced = true;
+            this.ended.emit();
+            this.stop();
+          }
+        });
+      }, 1000);
+    });
   }
 
   private stop(): void {

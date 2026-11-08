@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, OnDestroy, PLATFORM_ID, ViewChild, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, OnDestroy, PLATFORM_ID, ViewChild, computed, effect, inject, signal, untracked } from '@angular/core';
 import { FulfillmentType, isReadyMade } from '../../../../core/enums/fulfillment-type';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -155,28 +155,35 @@ export class ProductDetailsPageComponent implements OnDestroy {
     effect(() => this.ui.setStickyBarVisible(this.barVisible()), { allowSignalWrites: true });
     effect(() => this.ui.setContactProduct(this.product()?.name ?? null), { allowSignalWrites: true });
 
+    // Only the slug and the language decide when to load. Everything the response does afterwards runs untracked:
+    // when the server already sent the answer (server rendering, Arabic) the response arrives synchronously, inside
+    // this effect, and recordView() reads and rewrites the recently-viewed list. Tracked, that made the effect
+    // depend on its own write, so it re-ran forever and the page froze ("Page Unresponsive").
     effect(() => {
       const slug = this.slug();
       this.languageStore.lang();
       if (!slug) return;
-
-      this.loading.set(true);
-      this.catalogApi.getProduct(slug).subscribe({
-        next: (product) => {
-          this.product.set(product);
-          this.applySeo(product);
-          this.selectedValueId.set(this.defaultValueId(product));
-          this.activeGalleryImageId.set(this.posterId(product));
-          this.loading.set(false);
-          this.saved.recordView({ id: product.id, slug: product.slug });
-          this.fetchRelated(product.id);
-        },
-        error: () => {
-          this.product.set(null);
-          this.loading.set(false);
-        },
-      });
+      untracked(() => this.loadProduct(slug));
     }, { allowSignalWrites: true });
+  }
+
+  private loadProduct(slug: string): void {
+    this.loading.set(true);
+    this.catalogApi.getProduct(slug).subscribe({
+      next: (product) => {
+        this.product.set(product);
+        this.applySeo(product);
+        this.selectedValueId.set(this.defaultValueId(product));
+        this.activeGalleryImageId.set(this.posterId(product));
+        this.loading.set(false);
+        this.saved.recordView({ id: product.id, slug: product.slug });
+        this.fetchRelated(product.id);
+      },
+      error: () => {
+        this.product.set(null);
+        this.loading.set(false);
+      },
+    });
   }
 
   ngOnDestroy(): void {

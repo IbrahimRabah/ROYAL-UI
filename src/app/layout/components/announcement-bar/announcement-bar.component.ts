@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnDestroy, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, of } from 'rxjs';
@@ -31,6 +31,7 @@ export class AnnouncementBarComponent implements OnDestroy {
   private readonly translate = inject(TranslateService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly zone = inject(NgZone);
 
   private readonly all = signal<PublicAnnouncement[]>([]);
   private readonly dismissed = signal<Record<string, number>>({});
@@ -91,11 +92,16 @@ export class AnnouncementBarComponent implements OnDestroy {
     if (!isPlatformBrowser(this.platformId) || this.prefersReducedMotion()) {
       return;
     }
-    this.timer = setInterval(() => {
-      if (!this.paused && this.count() > 1) {
-        this.index.update((i) => (i + 1) % this.count());
-      }
-    }, ROTATE_MS);
+    // A repeating timer inside Angular's zone keeps the app from ever being "stable", and hydration only removes the
+    // leftover server-rendered markup once it is: the page then shows every card twice. So the timer runs outside the
+    // zone and steps back in only to change the message.
+    this.zone.runOutsideAngular(() => {
+      this.timer = setInterval(() => {
+        if (!this.paused && this.count() > 1) {
+          this.zone.run(() => this.index.update((i) => (i + 1) % this.count()));
+        }
+      }, ROTATE_MS);
+    });
   }
 
   private prefersReducedMotion(): boolean {

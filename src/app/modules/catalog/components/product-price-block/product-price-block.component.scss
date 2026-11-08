@@ -4,3 +4,30 @@
   font-weight: 700;
   color: var(--text);
 }
+
+.product-price-block__was {
+  margin-inline-start: var(--sp-2);
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--text-muted, #7a7266);
+}
+
+.product-price-block__off {
+  margin-inline-start: var(--sp-2);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #fff;
+  font-size: 0.5em;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.product-price-block__sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

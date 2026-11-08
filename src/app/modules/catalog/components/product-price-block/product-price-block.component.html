@@ -1,1 +1,5 @@
-<p class="product-price-block">{{ formatted }}</p>
+<p class="product-price-block">
+  {{ formatted }}
+  <del *ngIf="wasFormatted as was" class="product-price-block__was"><span class="product-price-block__sr">{{ 'sale.was' | translate }}</span> {{ was }}</del>
+  <span *ngIf="wasFormatted && percent" class="product-price-block__off">{{ 'sale.percentOff' | translate: { percent: percent } }}</span>
+</p>

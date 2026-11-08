@@ -87,6 +87,11 @@
   color: var(--ink);
 }
 
+.vl-product-card__badge--sale {
+  background: var(--gold);
+  color: #fff;
+}
+
 .vl-product-card__badge--out {
   background: var(--ink);
   color: var(--cream);

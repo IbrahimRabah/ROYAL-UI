@@ -62,6 +62,8 @@ export class SavedProductsService {
 
   /** Called when a product's detail page has actually loaded. */
   recordView(product: SavedProduct): void {
+    // Already the newest entry: nothing to change, nothing to write.
+    if (this._recentlyViewed()[0]?.id === product.id) return;
     const next = [product, ...this._recentlyViewed().filter((item) => item.id !== product.id)].slice(0, RECENTLY_VIEWED_MAX);
     this.commit('recentlyViewed', next);
   }

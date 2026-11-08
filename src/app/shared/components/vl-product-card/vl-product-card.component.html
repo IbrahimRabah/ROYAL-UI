@@ -30,6 +30,9 @@
       <span *ngIf="product.newArrival" class="vl-product-card__badge vl-product-card__badge--new">
         {{ 'product.new' | translate }}
       </span>
+      <span *ngIf="readyMade && product.discountPercent" class="vl-product-card__badge vl-product-card__badge--sale">
+        {{ 'sale.percentOff' | translate: { percent: product.discountPercent } }}
+      </span>
       <span *ngIf="readyMade && !product.inStock" class="vl-product-card__badge vl-product-card__badge--out">
         {{ 'product.outOfStockBadge' | translate }}
       </span>
@@ -56,6 +59,7 @@
       class="vl-product-card__price"
       [minPrice]="product.minPrice"
       [maxPrice]="product.maxPrice"
+      [compareAt]="product.compareAtPrice"
     ></app-vl-price>
     <ng-template #onRequest>
       <span class="vl-product-card__price">{{ 'product.priceOnRequest' | translate }}</span>

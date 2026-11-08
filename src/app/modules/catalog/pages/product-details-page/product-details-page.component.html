@@ -20,7 +20,7 @@
             <span>{{ selectedVariant()?.sku }}</span>
           </p>
 
-          <app-product-price-block *ngIf="readyMade(); else priceOnRequest" [price]="displayPrice()"></app-product-price-block>
+          <app-product-price-block *ngIf="readyMade(); else priceOnRequest" [price]="displayPrice()" [compareAt]="selectedVariant()?.compareAtPrice" [percent]="selectedVariant()?.discountPercent"></app-product-price-block>
           <ng-template #priceOnRequest>
             <p class="pdp__price-on-request">{{ 'product.priceOnRequest' | translate }}</p>
           </ng-template>
