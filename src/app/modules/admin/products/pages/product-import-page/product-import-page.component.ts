@@ -54,7 +54,7 @@ interface FieldIssue {
 /** One input of the row editor. `key` is the same key the server uses for the value and for findings. */
 interface FieldDef {
   key: string;
-  type: 'text' | 'number' | 'textarea' | 'category';
+  type: 'text' | 'number' | 'textarea' | 'category' | 'fulfillment' | 'size';
 }
 
 const MONEY_FORMATTER = new Intl.NumberFormat('en-US-u-nu-latn', {
@@ -119,8 +119,14 @@ export class ProductImportPageComponent {
     { key: 'price', type: 'number' },
     { key: 'compare_at', type: 'number' },
     { key: 'stock', type: 'number' },
+    { key: 'fulfillment_type', type: 'fulfillment' },
+    { key: 'shipping_size', type: 'size' },
     { key: 'slug', type: 'text' },
   ];
+
+  /** Empty means "work it out": a priced row is ready-made, sized from its dimensions. */
+  readonly fulfillmentOptions = ['READY_MADE', 'MADE_TO_ORDER', 'CUSTOM_WORK'];
+  readonly sizeOptions = ['SMALL', 'MEDIUM', 'LARGE'];
 
   readonly textFields: FieldDef[] = [
     { key: 'short_ar', type: 'text' },

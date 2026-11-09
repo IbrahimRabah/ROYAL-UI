@@ -316,12 +316,22 @@
                         </div>
                         <div>
                           <dt>{{ 'admin.products.import.detail.stock' | translate }}</dt>
-                          <dd>{{ row.data.stock ?? '—' }}</dd>
+                          <dd>{{ row.data.stock ?? ('admin.products.import.detail.stockDefault' | translate) }}</dd>
                         </div>
                         <div>
                           <dt>{{ 'admin.products.import.detail.fulfillment' | translate }}</dt>
                           <dd>
                             {{ row.data.fulfillmentType ? ('admin.products.list.fulfillment.' + row.data.fulfillmentType | translate) : '—' }}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>{{ 'admin.products.import.detail.size' | translate }}</dt>
+                          <dd>
+                            {{
+                              row.data.shippingSizeClass
+                                ? ('admin.products.form.sales.size.options.' + row.data.shippingSizeClass + '.label' | translate)
+                                : '—'
+                            }}
                           </dd>
                         </div>
                       </dl>
@@ -392,8 +402,34 @@
                             <option *ngFor="let name of categoryOptions()" [value]="name">{{ name }}</option>
                           </select>
 
+                          <select
+                            *ngIf="f.type === 'fulfillment'"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          >
+                            <option value="">{{ 'admin.products.import.fields.autoOption' | translate }}</option>
+                            <option *ngFor="let o of fulfillmentOptions" [value]="o">
+                              {{ 'admin.products.list.fulfillment.' + o | translate }}
+                            </option>
+                          </select>
+
+                          <select
+                            *ngIf="f.type === 'size'"
+                            [id]="inputId(row.rowNo, f.key)"
+                            name="{{ f.key }}"
+                            [ngModel]="draftValue(f.key)"
+                            (ngModelChange)="setDraft(row, f.key, $event)"
+                          >
+                            <option value="">{{ 'admin.products.import.fields.autoOption' | translate }}</option>
+                            <option *ngFor="let o of sizeOptions" [value]="o">
+                              {{ 'admin.products.form.sales.size.options.' + o + '.label' | translate }}
+                            </option>
+                          </select>
+
                           <input
-                            *ngIf="f.type !== 'category'"
+                            *ngIf="f.type !== 'category' && f.type !== 'fulfillment' && f.type !== 'size'"
                             [id]="inputId(row.rowNo, f.key)"
                             name="{{ f.key }}"
                             type="text"
