@@ -4,6 +4,7 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
+import { SSR_RESPONSE } from './src/app/core/tokens/ssr-response.token';
 
 // Angular's server render only finishes once every pending task is done. Node's built-in fetch (which the app's
 // HttpClient uses, via withFetch()) keeps each connection open for 4 seconds after a response, and that idle timer
@@ -60,7 +61,10 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          { provide: SSR_RESPONSE, useValue: res },
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

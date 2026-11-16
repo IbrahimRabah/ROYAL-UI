@@ -18,7 +18,8 @@ export class CartIconComponent {
   private readonly miniCart = inject(MiniCartStateService);
   private readonly router = inject(Router);
 
-  readonly itemCount = this.cartStore.itemCount;
+  /** Pieces in the cart (the sum of quantities), not the number of lines: 2 of one product is "2", not "1". */
+  readonly itemCount = this.cartStore.totalQuantity;
 
   /**
    * The anchor keeps a real href so middle/ctrl/cmd-click and no-JS still reach /cart. A plain left click is

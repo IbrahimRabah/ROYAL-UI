@@ -6,16 +6,23 @@
 
   <form [formGroup]="form" class="auth-field-row" novalidate>
     <div class="auth-field" [class.auth-field--invalid]="fieldError('phone')">
-      <label class="auth-field__label" for="contact-phone">{{ 'checkout.contact.phoneLabel' | translate }}</label>
+      <label class="auth-field__label" for="contact-phone">
+        {{ 'checkout.contact.phoneLabel' | translate }}<span class="auth-field__required" aria-hidden="true">*</span>
+      </label>
       <input
         id="contact-phone"
         type="tel"
+        inputmode="tel"
         class="auth-field__input"
         formControlName="phone"
         autocomplete="tel"
+        required
+        aria-required="true"
+        [attr.aria-invalid]="fieldError('phone') ? 'true' : null"
+        [attr.aria-describedby]="fieldError('phone') ? 'contact-phone-error' : null"
         [placeholder]="'account.addressForm.phonePlaceholder' | translate"
       />
-      <p class="auth-field__error" *ngIf="fieldError('phone') as key">{{ key | translate }}</p>
+      <p class="auth-field__error" id="contact-phone-error" *ngIf="fieldError('phone') as key">{{ key | translate }}</p>
     </div>
 
     <div class="auth-field" [class.auth-field--invalid]="fieldError('email')">
@@ -26,9 +33,11 @@
         class="auth-field__input"
         formControlName="email"
         autocomplete="email"
+        [attr.aria-invalid]="fieldError('email') ? 'true' : null"
+        [attr.aria-describedby]="fieldError('email') ? 'contact-email-error' : null"
         [placeholder]="'checkout.contact.emailPlaceholder' | translate"
       />
-      <p class="auth-field__error" *ngIf="fieldError('email') as key">{{ key | translate }}</p>
+      <p class="auth-field__error" id="contact-email-error" *ngIf="fieldError('email') as key">{{ key | translate }}</p>
     </div>
   </form>
 </section>

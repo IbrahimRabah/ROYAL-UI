@@ -9,3 +9,25 @@
   font-size: var(--fs-sm);
   color: var(--text-muted);
 }
+
+// The select shrinks to its content inside the flex row (about 98px on phones), which truncated the price
+// options. Give the trigger room for the longest label and let its overlay be at least as wide as the trigger.
+.sort-dropdown ::ng-deep .p-select {
+  min-inline-size: 13.75rem;
+  max-inline-size: 100%;
+}
+
+.sort-dropdown ::ng-deep .p-select-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .p-select-overlay {
+  min-inline-size: 13.75rem;
+}
+
+:host ::ng-deep .p-select-option {
+  white-space: normal;
+  min-block-size: 2.75rem;
+}

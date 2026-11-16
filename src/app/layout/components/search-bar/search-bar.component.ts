@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { EMPTY, catchError, debounceTime, map, of, switchMap, tap } from 'rxjs';
 
 import { SuggestionCategory, SuggestionProduct } from '../../../core/models';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 import { CatalogApiService } from '../../../core/services/api/catalog-api.service';
 
 /** The server returns empty arrays below 2 letters; we do not even ask. */
@@ -27,6 +28,7 @@ export class SearchBarComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
   private readonly catalogApi = inject(CatalogApiService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
 
@@ -83,6 +85,9 @@ export class SearchBarComponent {
       this.categoryRows.set(res.categories ?? []);
       this.activeIndex.set(-1);
       this.status.set('ready');
+      if (this.items().length === 0) {
+        this.analytics.track('zero_results', { query: this.query.value.trim(), source: 'suggestions' });
+      }
     });
   }
 
@@ -99,6 +104,7 @@ export class SearchBarComponent {
   }
 
   openSearch(): void {
+    this.analytics.track('search_open');
     this.isOpen.set(true);
     setTimeout(() => this.searchInput?.nativeElement.focus(), 50);
   }
@@ -183,6 +189,7 @@ export class SearchBarComponent {
     if (!q) {
       return;
     }
+    this.analytics.track('search_submit', { query: q });
     this.router.navigate(['/products'], { queryParams: { q } });
     this.closeSearch();
   }

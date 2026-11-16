@@ -8,7 +8,7 @@
     <source srcset="assets/images/home/hero.webp" type="image/webp" />
     <img
       class="hero-banner__image"
-      src="assets/images/home/hero.png"
+      src="assets/images/home/hero.webp"
       [alt]="'home.hero.imageAlt' | translate"
       fetchpriority="high"
       loading="eager"
@@ -21,6 +21,10 @@
     it must NOT flip with RTL/LTR like the rest of the site. `left` + translateX(-50%) is
     used deliberately here instead of the usual inset-inline-start/logical properties.
   -->
+  <!-- The page's one H1 (the wordmark is baked into the image, so there is no text heading to rely on). Visually
+       hidden until a visible headline is designed; screen readers and search engines read it. -->
+  <h1 class="visually-hidden">{{ 'home.hero.title' | translate }}</h1>
+
   <div class="hero-banner__content">
     <p class="hero-banner__tagline">{{ 'home.hero.tagline' | translate }}</p>
     <a

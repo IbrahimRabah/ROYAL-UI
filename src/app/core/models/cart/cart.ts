@@ -37,6 +37,8 @@ export interface CartResponse {
   totalQuantity: number;
   subtotal: Money;
   discountTotal: Money;
+  /** Assembly fees for the pieces in the cart (included in `estimatedTotal`); absent on older API builds. */
+  assemblyTotal?: Money;
   estimatedTotal: Money;
   taxIncluded: Money;
   couponCode: string | null;

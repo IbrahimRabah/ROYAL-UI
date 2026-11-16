@@ -7,8 +7,57 @@
       <p class="checkout-page__sub">{{ 'checkout.subtitle' | translate }}</p>
     </header>
 
+    <!-- Where the customer is: contact, then address, then confirm. All on this one page, so each step lights up as
+         its part of the form becomes valid. -->
+    <ol class="checkout-steps" [attr.aria-label]="'checkout.progress.label' | translate">
+      <li
+        class="checkout-steps__item"
+        [class.checkout-steps__item--done]="contactValid()"
+        [class.checkout-steps__item--current]="!contactValid()"
+        [attr.aria-current]="!contactValid() ? 'step' : null"
+      >
+        <span class="checkout-steps__dot" aria-hidden="true">
+          <i class="pi pi-check" *ngIf="contactValid(); else stepOne"></i>
+          <ng-template #stepOne>1</ng-template>
+        </span>
+        <span class="checkout-steps__label">{{ 'checkout.contact.heading' | translate }}</span>
+      </li>
+      <li
+        class="checkout-steps__item"
+        [class.checkout-steps__item--done]="addressValid()"
+        [class.checkout-steps__item--current]="contactValid() && !addressValid()"
+        [attr.aria-current]="contactValid() && !addressValid() ? 'step' : null"
+      >
+        <span class="checkout-steps__dot" aria-hidden="true">
+          <i class="pi pi-check" *ngIf="addressValid(); else stepTwo"></i>
+          <ng-template #stepTwo>2</ng-template>
+        </span>
+        <span class="checkout-steps__label">{{ 'checkout.address.heading' | translate }}</span>
+      </li>
+      <li
+        class="checkout-steps__item"
+        [class.checkout-steps__item--current]="contactValid() && addressValid()"
+        [attr.aria-current]="contactValid() && addressValid() ? 'step' : null"
+      >
+        <span class="checkout-steps__dot" aria-hidden="true">3</span>
+        <span class="checkout-steps__label">{{ 'checkout.summary.placeOrder' | translate }}</span>
+      </li>
+    </ol>
+
     <div class="checkout-page__grid">
       <div class="checkout-page__main">
+        <div class="form-error-summary" role="alert" *ngIf="issues().length">
+          <p class="form-error-summary__title">{{ 'checkout.errorSummary.title' | translate }}</p>
+          <ul class="form-error-summary__list">
+            <li *ngFor="let issue of issues()">
+              <a [href]="'#' + issue.id" (click)="onIssueClick($event, issue.id)">{{ issue.labelKey | translate }}</a>:
+              {{ issue.errorKey | translate }}
+            </li>
+          </ul>
+        </div>
+
+        <p class="form-required-legend">{{ 'checkout.requiredLegend' | translate }}</p>
+
         <app-review-step (contactChange)="onContactChange($event)"></app-review-step>
 
         <app-address-step [governorates]="governorates()" (addressChange)="onAddressChange($event)"></app-address-step>
@@ -25,6 +74,7 @@
           [submitting]="submitting()"
           [processing]="processing()"
           [submitError]="submitError()"
+          [showContactHelp]="submitErrorNeedsContact()"
           (placeOrder)="onPlaceOrder()"
         ></app-checkout-summary-sidebar>
       </aside>
@@ -38,7 +88,7 @@
       <span>{{ 'checkout.summary.total' | translate }}</span>
       <app-vl-price [minPrice]="shippingQuote()?.estimatedTotal ?? cartStore.cart()?.estimatedTotal ?? 0"></app-vl-price>
     </div>
-    <button type="button" class="checkout-page__mobile-bar-cta" [disabled]="!canSubmit()" (click)="onPlaceOrder()">
+    <button type="button" class="checkout-page__mobile-bar-cta" [disabled]="submitting() || processing()" (click)="onPlaceOrder()">
       <span class="auth-submit__spinner" *ngIf="submitting()" aria-hidden="true"></span>
       <span *ngIf="!submitting()">{{ 'checkout.summary.placeOrder' | translate }}</span>
     </button>

@@ -1,102 +1,160 @@
 <form [formGroup]="form" class="guest-address-form" novalidate>
   <div class="auth-field" [class.auth-field--invalid]="fieldError('recipientName')">
-    <label class="auth-field__label" for="gaf-recipient">{{ 'account.addressForm.recipientNameLabel' | translate }}</label>
+    <label class="auth-field__label" for="gaf-recipient">
+      {{ 'account.addressForm.recipientNameLabel' | translate }}<span class="auth-field__required" aria-hidden="true">*</span>
+    </label>
     <input
       id="gaf-recipient"
       type="text"
       class="auth-field__input"
       formControlName="recipientName"
+      autocomplete="name"
+      required
+      aria-required="true"
+      [attr.aria-invalid]="fieldError('recipientName') ? 'true' : null"
+      [attr.aria-describedby]="fieldError('recipientName') ? 'gaf-recipient-error' : null"
       [placeholder]="'account.addressForm.recipientNamePlaceholder' | translate"
     />
-    <p class="auth-field__error" *ngIf="fieldError('recipientName') as key">{{ key | translate }}</p>
+    <p class="auth-field__error" id="gaf-recipient-error" *ngIf="fieldError('recipientName') as key">{{ key | translate }}</p>
   </div>
 
   <div class="auth-field" [class.auth-field--invalid]="fieldError('governorateId')">
-    <label class="auth-field__label" for="gaf-governorate">{{ 'account.addressForm.governorateLabel' | translate }}</label>
-    <select id="gaf-governorate" class="auth-field__input" formControlName="governorateId">
-      <option [ngValue]="null" disabled>{{ 'account.addressForm.governoratePlaceholder' | translate }}</option>
-      <option *ngFor="let gov of governorates" [ngValue]="gov.id" [disabled]="!gov.served">{{
-        gov.served ? gov.name : gov.name + ' — ' + ('account.addressForm.unavailable' | translate)
-      }}</option>
-    </select>
-    <p class="auth-field__error" *ngIf="fieldError('governorateId') as key">{{ key | translate }}</p>
-  </div>
+    <label class="auth-field__label" id="gaf-governorate-label" for="gaf-governorate">
+      {{ 'account.addressForm.governorateLabel' | translate }}<span class="auth-field__required" aria-hidden="true">*</span>
+    </label>
+    <!-- The site's own PrimeNG select (same as the product sort), searchable, with its list attached to <body> so the
+         card never clips it. -->
+    <p-select
+      inputId="gaf-governorate"
+      class="gaf-select"
 
-  <div class="auth-field">
-    <label class="auth-field__label" for="gaf-area">{{ 'account.addressForm.areaLabel' | translate }}</label>
-    <input
-      id="gaf-area"
-      type="text"
-      class="auth-field__input"
-      formControlName="area"
-      [placeholder]="'account.addressForm.areaPlaceholder' | translate"
-    />
+      panelStyleClass="gaf-select-panel"
+      formControlName="governorateId"
+      scrollHeight="min(45vh, 320px)"
+      optionLabel="name"
+      optionValue="id"
+      optionDisabled="disabled"
+      filterBy="name"
+      [options]="options"
+      [filter]="options.length > 8"
+      [required]="true"
+      [ariaLabelledBy]="'gaf-governorate-label'"
+      [placeholder]="'account.addressForm.governoratePlaceholder' | translate"
+      [filterPlaceholder]="'account.addressForm.governorateSearch' | translate"
+      [emptyFilterMessage]="'account.addressForm.governorateNoMatch' | translate"
+    >
+      <ng-template pTemplate="item" let-gov>
+        <span>{{ gov.name }}</span>
+        <span *ngIf="!gov.served" class="gaf-select__unavailable"> — {{ 'account.addressForm.unavailable' | translate }}</span>
+      </ng-template>
+    </p-select>
+    <p class="auth-field__error" id="gaf-governorate-error" *ngIf="fieldError('governorateId') as key">{{ key | translate }}</p>
   </div>
 
   <div class="auth-field" [class.auth-field--invalid]="fieldError('streetAddress')">
-    <label class="auth-field__label" for="gaf-street">{{ 'account.addressForm.streetLabel' | translate }}</label>
+    <label class="auth-field__label" for="gaf-street">
+      {{ 'account.addressForm.streetLabel' | translate }}<span class="auth-field__required" aria-hidden="true">*</span>
+    </label>
     <input
       id="gaf-street"
       type="text"
       class="auth-field__input"
       formControlName="streetAddress"
+      autocomplete="address-line1"
+      required
+      aria-required="true"
+      [attr.aria-invalid]="fieldError('streetAddress') ? 'true' : null"
+      [attr.aria-describedby]="fieldError('streetAddress') ? 'gaf-street-error' : null"
       [placeholder]="'account.addressForm.streetPlaceholder' | translate"
     />
-    <p class="auth-field__error" *ngIf="fieldError('streetAddress') as key">{{ key | translate }}</p>
+    <p class="auth-field__error" id="gaf-street-error" *ngIf="fieldError('streetAddress') as key">{{ key | translate }}</p>
   </div>
 
-  <div class="guest-address-form__row-3">
+
+  <button
+    type="button"
+    class="guest-address-form__more-btn"
+    [attr.aria-expanded]="showMore()"
+    aria-controls="gaf-more"
+    (click)="toggleMore()"
+  >
+    <i class="pi" [ngClass]="showMore() ? 'pi-minus' : 'pi-plus'" aria-hidden="true"></i>
+    {{ (showMore() ? 'checkout.address.hideMore' : 'checkout.address.showMore') | translate }}
+  </button>
+
+  <!-- Optional details sit behind the toggle (the inputs stay in the page, so autofill still fills them). -->
+  <div id="gaf-more" class="guest-address-form__more" [hidden]="!showMore()">
     <div class="auth-field">
-      <label class="auth-field__label" for="gaf-building">{{ 'account.addressForm.buildingLabel' | translate }}</label>
+      <label class="auth-field__label" for="gaf-area">{{ 'account.addressForm.areaLabel' | translate }}</label>
       <input
-        id="gaf-building"
+        id="gaf-area"
         type="text"
         class="auth-field__input"
-        formControlName="building"
-        [placeholder]="'account.addressForm.buildingPlaceholder' | translate"
+        formControlName="area"
+        [placeholder]="'account.addressForm.areaPlaceholder' | translate"
       />
     </div>
 
-    <div class="auth-field">
-      <label class="auth-field__label" for="gaf-floor">{{ 'account.addressForm.floorLabel' | translate }}</label>
+    <div class="guest-address-form__row-3">
+      <div class="auth-field">
+        <label class="auth-field__label" for="gaf-building">{{ 'account.addressForm.buildingLabel' | translate }}</label>
+        <input
+          id="gaf-building"
+          type="text"
+          class="auth-field__input"
+          formControlName="building"
+          [placeholder]="'account.addressForm.buildingPlaceholder' | translate"
+        />
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-field__label" for="gaf-floor">{{ 'account.addressForm.floorLabel' | translate }}</label>
+        <input
+          id="gaf-floor"
+          type="text"
+          inputmode="numeric"
+          class="auth-field__input"
+          formControlName="floor"
+          [placeholder]="'account.addressForm.floorPlaceholder' | translate"
+        />
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-field__label" for="gaf-apartment">{{ 'account.addressForm.apartmentLabel' | translate }}</label>
+        <input
+          id="gaf-apartment"
+          type="text"
+          inputmode="numeric"
+          class="auth-field__input"
+          formControlName="apartment"
+          [placeholder]="'account.addressForm.apartmentPlaceholder' | translate"
+        />
+      </div>
+    </div>
+
+    <div class="auth-field" [class.auth-field--invalid]="fieldError('altPhone')">
+      <label class="auth-field__label" for="gaf-alt-phone">{{ 'account.addressForm.altPhoneLabel' | translate }}</label>
       <input
-        id="gaf-floor"
-        type="text"
+        id="gaf-alt-phone"
+        type="tel"
+        inputmode="tel"
         class="auth-field__input"
-        formControlName="floor"
-        [placeholder]="'account.addressForm.floorPlaceholder' | translate"
+        formControlName="altPhone"
+        autocomplete="tel"
+        [attr.aria-invalid]="fieldError('altPhone') ? 'true' : null"
+        [attr.aria-describedby]="fieldError('altPhone') ? 'gaf-alt-phone-error' : null"
+        [placeholder]="'account.addressForm.phonePlaceholder' | translate"
       />
+      <p class="guest-address-form__helper">{{ 'account.addressForm.altPhoneHelper' | translate }}</p>
+      <p class="auth-field__error" id="gaf-alt-phone-error" *ngIf="fieldError('altPhone') as key">{{ key | translate }}</p>
     </div>
 
     <div class="auth-field">
-      <label class="auth-field__label" for="gaf-apartment">{{ 'account.addressForm.apartmentLabel' | translate }}</label>
-      <input
-        id="gaf-apartment"
-        type="text"
-        class="auth-field__input"
-        formControlName="apartment"
-        [placeholder]="'account.addressForm.apartmentPlaceholder' | translate"
-      />
+      <label class="auth-field__label" for="gaf-landmark">{{ 'account.addressForm.landmarkLabel' | translate }}</label>
+      <input id="gaf-landmark" type="text" class="auth-field__input" formControlName="landmark" />
+      <p class="guest-address-form__helper">{{ 'account.addressForm.landmarkHelper' | translate }}</p>
     </div>
-  </div>
 
-  <div class="auth-field" [class.auth-field--invalid]="fieldError('altPhone')">
-    <label class="auth-field__label" for="gaf-alt-phone">{{ 'account.addressForm.altPhoneLabel' | translate }}</label>
-    <input
-      id="gaf-alt-phone"
-      type="tel"
-      class="auth-field__input"
-      formControlName="altPhone"
-      [placeholder]="'account.addressForm.phonePlaceholder' | translate"
-    />
-    <p class="guest-address-form__helper">{{ 'account.addressForm.altPhoneHelper' | translate }}</p>
-    <p class="auth-field__error" *ngIf="fieldError('altPhone') as key">{{ key | translate }}</p>
-  </div>
-
-  <div class="auth-field">
-    <label class="auth-field__label" for="gaf-landmark">{{ 'account.addressForm.landmarkLabel' | translate }}</label>
-    <input id="gaf-landmark" type="text" class="auth-field__input" formControlName="landmark" />
-    <p class="guest-address-form__helper">{{ 'account.addressForm.landmarkHelper' | translate }}</p>
   </div>
 
   <div class="auth-field">

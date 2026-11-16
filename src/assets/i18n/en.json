@@ -52,7 +52,9 @@
   },
   "topBar": {
     "cod": "Cash on Delivery",
-    "myOrders": "My Orders"
+    "myOrders": "My Orders",
+    "call": "Call us",
+    "whatsapp": "WhatsApp"
   },
   "wishlist": {
     "title": "Wishlist",
@@ -87,13 +89,6 @@
     "hero": {
       "tagline": "Crafted to Last"
     },
-    "feature": {
-      "delivery": "Free delivery in Greater Cairo",
-      "cod": "Cash on delivery",
-      "madeToOrder": "Made to order",
-      "experience": "15 years of craftsmanship",
-      "deliveryHelper": "Cairo, Giza and Qalyubia"
-    },
     "blurb": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
     "socialAria": "Follow us on social media",
     "social": {
@@ -127,6 +122,9 @@
     "addToCart": "Add to Cart",
     "outOfStock": "Out of Stock",
     "outOfStockBadge": "Sold Out",
+    "madeToOrderBadge": "Made to order",
+    "customWorkBadge": "Custom work",
+    "ratingAria": "Rated {{average}} out of 5 from {{count}} reviews. Go to the reviews",
     "inStock": "In Stock",
     "viewDetails": "View Details",
     "viewProduct": "View Product",
@@ -137,6 +135,7 @@
     "specifications": "Specifications",
     "alsoLike": "You May Also Like",
     "notFound": "This product could not be found.",
+    "quantityLabel": "Quantity",
     "gallery": {
       "zoom": "Zoom image",
       "previous": "Previous image",
@@ -170,12 +169,16 @@
     "empty": "Your cart is empty",
     "continueShopping": "Continue Shopping",
     "checkoutCta": "Proceed to Checkout",
+    "subtotalOneItem": "Subtotal (1 item)",
     "subtotalWithCount": "Subtotal ({{count}} items)",
     "shipping": "Shipping",
     "shippingNote": "Calculated at checkout based on your governorate",
     "total": "Total",
     "orderSummary": "Order Summary",
     "codBadge": "Cash on Delivery",
+    "discount": "Discount",
+    "assembly": "Assembly",
+    "helpPrompt": "Questions about your order?",
     "clearCart": "Clear Cart",
     "headerProduct": "Product",
     "headerPrice": "Price",
@@ -193,6 +196,13 @@
     "warningsPriceTitle": "Prices have changed since you added these items"
   },
   "checkout": {
+    "progress": {
+      "label": "Checkout progress"
+    },
+    "requiredLegend": "Fields marked * are required.",
+    "errorSummary": {
+      "title": "Please fix the following to place your order:"
+    },
     "title": "Checkout",
     "subtitle": "Complete your order securely.",
     "contact": {
@@ -204,6 +214,8 @@
     "address": {
       "heading": "Shipping Address",
       "useDifferent": "Use a different address",
+      "showMore": "Add more details (area, building, floor, apartment, landmark)",
+      "hideMore": "Hide extra details",
       "noteLabel": "Order Note (optional)",
       "notePlaceholder": "Anything the courier or our team should know"
     },
@@ -239,6 +251,10 @@
       "copyAria": "Copy order number",
       "saveNumberNote": "Save this number — you'll need it if you contact us about this order.",
       "callNote": "We'll call you to confirm your order.",
+      "nextTitle": "What happens next",
+      "nextCall": "We call you to confirm your order and its details.",
+      "nextSchedule": "We agree a delivery date with you.",
+      "nextPay": "You pay in cash when your order arrives.",
       "continueShopping": "Continue Shopping",
       "viewOrders": "View My Orders",
       "unavailable": "We couldn't load this order's details here. Check your phone — we'll call to confirm it shortly."
@@ -439,6 +455,10 @@
     "emptyFiltered": "No projects in this category yet."
   },
   "customRequest": {
+    "requiredLegend": "Fields marked * are required.",
+    "errorSummary": {
+      "title": "Please fix the following to send your request:"
+    },
     "hero": {
       "eyebrow": "Custom work",
       "titleLine1": "Request a quote",
@@ -590,6 +610,7 @@
   },
   "home": {
     "hero": {
+      "title": "Royal Iron: iron furniture and architectural metalwork, made to order in Egypt",
       "imageAlt": "ROYAL IRON furniture",
       "tagline": "Handcrafted furniture in wood and forged iron, made in Egypt since 2008.",
       "cta": "Shop Now"
@@ -606,14 +627,8 @@
     "newArrivals": {
       "title": "New Arrivals",
       "viewAll": "View All"
-    },
-    "valueProps": {
-      "label": "Why customers choose us",
-      "cod": "Cash on delivery",
-      "workshop": "Made in our own workshop",
-      "warranty": "Two-year warranty",
-      "delivery": "Delivery across Egypt"
     }
+
   },
   "products": {
     "resultsCount": "{{count}} products",
@@ -633,7 +648,9 @@
       "price": "Price",
       "inStockOnly": "In Stock Only",
       "clearAll": "Clear All",
+      "showResults": "Show {{count}} products",
       "mobileButton": "Filters",
+      "sortAndFilter": "Sort & filter",
       "allCategory": "All {{name}}"
     },
     "empty": {
@@ -713,6 +730,8 @@
       "phonePlaceholder": "01xxxxxxxxx",
       "governorateLabel": "Governorate",
       "governoratePlaceholder": "Select a governorate",
+      "governorateSearch": "Search governorates",
+      "governorateNoMatch": "No governorate matches",
       "unavailable": "Unavailable",
       "altPhoneLabel": "Alternate Phone (optional)",
       "altPhoneHelper": "A second number helps the courier if the first doesn't answer.",
@@ -2988,6 +3007,7 @@
   },
   "sale": {
     "percentOff": "{{percent}}% off",
+    "youSave": "You save {{amount}}",
     "shopNow": "Shop the sale",
     "endsIn": "Ends in",
     "sectionLabel": "Sales",

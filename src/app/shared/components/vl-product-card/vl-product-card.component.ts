@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { APP_CONFIG } from '../../../core/constants/app-config';
-import { isReadyMade } from '../../../core/enums/fulfillment-type';
+import { FulfillmentType, isReadyMade } from '../../../core/enums/fulfillment-type';
 import { ProductSummaryResponse } from '../../../core/models';
 
 @Component({
@@ -20,5 +20,17 @@ export class VlProductCardComponent {
 
   get readyMade(): boolean {
     return isReadyMade(this.product);
+  }
+
+  /** Not sold off the shelf: say how it is sold (from the product's own fulfilment type, never invented). */
+  get fulfilmentBadgeKey(): string | null {
+    switch (this.product.fulfillmentType) {
+      case FulfillmentType.MADE_TO_ORDER:
+        return 'product.madeToOrderBadge';
+      case FulfillmentType.CUSTOM_WORK:
+        return 'product.customWorkBadge';
+      default:
+        return null;
+    }
   }
 }

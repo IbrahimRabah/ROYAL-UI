@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SelectModule } from 'primeng/select';
 import { SharedModule } from '../../shared/shared.module';
 
 import { CheckoutRoutingModule } from './checkout-routing.module';
@@ -29,6 +30,7 @@ import { CheckoutSummarySidebarComponent } from './components/checkout-summary-s
   imports: [
     CommonModule,
     CheckoutRoutingModule,
+    SelectModule,
     SharedModule
   ]
 })

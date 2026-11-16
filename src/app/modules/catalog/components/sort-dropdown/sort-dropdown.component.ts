@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 import { SortOption } from '../../../../core/enums/sort-option';
 
-interface SortChoice {
+export interface SortChoice {
   value: SortOption;
   labelKey: string;
 }
 
-const SORT_CHOICES: SortChoice[] = [
+export const SORT_CHOICES: SortChoice[] = [
   { value: SortOption.NEWEST, labelKey: 'products.sort.newest' },
   { value: SortOption.PRICE_ASC, labelKey: 'products.sort.priceAsc' },
   { value: SortOption.PRICE_DESC, labelKey: 'products.sort.priceDesc' },

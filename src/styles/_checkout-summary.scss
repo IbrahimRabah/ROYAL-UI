@@ -283,7 +283,7 @@ button.checkout-summary__submit {
   i {
     flex-shrink: 0;
     margin-block-start: 2px;
-    color: var(--brand);
+    color: var(--brand-text);
   }
 
   small {
@@ -295,5 +295,32 @@ button.checkout-summary__submit {
 @media (prefers-reduced-motion: reduce) {
   .checkout-summary__value--fade {
     animation: none;
+  }
+}
+
+// "Questions about your order?  Call us · WhatsApp": shown under the buttons of the cart and the checkout summary.
+.help-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1) var(--sp-4);
+  margin-block-start: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.help-links__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 2.75rem; // 44px touch target
+  color: var(--brand-text);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
   }
 }

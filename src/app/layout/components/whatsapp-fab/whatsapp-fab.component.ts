@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { TranslateService } from '@ngx-translate/core';
 
 import { APP_CONFIG } from '../../../core/constants/app-config';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 import { LanguageStoreService } from '../../../core/state/language-store.service';
 import { UiStoreService } from '../../../core/state/ui-store.service';
 
@@ -20,9 +21,17 @@ export class WhatsappFabComponent {
   private readonly ui = inject(UiStoreService);
   private readonly translate = inject(TranslateService);
   private readonly languageStore = inject(LanguageStoreService);
+  private readonly analytics = inject(AnalyticsService);
 
   /** Lifted above the product page's sticky bar so the two never overlap. */
   readonly raised = this.ui.stickyBarVisible;
+
+  /** Lifted above the cart/checkout bottom CTA bar (phones/tablets only; the bar is hidden from `lg` up). */
+  readonly raisedMobile = this.ui.mobileBarVisible;
+
+  onClick(): void {
+    this.analytics.track('whatsapp_click', { source: 'fab' });
+  }
 
   readonly href = computed<string | null>(() => {
     this.languageStore.lang(); // message follows the interface language

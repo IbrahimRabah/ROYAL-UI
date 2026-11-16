@@ -26,6 +26,13 @@
   &--raised {
     inset-block-end: calc(var(--sticky-bar-h) + var(--sp-4) + env(safe-area-inset-bottom));
   }
+
+  // Cart / checkout: their fixed bottom CTA bar (phones and tablets only) must never sit under the button.
+  &--raised-mobile {
+    @media (max-width: 991.98px) {
+      inset-block-end: calc(var(--sticky-bar-h) + var(--sp-4) + env(safe-area-inset-bottom));
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

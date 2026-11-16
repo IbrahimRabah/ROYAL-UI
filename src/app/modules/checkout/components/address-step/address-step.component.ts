@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { AddressResponse, GovernorateResponse } from '../../../../core/models';
 import { AddressApiService } from '../../../../core/services/api/address-api.service';
 import { AuthStoreService } from '../../../../core/state/auth-store.service';
+import { FormIssue } from '../../../../shared/utils/form-issues.util';
 import { GuestAddressFields, GuestAddressFormComponent, GuestAddressFormValue } from '../guest-address-form/guest-address-form.component';
 
 export interface AddressStepValue {
@@ -76,6 +77,11 @@ export class AddressStepComponent implements OnInit {
     if (this.mode() === 'new') {
       this.guestForm?.touchAll();
     }
+  }
+
+  /** The guest form's invalid fields (a saved address has none to fix), top to bottom. */
+  invalidFields(): FormIssue[] {
+    return this.mode() === 'new' ? (this.guestForm?.invalidFields() ?? []) : [];
   }
 
   flagGovernorateNotServed(): void {

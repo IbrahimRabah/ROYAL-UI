@@ -12,9 +12,15 @@
   </div>
 
   <div class="product-gallery__main">
-    <span class="product-gallery__zoom" aria-hidden="true">
-      <i class="pi pi-search-plus"></i>
-    </span>
+    <button
+      type="button"
+      class="product-gallery__zoom"
+      aria-haspopup="dialog"
+      [attr.aria-label]="'product.gallery.zoom' | translate"
+      (click)="openLightbox()"
+    >
+      <i class="pi pi-search-plus" aria-hidden="true"></i>
+    </button>
 
     <button
       *ngIf="images.length > 1"
@@ -46,4 +52,55 @@
       <i class="pi pi-chevron-right" aria-hidden="true"></i>
     </button>
   </div>
+
+  <!--
+    Native modal <dialog>: the browser traps focus inside it, closes it on Escape and returns focus to the zoom
+    button that opened it. The image is only rendered while open, so nothing extra is downloaded up front.
+  -->
+  <dialog
+    #lightbox
+    class="product-gallery__lightbox"
+    [attr.aria-label]="productName"
+    (close)="onLightboxClosed()"
+    (click)="onDialogClick($event)"
+  >
+    <button
+      type="button"
+      class="product-gallery__lightbox-close"
+      [attr.aria-label]="'common.close' | translate"
+      (click)="closeLightbox()"
+    >
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+
+    <button
+      *ngIf="lightboxOpen() && images.length > 1"
+      type="button"
+      class="product-gallery__lightbox-nav product-gallery__lightbox-nav--prev"
+      [attr.aria-label]="'product.gallery.previous' | translate"
+      (click)="previous()"
+    >
+      <i class="pi pi-chevron-left" aria-hidden="true"></i>
+    </button>
+
+    <div class="product-gallery__lightbox-stage" *ngIf="lightboxOpen() && activeImage() as image">
+      <img
+        class="product-gallery__lightbox-image"
+        [class.product-gallery__lightbox-image--zoomed]="zoomed()"
+        [src]="image.url"
+        [alt]="image.alt || productName"
+        (click)="toggleZoom()"
+      />
+    </div>
+
+    <button
+      *ngIf="lightboxOpen() && images.length > 1"
+      type="button"
+      class="product-gallery__lightbox-nav product-gallery__lightbox-nav--next"
+      [attr.aria-label]="'product.gallery.next' | translate"
+      (click)="next()"
+    >
+      <i class="pi pi-chevron-right" aria-hidden="true"></i>
+    </button>
+  </dialog>
 </div>

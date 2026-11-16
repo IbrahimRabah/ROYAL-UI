@@ -7,7 +7,7 @@
       [attr.aria-pressed]="isSelected(value.id)"
       (click)="toggle.emit(value.id)"
     >
-      <span class="filter-color-swatches__dot" [style.background]="value.hexColor"></span>
+      <span class="filter-color-swatches__dot" [style.background]="value.hexColor | hexColor"></span>
       <span class="filter-color-swatches__name">{{ value.name }}</span>
       <span *ngIf="value.productCount != null" class="filter-color-swatches__count">{{ value.productCount }}</span>
     </button>

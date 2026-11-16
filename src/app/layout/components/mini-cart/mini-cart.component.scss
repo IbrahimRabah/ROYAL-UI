@@ -86,7 +86,7 @@
   &:hover,
   &:focus-visible {
     background: var(--surface-alt);
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -196,7 +196,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 

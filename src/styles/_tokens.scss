@@ -53,6 +53,9 @@
   --text-muted: #6b5d4f;
   --brand: var(--gold);
   --brand-hover: var(--gold-dp);
+  // Brand colour for TEXT on light surfaces. The bright gold (--brand) is only ~3:1 on paper/cream, below the 4.5:1
+  // WCAG AA minimum for body-size text; the deeper gold passes. Keep --brand for fills, borders and icons.
+  --brand-text: var(--gold-dp);
   --border: #e0d5c7;
 
   --fs-xs: clamp(0.6875rem, 0.66rem + 0.15vw, 0.75rem);

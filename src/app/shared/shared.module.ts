@@ -68,6 +68,7 @@ import { ImgFallbackDirective } from './directives/img-fallback.directive';
 import { WishlistHeartComponent } from './components/wishlist-heart/wishlist-heart.component';
 import { RecentlyViewedStripComponent } from './components/recently-viewed-strip/recently-viewed-strip.component';
 import { ImageUrlPipe } from './pipes/image-url.pipe';
+import { HexColorPipe } from './pipes/hex-color.pipe';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceInputDirective } from './directives/debounce-input.directive';
 import { OnlyDigitsDirective } from './directives/only-digits.directive';
@@ -138,6 +139,7 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     LazyImgDirective,
     ImgFallbackDirective,
     ImageUrlPipe,
+    HexColorPipe,
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,
@@ -218,6 +220,7 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     LazyImgDirective,
     ImgFallbackDirective,
     ImageUrlPipe,
+    HexColorPipe,
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,

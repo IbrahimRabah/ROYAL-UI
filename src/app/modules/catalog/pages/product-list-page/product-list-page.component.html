@@ -25,12 +25,6 @@
     [cards]="categoryCards()"
   ></app-category-card-grid>
 
-  <button type="button" class="plp__mobile-filters-btn" (click)="openMobileFilters()">
-    <i class="pi pi-sliders-h" aria-hidden="true"></i>
-    {{ 'products.filters.mobileButton' | translate }}
-    <span *ngIf="activeFilterCount() > 0" class="plp__mobile-filters-count">{{ activeFilterCount() }}</span>
-  </button>
-
   <div class="plp__layout">
     <aside class="plp__sidebar">
       <app-filter-sidebar
@@ -95,7 +89,33 @@
   </div>
 </div>
 
-<app-mobile-filter-drawer [visible]="mobileFiltersOpen()" (visibleChange)="mobileFiltersOpen.set($event)">
+<!-- Sort and filter in one place on phones: this bar (always on screen) opens the panel below. -->
+<div class="plp-bar">
+  <span class="plp-bar__count" aria-live="polite">
+    {{ 'products.resultsCount' | translate: { count: productsPage().totalElements } }}
+  </span>
+  <button type="button" class="plp-bar__btn" (click)="openMobileFilters()" aria-haspopup="dialog">
+    <i class="pi pi-sliders-h" aria-hidden="true"></i>
+    {{ 'products.filters.sortAndFilter' | translate }}
+    <span *ngIf="activeFilterCount() > 0" class="plp__mobile-filters-count">{{ activeFilterCount() }}</span>
+  </button>
+</div>
+
+<app-mobile-filter-drawer
+  [visible]="mobileFiltersOpen()"
+  [resultCount]="productsLoading() ? null : productsPage().totalElements"
+  [canClear]="hasActiveFilters()"
+  (visibleChange)="mobileFiltersOpen.set($event)"
+  (clearAll)="onClearAllFilters()"
+>
+  <fieldset class="plp-sort">
+    <legend class="plp-sort__legend">{{ 'products.sortLabel' | translate }}</legend>
+    <label class="plp-sort__option" *ngFor="let choice of sortChoices">
+      <input type="radio" name="plp-sort" [value]="choice.value" [checked]="sort() === choice.value" (change)="onSortChange(choice.value)" />
+      <span>{{ choice.labelKey | translate }}</span>
+    </label>
+  </fieldset>
+
   <app-filter-sidebar
     [facets]="facets()"
     [filter]="queryFilter()"

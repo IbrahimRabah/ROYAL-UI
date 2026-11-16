@@ -173,6 +173,26 @@
 
 // ---- primary action + sticky bar ------------------------------------------------------------
 
+.pdp__qty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-3);
+
+  // 44px touch targets on the +/- buttons (the shared stepper is 32px, which is right for the dense cart rows).
+  ::ng-deep .vl-qty-stepper__btn {
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+  }
+}
+
+.pdp__qty-label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
 .pdp__primary-action app-add-to-cart-box,
 .pdp-bar__action app-add-to-cart-box {
   display: block;
@@ -287,4 +307,35 @@
 .pdp__sale-ends {
   margin-inline-start: auto;
   color: var(--text-muted, #6b6b6b);
+}
+
+.pdp__breadcrumb {
+  display: block;
+  padding-block: var(--sp-3);
+}
+
+// The rating under the title: stars, average and count, one 44px tap target that jumps to the reviews.
+.pdp__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 2.75rem;
+  margin-block-end: var(--sp-2);
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+}
+
+.pdp__rating-average {
+  font-weight: 700;
+  color: var(--ink);
 }

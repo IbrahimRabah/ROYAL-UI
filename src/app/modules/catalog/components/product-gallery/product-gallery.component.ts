@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output, computed, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, computed, effect, inject, signal, untracked } from '@angular/core';
 
 import { ImageResponse } from '../../../../core/models';
+import { ScrollLockService } from '../../../../core/services/scroll-lock.service';
 
 @Component({
   selector: 'app-product-gallery',
@@ -15,6 +16,12 @@ export class ProductGalleryComponent implements OnDestroy {
   private readonly imageOpacitySignal = signal(1);
   private fadeTimer: ReturnType<typeof setTimeout> | null = null;
   private hasImages = false;
+  private readonly scrollLock = inject(ScrollLockService);
+
+  @ViewChild('lightbox') private lightboxRef?: ElementRef<HTMLDialogElement>;
+
+  readonly lightboxOpen = signal(false);
+  readonly zoomed = signal(false);
 
   @Input({ required: true }) productName!: string;
 
@@ -59,6 +66,41 @@ export class ProductGalleryComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     if (this.fadeTimer) clearTimeout(this.fadeTimer);
+    // Leaving the page with the lightbox open removes the <dialog> without a `close` event: release the lock here.
+    if (this.lightboxOpen()) this.scrollLock.unlock();
+  }
+
+  openLightbox(): void {
+    const dialog = this.lightboxRef?.nativeElement;
+    if (!dialog || dialog.open || typeof dialog.showModal !== 'function') return;
+    this.zoomed.set(false);
+    this.lightboxOpen.set(true);
+    dialog.showModal();
+    this.scrollLock.lock();
+  }
+
+  closeLightbox(): void {
+    this.lightboxRef?.nativeElement.close();
+  }
+
+  /** Fires for Escape, the close button and `close()` alike. */
+  onLightboxClosed(): void {
+    if (!this.lightboxOpen()) return;
+    this.lightboxOpen.set(false);
+    this.zoomed.set(false);
+    this.scrollLock.unlock();
+  }
+
+  /** A click on the dark backdrop (the dialog or its empty stage, not the image or a button) dismisses it. */
+  onDialogClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement | null;
+    if (target === this.lightboxRef?.nativeElement || target?.classList.contains('product-gallery__lightbox-stage')) {
+      this.closeLightbox();
+    }
+  }
+
+  toggleZoom(): void {
+    this.zoomed.update((value) => !value);
   }
 
   select(i: number): void {

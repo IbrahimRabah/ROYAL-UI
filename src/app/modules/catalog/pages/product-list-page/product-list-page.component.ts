@@ -1,11 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import { BreadcrumbItem } from '../../../../shared/components/vl-breadcrumb/vl-breadcrumb.component';
 import { CategoryFilterOption } from '../../components/filter-sidebar/filter-sidebar.component';
+import { SORT_CHOICES } from '../../components/sort-dropdown/sort-dropdown.component';
 import { ActiveFilterChip } from '../../components/active-filters-bar/active-filters-bar.component';
 import { CategoryCard } from '../../components/category-card-grid/category-card-grid.component';
 import { APP_CONFIG } from '../../../../core/constants/app-config';
@@ -20,10 +21,12 @@ import {
   ProductSummaryResponse,
   PublicPromotion,
 } from '../../../../core/models';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { CatalogApiService } from '../../../../core/services/api/catalog-api.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { MarketingApiService } from '../../../../core/services/api/marketing-api.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
+import { UiStoreService } from '../../../../core/state/ui-store.service';
 
 interface ResolvedCategory {
   node: CategoryNode;
@@ -80,6 +83,8 @@ export class ProductListPageComponent {
   private readonly languageStore = inject(LanguageStoreService);
   private readonly translate = inject(TranslateService);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly ui = inject(UiStoreService);
 
   private readonly queryParamMap = toSignal(this.route.queryParamMap, {
     initialValue: this.route.snapshot.queryParamMap,
@@ -136,6 +141,7 @@ export class ProductListPageComponent {
   private readonly retryTick = signal(0);
 
   readonly mobileFiltersOpen = signal(false);
+  readonly sortChoices = SORT_CHOICES;
   readonly bannerBroken = signal(false);
   readonly promoBroken = signal(false);
 
@@ -296,6 +302,10 @@ export class ProductListPageComponent {
   });
 
   constructor() {
+    // The fixed sort / filter bar (below lg) owns the bottom edge: the WhatsApp button lifts above it.
+    this.ui.setMobileBarVisible(true);
+    inject(DestroyRef).onDestroy(() => this.ui.setMobileBarVisible(false));
+
     this.marketingApi.promotions().subscribe({ next: (list) => this.sales.set(list), error: () => {} });
     effect(() => {
       this.languageStore.lang();
@@ -345,6 +355,9 @@ export class ProductListPageComponent {
         next: (page) => {
           this.productsPage.set(page);
           this.productsLoading.set(false);
+          if (page.totalElements === 0) {
+            this.analytics.track('zero_results', { query: filter.q ?? null, source: 'products' });
+          }
         },
         error: () => {
           this.productsLoading.set(false);
@@ -445,7 +458,10 @@ export class ProductListPageComponent {
 
   private updateQueryParams(patch: Record<string, unknown>, resetPage = true): void {
     const queryParams: Record<string, unknown> = { ...patch };
-    if (resetPage) queryParams['page'] = null;
+    if (resetPage) {
+      queryParams['page'] = null;
+      this.analytics.track('filter_apply', { filters: Object.keys(patch).join(',') });
+    }
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,

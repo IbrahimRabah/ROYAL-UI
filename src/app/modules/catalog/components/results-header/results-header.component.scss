@@ -17,3 +17,14 @@
   font-size: var(--fs-sm);
   color: var(--text-muted);
 }
+
+// Below lg the sort lives in the filter panel (opened from the bottom bar), so the row keeps only the count.
+.results-header__row app-sort-dropdown {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .results-header__row app-sort-dropdown {
+    display: block;
+  }
+}

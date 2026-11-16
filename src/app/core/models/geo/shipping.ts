@@ -19,6 +19,8 @@ export interface ShippingQuoteResponse {
   deliveryDaysMin: number;
   deliveryDaysMax: number;
   orderSubtotal: Money;
+  /** Assembly fees included in `estimatedTotal`; absent on older API builds. */
+  assemblyTotal?: Money;
   totalWeightGrams: number;
   estimatedTotal: Money;
 }

@@ -26,6 +26,12 @@ export class ProductPriceBlockComponent {
     return this.compareAt != null && money(this.compareAt) > money(this.price) ? PRICE_FORMATTER.format(money(this.compareAt)) : null;
   }
 
+  /** "You save": the regular price minus the price now, per piece; null when nothing is discounted. */
+  get savingsFormatted(): string | null {
+    const saved = money(this.compareAt) - money(this.price);
+    return this.compareAt != null && saved > 0 ? PRICE_FORMATTER.format(saved) : null;
+  }
+
   get formatted(): string {
     return PRICE_FORMATTER.format(money(this.price));
   }

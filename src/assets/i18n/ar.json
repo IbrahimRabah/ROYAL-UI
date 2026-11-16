@@ -52,7 +52,9 @@
   },
   "topBar": {
     "cod": "الدفع عند الاستلام",
-    "myOrders": "طلباتي"
+    "myOrders": "طلباتي",
+    "call": "اتصل بنا",
+    "whatsapp": "واتساب"
   },
   "wishlist": {
     "title": "المفضلة",
@@ -87,13 +89,6 @@
     "hero": {
       "tagline": "صناعة تدوم"
     },
-    "feature": {
-      "delivery": "توصيل مجاني للقاهرة الكبرى",
-      "cod": "الدفع عند الاستلام",
-      "madeToOrder": "تصنيع حسب الطلب",
-      "experience": "١٥ عامًا من الحرفية",
-      "deliveryHelper": "القاهرة والجيزة والقليوبية"
-    },
     "blurb": "أثاث مصنوع يدويًا من الخشب والحديد المشغول، في مصر منذ ٢٠٠٨.",
     "socialAria": "تابعنا على وسائل التواصل الاجتماعي",
     "social": {
@@ -127,6 +122,9 @@
     "addToCart": "أضف إلى السلة",
     "outOfStock": "غير متوفر",
     "outOfStockBadge": "نفد",
+    "madeToOrderBadge": "حسب الطلب",
+    "customWorkBadge": "تصنيع خاص",
+    "ratingAria": "تقييم {{average}} من 5 من {{count}} مراجعة. انتقل إلى المراجعات",
     "inStock": "متوفر",
     "viewDetails": "عرض التفاصيل",
     "viewProduct": "اعرض المنتج",
@@ -137,6 +135,7 @@
     "specifications": "المواصفات",
     "alsoLike": "قد يعجبك أيضاً",
     "notFound": "تعذر العثور على هذا المنتج.",
+    "quantityLabel": "الكمية",
     "gallery": {
       "zoom": "تكبير الصورة",
       "previous": "الصورة السابقة",
@@ -170,12 +169,16 @@
     "empty": "سلتك فارغة",
     "continueShopping": "متابعة التسوق",
     "checkoutCta": "متابعة إتمام الطلب",
+    "subtotalOneItem": "الإجمالي الفرعي (منتج واحد)",
     "subtotalWithCount": "الإجمالي الفرعي ({{count}} منتج)",
     "shipping": "الشحن",
     "shippingNote": "يُحسب عند إتمام الطلب حسب محافظتك",
     "total": "الإجمالي",
     "orderSummary": "ملخص الطلب",
     "codBadge": "الدفع عند الاستلام",
+    "discount": "الخصم",
+    "assembly": "التركيب",
+    "helpPrompt": "هل لديك سؤال عن طلبك؟",
     "clearCart": "إفراغ السلة",
     "headerProduct": "المنتج",
     "headerPrice": "السعر",
@@ -193,6 +196,13 @@
     "warningsPriceTitle": "تغيّرت أسعار بعض المنتجات في سلتك"
   },
   "checkout": {
+    "progress": {
+      "label": "مراحل إتمام الطلب"
+    },
+    "requiredLegend": "الحقول المميزة بعلامة * مطلوبة.",
+    "errorSummary": {
+      "title": "من فضلك صحّح الآتي لإتمام الطلب:"
+    },
     "title": "إتمام الطلب",
     "subtitle": "أكمل طلبك بكل أمان.",
     "contact": {
@@ -204,6 +214,8 @@
     "address": {
       "heading": "عنوان الشحن",
       "useDifferent": "استخدم عنوانًا آخر",
+      "showMore": "إضافة تفاصيل أخرى (المنطقة، العمارة، الدور، الشقة، علامة مميزة)",
+      "hideMore": "إخفاء التفاصيل الإضافية",
       "noteLabel": "ملاحظة للطلب (اختياري)",
       "notePlaceholder": "أي شيء يجب أن يعرفه المندوب أو فريقنا"
     },
@@ -239,6 +251,10 @@
       "copyAria": "نسخ رقم الطلب",
       "saveNumberNote": "احفظ هذا الرقم — ستحتاجه إذا تواصلت معنا بخصوص الطلب.",
       "callNote": "سنتصل بك لتأكيد طلبك.",
+      "nextTitle": "ماذا يحدث بعد ذلك",
+      "nextCall": "سنتصل بك لتأكيد طلبك وتفاصيله.",
+      "nextSchedule": "نتفق معك على موعد التوصيل.",
+      "nextPay": "تدفع نقداً عند استلام طلبك.",
       "continueShopping": "متابعة التسوق",
       "viewOrders": "عرض طلباتي",
       "unavailable": "تعذّر تحميل تفاصيل هذا الطلب هنا. تابع هاتفك — سنتصل لتأكيده قريبًا."
@@ -439,6 +455,10 @@
     "emptyFiltered": "لا توجد مشاريع في هذا التصنيف بعد."
   },
   "customRequest": {
+    "requiredLegend": "الحقول المميزة بعلامة * مطلوبة.",
+    "errorSummary": {
+      "title": "من فضلك صحّح الآتي لإرسال طلبك:"
+    },
     "hero": {
       "eyebrow": "تصنيع مخصوص",
       "titleLine1": "اطلب عرض سعر",
@@ -590,6 +610,7 @@
   },
   "home": {
     "hero": {
+      "title": "رويال آيرون: أثاث حديد وأعمال معمارية بالتصنيع حسب الطلب في مصر",
       "imageAlt": "أثاث رويال آيرون",
       "tagline": "أثاث مصنوع يدويًا من الخشب والحديد المشغول، في مصر منذ ٢٠٠٨.",
       "cta": "تسوّق الآن"
@@ -606,14 +627,8 @@
     "newArrivals": {
       "title": "وصل حديثاً",
       "viewAll": "عرض الكل"
-    },
-    "valueProps": {
-      "label": "لماذا يختارنا عملاؤنا",
-      "cod": "الدفع عند الاستلام",
-      "workshop": "تصنيع في ورشتنا",
-      "warranty": "ضمان سنتين",
-      "delivery": "شحن لكل المحافظات"
     }
+
   },
   "products": {
     "resultsCount": "{{count}} منتج",
@@ -633,7 +648,9 @@
       "price": "السعر",
       "inStockOnly": "المتوفر فقط",
       "clearAll": "مسح الكل",
+      "showResults": "عرض {{count}} منتج",
       "mobileButton": "الفلاتر",
+      "sortAndFilter": "الترتيب والتصفية",
       "allCategory": "كل {{name}}"
     },
     "empty": {
@@ -713,6 +730,8 @@
       "phonePlaceholder": "01xxxxxxxxx",
       "governorateLabel": "المحافظة",
       "governoratePlaceholder": "اختر المحافظة",
+      "governorateSearch": "ابحث عن المحافظة",
+      "governorateNoMatch": "لا توجد محافظة بهذا الاسم",
       "unavailable": "غير متاحة",
       "altPhoneLabel": "رقم موبايل آخر (اختياري)",
       "altPhoneHelper": "رقم إضافي يساعد المندوب لو الهاتف الأساسي لا يرد.",
@@ -2988,6 +3007,7 @@
   },
   "sale": {
     "percentOff": "خصم {{percent}}%",
+    "youSave": "توفّر {{amount}}",
     "shopNow": "تسوّق العرض",
     "endsIn": "ينتهي بعد",
     "sectionLabel": "العروض",

@@ -1,6 +1,10 @@
 <ng-container *ngIf="!loading(); else loadingTpl">
   <ng-container *ngIf="product() as p; else notFoundTpl">
     <section class="pdp section">
+      <div class="container-vl">
+        <app-vl-breadcrumb class="pdp__breadcrumb" [items]="breadcrumbItems()"></app-vl-breadcrumb>
+      </div>
+
       <div class="container-vl pdp__grid">
         <app-product-gallery
           [images]="galleryImages()"
@@ -13,6 +17,13 @@
           <span *ngIf="p.newArrival" class="pdp__badge">{{ 'product.new' | translate }}</span>
 
           <h1 class="pdp__name">{{ p.name }}</h1>
+
+          <button type="button" class="pdp__rating" *ngIf="p.ratingCount" (click)="scrollToReviews()"
+            [attr.aria-label]="('product.ratingAria' | translate: { average: (p.ratingAvg | number: '1.1-1' : 'en-US'), count: p.ratingCount })">
+            <app-vl-stars [value]="p.ratingAvg" size="sm"></app-vl-stars>
+            <span class="pdp__rating-average">{{ p.ratingAvg | number: '1.1-1' : 'en-US' }}</span>
+            <span class="pdp__rating-count">({{ p.ratingCount }})</span>
+          </button>
 
           <p class="pdp__meta">
             <span>{{ categoryName() }}</span>
@@ -35,11 +46,24 @@
           <p class="pdp__short-desc">{{ p.shortDescription }}</p>
 
           <app-variant-selector
-            *ngIf="readyMade() && colorGroup() as group"
-            [colorGroup]="group"
-            [selectedValueId]="isPosterDisplayed() ? null : selectedValueId()"
+            *ngIf="readyMade() && (colorGroup() || optionGroups().length)"
+            [colorGroup]="colorGroup()"
+            [selectedValueId]="isPosterDisplayed() && (colorGroup()?.values?.length ?? 0) > 1 ? null : selectedValueId()"
+            [optionGroups]="optionGroups()"
+            [selectedOptionIds]="selectedOptionIds()"
             (selectedValueIdChange)="selectValue($event)"
+            (optionSelect)="selectOption($event.groupId, $event.valueId)"
           ></app-variant-selector>
+
+          <div class="pdp__qty" *ngIf="readyMade() && inStock()">
+            <span class="pdp__qty-label">{{ 'product.quantityLabel' | translate }}</span>
+            <app-vl-quantity-stepper
+              [value]="effectiveQuantity()"
+              [max]="maxQuantity()"
+              (decrease)="decreaseQuantity()"
+              (increase)="increaseQuantity()"
+            ></app-vl-quantity-stepper>
+          </div>
 
           <!-- The page's one primary action. The sticky bar renders this same template, so it can never drift. -->
           <div #primaryActionAnchor class="pdp__primary-action">
@@ -116,7 +140,7 @@
         />
         <div class="pdp-bar__info">
           <span class="pdp-bar__name">{{ p.name }}</span>
-          <app-vl-price *ngIf="readyMade(); else barOnRequest" class="pdp-bar__price" [minPrice]="displayPrice()"></app-vl-price>
+          <app-vl-price *ngIf="readyMade(); else barOnRequest" class="pdp-bar__price" [minPrice]="linePrice()"></app-vl-price>
           <ng-template #barOnRequest>
             <span class="pdp-bar__price">{{ 'product.priceOnRequest' | translate }}</span>
           </ng-template>

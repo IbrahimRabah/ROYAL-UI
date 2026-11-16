@@ -23,7 +23,12 @@ export class MobileFilterDrawerComponent implements OnChanges, OnDestroy {
   private readonly document = inject(DOCUMENT);
 
   @Input() visible = false;
+  /** Live number of products matching the current filters; shown on the apply button when known. */
+  @Input() resultCount: number | null = null;
+  /** True when at least one filter is active, which enables the footer's "clear all". */
+  @Input() canClear = false;
   @Output() readonly visibleChange = new EventEmitter<boolean>();
+  @Output() readonly clearAll = new EventEmitter<void>();
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('visible' in changes && isPlatformBrowser(this.platformId)) {

@@ -14,7 +14,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
     background: var(--surface-alt);
   }
 }
@@ -44,7 +44,7 @@
   &:hover,
   &:focus-visible {
     background: var(--surface-alt);
-    color: var(--brand);
+    color: var(--brand-text);
   }
 
   &:disabled {

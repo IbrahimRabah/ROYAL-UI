@@ -19,8 +19,18 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  object-fit: fill;
+  // `fill` stretched the artwork whenever the 700px cap made the box narrower than the image's own ratio
+  // (phones wider than ~394px). `cover` keeps the proportions and trims a little off the edges instead.
+  object-fit: cover;
   object-position: center;
+}
+
+// The primary call to action: a comfortable touch target (>= 44px tall) and a legible label on phones.
+.hero-banner .hero-banner__cta {
+  min-block-size: 2.75rem;
+  padding-inline: var(--sp-6);
+  font-size: var(--fs-base);
+  font-weight: 600;
 }
 
 .hero-banner__content {

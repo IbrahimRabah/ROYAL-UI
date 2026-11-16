@@ -4,3 +4,28 @@
     animation: none;
   }
 }
+
+// Governorate list of the checkout address form (rendered inside the field, in the white card; styled here because PrimeNG builds it outside the component view).
+// Never wider than the phone screen, with 44px rows; the search box is 16px so iOS does not zoom the page on focus.
+.gaf-select-panel {
+  // Exactly as wide as the field it belongs to, so the list opens inside the white card instead of spilling past it.
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+
+  .p-select-option {
+    display: flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    white-space: normal;
+  }
+
+  .p-select-filter {
+    min-block-size: 2.75rem;
+    font-size: 1rem;
+  }
+}
+
+.gaf-select__unavailable {
+  color: var(--text-muted);
+}

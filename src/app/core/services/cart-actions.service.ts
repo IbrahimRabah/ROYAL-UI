@@ -27,7 +27,16 @@ export class CartActionsService {
   }
 
   add(variantId: number, quantity = 1): Observable<CartResponse> {
-    return this.cartApi.addItem({ variantId, quantity }).pipe(tap((cart) => this.cartStore.set(cart)));
+    return this.cartApi.addItem({ variantId, quantity }).pipe(
+      tap((cart) => this.cartStore.set(cart)),
+      catchError((err: unknown) => {
+        // 409 = the stock moved (or the cart changed in another tab): reload the real cart; the error still reaches the caller.
+        if (err instanceof HttpErrorResponse && err.status === 409) {
+          this.cartApi.getCart().subscribe((cart) => this.cartStore.set(cart));
+        }
+        return throwError(() => err);
+      }),
+    );
   }
 
   updateQuantity(itemId: number, quantity: number): Observable<CartResponse> {

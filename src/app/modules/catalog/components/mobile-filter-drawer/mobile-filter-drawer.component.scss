@@ -25,7 +25,8 @@
   transform: translateX(100%);
   transition: transform 280ms ease;
   z-index: var(--z-drawer);
-  overflow-y: auto;
+  // The panel itself never scrolls: only the body does, so the footer (apply button) stays pinned on screen.
+  overflow: hidden;
 
   :host-context([dir='rtl']) & {
     transform: translateX(-100%);
@@ -58,8 +59,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 2rem;
-  block-size: 2rem;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
   border: none;
   background: transparent;
   color: var(--text-muted);
@@ -69,6 +70,9 @@
 
 .mobile-filter-drawer__body {
   flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--sp-4);
 }
 
@@ -78,13 +82,37 @@
   padding: 0;
 }
 
+.mobile-filter-drawer__header,
 .mobile-filter-drawer__footer {
+  flex: 0 0 auto;
+}
+
+.mobile-filter-drawer__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
   padding: var(--sp-4);
+  padding-block-end: calc(var(--sp-4) + env(safe-area-inset-bottom));
   border-block-start: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.mobile-filter-drawer__clear {
+  flex: 0 0 auto;
+  min-block-size: 2.75rem;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .mobile-filter-drawer__apply {
-  inline-size: 100%;
+  flex: 1 1 auto;
+  min-block-size: 2.75rem;
   padding: var(--sp-3);
   border: none;
   border-radius: var(--r-sm);

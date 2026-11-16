@@ -24,6 +24,15 @@
 
   <p class="confirmation-page__call-note">{{ 'checkout.confirmation.callNote' | translate }}</p>
 
+  <section class="confirmation-next" [attr.aria-label]="'checkout.confirmation.nextTitle' | translate">
+    <h2 class="confirmation-next__title">{{ 'checkout.confirmation.nextTitle' | translate }}</h2>
+    <ol class="confirmation-next__list">
+      <li>{{ 'checkout.confirmation.nextCall' | translate }}</li>
+      <li>{{ 'checkout.confirmation.nextSchedule' | translate }}</li>
+      <li>{{ 'checkout.confirmation.nextPay' | translate }}</li>
+    </ol>
+  </section>
+
   <ng-container *ngIf="loading()">
     <div class="confirmation-page__loading">
       <p-skeleton height="6rem" borderRadius="var(--r-md)"></p-skeleton>

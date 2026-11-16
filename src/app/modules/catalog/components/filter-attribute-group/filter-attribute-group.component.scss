@@ -11,10 +11,14 @@
   display: flex;
   align-items: center;
   gap: var(--sp-3);
+  min-block-size: 2.75rem; // 44px touch target
 }
 
 .filter-attribute-group__label {
   flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  align-self: stretch; // the whole label strip toggles the checkbox, not just the 18px box
   font-size: var(--fs-sm);
   color: var(--text);
   cursor: pointer;

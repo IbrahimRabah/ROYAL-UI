@@ -203,3 +203,90 @@
   padding-block-start: var(--sp-6);
   border-block-start: 1px solid var(--border);
 }
+
+// ---- sort / filter bar (phones and tablets) ------------------------------------------------------------------
+.plp {
+  // Room for the fixed bar so it never covers the last products or the pagination.
+  padding-block-end: calc(var(--sticky-bar-h) + var(--sp-5) + env(safe-area-inset-bottom));
+
+  @include breakpoints.lg {
+    padding-block-end: var(--sp-5);
+  }
+}
+
+.plp-bar {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-block-size: var(--sticky-bar-h);
+  padding: var(--sp-3) var(--sp-4);
+  padding-block-end: calc(var(--sp-3) + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-block-start: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+
+  @include breakpoints.lg {
+    display: none;
+  }
+}
+
+.plp-bar__count {
+  min-inline-size: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.plp-bar__btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-block-size: 2.75rem;
+  padding: var(--sp-2) var(--sp-5);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+// Sort choices at the top of the filter panel.
+.plp-sort {
+  margin: 0 0 var(--sp-4);
+  padding: 0 0 var(--sp-3);
+  border: none;
+  border-block-end: 1px solid var(--line-soft);
+}
+
+.plp-sort__legend {
+  margin-block-end: var(--sp-2);
+  padding: 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.plp-sort__option {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: 2.75rem; // 44px touch target
+  font-size: var(--fs-base);
+  color: var(--text);
+  cursor: pointer;
+
+  input {
+    accent-color: var(--brand);
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+}

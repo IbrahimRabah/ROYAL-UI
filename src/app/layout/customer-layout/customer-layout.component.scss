@@ -1,4 +1,12 @@
 // A real block box spanning the whole page: it is the containing block that lets the sticky header row stick.
 :host {
   display: block;
+
+  // Readability on phones: body text 16px, secondary text, labels and navigation never below 14px, 1.5 line height.
+  // Set here (not on :root) so the admin screens, which are dense tables, keep their own sizes.
+  --fs-base: 1rem;
+  --fs-sm: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --fs-xs: 0.8125rem;
+  font-size: var(--fs-base);
+  line-height: 1.5;
 }

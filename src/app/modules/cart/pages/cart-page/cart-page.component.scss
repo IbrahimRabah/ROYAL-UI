@@ -34,7 +34,7 @@
     text-decoration: none;
 
     &:hover, &:focus-visible {
-      color: var(--brand);
+      color: var(--brand-text);
     }
   }
 }
@@ -56,7 +56,7 @@
   font-weight: 600;
 
   &:hover, &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 
   i {
@@ -160,7 +160,7 @@
     flex-shrink: 0;
     margin-block-start: 2px;
     font-size: 1.25rem;
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -186,7 +186,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-4);
+  min-block-size: var(--sticky-bar-h);
   padding: var(--sp-3) var(--sp-4);
+  padding-block-end: calc(var(--sp-3) + env(safe-area-inset-bottom));
   background: var(--surface);
   box-shadow: var(--shadow-md);
 
@@ -213,7 +215,7 @@
   border-radius: var(--r-md);
   background: var(--ink);
   color: var(--paper);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   font-weight: 600;
   cursor: pointer;
 

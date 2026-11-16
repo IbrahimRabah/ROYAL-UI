@@ -35,6 +35,11 @@
       <span class="checkout-summary__value"><app-vl-price [minPrice]="cart.subtotal"></app-vl-price></span>
     </div>
 
+    <div class="checkout-summary__row" *ngIf="hasAssembly">
+      <span class="checkout-summary__label">{{ 'cart.assembly' | translate }}</span>
+      <span class="checkout-summary__value"><app-vl-price [minPrice]="assemblyTotal"></app-vl-price></span>
+    </div>
+
     <div class="checkout-summary__row">
       <span class="checkout-summary__label">{{ 'checkout.summary.shipping' | translate }}</span>
 
@@ -68,6 +73,14 @@
     {{ 'checkout.errors.processing' | translate }}
   </p>
   <p class="checkout-summary__error" *ngIf="submitError && !processing">{{ submitError }}</p>
+  <div class="help-links" *ngIf="showContactHelp && submitError && !processing">
+    <a class="help-links__link" [href]="'tel:' + contact.phone" (click)="onContactClick('call_click')">
+      <i class="pi pi-phone" aria-hidden="true"></i> {{ 'topBar.call' | translate }}
+    </a>
+    <a class="help-links__link" [href]="contact.whatsappUrl" target="_blank" rel="noopener" (click)="onContactClick('whatsapp_click')">
+      <i class="pi pi-whatsapp" aria-hidden="true"></i> {{ 'topBar.whatsapp' | translate }}
+    </a>
+  </div>
 
   <button type="button" class="checkout-summary__submit" [disabled]="submitting || processing" (click)="placeOrder.emit()">
     <span class="auth-submit__spinner" *ngIf="submitting" aria-hidden="true"></span>
@@ -89,6 +102,15 @@
     <div class="checkout-summary__reassurance-item">
       <i class="pi pi-verified" aria-hidden="true"></i>
       <span>{{ 'checkout.summary.reassurance.authentic' | translate }}</span>
+    </div>
+    <div class="help-links">
+      <span class="help-links__prompt">{{ 'cart.helpPrompt' | translate }}</span>
+      <a class="help-links__link" [href]="'tel:' + contact.phone" (click)="onContactClick('call_click')">
+        <i class="pi pi-phone" aria-hidden="true"></i> {{ 'topBar.call' | translate }}
+      </a>
+      <a class="help-links__link" [href]="contact.whatsappUrl" target="_blank" rel="noopener" (click)="onContactClick('whatsapp_click')">
+        <i class="pi pi-whatsapp" aria-hidden="true"></i> {{ 'topBar.whatsapp' | translate }}
+      </a>
     </div>
   </div>
   </div>

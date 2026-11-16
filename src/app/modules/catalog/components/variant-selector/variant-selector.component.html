@@ -1,18 +1,40 @@
-<div class="variant-selector" *ngIf="colorGroup.values.length">
-  <p class="variant-selector__label" *ngIf="selectedValueName">
-    {{ 'product.color' | translate }}: <span class="variant-selector__value">{{ selectedValueName }}</span>
-  </p>
+<div class="variant-selector">
+  <div class="variant-selector__group" *ngIf="colorGroup && colorGroup.values.length" role="group" [attr.aria-label]="'product.color' | translate">
+    <p class="variant-selector__label">
+      {{ 'product.color' | translate }}<ng-container *ngIf="selectedValueName">: <span class="variant-selector__value">{{ selectedValueName }}</span></ng-container>
+    </p>
 
-  <div class="variant-selector__swatches">
-    <button
-      *ngFor="let value of colorGroup.values"
-      type="button"
-      class="variant-selector__swatch"
-      [class.variant-selector__swatch--active]="value.id === selectedValueId"
-      [style.background]="value.hexColor"
-      [attr.aria-label]="value.name"
-      [attr.aria-pressed]="value.id === selectedValueId"
-      (click)="select(value.id)"
-    ></button>
+    <div class="variant-selector__chips">
+      <button
+        *ngFor="let value of colorGroup.values"
+        type="button"
+        class="variant-selector__chip"
+        [class.variant-selector__chip--active]="value.id === selectedValueId"
+        [attr.aria-pressed]="value.id === selectedValueId"
+        (click)="select(value.id)"
+      >
+        <span class="variant-selector__dot" [style.background]="value.hexColor | hexColor" aria-hidden="true"></span>
+        <span class="variant-selector__chip-text">{{ value.name }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="variant-selector__group" *ngFor="let group of optionGroups" role="group" [attr.aria-label]="group.name">
+    <p class="variant-selector__label">
+      {{ group.name }}<ng-container *ngIf="selectedOptionName(group) as chosen">: <span class="variant-selector__value">{{ chosen }}</span></ng-container>
+    </p>
+
+    <div class="variant-selector__chips">
+      <button
+        *ngFor="let value of group.values"
+        type="button"
+        class="variant-selector__chip"
+        [class.variant-selector__chip--active]="value.id === selectedOptionIds[group.attributeId]"
+        [attr.aria-pressed]="value.id === selectedOptionIds[group.attributeId]"
+        (click)="selectOption(group, value.id)"
+      >
+        <span class="variant-selector__chip-text">{{ value.name }}</span>
+      </button>
+    </div>
   </div>
 </div>

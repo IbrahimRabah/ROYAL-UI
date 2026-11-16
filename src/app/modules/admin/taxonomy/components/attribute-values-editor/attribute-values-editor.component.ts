@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TranslateService } from '@ngx-translate/core';
 
 import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
+import { normalizeHexColor } from '../../../../../shared/utils/hex-color.util';
 
 export interface AttributeValueRow {
   id: number | null;
@@ -61,7 +62,8 @@ export class AttributeValuesEditorComponent {
   }
 
   updateHexFromText(index: number, value: string): void {
-    this.updateRow(index, { hexColor: value.trim() || null });
+    // A hex typed without its `#` is not a valid CSS colour (the swatch would render transparent): add it.
+    this.updateRow(index, { hexColor: normalizeHexColor(value) });
   }
 
   moveUp(index: number): void {

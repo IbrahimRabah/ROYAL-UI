@@ -68,19 +68,116 @@
   position: absolute;
   inset-block-start: var(--sp-4);
   inset-inline-end: var(--sp-4);
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: 40px;
-  block-size: 40px;
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 0;
+  border: none;
   border-radius: var(--r-full);
   background: var(--paper);
   color: var(--ink);
   box-shadow: var(--shadow-sm);
+  cursor: zoom-in;
 
   i {
     font-size: 1rem;
   }
+}
+
+.product-gallery__lightbox {
+  inline-size: 100vw;
+  block-size: 100dvh;
+  max-inline-size: 100vw;
+  max-block-size: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--paper);
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgba(20, 17, 15, 0.92);
+  }
+
+  &[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.product-gallery__lightbox-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.product-gallery__lightbox-image {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+  // Pinch-zoom stays native on touch screens; a tap/click toggles the 2x view below.
+  touch-action: pinch-zoom;
+
+  &--zoomed {
+    max-inline-size: none;
+    max-block-size: none;
+    inline-size: 200%;
+    cursor: zoom-out;
+    margin: auto;
+  }
+}
+
+.product-gallery__lightbox-close,
+.product-gallery__lightbox-nav {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.product-gallery__lightbox-close {
+  inset-block-start: calc(var(--sp-4) + env(safe-area-inset-top));
+  inset-inline-end: var(--sp-4);
+}
+
+.product-gallery__lightbox-nav {
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+
+  i {
+    :host-context([dir='rtl']) & {
+      transform: scaleX(-1);
+    }
+  }
+}
+
+.product-gallery__lightbox-nav--prev {
+  inset-inline-start: var(--sp-4);
+}
+
+.product-gallery__lightbox-nav--next {
+  inset-inline-end: var(--sp-4);
 }
 
 .product-gallery__nav {

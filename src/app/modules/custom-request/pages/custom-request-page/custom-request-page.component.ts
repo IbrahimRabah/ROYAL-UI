@@ -21,6 +21,7 @@ import { CustomRequestApiService } from '../../../../core/services/api/custom-re
 import { GeoApiService } from '../../../../core/services/api/geo-api.service';
 import { LanguageStoreService } from '../../../../core/state/language-store.service';
 import { getFieldErrorKey } from '../../../../shared/utils/field-error-key.util';
+import { FormIssue } from '../../../../shared/utils/form-issues.util';
 import { egyptianPhoneValidator } from '../../../../shared/validators/egyptian-phone.validator';
 
 type FieldName = 'contactName' | 'phone' | 'email' | 'governorateId' | 'area' | 'streetAddress'
@@ -76,6 +77,9 @@ export class CustomRequestPageComponent implements OnDestroy {
     return img ? { url: img.thumbUrl || img.url, alt: img.alt || this.product()!.name } : null;
   }
 
+  /** Fields to fix, listed in the error summary after a submit attempt with missing or invalid data. */
+  readonly issues = signal<FormIssue[]>([]);
+
   readonly photos = signal<PhotoItem[]>([]);
   /** Translation key + params for the latest rejected file(s). */
   readonly photoError = signal<{ key: string; params: Record<string, string | number> } | null>(null);
@@ -117,6 +121,11 @@ export class CustomRequestPageComponent implements OnDestroy {
         error: () => {},
       });
     }, { allowSignalWrites: true });
+
+    // Once the summary is showing, keep it in step with the form: fixed fields drop off, an all-valid form clears it.
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      if (this.issues().length) this.issues.set(this.collectIssues());
+    });
 
     this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       this.productSlug = params.get('product')?.trim() || null;
@@ -232,6 +241,7 @@ export class CustomRequestPageComponent implements OnDestroy {
     this.failed.set(false);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.issues.set(this.collectIssues());
       this.focusFirstInvalid();
       return;
     }
@@ -267,6 +277,37 @@ export class CustomRequestPageComponent implements OnDestroy {
     } catch {
       // Clipboard can be blocked; the number is still selectable on screen.
     }
+  }
+
+  /** Click on a summary entry: jump to that field instead of following the "#id" link. */
+  onIssueClick(event: Event, id: string): void {
+    event.preventDefault();
+    if (!this.isBrowser) return;
+    const el = this.host.nativeElement.querySelector<HTMLElement>('#' + id);
+    el?.focus({ preventScroll: true });
+    el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  /** The invalid fields in on-screen order, for the summary. */
+  private collectIssues(): FormIssue[] {
+    const fields: { name: FieldName; id: string; labelKey: string }[] = [
+      { name: 'contactName', id: 'cr-name', labelKey: 'customRequest.form.name' },
+      { name: 'phone', id: 'cr-phone', labelKey: 'customRequest.form.phone' },
+      { name: 'email', id: 'cr-email', labelKey: 'customRequest.form.email' },
+      { name: 'governorateId', id: 'cr-gov', labelKey: 'customRequest.form.governorate' },
+    ];
+    const issues: FormIssue[] = [];
+    for (const field of fields) {
+      const errorKey = this.fieldError(field.name);
+      if (errorKey) issues.push({ id: field.id, labelKey: field.labelKey, errorKey });
+    }
+    // The three measurements share one message, so they are one entry (linked to the first of them).
+    if (this.fieldError('widthCm') || this.fieldError('heightCm') || this.fieldError('depthCm')) {
+      issues.push({ id: 'cr-w', labelKey: 'customRequest.form.dimensions', errorKey: 'customRequest.errors.dimension' });
+    }
+    const quantityError = this.fieldError('quantity');
+    if (quantityError) issues.push({ id: 'cr-qty', labelKey: 'customRequest.form.quantity', errorKey: quantityError });
+    return issues;
   }
 
   private focusFirstInvalid(): void {

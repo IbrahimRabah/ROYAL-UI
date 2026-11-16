@@ -133,6 +133,27 @@
     <a routerLink="/contact" class="mobile-nav-drawer__link" (click)="close()">
       {{ 'common.contact' | translate }}
     </a>
+    <a routerLink="/me/orders" class="mobile-nav-drawer__link" (click)="close()">
+      {{ 'topBar.myOrders' | translate }}
+    </a>
+
+    <!-- Reach a person in one tap: dial, or open WhatsApp. -->
+    <div class="mobile-nav-drawer__contact">
+      <a class="mobile-nav-drawer__contact-btn" [href]="'tel:' + contact.phone" (click)="onContactClick('call_click')">
+        <i class="pi pi-phone" aria-hidden="true"></i>
+        {{ 'topBar.call' | translate }}
+      </a>
+      <a
+        class="mobile-nav-drawer__contact-btn mobile-nav-drawer__contact-btn--wa"
+        [href]="contact.whatsappUrl"
+        target="_blank"
+        rel="noopener"
+        (click)="onContactClick('whatsapp_click')"
+      >
+        <i class="pi pi-whatsapp" aria-hidden="true"></i>
+        {{ 'topBar.whatsapp' | translate }}
+      </a>
+    </div>
 
     <hr class="mobile-nav-drawer__divider" />
 

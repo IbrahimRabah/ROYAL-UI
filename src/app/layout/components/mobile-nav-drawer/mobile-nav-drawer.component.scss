@@ -127,7 +127,7 @@
   &:hover,
   &:focus-visible {
     background: var(--surface-alt);
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -210,7 +210,7 @@
   overflow-wrap: anywhere;
 
   &--all {
-    color: var(--brand);
+    color: var(--brand-text);
     font-weight: 600;
   }
 
@@ -223,5 +223,37 @@
 
   &--child {
     padding-inline-start: var(--sp-5);
+  }
+}
+
+// Call / WhatsApp: two full-width-ish 44px buttons at the bottom of the menu.
+.mobile-nav-drawer__contact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-3);
+}
+
+.mobile-nav-drawer__contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-block-size: 2.75rem;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--ink);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--surface-alt);
+  }
+
+  &--wa i {
+    color: #1a9d50;
   }
 }

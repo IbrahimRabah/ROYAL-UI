@@ -48,6 +48,18 @@
       </div>
 
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="cr-form" *ngIf="productState() !== 'unavailable' && productState() !== 'error'">
+        <div class="form-error-summary" role="alert" *ngIf="issues().length">
+          <p class="form-error-summary__title">{{ 'customRequest.errorSummary.title' | translate }}</p>
+          <ul class="form-error-summary__list">
+            <li *ngFor="let issue of issues()">
+              <a [href]="'#' + issue.id" (click)="onIssueClick($event, issue.id)">{{ issue.labelKey | translate }}</a>:
+              {{ issue.errorKey | translate }}
+            </li>
+          </ul>
+        </div>
+
+        <p class="form-required-legend">{{ 'customRequest.requiredLegend' | translate }}</p>
+
         <div class="cr-segmented" *ngIf="productState() === 'none'" role="group" [attr.aria-label]="'customRequest.form.typeLabel' | translate">
           <button
             *ngFor="let option of typeOptions"
@@ -63,34 +75,45 @@
         </div>
 
         <div class="auth-field" [class.auth-field--invalid]="fieldError('contactName') || serverError('contactName')">
-          <label class="auth-field__label" for="cr-name">{{ 'customRequest.form.name' | translate }}</label>
-          <input id="cr-name" type="text" class="auth-field__input" formControlName="contactName" maxlength="150" autocomplete="name" />
-          <p class="auth-field__error" *ngIf="serverError('contactName') as m">{{ m }}</p>
-          <p class="auth-field__error" *ngIf="fieldError('contactName') as key">{{ key | translate }}</p>
+          <label class="auth-field__label" for="cr-name">{{ 'customRequest.form.name' | translate }}<span class="auth-field__required" aria-hidden="true">*</span></label>
+          <input id="cr-name" type="text" class="auth-field__input" formControlName="contactName" maxlength="150" autocomplete="name"
+            required aria-required="true"
+            [attr.aria-invalid]="(fieldError('contactName') || serverError('contactName')) ? 'true' : null"
+            [attr.aria-describedby]="(fieldError('contactName') || serverError('contactName')) ? 'cr-name-error' : null" />
+          <p class="auth-field__error" id="cr-name-error" *ngIf="serverError('contactName') as m">{{ m }}</p>
+          <p class="auth-field__error" id="cr-name-error" *ngIf="fieldError('contactName') as key">{{ key | translate }}</p>
         </div>
 
         <div class="auth-field" [class.auth-field--invalid]="fieldError('phone') || serverError('phone')">
-          <label class="auth-field__label" for="cr-phone">{{ 'customRequest.form.phone' | translate }}</label>
-          <input id="cr-phone" type="tel" dir="ltr" class="auth-field__input cr-ltr" formControlName="phone" placeholder="01xxxxxxxxx" autocomplete="tel" />
-          <p class="auth-field__error" *ngIf="serverError('phone') as m">{{ m }}</p>
-          <p class="auth-field__error" *ngIf="fieldError('phone') as key">{{ key | translate }}</p>
+          <label class="auth-field__label" for="cr-phone">{{ 'customRequest.form.phone' | translate }}<span class="auth-field__required" aria-hidden="true">*</span></label>
+          <input id="cr-phone" type="tel" inputmode="tel" dir="ltr" class="auth-field__input cr-ltr" formControlName="phone" placeholder="01xxxxxxxxx" autocomplete="tel"
+            required aria-required="true"
+            [attr.aria-invalid]="(fieldError('phone') || serverError('phone')) ? 'true' : null"
+            [attr.aria-describedby]="(fieldError('phone') || serverError('phone')) ? 'cr-phone-error' : null" />
+          <p class="auth-field__error" id="cr-phone-error" *ngIf="serverError('phone') as m">{{ m }}</p>
+          <p class="auth-field__error" id="cr-phone-error" *ngIf="fieldError('phone') as key">{{ key | translate }}</p>
         </div>
 
         <div class="auth-field" [class.auth-field--invalid]="fieldError('email') || serverError('email')">
           <label class="auth-field__label" for="cr-email">{{ 'customRequest.form.email' | translate }}</label>
-          <input id="cr-email" type="email" dir="ltr" class="auth-field__input cr-ltr" formControlName="email" maxlength="255" autocomplete="email" />
-          <p class="auth-field__error" *ngIf="serverError('email') as m">{{ m }}</p>
-          <p class="auth-field__error" *ngIf="fieldError('email') as key">{{ key | translate }}</p>
+          <input id="cr-email" type="email" dir="ltr" class="auth-field__input cr-ltr" formControlName="email" maxlength="255" autocomplete="email"
+            [attr.aria-invalid]="(fieldError('email') || serverError('email')) ? 'true' : null"
+            [attr.aria-describedby]="(fieldError('email') || serverError('email')) ? 'cr-email-error' : null" />
+          <p class="auth-field__error" id="cr-email-error" *ngIf="serverError('email') as m">{{ m }}</p>
+          <p class="auth-field__error" id="cr-email-error" *ngIf="fieldError('email') as key">{{ key | translate }}</p>
         </div>
 
         <div class="auth-field" [class.auth-field--invalid]="fieldError('governorateId') || serverError('governorateId')">
-          <label class="auth-field__label" for="cr-gov">{{ 'customRequest.form.governorate' | translate }}</label>
-          <select id="cr-gov" class="auth-field__input" formControlName="governorateId">
+          <label class="auth-field__label" for="cr-gov">{{ 'customRequest.form.governorate' | translate }}<span class="auth-field__required" aria-hidden="true">*</span></label>
+          <select id="cr-gov" class="auth-field__input" formControlName="governorateId" autocomplete="address-level1"
+            required aria-required="true"
+            [attr.aria-invalid]="(fieldError('governorateId') || serverError('governorateId')) ? 'true' : null"
+            [attr.aria-describedby]="(fieldError('governorateId') || serverError('governorateId')) ? 'cr-gov-error' : null">
             <option [ngValue]="null" disabled>{{ 'account.addressForm.governoratePlaceholder' | translate }}</option>
             <option *ngFor="let gov of governorates()" [ngValue]="gov.id" >{{ gov.name }}</option>
           </select>
-          <p class="auth-field__error" *ngIf="serverError('governorateId') as m">{{ m }}</p>
-          <p class="auth-field__error" *ngIf="fieldError('governorateId') as key">{{ key | translate }}</p>
+          <p class="auth-field__error" id="cr-gov-error" *ngIf="serverError('governorateId') as m">{{ m }}</p>
+          <p class="auth-field__error" id="cr-gov-error" *ngIf="fieldError('governorateId') as key">{{ key | translate }}</p>
         </div>
 
         <div class="auth-field">
@@ -127,8 +150,10 @@
 
         <div class="auth-field cr-quantity" [class.auth-field--invalid]="fieldError('quantity')">
           <label class="auth-field__label" for="cr-qty">{{ 'customRequest.form.quantity' | translate }}</label>
-          <input id="cr-qty" type="number" dir="ltr" inputmode="numeric" min="1" max="10000" step="1" class="auth-field__input cr-ltr" formControlName="quantity" />
-          <p class="auth-field__error" *ngIf="fieldError('quantity') as key">{{ key | translate }}</p>
+          <input id="cr-qty" type="number" dir="ltr" inputmode="numeric" min="1" max="10000" step="1" class="auth-field__input cr-ltr" formControlName="quantity"
+            [attr.aria-invalid]="fieldError('quantity') ? 'true' : null"
+            [attr.aria-describedby]="fieldError('quantity') ? 'cr-qty-error' : null" />
+          <p class="auth-field__error" id="cr-qty-error" *ngIf="fieldError('quantity') as key">{{ key | translate }}</p>
         </div>
 
         <div class="auth-field">

@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { CategoryNode, PortfolioCategory } from '../../../core/models';
+import { APP_CONFIG } from '../../../core/constants/app-config';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 import { CatalogApiService } from '../../../core/services/api/catalog-api.service';
 import { PortfolioApiService } from '../../../core/services/api/portfolio-api.service';
 import { LanguageStoreService } from '../../../core/state/language-store.service';
@@ -14,6 +16,13 @@ export class SiteHeaderComponent {
   private readonly catalogApi = inject(CatalogApiService);
   private readonly portfolioApi = inject(PortfolioApiService);
   private readonly languageStore = inject(LanguageStoreService);
+  private readonly analytics = inject(AnalyticsService);
+
+  readonly contact = APP_CONFIG.contact;
+
+  onCallClick(): void {
+    this.analytics.track('call_click', { source: 'header' });
+  }
 
   readonly categories = signal<CategoryNode[]>([]);
   /** Architectural Work menu entries; empty (also on failure) collapses the menu to one plain link. */

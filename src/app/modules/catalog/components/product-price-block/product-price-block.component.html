@@ -3,3 +3,4 @@
   <del *ngIf="wasFormatted as was" class="product-price-block__was"><span class="product-price-block__sr">{{ 'sale.was' | translate }}</span> {{ was }}</del>
   <span *ngIf="wasFormatted && percent" class="product-price-block__off">{{ 'sale.percentOff' | translate: { percent: percent } }}</span>
 </p>
+<p class="product-price-block__save" *ngIf="savingsFormatted as save">{{ 'sale.youSave' | translate: { amount: save } }}</p>

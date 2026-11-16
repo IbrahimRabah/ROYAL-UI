@@ -19,6 +19,8 @@ import { NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { CategoryNode, PortfolioCategory } from '../../../core/models';
+import { APP_CONFIG } from '../../../core/constants/app-config';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 import { ScrollLockService } from '../../../core/services/scroll-lock.service';
 
 const FOCUSABLE_SELECTOR =
@@ -49,6 +51,9 @@ export class MobileNavDrawerComponent implements OnChanges, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly scrollLock = inject(ScrollLockService);
+  private readonly analytics = inject(AnalyticsService);
+
+  readonly contact = APP_CONFIG.contact;
 
   @Input() categories: CategoryNode[] = [];
   @Input() workCategories: PortfolioCategory[] = [];
@@ -112,6 +117,10 @@ export class MobileNavDrawerComponent implements OnChanges, OnDestroy {
     if (!q) return;
     this.close();
     void this.router.navigate(['/products'], { queryParams: { q } });
+  }
+
+  onContactClick(event: 'call_click' | 'whatsapp_click'): void {
+    this.analytics.track(event, { source: 'drawer' });
   }
 
   close(): void {

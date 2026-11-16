@@ -4,7 +4,7 @@
       appImgFallback
       class="vl-product-card__image"
       [src]="product.imageUrl | imageUrl"
-      [alt]="product.imageAlt"
+      [alt]="product.imageAlt || product.name"
       loading="lazy"
       decoding="async"
     />
@@ -17,7 +17,7 @@
         *ngIf="product.hoverImageUrl"
         class="vl-product-card__image vl-product-card__image--hover"
         [src]="product.hoverImageUrl"
-        [alt]="product.imageAlt"
+        [alt]="product.imageAlt || product.name"
         loading="lazy"
         decoding="async"
       />
@@ -32,6 +32,9 @@
       </span>
       <span *ngIf="readyMade && product.discountPercent" class="vl-product-card__badge vl-product-card__badge--sale">
         {{ 'sale.percentOff' | translate: { percent: product.discountPercent } }}
+      </span>
+      <span *ngIf="fulfilmentBadgeKey as badgeKey" class="vl-product-card__badge vl-product-card__badge--made">
+        {{ badgeKey | translate }}
       </span>
       <span *ngIf="readyMade && !product.inStock" class="vl-product-card__badge vl-product-card__badge--out">
         {{ 'product.outOfStockBadge' | translate }}

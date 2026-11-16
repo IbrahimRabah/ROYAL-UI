@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,6 +10,7 @@ import { CartActionsService } from '../../../../core/services/cart-actions.servi
 import { ConfirmDialogService } from '../../../../core/services/confirm-dialog.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { CartStoreService } from '../../../../core/state/cart-store.service';
+import { UiStoreService } from '../../../../core/state/ui-store.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -25,6 +26,9 @@ export class CartPageComponent {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
+  private readonly ui = inject(UiStoreService);
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly cartStore = inject(CartStoreService);
 
   readonly loading = signal(true);
@@ -37,6 +41,10 @@ export class CartPageComponent {
       this.loading.set(false);
       return;
     }
+
+    // The fixed bottom CTA bar is rendered only for a loaded, non-empty cart: lift the WhatsApp button above it then.
+    effect(() => this.ui.setMobileBarVisible(!this.loading() && !this.cartStore.isEmpty()), { allowSignalWrites: true });
+    this.destroyRef.onDestroy(() => this.ui.setMobileBarVisible(false));
 
     this.cartApi.getCart().subscribe({
       next: (cart) => {

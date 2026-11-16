@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { getFieldErrorKey } from '../../../../shared/utils/field-error-key.util';
+import { FormIssue, collectFormIssues } from '../../../../shared/utils/form-issues.util';
 import { egyptianPhoneValidator } from '../../../../shared/validators/egyptian-phone.validator';
 import { AuthStoreService } from '../../../../core/state/auth-store.service';
 
@@ -20,6 +21,7 @@ type FieldName = 'phone' | 'email';
 export class ReviewStepComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authStore = inject(AuthStoreService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Output() readonly contactChange = new EventEmitter<{ value: ContactValue; valid: boolean }>();
 
@@ -45,6 +47,15 @@ export class ReviewStepComponent implements OnInit {
 
   touchAll(): void {
     this.form.markAllAsTouched();
+    this.cdr.markForCheck();
+  }
+
+  /** The invalid fields, top to bottom (call after touchAll). */
+  invalidFields(): FormIssue[] {
+    return collectFormIssues([
+      { id: 'contact-phone', labelKey: 'checkout.contact.phoneLabel', control: this.form.get('phone') },
+      { id: 'contact-email', labelKey: 'checkout.contact.emailLabel', control: this.form.get('email') },
+    ]);
   }
 
   private emit(): void {

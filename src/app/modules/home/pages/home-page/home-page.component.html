@@ -1,26 +1,3 @@
-<!-- Who you are dealing with, in two seconds. Quiet reassurance above the hero, so it is visible without scrolling.
-     Copy lives in the locale files (home.valueProps.*) and is deliberately limited to claims that are true here. -->
-<section class="home-values" [attr.aria-label]="'home.valueProps.label' | translate">
-  <ul class="container-vl home-values__list">
-    <li class="home-values__item">
-      <i class="pi pi-money-bill" aria-hidden="true"></i>
-      <span>{{ 'home.valueProps.cod' | translate }}</span>
-    </li>
-    <li class="home-values__item">
-      <i class="pi pi-wrench" aria-hidden="true"></i>
-      <span>{{ 'home.valueProps.workshop' | translate }}</span>
-    </li>
-    <li class="home-values__item">
-      <i class="pi pi-shield" aria-hidden="true"></i>
-      <span>{{ 'home.valueProps.warranty' | translate }}</span>
-    </li>
-    <li class="home-values__item">
-      <i class="pi pi-truck" aria-hidden="true"></i>
-      <span>{{ 'home.valueProps.delivery' | translate }}</span>
-    </li>
-  </ul>
-</section>
-
 <app-hero-banner></app-hero-banner>
 
 <app-sale-banners [max]="3"></app-sale-banners>

@@ -103,7 +103,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-4);
+  min-block-size: var(--sticky-bar-h);
   padding: var(--sp-3) var(--sp-4);
+  padding-block-end: calc(var(--sp-3) + env(safe-area-inset-bottom));
   background: var(--surface);
   box-shadow: var(--shadow-md);
 
@@ -131,7 +133,7 @@ button.checkout-page__mobile-bar-cta {
   border-radius: var(--r-md);
   background: var(--ink);
   color: var(--paper);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -141,4 +143,79 @@ button.checkout-page__mobile-bar-cta {
     opacity: 0.4;
     cursor: not-allowed;
   }
+}
+
+// ---- progress indicator: contact -> address -> confirm -------------------------------------------------------
+.checkout-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-6);
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-steps__item {
+  position: relative;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+
+  // The line to the next step.
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 1rem;
+    inset-inline-start: calc(50% + 1.25rem);
+    inline-size: calc(100% - 2.5rem);
+    block-size: 2px;
+    background: var(--line);
+  }
+
+  &--done:not(:last-child)::after {
+    background: var(--brand);
+  }
+}
+
+.checkout-steps__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 2px solid var(--line);
+  border-radius: var(--r-full);
+  background: var(--paper);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+}
+
+.checkout-steps__item--current {
+  color: var(--ink);
+  font-weight: 700;
+
+  .checkout-steps__dot {
+    border-color: var(--brand);
+    color: var(--brand-text);
+  }
+}
+
+.checkout-steps__item--done {
+  color: var(--ink);
+
+  .checkout-steps__dot {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--ink);
+  }
+}
+
+.checkout-steps__label {
+  overflow-wrap: anywhere;
 }

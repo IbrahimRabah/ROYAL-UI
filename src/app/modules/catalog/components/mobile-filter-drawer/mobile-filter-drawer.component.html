@@ -31,8 +31,19 @@
   </div>
 
   <div class="mobile-filter-drawer__footer">
+    <button
+      *ngIf="canClear"
+      type="button"
+      class="mobile-filter-drawer__clear"
+      (click)="clearAll.emit()"
+    >
+      {{ 'products.filters.clearAll' | translate }}
+    </button>
     <button type="button" class="mobile-filter-drawer__apply" (click)="close()">
-      {{ 'common.confirm' | translate }}
+      <ng-container *ngIf="resultCount !== null; else confirmLabel">
+        {{ 'products.filters.showResults' | translate: { count: resultCount } }}
+      </ng-container>
+      <ng-template #confirmLabel>{{ 'common.confirm' | translate }}</ng-template>
     </button>
   </div>
 </div>

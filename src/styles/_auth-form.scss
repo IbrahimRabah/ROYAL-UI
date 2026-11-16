@@ -111,7 +111,7 @@ button.auth-field__toggle {
   transition: color 200ms ease;
 
   &:hover {
-    color: var(--gold);
+    color: var(--brand-text);
   }
 }
 
@@ -261,5 +261,56 @@ button.auth-submit {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+// A required field's asterisk. Decorative: the input itself carries `required` / `aria-required` for assistive tech.
+.auth-field__required {
+  margin-inline-start: var(--sp-1);
+  color: var(--stop);
+  font-weight: 700;
+}
+
+.auth-field__input[aria-invalid='true'] {
+  border-color: var(--stop);
+}
+
+// "Fields marked * are required" line above a form.
+.form-required-legend {
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+// Shown after a failed submit: lists every field to fix, each linking to its input.
+.form-error-summary {
+  margin-block-end: var(--sp-5);
+  padding: var(--sp-4);
+  border: 1px solid var(--stop);
+  border-radius: var(--r-md);
+  background: var(--stop-bg);
+  color: var(--ink);
+  outline: none;
+}
+
+.form-error-summary__title {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--stop);
+}
+
+.form-error-summary__list {
+  margin: 0;
+  padding-inline-start: var(--sp-5);
+  font-size: var(--fs-sm);
+
+  li + li {
+    margin-block-start: var(--sp-1);
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: underline;
   }
 }

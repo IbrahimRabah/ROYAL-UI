@@ -1,3 +1,9 @@
+// The header row is laid out for these exact sizes (the English labels are long: the full menu only just fits between
+// the logo and the search icon). The storefront-wide text size is a little larger, so the menu keeps its own.
+:host {
+  --fs-sm: 0.875rem;
+}
+
 .main-nav {
   display: flex;
   align-items: center;
@@ -26,12 +32,12 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
 .main-nav__link--active {
-  color: var(--brand);
+  color: var(--brand-text);
   border-block-end-color: var(--brand);
 }
 
@@ -96,7 +102,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -120,7 +126,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -149,7 +155,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -167,12 +173,6 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--sp-2);
-}
-
-.main-nav__count {
-  color: var(--text-muted);
-  font-size: var(--fs-xs, 0.75rem);
-  opacity: 0.7;
 }
 
 .main-nav__feature-media {
@@ -217,7 +217,7 @@
 }
 
 .main-nav__link--all {
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .main-nav__all {
@@ -234,7 +234,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -290,7 +290,7 @@
   &:hover,
   &:focus-visible {
     background: var(--surface-alt);
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
@@ -306,7 +306,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--brand);
+    color: var(--brand-text);
   }
 }
 
