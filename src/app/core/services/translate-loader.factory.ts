@@ -1,7 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
 import { TranslateLoader, TranslationObject } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Observable, of } from 'rxjs';
 
 import { Language } from '../enums/language';
@@ -14,11 +11,16 @@ const STATIC_TRANSLATIONS: Record<Language, TranslationObject> = {
 };
 
 /**
- * Server-only loader. Node's fetch (used by provideHttpClient(withFetch())) rejects the
- * relative URL TranslateHttpLoader builds ('./assets/i18n/ar.json') since there is no page
- * origin to resolve it against, and this app's CommonEngine/prerender setup has no live
- * server to answer that request during `ng build` anyway. So instead of a network round
- * trip, SSR reads the same JSON straight out of the compiled bundle.
+ * Reads the translations straight out of the compiled bundle, on the server AND in the browser.
+ *
+ * The browser used to download ./assets/i18n/<lang>.json. That file is served with a one-year cache lifetime (every
+ * static file is, see server.ts), so a returning visitor kept the OLD file after a release: every string added since
+ * then showed as its raw key ("topBar.call", "products.filters.sortAndFilter"). The server render never had the
+ * problem, which is why the page looked right until the browser took over. The JSON is already part of the bundle
+ * (the server loader imports it), and the bundle's file name changes with every build, so reading it from there keeps
+ * the texts and the code from the same release together, with no extra request.
+ *
+ * On the server there is also no page origin for a relative URL to resolve against, and `ng build` has no live server.
  */
 class StaticTranslateLoader extends TranslateLoader {
   getTranslation(lang: string): Observable<TranslationObject> {
@@ -26,8 +28,7 @@ class StaticTranslateLoader extends TranslateLoader {
   }
 }
 
-export function translateLoaderFactory(http: HttpClient, platformId: object): TranslateLoader {
-  return isPlatformBrowser(platformId)
-    ? new TranslateHttpLoader(http, './assets/i18n/', '.json')
-    : new StaticTranslateLoader();
+// The parameters are kept so the module's `deps: [HttpClient, PLATFORM_ID]` stays valid; neither is needed any more.
+export function translateLoaderFactory(_http?: unknown, _platformId?: object): TranslateLoader {
+  return new StaticTranslateLoader();
 }
