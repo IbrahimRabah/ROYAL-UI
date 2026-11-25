@@ -1,0 +1,17 @@
+<app-category-banner
+  heading="h1"
+  [title]="'home.departments.furniture.title' | translate"
+  [subtitle]="'home.departments.furniture.subtitle' | translate"
+  [cta]="'home.departments.furniture.cta' | translate"
+  [bannerUrl]="bannerUrl"
+  link="/products"
+  [tiles]="tiles()"
+></app-category-banner>
+
+<app-featured-section
+  [products]="products()"
+  [loading]="productsLoading()"
+  titleKey="home.newArrivals.title"
+  viewAllKey="home.newArrivals.viewAll"
+  [viewAllParams]="{}"
+></app-featured-section>

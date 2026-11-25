@@ -1,4 +1,9 @@
 export const APP_CONFIG = {
+  /** The storefront's two departments. Banners live in assets until the admin gets a banner screen. */
+  departments: {
+    furniture: { banner: 'assets/images/departments/furniture-banner.jpg' },
+    architectural: { banner: 'assets/images/departments/crital-banner.jpg' },
+  },
   pagination: {
     products: { size: 24, maxSize: 60 },
     featuredProducts: { size: 12, maxSize: 60 },

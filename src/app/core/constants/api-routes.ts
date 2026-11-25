@@ -41,6 +41,7 @@ export const API_ROUTES = {
     relatedProducts: (productId: number) => `${BASE}/products/${productId}/related`,
     featuredProducts: () => `${BASE}/products/featured`,
     newArrivals: () => `${BASE}/products/new-arrivals`,
+    bestSellers: () => `${BASE}/products/best-sellers`,
     variantAvailability: (variantId: number) => `${BASE}/variants/${variantId}/availability`,
     brands: () => `${BASE}/brands`,
     categoryTree: () => `${BASE}/categories/tree`,
@@ -75,6 +76,7 @@ export const API_ROUTES = {
   },
   shipping: {
     quote: () => `${BASE}/shipping/quote`,
+    deliveryOptions: () => `${BASE}/shipping/governorates`,
   },
 
   admin: {

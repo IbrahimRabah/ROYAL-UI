@@ -3,107 +3,26 @@
     {{ 'common.home' | translate }}
   </a>
 
-  <!-- Top categories live in the bar itself; hovering one opens its subcategories + image. -->
-  <ng-container *ngFor="let category of visibleCategories">
-    <div
-      class="main-nav__item"
-      *ngIf="category.children.length; else plainCategory"
-      (mouseenter)="hoverOpen(catId(category))"
-      (mouseleave)="hoverClose(catId(category))"
-    >
-      <a
-        class="main-nav__link main-nav__trigger"
-        [class.main-nav__link--active]="isOpen(catId(category))"
-        [attr.data-menu]="catId(category)"
-        [attr.aria-expanded]="isOpen(catId(category))"
-        aria-haspopup="true"
-        [attr.aria-controls]="'main-nav-' + catId(category)"
-        routerLink="/products"
-        [queryParams]="{ categoryId: category.id }"
-        (keydown.arrowdown)="openWithKeyboard($event, catId(category))"
-      >
-        <span>{{ category.name }}</span>
-        <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
-      </a>
-
-      <div [id]="'main-nav-' + catId(category)" class="main-nav__mega" [class.main-nav__mega--open]="isOpen(catId(category))">
-        <div class="container-vl main-nav__mega-inner main-nav__feature">
-          <div class="main-nav__feature-body">
-            <a
-              class="main-nav__feature-title"
-              routerLink="/products"
-              [queryParams]="{ categoryId: category.id }"
-              (click)="closeAll()"
-            >{{ category.name }}</a>
-            <ul class="main-nav__feature-list">
-              <li *ngFor="let child of category.children">
-                <a
-                  class="main-nav__child"
-                  routerLink="/products"
-                  [queryParams]="{ categoryId: child.id }"
-                  (click)="closeAll()"
-                >
-                  <span>{{ child.name }}</span>
-                </a>
-              </li>
-            </ul>
-            <a
-              class="main-nav__all"
-              routerLink="/products"
-              [queryParams]="{ categoryId: category.id }"
-              (click)="closeAll()"
-            >
-              {{ 'header.nav.shopAll' | translate: { name: category.name } }}
-              <i class="pi pi-arrow-right main-nav__all-arrow" aria-hidden="true"></i>
-            </a>
-          </div>
-
-          <a
-            *ngIf="category.bannerUrl || category.imageUrl"
-            class="main-nav__feature-media"
-            routerLink="/products"
-            [queryParams]="{ categoryId: category.id }"
-            (click)="closeAll()"
-            tabindex="-1"
-            aria-hidden="true"
-          >
-            <img [src]="category.bannerUrl || category.imageUrl" alt="" loading="lazy" />
-            <span class="main-nav__feature-caption">{{ category.name }}</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <ng-template #plainCategory>
-      <a
-        class="main-nav__link"
-        routerLink="/products"
-        [queryParams]="{ categoryId: category.id }"
-      >{{ category.name }}</a>
-    </ng-template>
-  </ng-container>
-
-  <!-- Overflow: remaining categories as columns -->
-  <div class="main-nav__item" *ngIf="overflowCategories.length" (mouseenter)="hoverOpen('more')" (mouseleave)="hoverClose('more')">
-    <button
-      type="button"
+  <!-- Furniture: one mega menu holding every product category with its subcategories. -->
+  <div class="main-nav__item" *ngIf="categories.length; else furnitureLink" (mouseenter)="hoverOpen('furniture')" (mouseleave)="hoverClose('furniture')">
+    <a
       class="main-nav__link main-nav__trigger"
-      data-menu="more"
-      [class.main-nav__link--active]="isOpen('more')"
-      [attr.aria-expanded]="isOpen('more')"
+      data-menu="furniture"
+      [class.main-nav__link--active]="isOpen('furniture')"
+      [attr.aria-expanded]="isOpen('furniture')"
       aria-haspopup="true"
-      aria-controls="main-nav-more"
-      (click)="toggle('more')"
-      (keydown.arrowdown)="openWithKeyboard($event, 'more')"
+      aria-controls="main-nav-furniture"
+      routerLink="/furniture"
+      (keydown.arrowdown)="openWithKeyboard($event, 'furniture')"
     >
-      <span>{{ 'header.nav.more' | translate }}</span>
+      <span>{{ 'header.nav.furniture' | translate }}</span>
       <i class="pi pi-angle-down main-nav__chevron" aria-hidden="true"></i>
-    </button>
+    </a>
 
-    <div id="main-nav-more" class="main-nav__mega" [class.main-nav__mega--open]="isOpen('more')">
+    <div id="main-nav-furniture" class="main-nav__mega" [class.main-nav__mega--open]="isOpen('furniture')">
       <div class="container-vl main-nav__mega-inner">
         <div class="main-nav__mega-grid">
-          <div class="main-nav__col" *ngFor="let category of overflowCategories">
+          <div class="main-nav__col" *ngFor="let category of categories">
             <a
               class="main-nav__col-title"
               routerLink="/products"
@@ -122,13 +41,19 @@
             </ul>
           </div>
         </div>
+        <a class="main-nav__all" routerLink="/furniture" (click)="closeAll()">
+          {{ 'header.nav.allFurniture' | translate }}
+          <i class="pi pi-arrow-right main-nav__all-arrow" aria-hidden="true"></i>
+        </a>
       </div>
     </div>
   </div>
 
-  <a routerLink="/products" routerLinkActive="main-nav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="main-nav__link main-nav__link--all">
-    {{ 'common.allProducts' | translate }}
-  </a>
+  <ng-template #furnitureLink>
+    <a routerLink="/furniture" routerLinkActive="main-nav__link--active" class="main-nav__link">
+      {{ 'header.nav.furniture' | translate }}
+    </a>
+  </ng-template>
 
   <!-- Architectural Work: a short menu from /portfolio/categories. With no categories it is just a link. -->
   <div

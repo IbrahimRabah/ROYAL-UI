@@ -1,0 +1,52 @@
+.delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.delivery__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+
+  .pi {
+    color: var(--gold);
+  }
+}
+
+.delivery ::ng-deep .p-select {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+}
+
+.delivery__result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.delivery__free {
+  color: var(--success, #2e7d32);
+}
+
+// The list opens inside the card, exactly as wide as the field, on phones and desktops alike.
+.delivery ::ng-deep .p-select-overlay {
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.delivery ::ng-deep .p-select-option {
+  min-block-size: 2.75rem;
+}
+
+.delivery ::ng-deep .p-select-list-container {
+  max-block-size: 16rem;
+}

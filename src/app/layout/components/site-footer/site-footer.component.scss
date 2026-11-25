@@ -91,13 +91,33 @@
   color: var(--gold-lt);
 }
 
+// Side by side even on a phone: contact across the top, then address / links / payments in two columns.
 .site-footer__col--contact,
-.site-footer__col--visit {
+.site-footer__col--payments {
   grid-column: 1 / -1;
 }
 
-.site-footer__col--links {
-  display: none;
+.site-footer__payments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-1) var(--sp-3);
+    border: 1px solid rgba(242, 235, 225, 0.25);
+    border-radius: var(--r-full);
+    font-size: var(--fs-sm);
+  }
+
+  .pi {
+    color: var(--gold-lt);
+  }
 }
 
 .site-footer__list {
@@ -196,12 +216,8 @@
     display: block;
   }
 
-  .site-footer__col--links {
-    display: block;
-  }
-
   .site-footer__col--contact,
-  .site-footer__col--visit {
+  .site-footer__col--payments {
     grid-column: auto;
   }
 }

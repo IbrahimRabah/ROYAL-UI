@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 
 import { API_ROUTES } from '../../constants/api-routes';
 import { APP_CONFIG } from '../../constants/app-config';
@@ -56,6 +56,14 @@ export class CatalogApiService {
   getNewArrivals(page?: number, size?: number): Observable<PageResponse<ProductSummaryResponse>> {
     const params = this.buildPageParams(page, size ?? APP_CONFIG.pagination.newArrivals.size);
     return this.http.get<PageResponse<ProductSummaryResponse>>(API_ROUTES.catalog.newArrivals(), { params });
+  }
+
+  /** Most-ordered products. Falls back to the featured ones when the endpoint is missing or errors, so the strip is never empty. */
+  getBestSellers(page?: number, size?: number): Observable<PageResponse<ProductSummaryResponse>> {
+    const params = this.buildPageParams(page, size ?? APP_CONFIG.pagination.featuredProducts.size);
+    return this.http
+      .get<PageResponse<ProductSummaryResponse>>(API_ROUTES.catalog.bestSellers(), { params, context: new HttpContext().set(SUPPRESS_ERROR_TOAST, true) })
+      .pipe(catchError(() => this.getFeatured(page, size)));
   }
 
   getCategoryTree(): Observable<CategoryNode[]> {

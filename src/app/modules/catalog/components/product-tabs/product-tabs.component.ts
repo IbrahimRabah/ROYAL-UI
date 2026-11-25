@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { ProductSpecification } from '../../../../core/models';
 
-type ProductTabKey = 'description' | 'specifications';
-
+/** The description and the specifications, one after the other: no tabs, so nothing is hidden behind a tap. */
 @Component({
   selector: 'app-product-tabs',
   templateUrl: './product-tabs.component.html',
@@ -13,14 +12,4 @@ type ProductTabKey = 'description' | 'specifications';
 export class ProductTabsComponent {
   @Input() description = '';
   @Input() specifications: ProductSpecification[] = [];
-
-  readonly activeTab = signal<ProductTabKey>('description');
-
-  get showTabs(): boolean {
-    return this.specifications.length > 0;
-  }
-
-  selectTab(tab: ProductTabKey): void {
-    this.activeTab.set(tab);
-  }
 }

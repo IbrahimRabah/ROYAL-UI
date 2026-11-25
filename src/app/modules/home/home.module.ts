@@ -9,6 +9,9 @@ import { HeroBannerComponent } from './components/hero-banner/hero-banner.compon
 import { CategoryShowcaseComponent } from './components/category-showcase/category-showcase.component';
 import { FeaturedSectionComponent } from './components/featured-section/featured-section.component';
 import { NewArrivalsSectionComponent } from './components/new-arrivals-section/new-arrivals-section.component';
+import { CategoryBannerComponent } from './components/category-banner/category-banner.component';
+import { PromoBannerComponent } from './components/promo-banner/promo-banner.component';
+import { FurniturePageComponent } from './pages/furniture-page/furniture-page.component';
 
 
 @NgModule({
@@ -17,7 +20,10 @@ import { NewArrivalsSectionComponent } from './components/new-arrivals-section/n
     HeroBannerComponent,
     CategoryShowcaseComponent,
     FeaturedSectionComponent,
-    NewArrivalsSectionComponent
+    NewArrivalsSectionComponent,
+    CategoryBannerComponent,
+    PromoBannerComponent,
+    FurniturePageComponent
   ],
   imports: [
     CommonModule,

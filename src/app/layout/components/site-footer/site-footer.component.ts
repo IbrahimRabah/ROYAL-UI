@@ -45,6 +45,7 @@ export class SiteFooterComponent {
     { labelKey: 'common.home', path: '/' },
     { labelKey: 'common.allProducts', path: '/products' },
     { labelKey: 'common.about', path: '/about' },
+    { labelKey: 'faq.title', path: '/faq' },
     { labelKey: 'common.contact', path: '/contact' }
   ];
 

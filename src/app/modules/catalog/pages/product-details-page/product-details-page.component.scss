@@ -339,3 +339,44 @@
   font-weight: 700;
   color: var(--ink);
 }
+
+.pdp__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-1) var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r-pill, 999px);
+    background: var(--cream);
+    font-size: var(--fs-sm);
+    color: var(--text);
+  }
+
+  .pi {
+    color: var(--gold);
+  }
+}
+
+.pdp__tax-note {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.pdp__pair {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--brand-text);
+  font-size: var(--fs-sm);
+  text-decoration: underline;
+  cursor: pointer;
+}

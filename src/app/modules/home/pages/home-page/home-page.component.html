@@ -2,9 +2,33 @@
 
 <app-sale-banners [max]="3"></app-sale-banners>
 
-<app-category-showcase [categories]="categories()"></app-category-showcase>
+<app-category-banner
+  [title]="'home.departments.furniture.title' | translate"
+  [subtitle]="'home.departments.furniture.subtitle' | translate"
+  [cta]="'home.departments.furniture.cta' | translate"
+  [bannerUrl]="furnitureBanner"
+  link="/furniture"
+  [tiles]="furnitureTiles()"
+></app-category-banner>
 
-<app-featured-section [products]="featuredProducts()" [loading]="featuredLoading()"></app-featured-section>
+<app-category-banner
+  [title]="'home.departments.architectural.title' | translate"
+  [subtitle]="'home.departments.architectural.subtitle' | translate"
+  [cta]="'home.departments.architectural.cta' | translate"
+  [bannerUrl]="architecturalBanner"
+  link="/portfolio"
+  [tiles]="architecturalTiles()"
+></app-category-banner>
+
+<app-promo-banner></app-promo-banner>
+
+<app-featured-section
+  [products]="bestSellers()"
+  [loading]="bestSellersLoading()"
+  titleKey="home.bestSellers.title"
+  viewAllKey="home.bestSellers.viewAll"
+  [viewAllParams]="{}"
+></app-featured-section>
 
 <app-new-arrivals-section [products]="newArrivals()" [loading]="newArrivalsLoading()"></app-new-arrivals-section>
 

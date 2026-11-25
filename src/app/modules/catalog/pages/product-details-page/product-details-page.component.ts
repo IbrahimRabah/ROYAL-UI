@@ -137,7 +137,11 @@ export class ProductDetailsPageComponent implements OnDestroy {
     const variant = this.selectedVariant();
     const variantImages = variant?.images.length ? variant.images : product.images;
 
-    return dedupeById(poster ? [poster, ...variantImages] : variantImages);
+    // Product-level images no variant claims (detail shots) join the gallery, so nothing is parked below the description.
+    const claimed = new Set(product.variants.flatMap((v) => v.images.map((image) => image.id)));
+    const shared = product.images.filter((image) => !claimed.has(image.id));
+
+    return dedupeById([...(poster ? [poster] : []), ...variantImages, ...shared]);
   });
 
   /** Thumbnail for the sticky bar: the first gallery image, or null (the imageUrl pipe then shows the placeholder). */
@@ -158,14 +162,6 @@ export class ProductDetailsPageComponent implements OnDestroy {
   readonly isPosterDisplayed = computed(() => {
     const displayed = this.displayedImageId();
     return displayed !== null && displayed === this.posterImageId();
-  });
-
-  readonly descriptionImage = computed<ImageResponse | null>(() => {
-    const product = this.product();
-    if (!product || !product.images.length) return null;
-    const shown = new Set(this.galleryImages().map((image) => image.id));
-    const exclusive = product.images.find((image) => !shown.has(image.id));
-    return exclusive ?? product.images[product.images.length - 1];
   });
 
   /** Home > All products > the category chain > this product, so the customer can step back up. */
@@ -204,6 +200,11 @@ export class ProductDetailsPageComponent implements OnDestroy {
 
   increaseQuantity(): void {
     this.quantity.set(Math.min(this.effectiveQuantity() + 1, this.maxQuantity()));
+  }
+
+  /** "Need a pair?": one tap sets the quantity to two. */
+  chooseTwo(): void {
+    this.quantity.set(Math.min(2, this.maxQuantity()));
   }
 
   decreaseQuantity(): void {

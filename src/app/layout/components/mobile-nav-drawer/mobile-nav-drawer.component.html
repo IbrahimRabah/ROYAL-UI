@@ -56,7 +56,7 @@
       aria-controls="mobile-nav-products"
       (click)="toggleSection('products')"
     >
-      <span>{{ 'header.nav.products' | translate }}</span>
+      <span>{{ 'header.nav.furniture' | translate }}</span>
       <i class="pi pi-angle-down mobile-nav-drawer__chevron" aria-hidden="true"></i>
     </button>
     <div
@@ -66,8 +66,8 @@
       [attr.inert]="isSectionOpen('products') ? null : ''"
     >
       <div class="mobile-nav-drawer__children-inner">
-        <a routerLink="/products" class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--all" (click)="close()">
-          {{ 'common.allProducts' | translate }}
+        <a routerLink="/furniture" class="mobile-nav-drawer__child-link mobile-nav-drawer__child-link--all" (click)="close()">
+          {{ 'header.nav.allFurniture' | translate }}
         </a>
         <ng-container *ngFor="let category of categories">
           <a

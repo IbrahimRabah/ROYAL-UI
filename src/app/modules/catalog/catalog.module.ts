@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DeliveryEstimateComponent } from './components/delivery-estimate/delivery-estimate.component';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { SelectModule } from 'primeng/select';
@@ -31,6 +32,7 @@ import { CategoryCardGridComponent } from './components/category-card-grid/categ
 
 @NgModule({
   declarations: [
+    DeliveryEstimateComponent,
     ProductReviewsComponent,
     ProductListPageComponent,
     ProductDetailsPageComponent,

@@ -1,0 +1,39 @@
+@use 'styles/breakpoints';
+
+.promo-banner__link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  border-radius: var(--r-md);
+  background: var(--ink) center / cover no-repeat;
+  color: var(--cream);
+  text-decoration: none;
+}
+
+.promo-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-sm);
+
+  strong {
+    font-family: var(--display);
+    font-size: var(--fs-h4);
+    color: var(--gold-lt);
+  }
+}
+
+.promo-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding-inline: var(--sp-5);
+  border-radius: var(--r-full);
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}

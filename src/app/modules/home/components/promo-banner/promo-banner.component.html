@@ -1,0 +1,11 @@
+<section class="promo-banner section">
+  <div class="container-vl">
+    <a class="promo-banner__link" [routerLink]="link" [style.background-image]="imageUrl ? 'url(' + imageUrl + ')' : null">
+      <span class="promo-banner__text">
+        <strong>{{ 'home.promo.title' | translate }}</strong>
+        <span>{{ 'home.promo.subtitle' | translate }}</span>
+      </span>
+      <span class="promo-banner__cta">{{ 'home.promo.cta' | translate }}</span>
+    </a>
+  </div>
+</section>

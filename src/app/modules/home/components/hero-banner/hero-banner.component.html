@@ -1,31 +1,21 @@
 <section class="hero-banner">
-  <!-- LCP image: a dedicated portrait crop below md (composed for phone aspect ratios,
-       not just the desktop artwork squeezed narrower), then webp with a png fallback
-       above that — loaded eagerly at high priority, the opposite of every other image
-       on the page, which is lazy. -->
-  <picture>
-    <source media="(max-width: 767px)" srcset="assets/images/home/hero_mobile.png" />
-    <source srcset="assets/images/home/hero.webp" type="image/webp" />
-    <img
-      class="hero-banner__image"
-      src="assets/images/home/hero.webp"
-      [alt]="'home.hero.imageAlt' | translate"
-      fetchpriority="high"
-      loading="eager"
-    />
-  </picture>
+  <!-- LCP image (about 215KB, 3:1): loaded eagerly at high priority, the opposite of every other image on the page. -->
+  <img
+    class="hero-banner__image"
+    src="assets/images/home/new-banner.jpg"
+    width="2172"
+    height="724"
+    [alt]="'home.hero.imageAlt' | translate"
+    fetchpriority="high"
+    loading="eager"
+  />
 
-  <!--
-    Sits directly under the ROYAL IRON wordmark that's baked into the image itself,
-    so its position is pinned to fixed pixels of that artwork, not to reading direction —
-    it must NOT flip with RTL/LTR like the rest of the site. `left` + translateX(-50%) is
-    used deliberately here instead of the usual inset-inline-start/logical properties.
-  -->
-  <!-- The page's one H1 (the wordmark is baked into the image, so there is no text heading to rely on). Visually
-       hidden until a visible headline is designed; screen readers and search engines read it. -->
+  <!-- The page's one H1 (there is no text heading in the picture). Visually hidden; screen readers and search
+       engines read it. -->
   <h1 class="visually-hidden">{{ 'home.hero.title' | translate }}</h1>
 
   <div class="hero-banner__content">
+    <p class="hero-banner__headline" aria-hidden="true">{{ 'footer.hero.tagline' | translate }}</p>
     <p class="hero-banner__tagline">{{ 'home.hero.tagline' | translate }}</p>
     <a
       routerLink="/products"

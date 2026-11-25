@@ -61,3 +61,4 @@ export * from './system/ping';
 export * from './custom-request/custom-request-public';
 export * from './catalog/search';
 export * from './custom-request/my-custom-request';
+export * from './geo/delivery-option';

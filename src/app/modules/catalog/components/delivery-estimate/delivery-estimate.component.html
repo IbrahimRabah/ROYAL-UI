@@ -1,0 +1,30 @@
+<div class="delivery" *ngIf="options().length && !failed()">
+  <label class="delivery__label" for="delivery-gov">
+    <i class="pi pi-truck" aria-hidden="true"></i>
+    {{ 'product.delivery.label' | translate }}
+  </label>
+  <p-select
+    inputId="delivery-gov"
+    styleClass="delivery__select"
+    [options]="options()"
+    optionLabel="name"
+    optionValue="id"
+    [ngModel]="selectedId()"
+    (onChange)="select($event.value)"
+    [filter]="options().length > 8"
+    filterBy="name"
+    [showClear]="true"
+    [placeholder]="'product.delivery.choose' | translate"
+    [filterPlaceholder]="'product.delivery.search' | translate"
+    [emptyFilterMessage]="'product.delivery.noMatch' | translate"
+  ></p-select>
+
+  <p class="delivery__result" *ngIf="selected() as s" aria-live="polite">
+    <span>{{ 'product.delivery.days' | translate: { min: s.deliveryDaysMin, max: s.deliveryDaysMax } }}</span>
+    <span class="delivery__sep" aria-hidden="true">&bull;</span>
+    <strong *ngIf="s.free; else paid" class="delivery__free">{{ 'product.delivery.free' | translate }}</strong>
+    <ng-template #paid>
+      <span *ngIf="s.shippingCost != null">{{ 'product.delivery.cost' | translate: { amount: (s.shippingCost | number: '1.0-0' : 'en-US') } }}</span>
+    </ng-template>
+  </p>
+</div>

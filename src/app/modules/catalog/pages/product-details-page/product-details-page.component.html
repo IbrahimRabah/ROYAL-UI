@@ -31,10 +31,19 @@
             <span>{{ selectedVariant()?.sku }}</span>
           </p>
 
+          <ul class="pdp__trust" [attr.aria-label]="'product.features.warranty.title' | translate">
+            <li><i class="pi pi-shield" aria-hidden="true"></i>{{ 'product.trust.warranty' | translate }}</li>
+            <li><i class="pi pi-money-bill" aria-hidden="true"></i>{{ 'product.trust.cod' | translate }}</li>
+            <li><i class="pi pi-wrench" aria-hidden="true"></i>{{ 'product.trust.workshop' | translate }}</li>
+          </ul>
+
           <app-product-price-block *ngIf="readyMade(); else priceOnRequest" [price]="displayPrice()" [compareAt]="selectedVariant()?.compareAtPrice" [percent]="selectedVariant()?.discountPercent"></app-product-price-block>
+          <p class="pdp__tax-note" *ngIf="readyMade()">{{ 'product.taxIncluded' | translate }}</p>
           <ng-template #priceOnRequest>
             <p class="pdp__price-on-request">{{ 'product.priceOnRequest' | translate }}</p>
           </ng-template>
+
+          <app-delivery-estimate *ngIf="readyMade()" [sizeClass]="p.shippingSizeClass"></app-delivery-estimate>
 
           <div class="pdp__sale" *ngIf="readyMade() && p.sale as sale">
             <span class="pdp__sale-badge">{{ 'sale.percentOff' | translate: { percent: (sale.percent | number: '1.0-2') } }}</span>
@@ -63,6 +72,7 @@
               (decrease)="decreaseQuantity()"
               (increase)="increaseQuantity()"
             ></app-vl-quantity-stepper>
+            <button type="button" class="pdp__pair" *ngIf="maxQuantity() >= 2 && effectiveQuantity() < 2" (click)="chooseTwo()">{{ 'product.pair' | translate }}</button>
           </div>
 
           <!-- The page's one primary action. The sticky bar renders this same template, so it can never drift. -->
@@ -86,21 +96,12 @@
     </section>
 
     <section class="pdp__description section">
-      <div class="container-vl pdp__description-inner" [class.pdp__description-inner--single]="!descriptionImage()">
+      <div class="container-vl pdp__description-inner pdp__description-inner--single">
         <app-product-tabs
           class="pdp__description-copy"
           [description]="p.description"
           [specifications]="p.specifications"
         ></app-product-tabs>
-
-        <img
-          *ngIf="descriptionImage() as image"
-          class="pdp__description-image"
-          [src]="image.url"
-          [alt]="image.alt || p.name"
-          loading="lazy"
-          decoding="async"
-        />
       </div>
     </section>
 

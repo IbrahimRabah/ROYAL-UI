@@ -1,9 +1,9 @@
 <section class="featured-section section" *ngIf="showSection">
   <div class="container-vl">
     <div class="featured-section__header">
-      <h2 class="featured-section__title">{{ 'home.featured.title' | translate }}</h2>
-      <a class="featured-section__view-all" routerLink="/products" [queryParams]="{ featured: true }">
-        {{ 'home.featured.viewAll' | translate }}
+      <h2 class="featured-section__title">{{ titleKey | translate }}</h2>
+      <a class="featured-section__view-all" routerLink="/products" [queryParams]="viewAllParams">
+        {{ viewAllKey | translate }}
       </a>
     </div>
 
@@ -11,7 +11,7 @@
       <app-vl-skeleton *ngFor="let placeholder of skeletonPlaceholders"></app-vl-skeleton>
     </div>
 
-    <app-vl-carousel *ngIf="!loading" [items]="products" [ariaLabel]="'home.featured.title' | translate">
+    <app-vl-carousel *ngIf="!loading" [items]="products" [ariaLabel]="titleKey | translate">
       <ng-template let-product>
         <app-vl-product-card [product]="product"></app-vl-product-card>
       </ng-template>

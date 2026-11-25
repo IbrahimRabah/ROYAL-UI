@@ -1,0 +1,112 @@
+@use 'styles/breakpoints';
+
+.category-banner__hero {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--shadow-sm, none);
+  background: var(--surface-alt);
+  color: var(--cream);
+  text-decoration: none;
+
+  @include breakpoints.md {
+    aspect-ratio: 21 / 8;
+  }
+}
+
+.category-banner__image {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.category-banner__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.05) 65%);
+}
+
+.category-banner__content {
+  position: absolute;
+  inset-inline: var(--sp-5);
+  inset-block-end: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.category-banner__title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: var(--fs-h2);
+  color: inherit;
+}
+
+.category-banner__subtitle {
+  max-inline-size: 38ch;
+  font-size: var(--fs-sm);
+  opacity: 0.92;
+}
+
+.category-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--cream);
+  border-radius: var(--r-full);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+// Small tiles, one scrolling row on a phone, wrapping on wider screens.
+.category-banner__subs {
+  display: flex;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0 0;
+  padding: 0 0 var(--sp-2);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include breakpoints.md {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
+
+.category-banner__sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  inline-size: 5.5rem;
+  color: var(--text);
+  text-decoration: none;
+  text-align: center;
+  font-size: var(--fs-sm);
+
+  &:hover .category-banner__sub-image,
+  &:focus-visible .category-banner__sub-image {
+    border-color: var(--gold);
+  }
+}
+
+.category-banner__sub-image {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  border: 2px solid transparent;
+  border-radius: var(--r-full);
+  object-fit: cover;
+  background: var(--surface-alt);
+  transition: border-color 220ms ease;
+}

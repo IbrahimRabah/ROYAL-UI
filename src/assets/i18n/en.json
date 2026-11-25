@@ -45,6 +45,8 @@
     "nav": {
       "products": "Products",
       "architecturalWork": "Architectural Work",
+      "furniture": "Furniture",
+      "allFurniture": "All furniture",
       "allWork": "View all architectural work",
       "more": "More",
       "shopAll": "Shop all {{name}}"
@@ -114,6 +116,10 @@
     "visit": {
       "heading": "Visit us"
     },
+    "payments": {
+      "heading": "Payment methods",
+      "cod": "Cash on delivery"
+    },
     "links": {
       "heading": "Links"
     }
@@ -159,6 +165,22 @@
         "subtitle": "Cancel any time until your order ships"
       }
     },
+    "trust": {
+      "warranty": "2-year warranty",
+      "cod": "Cash on delivery",
+      "workshop": "Made in our workshop"
+    },
+    "pair": "Need a pair? Choose 2",
+    "delivery": {
+      "label": "Deliver to",
+      "search": "Search governorate",
+      "noMatch": "No results",
+      "choose": "Choose governorate",
+      "days": "Arrives in {{min}}–{{max}} days",
+      "free": "Free shipping",
+      "cost": "Shipping EGP {{amount}}"
+    },
+    "taxIncluded": "Price includes tax",
     "requestQuote": "Request a quote",
     "priceOnRequest": "Price on request",
     "orderMadeToMeasure": "Order made to measure",
@@ -623,6 +645,19 @@
     "featured": {
       "title": "Featured Products",
       "viewAll": "View All"
+    },
+    "bestSellers": {
+      "title": "Best Sellers",
+      "viewAll": "View All"
+    },
+    "promo": {
+      "title": "Need a custom design?",
+      "subtitle": "We build the piece to your size and spec in our workshop",
+      "cta": "Request now"
+    },
+    "departments": {
+      "furniture": { "title": "Furniture", "subtitle": "Handcrafted pieces in wrought iron and wood", "cta": "Browse furniture" },
+      "architectural": { "title": "Architectural Work", "subtitle": "Gates, railings and staircases made for your project", "cta": "See our work" }
     },
     "newArrivals": {
       "title": "New Arrivals",

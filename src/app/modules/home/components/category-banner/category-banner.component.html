@@ -1,0 +1,36 @@
+<section class="category-banner section">
+  <div class="container-vl">
+    <a class="category-banner__hero" [routerLink]="link">
+      <img
+        class="category-banner__image"
+        [src]="bannerUrl"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="category-banner__scrim" aria-hidden="true"></span>
+      <span class="category-banner__content">
+        <h1 *ngIf="heading === 'h1'; else h2" class="category-banner__title">{{ title }}</h1>
+        <ng-template #h2><h2 class="category-banner__title">{{ title }}</h2></ng-template>
+        <span class="category-banner__subtitle" *ngIf="subtitle">{{ subtitle }}</span>
+        <span class="category-banner__cta" *ngIf="cta">{{ cta }}</span>
+      </span>
+    </a>
+
+    <ul class="category-banner__subs" *ngIf="tiles.length">
+      <li *ngFor="let tile of tiles">
+        <a class="category-banner__sub" [routerLink]="tile.link" [queryParams]="tile.queryParams">
+          <img
+            appImgFallback
+            class="category-banner__sub-image"
+            [src]="tile.imageUrl | imageUrl"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="category-banner__sub-name">{{ tile.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
