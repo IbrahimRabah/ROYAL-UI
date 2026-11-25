@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-/** A slim advertising banner. Text-only until the artwork arrives: set `imageUrl` and it becomes the background. */
+/** A slim advertising banner over a dark workshop photo (a tint keeps the text legible). */
 @Component({
   selector: 'app-promo-banner',
   templateUrl: './promo-banner.component.html',
@@ -8,6 +8,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PromoBannerComponent {
-  @Input() imageUrl: string | null = null;
+  @Input() imageUrl: string | null = 'assets/images/home/custom.jpg';
   @Input() link: string | unknown[] = '/custom-request';
 }

@@ -8,9 +8,17 @@
   gap: var(--sp-3);
   padding: var(--sp-5);
   border-radius: var(--r-md);
-  background: var(--ink) center / cover no-repeat;
+  min-block-size: 9.5rem;
+  background: var(--ink) center 55% / cover no-repeat;
   color: var(--cream);
   text-decoration: none;
+}
+
+@include breakpoints.md {
+  .promo-banner__link {
+    min-block-size: 11.5rem;
+    padding-inline: var(--sp-8);
+  }
 }
 
 .promo-banner__text {
