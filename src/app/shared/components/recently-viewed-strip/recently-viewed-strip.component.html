@@ -1,6 +1,6 @@
 <section class="recently-viewed section" *ngIf="visible()">
   <div class="container-vl">
-    <h2 class="recently-viewed__title">{{ 'recentlyViewed.title' | translate }}</h2>
+    <h2 class="recently-viewed__title draw-line">{{ 'recentlyViewed.title' | translate }}</h2>
 
     <app-vl-carousel [items]="products()" [ariaLabel]="'recentlyViewed.title' | translate">
       <ng-template let-product>

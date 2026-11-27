@@ -1,0 +1,25 @@
+<button
+  type="button"
+  class="back-to-top"
+  [class.back-to-top--visible]="visible()"
+  [class.back-to-top--raised]="raised()"
+  [class.back-to-top--raised-mobile]="raisedMobile()"
+  [attr.aria-hidden]="!visible()"
+  [attr.tabindex]="visible() ? 0 : -1"
+  [attr.aria-label]="'common.backToTop' | translate"
+  (click)="scrollToTop()"
+>
+  <svg class="back-to-top__ring" viewBox="0 0 48 48" aria-hidden="true">
+    <circle class="back-to-top__track" cx="24" cy="24" r="22" />
+    <circle
+      #ring
+      class="back-to-top__progress"
+      cx="24"
+      cy="24"
+      r="22"
+      [attr.stroke-dasharray]="ringLength"
+      [attr.stroke-dashoffset]="ringLength"
+    />
+  </svg>
+  <i class="pi pi-arrow-up back-to-top__icon" aria-hidden="true"></i>
+</button>

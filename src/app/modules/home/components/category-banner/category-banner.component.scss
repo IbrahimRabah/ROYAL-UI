@@ -110,3 +110,55 @@
   background: var(--surface-alt);
   transition: border-color 220ms ease;
 }
+
+// Hover: the photo drifts closer and the outlined CTA fills with gold, with a gold frame drawn inside the edge.
+.category-banner__image {
+  transition: transform 1200ms var(--ease-out);
+}
+
+.category-banner__cta {
+  transition: background 300ms ease, border-color 300ms ease, color 300ms ease;
+}
+
+.category-banner__hero {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: var(--sp-3);
+    border: 1px solid rgba(212, 168, 98, 0.7);
+    border-radius: calc(var(--r-md) - 2px);
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    .category-banner__image {
+      transform: scale(1.05);
+    }
+
+    .category-banner__cta {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--ink);
+    }
+
+    &::after {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-banner__image,
+  .category-banner__hero::after {
+    transition: none;
+  }
+
+  .category-banner__hero:hover .category-banner__image {
+    transform: none;
+  }
+}

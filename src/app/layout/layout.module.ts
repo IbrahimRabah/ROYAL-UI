@@ -22,6 +22,7 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
 import { AdminTopbarComponent } from './components/admin-topbar/admin-topbar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
 
 
 
@@ -42,7 +43,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     AdminSidebarComponent,
     AdminTopbarComponent,
     NotFoundComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    BackToTopComponent
   ],
   imports: [
     CommonModule,

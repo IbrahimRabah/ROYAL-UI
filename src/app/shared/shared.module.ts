@@ -73,6 +73,7 @@ import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceInputDirective } from './directives/debounce-input.directive';
 import { OnlyDigitsDirective } from './directives/only-digits.directive';
 import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
+import { AutoRevealDirective } from './directives/auto-reveal.directive';
 
 @NgModule({
   declarations: [
@@ -143,7 +144,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,
-    ScrollRevealDirective
+    ScrollRevealDirective,
+    AutoRevealDirective
   ],
   imports: [
     CommonModule,
@@ -224,7 +226,8 @@ import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
     AutofocusDirective,
     DebounceInputDirective,
     OnlyDigitsDirective,
-    ScrollRevealDirective
+    ScrollRevealDirective,
+    AutoRevealDirective
   ]
 })
 export class SharedModule { }

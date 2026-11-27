@@ -75,6 +75,41 @@
   z-index: var(--z-header);
   background: var(--surface);
   border-block-end: 1px solid var(--border);
+  transition:
+    transform 420ms var(--ease-out),
+    box-shadow 300ms ease;
+
+  // Set by the component on scroll.
+  &.site-header--scrolled {
+    box-shadow: 0 6px 24px rgba(20, 17, 15, 0.08);
+  }
+
+  &.site-header--hidden {
+    transform: translateY(-100%);
+    box-shadow: none;
+  }
+}
+
+// A thin gold line drawn along the bottom edge as the page is read (--scroll-progress: 0..1).
+.site-header__progress {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1px;
+  block-size: 2px;
+  background: linear-gradient(90deg, var(--gold-dp), var(--gold-lt));
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+:host-context(html[dir='rtl']) .site-header__progress {
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
 }
 
 .site-header__row {

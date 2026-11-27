@@ -19,7 +19,7 @@
 
   <ng-container *ngIf="!loading() && !error() && order() as o">
     <header class="order-details-page__header">
-      <h1 class="order-details-page__heading">{{ 'account.orderDetails.heading' | translate }}</h1>
+      <h1 class="order-details-page__heading draw-line">{{ 'account.orderDetails.heading' | translate }}</h1>
 
       <div class="order-details-page__number-tile">
         <span class="order-details-page__number">{{ o.orderNumber }}</span>

@@ -236,3 +236,19 @@
     grid-template-columns: 1fr;
   }
 }
+
+// Gold ornament drawn across the top edge of the footer, and short drawn rules under the column headings.
+.site-footer__ornament {
+  // Centred on the top border line.
+  margin-block-start: -6px;
+}
+
+.site-footer__heading.draw-line {
+  padding-block-end: var(--sp-2);
+  margin-block-end: var(--sp-3);
+
+  &::after {
+    inline-size: 1.75rem;
+    block-size: 1px;
+  }
+}

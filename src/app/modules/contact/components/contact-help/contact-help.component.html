@@ -1,13 +1,13 @@
 <section class="contact-help section">
   <div class="container-vl">
-    <h2 class="contact-help__heading">{{ 'contact.help.heading' | translate }}</h2>
+    <h2 class="contact-help__heading draw-line draw-line--center">{{ 'contact.help.heading' | translate }}</h2>
     <span class="contact-help__rule" aria-hidden="true"></span>
 
     <div class="contact-help__grid">
       <ng-container *ngFor="let card of cards">
         <a
           *ngIf="card.link.kind === 'route'; else externalCard"
-          class="contact-help__card"
+          class="contact-help__card" data-reveal="up"
           [routerLink]="card.link.url"
         >
           <ng-container *ngTemplateOutlet="cardBody; context: { card: card }"></ng-container>
@@ -15,7 +15,7 @@
 
         <ng-template #externalCard>
           <a
-            class="contact-help__card"
+            class="contact-help__card" data-reveal="up"
             [href]="card.link.url"
             target="_blank"
             rel="noopener noreferrer"

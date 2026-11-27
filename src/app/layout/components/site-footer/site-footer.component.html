@@ -2,8 +2,9 @@
 
 
   <div class="site-footer__bottom">
+    <span class="vl-ornament site-footer__ornament" aria-hidden="true"><span class="vl-ornament__gem"></span></span>
     <div class="container-vl site-footer__grid">
-      <div class="site-footer__brand">
+      <div class="site-footer__brand" data-reveal="up">
         <a routerLink="/" class="site-footer__logo">
           <img src="assets/images/shared/dark_logo.png" [alt]="'header.logoAlt' | translate" />
         </a>
@@ -31,7 +32,7 @@
       </div>
 
       <section class="site-footer__col site-footer__col--contact">
-        <h2 class="site-footer__heading">{{ 'footer.contact.heading' | translate }}</h2>
+        <h2 class="site-footer__heading draw-line">{{ 'footer.contact.heading' | translate }}</h2>
         <dl class="site-footer__list site-footer__list--pairs">
           <div *ngFor="let item of contactItems" class="site-footer__item">
             <dt>{{ item.labelKey | translate }}</dt>
@@ -49,7 +50,7 @@
       </section>
 
       <section class="site-footer__col site-footer__col--visit">
-        <h2 class="site-footer__heading">{{ 'footer.visit.heading' | translate }}</h2>
+        <h2 class="site-footer__heading draw-line">{{ 'footer.visit.heading' | translate }}</h2>
         <dl class="site-footer__list">
           <div class="site-footer__item">
             <dt>{{ 'footer.contact.address' | translate }}</dt>
@@ -62,17 +63,17 @@
         </dl>
       </section>
 
-      <nav class="site-footer__col site-footer__col--links" [attr.aria-label]="'footer.links.heading' | translate">
-        <h2 class="site-footer__heading">{{ 'footer.links.heading' | translate }}</h2>
+      <nav class="site-footer__col site-footer__col--links" data-reveal="up" [attr.aria-label]="'footer.links.heading' | translate">
+        <h2 class="site-footer__heading draw-line">{{ 'footer.links.heading' | translate }}</h2>
         <ul class="site-footer__list">
           <li *ngFor="let link of navLinks">
-            <a [routerLink]="link.path">{{ link.labelKey | translate }}</a>
+            <a class="link-draw" [routerLink]="link.path">{{ link.labelKey | translate }}</a>
           </li>
         </ul>
       </nav>
 
       <section class="site-footer__col site-footer__col--payments">
-        <h2 class="site-footer__heading">{{ 'footer.payments.heading' | translate }}</h2>
+        <h2 class="site-footer__heading draw-line">{{ 'footer.payments.heading' | translate }}</h2>
         <ul class="site-footer__payments">
           <li><i class="pi pi-money-bill" aria-hidden="true"></i>{{ 'footer.payments.cod' | translate }}</li>
         </ul>

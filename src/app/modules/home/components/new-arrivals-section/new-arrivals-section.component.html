@@ -1,7 +1,7 @@
 <section class="new-arrivals-section section" *ngIf="showSection">
   <div class="container-vl">
     <div class="new-arrivals-section__header">
-      <h2 class="new-arrivals-section__title">{{ 'home.newArrivals.title' | translate }}</h2>
+      <h2 class="new-arrivals-section__title draw-line">{{ 'home.newArrivals.title' | translate }}</h2>
       <a class="new-arrivals-section__view-all" routerLink="/products" [queryParams]="{ newArrival: true }">
         {{ 'home.newArrivals.viewAll' | translate }}
       </a>

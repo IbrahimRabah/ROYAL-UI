@@ -1,9 +1,9 @@
 <section class="about-values section">
   <div class="container-vl">
-    <h2 class="about-values__heading">{{ 'about.values.heading' | translate }}</h2>
+    <h2 class="about-values__heading draw-line draw-line--center">{{ 'about.values.heading' | translate }}</h2>
 
     <div class="about-values__grid">
-      <div class="about-values__item" *ngFor="let item of items">
+      <div class="about-values__item" data-reveal="up" *ngFor="let item of items">
         <i class="pi {{ item.icon }} about-values__icon" aria-hidden="true"></i>
         <p class="about-values__title">{{ 'about.values.' + item.key + '.title' | translate }}</p>
         <p class="about-values__description">{{ 'about.values.' + item.key + '.description' | translate }}</p>

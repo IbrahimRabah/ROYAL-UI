@@ -234,9 +234,9 @@
     </ng-template>
 
     <section class="cr-steps" *ngIf="!reference()">
-      <h2 class="cr-steps__title">{{ 'customRequest.steps.title' | translate }}</h2>
+      <h2 class="cr-steps__title draw-line draw-line--center">{{ 'customRequest.steps.title' | translate }}</h2>
       <ol class="cr-steps__list">
-        <li class="cr-steps__item" *ngFor="let s of steps; let i = index">
+        <li class="cr-steps__item" data-reveal="up" *ngFor="let s of steps; let i = index">
           <span class="cr-steps__num" dir="ltr">{{ i + 1 }}</span>
           <span>{{ 'customRequest.steps.' + s | translate }}</span>
         </li>

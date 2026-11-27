@@ -1,6 +1,6 @@
 <section class="about-collection section">
   <div class="container-vl">
-    <h2 class="about-collection__heading">
+    <h2 class="about-collection__heading draw-line draw-line--center">
       <span class="about-collection__rule" aria-hidden="true"></span>
       {{ 'about.collection.heading' | translate }}
       <span class="about-collection__rule" aria-hidden="true"></span>
@@ -8,7 +8,7 @@
 
     <div class="about-collection__cards">
       <article
-        class="about-collection__card"
+        class="about-collection__card" data-reveal="up"
         *ngFor="let card of cards"
       >
         <div class="about-collection__image-wrap">

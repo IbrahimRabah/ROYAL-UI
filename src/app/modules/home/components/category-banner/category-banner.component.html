@@ -18,7 +18,7 @@
     </a>
 
     <ul class="category-banner__subs" *ngIf="tiles.length">
-      <li *ngFor="let tile of tiles">
+      <li *ngFor="let tile of tiles" data-reveal="zoom">
         <a class="category-banner__sub" [routerLink]="tile.link" [queryParams]="tile.queryParams">
           <img
             appImgFallback

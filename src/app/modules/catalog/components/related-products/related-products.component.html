@@ -1,6 +1,6 @@
 <section class="related-products section" *ngIf="products.length">
   <div class="container-vl">
-    <h2 class="related-products__title">{{ 'product.alsoLike' | translate }}</h2>
+    <h2 class="related-products__title draw-line draw-line--center">{{ 'product.alsoLike' | translate }}</h2>
 
     <div class="related-products__grid">
       <app-vl-product-card *ngFor="let product of products" [product]="product"></app-vl-product-card>

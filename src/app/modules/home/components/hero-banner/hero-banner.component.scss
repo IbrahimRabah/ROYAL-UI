@@ -73,3 +73,63 @@
     font-size: var(--fs-base);
   }
 }
+
+// Entrance: the picture settles from a slight zoom while the words rise in one after another. Plays once, on
+// first paint (also for the server-rendered page), and the image stays fully opaque so LCP is not delayed.
+.hero-banner {
+  overflow: hidden;
+}
+
+.hero-banner__image {
+  animation: vl-settle 1800ms var(--ease-out) backwards;
+}
+
+.hero-banner__headline,
+.hero-banner__tagline,
+.hero-banner .hero-banner__cta {
+  animation: vl-rise-in 800ms var(--ease-out) backwards;
+}
+
+.hero-banner__headline {
+  animation-delay: 250ms;
+}
+
+.hero-banner__tagline {
+  animation-delay: 400ms;
+}
+
+.hero-banner .hero-banner__cta {
+  animation-delay: 550ms;
+}
+
+// A short gold stroke drawn under the headline.
+.hero-banner__headline {
+  position: relative;
+  padding-block-end: var(--sp-2);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 50%;
+    inline-size: 4rem;
+    block-size: 2px;
+    translate: -50% 0;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    animation: vl-draw-x 1000ms var(--ease-out) 700ms backwards;
+  }
+}
+
+:host-context(html[dir='rtl']) .hero-banner__headline::after {
+  translate: 50% 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner__image,
+  .hero-banner__headline,
+  .hero-banner__tagline,
+  .hero-banner .hero-banner__cta,
+  .hero-banner__headline::after {
+    animation: none;
+  }
+}

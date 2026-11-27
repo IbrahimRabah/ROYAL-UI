@@ -1,0 +1,99 @@
+// Bottom corner opposite the WhatsApp button, and lifted over the same bottom bars it lifts over.
+.back-to-top {
+  position: fixed;
+  inset-inline-start: var(--sp-4);
+  inset-block-end: calc(var(--sp-4) + env(safe-area-inset-bottom));
+  z-index: var(--z-header);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--gold-dp);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px) scale(0.85);
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 400ms var(--ease-out),
+    visibility 0s linear 400ms,
+    inset-block-end 220ms ease,
+    background 220ms ease,
+    color 220ms ease;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 400ms var(--ease-out),
+      visibility 0s,
+      inset-block-end 220ms ease,
+      background 220ms ease,
+      color 220ms ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: var(--ink);
+    color: var(--gold-lt);
+  }
+
+  &:hover .back-to-top__icon {
+    transform: translateY(-3px);
+  }
+
+  &--raised {
+    inset-block-end: calc(var(--sticky-bar-h) + var(--sp-4) + env(safe-area-inset-bottom));
+  }
+
+  &--raised-mobile {
+    @media (max-width: 991.98px) {
+      inset-block-end: calc(var(--sticky-bar-h) + var(--sp-4) + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+.back-to-top__ring {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  // Start the stroke at 12 o'clock.
+  transform: rotate(-90deg);
+  fill: none;
+  stroke-width: 2;
+}
+
+.back-to-top__track {
+  stroke: var(--line);
+}
+
+.back-to-top__progress {
+  stroke: var(--gold);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 120ms linear;
+}
+
+.back-to-top__icon {
+  position: relative;
+  font-size: 0.95rem;
+  transition: transform 250ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top,
+  .back-to-top--visible,
+  .back-to-top__icon,
+  .back-to-top__progress {
+    transition: none;
+  }
+}
